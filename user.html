@@ -1,0 +1,735 @@
+<div id="view-user" class="view-section container p-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
+    <div>
+      <h4 class="fw-bold text-white mb-0"><i class="bi bi-person-circle text-success me-2"></i>หน้าหลักพนักงาน</h4>
+      <small class="text-secondary opacity-75">ยินดีต้อนรับ, <span id="userNameHeader" class="fw-bold text-success">...</span></small>
+    </div>
+    <button class="btn btn-outline-danger btn-sm rounded-pill px-3 border-opacity-25 hover-scale" onclick="logout()">
+      <i class="bi bi-box-arrow-right me-1"></i> ออกจากระบบ
+    </button>
+  </div>
+
+  <div id="userLoading" class="text-center py-5">
+      <div class="spinner-border text-success" role="status"></div>
+  </div>
+
+  <div id="userProfileContent" class="row g-4" style="display:none; animation: fadeIn 0.5s ease-out;">
+      
+      <div class="col-lg-4">
+          <div id="stickyProfileWrapper" style="position: sticky; top: 20px;">
+              <div id="userProfileCard"></div>
+          </div>
+      </div>
+
+      <div class="col-lg-8">
+          <div class="card border-0 shadow-lg" style="background: rgba(30,30,30,0.5); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;">
+              
+              <div class="card-header bg-transparent border-bottom border-secondary border-opacity-25 p-0">
+                  <ul class="nav nav-pills nav-fill p-2 gap-2" id="userTabs" role="tablist">
+                      <li class="nav-item" role="presentation">
+                          <button class="nav-link active rounded-pill small py-2" id="tab-btn-docs" data-bs-toggle="tab" data-bs-target="#tab-content-docs" type="button" role="tab">
+                              <i class="bi bi-folder2-open me-1"></i> จัดการเอกสารแนบ
+                              <span class="badge bg-dark border border-secondary ms-1" id="docCountBadge">0/10</span>
+                          </button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <button class="nav-link rounded-pill small py-2 text-danger" id="tab-btn-warns" data-bs-toggle="tab" data-bs-target="#tab-content-warns" type="button" role="tab">
+                              <i class="bi bi-exclamation-triangle-fill me-1"></i> ใบเตือน
+                              <span class="badge bg-danger ms-1" id="warnCountBadge">0</span>
+                          </button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <button class="nav-link rounded-pill small py-2 text-warning" id="tab-btn-accs" data-bs-toggle="tab" data-bs-target="#tab-content-accs" type="button" role="tab">
+                              <i class="bi bi-cone-striped me-1"></i> อุบัติเหตุ
+                              <span class="badge bg-warning text-dark ms-1" id="accCountBadge">0</span>
+                          </button>
+                      </li>
+                  </ul>
+              </div>
+
+              <div class="card-body p-4">
+                  <div class="tab-content" id="userTabsContent">
+                      
+                      <div class="tab-pane fade show active" id="tab-content-docs" role="tabpanel">
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                              <h6 class="fw-bold text-success mb-0"><i class="bi bi-folder-check me-2"></i>อัปโหลดไฟล์เอกสารส่วนตัว</h6>
+                          </div>
+                          <div id="userDocList" class="row g-3"></div>
+                      </div>
+
+                      <div class="tab-pane fade" id="tab-content-warns" role="tabpanel">
+                          <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-danger border-opacity-25">
+                              <h6 class="fw-bold text-danger mb-0"><i class="bi bi-exclamation-triangle me-2"></i>ประวัติการได้รับใบเตือน</h6>
+                              <select class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;" id="warnLimit" onchange="renderUserWarningsList()">
+                                  <option value="10" selected>10 แถว</option>
+                                  <option value="20">20 แถว</option>
+                                  <option value="all">ทั้งหมด</option>
+                              </select>
+                          </div>
+                          <div id="userWarningListTab"></div>
+                      </div>
+
+                      <div class="tab-pane fade" id="tab-content-accs" role="tabpanel">
+                          <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-warning border-opacity-25">
+                              <h6 class="fw-bold text-warning mb-0"><i class="bi bi-cone-striped me-2"></i>ประวัติการแจ้งอุบัติเหตุ</h6>
+                              <select class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;" id="accLimit" onchange="renderUserAccidentsList()">
+                                  <option value="10" selected>10 แถว</option>
+                                  <option value="20">20 แถว</option>
+                                  <option value="all">ทั้งหมด</option>
+                              </select>
+                          </div>
+                          <div id="userAccidentListTab">
+                              <div class="text-center text-muted py-4 small opacity-50"><div class="spinner-border spinner-border-sm text-warning mb-2"></div><br>กำลังโหลดประวัติ...</div>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="yardModal" tabindex="-1" style="z-index: 1060;">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content bg-dark text-light border border-info border-opacity-50">
+      <div class="modal-header border-secondary border-opacity-50 pb-3">
+        <h5 class="modal-title text-info fw-bold"><i class="bi bi-geo-alt-fill me-2"></i>ลานรับ-คืนตู้</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="row g-2 mb-4 p-3 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+          <div class="col-md-6">
+            <label class="small text-muted mb-1">ค้นหาลาน หรือ ที่อยู่</label>
+            <div class="input-group">
+              <span class="input-group-text bg-transparent border-secondary text-info"><i class="bi bi-search"></i></span>
+              <input type="text" id="yardSearchInput" class="form-control bg-transparent text-light border-secondary shadow-none" placeholder="พิมพ์ชื่อลาน..." onkeyup="filterYards()">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="small text-muted mb-1">แยกตามโซน</label>
+            <select id="yardZoneSelect" class="form-select bg-transparent text-light border-secondary shadow-none" onchange="filterYards()">
+              <option value="all" class="text-dark">🌐 แสดงทุกโซน</option>
+            </select>
+          </div>
+        </div>
+        <div id="yardList" class="row g-3">
+          <div class="text-center p-5"><div class="spinner-border text-info"></div><p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="userRepairModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    <div class="modal-content" style="background: rgba(20,20,20,0.98); backdrop-filter: blur(20px); border: 1px solid rgba(13, 110, 253, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+      <div class="modal-header border-bottom border-primary border-opacity-25 pb-3">
+        <h5 class="modal-title fw-bold text-primary"><i class="bi bi-wrench me-2"></i>ใบแจ้งซ่อมบำรุงรถ / ปัญหาการใช้งาน</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="userRepairForm" onsubmit="submitUserRepair(event)">
+          
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="small text-muted mb-1">วันที่แจ้งซ่อม *</label>
+              <input type="date" class="form-control bg-dark text-light border-secondary" id="repDate" required>
+            </div>
+            <div class="col-md-6">
+              <label class="small text-muted mb-1">ทะเบียนรถ *</label>
+              <select class="form-select bg-dark text-light border-secondary" id="repPlate" required>
+                <option value="">กำลังโหลดทะเบียน...</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label class="small text-muted mb-1">เลขไมล์ปัจจุบัน (ถ้ามี)</label>
+              <input type="number" class="form-control bg-dark text-light border-secondary" id="repMile" placeholder="เช่น 125000">
+            </div>
+          </div>
+
+          <div class="mb-3 p-3 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <label class="small text-light fw-bold m-0"><i class="bi bi-list-check me-2"></i>รายการซ่อมบำรุง</label>
+              <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="addUserRepairRow()"><i class="bi bi-plus"></i> เพิ่มรายการ</button>
+            </div>
+            <div id="userRepairItemsContainer">
+              <div class="input-group input-group-sm mb-2 user-repair-row">
+                <select class="form-select bg-dark text-light border-secondary rep-select" style="max-width: 45%;" onchange="toggleUserCustomInput(this)" required>
+                  <option value="" disabled selected>เลือกรายการ...</option>
+                  <option value="ถ่ายน้ำมันเครื่อง">ถ่ายน้ำมันเครื่อง</option>
+                  <option value="เปลี่ยนกรองน้ำมันเครื่อง">เปลี่ยนกรองน้ำมันเครื่อง</option>
+                  <option value="เป่ากรองอากาศ">เป่ากรองอากาศ</option>
+                  <option value="เป่ากรองแอร์">เป่ากรองแอร์</option>
+                  <option value="เป่าหน้าเครื่อง">เป่าหน้าเครื่อง</option>
+                  <option value="เช็คน้ำกลั่น">เช็คน้ำกลั่น</option>
+                  <option value="เช็คลมยาง">เช็คลมยาง</option>
+                  <option value="อัดจารบี">อัดจารบี</option>
+                  <option value="สลับยาง">สลับยาง</option>
+                  <option value="เปลี่ยนยาง">เปลี่ยนยาง</option>
+                  <option value="other">อื่นๆ (ระบุเอง)</option>
+                </select>
+                <input type="text" class="form-control bg-dark text-light border-warning rep-custom d-none" placeholder="ระบุอาการ/รายการ">
+                <button type="button" class="btn btn-outline-danger btn-remove-rep" onclick="removeUserRepairRow(this)"><i class="bi bi-trash"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="small text-muted mb-1">หมายเหตุ / อาการเพิ่มเติม</label>
+            <textarea class="form-control bg-dark text-light border-secondary" id="repNote" rows="2" placeholder="อธิบายอาการเบื้องต้น หรือ ตำแหน่งเพิ่มเติม..."></textarea>
+          </div>
+
+          <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
+            <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitRep"><i class="bi bi-send-fill me-2"></i>ส่งใบแจ้งซ่อม</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function loadUserData() {
+    document.getElementById('userLoading').style.display = 'block';
+    document.getElementById('userProfileContent').style.display = 'none';
+
+    callAPI({ action: 'getEmployeesByRole', role: 'User', userId: currentUser.empId }).then(function(data){
+      document.getElementById('userLoading').style.display = 'none';
+      document.getElementById('userProfileContent').style.display = 'flex';
+      
+      if(!data || data.length === 0) return;
+      
+      var d = data[0];
+      currentUserData = d;
+      document.getElementById('userNameHeader').innerText = d.name;
+
+      renderUserProfile(d);
+      renderUserDocs(d);
+      
+      globalUserWarnings = [];
+      if (d.docs.WARNING && d.docs.WARNING.length > 0) {
+          globalUserWarnings = d.docs.WARNING.sort(function(a,b) { return new Date(b.date) - new Date(a.date); });
+      }
+      document.getElementById('warnCountBadge').innerText = globalUserWarnings.length;
+      renderUserWarningsList();
+
+      callAPI({ action: 'getAccidentData', role: 'User', empId: currentUser.empId }).then(function(accData) {
+          globalUserAccidents = accData || [];
+          document.getElementById('accCountBadge').innerText = globalUserAccidents.length;
+          renderUserAccidentsList();
+      });
+
+    });
+  }
+
+  function renderUserProfile(d) {
+      if (!d) return;
+
+      var finalLeaveUrl = "#";
+      try {
+        var now = new Date().getTime();
+        var rawString = d.id + "|" + now;
+        var token = btoa(unescape(encodeURIComponent(rawString)));
+        var leaveAppUrl = "https://script.google.com/macros/s/AKfycby32LX4-2iN0zPA9EmhSneiX1Pz66uCMlBnqE2jiWtnVD8L9BG6zcLUyJ4Rh15WilT0uQ/exec";
+        finalLeaveUrl = leaveAppUrl + "?sso_user=" + encodeURIComponent(d.id) + "&sso_token=" + token;
+      } catch (e) {}
+
+      var rawUrl = (d.docs.PHOTO && d.docs.PHOTO.url) ? d.docs.PHOTO.url : '';
+      var photoUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+      
+      if (rawUrl && rawUrl.indexOf('drive.google.com') !== -1) {
+        var fileIdMatch = rawUrl.match(/[-\w]{25,}/);
+        if (fileIdMatch) {
+          photoUrl = "https://drive.google.com/thumbnail?id=" + fileIdMatch[0] + "&sz=w300-h300"; 
+        }
+      }
+
+      var nicknameText = d.nickname ? '(' + d.nickname + ')' : '';
+      var phoneText = d.phone || '-';
+
+      var html = '<div class="card border-0 shadow-lg text-center overflow-hidden position-relative" style="background: rgba(30,30,30,0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;">' +
+            '<div style="height: 80px; background: linear-gradient(135deg, rgba(0,230,118,0.2), rgba(0,0,0,0));"></div>' +
+            '<div class="card-body p-4 pt-0 position-relative">' +
+                '<div class="position-relative d-inline-block mb-3" style="margin-top: -50px;">' +
+                    '<div style="position: absolute; inset: -3px; background: #121212; border-radius: 50%;"></div>' +
+                    '<img src="' + photoUrl + '" class="rounded-circle shadow-lg position-relative object-fit-cover" style="width: 100px; height: 100px; background-color: #222; border: 3px solid var(--accent-color);">' +
+                '</div>' +
+                '<h5 class="fw-bold mb-1 text-white">' + d.name + '</h5>' +
+                '<p class="text-secondary small mb-2">' + nicknameText + '</p>' +
+                '<span class="badge bg-dark border border-secondary text-success fw-normal mb-4 px-3 py-2 rounded-pill">' + d.position + '</span>' +
+                '<div class="text-start small">' +
+                    '<div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">' +
+                        '<span class="text-secondary">รหัสพนักงาน</span>' +
+                        '<span class="text-light font-monospace fw-bold">' + d.id + '</span>' +
+                    '</div>' +
+                    '<div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">' +
+                        '<span class="text-secondary">เบอร์โทร</span>' +
+                        '<span class="text-light">' + phoneText + '</span>' +
+                    '</div>' +
+                    '<div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">' +
+                        '<span class="text-secondary">วันเกิด</span>' +
+                        '<span class="text-light">' + formatDate(d.birthDate) + '</span>' +
+                    '</div>' +
+                     '<div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">' +
+                        '<span class="text-secondary">อายุ</span>' +
+                        '<span class="text-light">' + calcAge(d.birthDate) + '</span>' +
+                    '</div>' +
+                    '<div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">' +
+                        '<span class="text-secondary">เริ่มงาน</span>' +
+                        '<span class="text-light">' + formatDate(d.startDate) + '</span>' +
+                    '</div>' +
+                    '<div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">' +
+                        '<span class="text-secondary">อายุงาน</span>' +
+                        '<span class="text-success fw-bold">' + calcTenure(d.startDate) + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="d-grid gap-2 mt-4">' +
+                    '<button class="btn btn-outline-secondary rounded-pill btn-sm border-opacity-25 text-light hover-scale py-2" onclick="openUserEditModal(\'' + d.id + '\')"><i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว</button>' +
+                      '<div class="row g-2 mt-1">' +
+                        '<div class="col-6">' +
+                          '<a href="' + finalLeaveUrl + '" target="_blank" class="btn btn-dark w-100 rounded-pill btn-sm border border-warning text-warning hover-scale py-2">' +
+                              '<i class="bi bi-calendar-event me-1"></i>แจ้งลางาน' +
+                          '</a>' +
+                        '</div>' +
+                        '<div class="col-6">' + 
+                          '<button onclick="openAccidentModal()" class="btn btn-dark w-100 rounded-pill btn-sm border border-danger text-danger hover-scale py-2">' +
+                              '<i class="bi bi-cone-striped me-1"></i>แจ้งอุบัติเหตุ' +
+                          '</button>' +
+                        '</div>' +
+                        '<div class="col-6">' + 
+                          '<button onclick="openUserRepairModal()" class="btn btn-dark w-100 rounded-pill btn-sm border border-primary text-primary hover-scale py-2">' +
+                              '<i class="bi bi-wrench me-1"></i>แจ้งซ่อมรถ' +
+                          '</button>' +
+                        '</div>' +
+                        '<div class="col-6">' +
+                          '<button onclick="openYardModal()" class="btn btn-dark w-100 rounded-pill btn-sm border border-info text-info hover-scale py-2">' +
+                              '<i class="bi bi-geo-alt-fill me-1"></i>ดูลานรับ-คืนตู้' +
+                          '</button>' +
+                        '</div>' +
+                      '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+        
+      document.getElementById('userProfileCard').innerHTML = html;
+  }
+
+  function renderUserAccidentsList() {
+      var limit = document.getElementById('accLimit').value;
+      var list = limit === 'all' ? globalUserAccidents : globalUserAccidents.slice(0, parseInt(limit));
+      var html = '';
+
+      if (list.length > 0) {
+          list.forEach(function(a) {
+              var safePdfUrl = a.pdfUrl !== '-' ? a.pdfUrl : '#';
+              var statusColor = (a.status === 'Pending' || a.status === 'รอดำเนินการ') ? 'text-warning' : 'text-success';
+              var statusText = a.status === 'Pending' ? 'รอดำเนินการ' : a.status;
+              
+              html += '<div class="p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(255,165,0,0.05); border: 1px solid rgba(255,165,0,0.2);">' +
+                  '<div class="d-flex justify-content-between align-items-center mb-2 border-bottom border-warning border-opacity-25 pb-2">' +
+                      '<span class="font-monospace text-warning fw-bold"><i class="bi bi-hash"></i>' + a.docNo + '</span>' +
+                      '<span class="badge bg-dark border border-secondary ' + statusColor + ' px-3 py-2 rounded-pill">' + statusText + '</span>' +
+                  '</div>' +
+                  '<div class="row g-2 small text-light mb-3">' +
+                      '<div class="col-md-6"><i class="bi bi-calendar-event me-2 text-muted"></i>' + a.accDate + ' เวลา ' + a.accTime + '</div>' +
+                      '<div class="col-md-6 text-truncate" title="' + a.location + '"><i class="bi bi-geo-alt me-2 text-muted"></i>' + a.location + '</div>' +
+                      '<div class="col-md-6"><i class="bi bi-truck me-2 text-muted"></i>' + a.vehType + ' (' + a.truckPlate + ')</div>' +
+                      '<div class="col-md-6"><i class="bi bi-exclamation-triangle me-2 text-danger"></i>' + a.cause + '</div>' +
+                  '</div>' +
+                  '<div class="d-flex justify-content-end">' +
+                      '<a href="' + safePdfUrl + '" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill px-4"><i class="bi bi-file-pdf me-1"></i>ดูเอกสารที่แจ้ง</a>' +
+                  '</div>' +
+              '</div>';
+          });
+      } else {
+          html = '<div class="text-center text-muted py-5 small opacity-50"><i class="bi bi-check-circle fs-1 d-block mb-3 text-success"></i>ไม่มีประวัติอุบัติเหตุ</div>';
+      }
+      document.getElementById('userAccidentListTab').innerHTML = html;
+  }
+
+  function renderUserWarningsList() {
+      var limit = document.getElementById('warnLimit').value;
+      var list = limit === 'all' ? globalUserWarnings : globalUserWarnings.slice(0, parseInt(limit));
+      var html = '';
+
+      if (list.length > 0) {
+          list.forEach(function(w) {
+              html += '<div class="d-flex flex-wrap justify-content-between align-items-center p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(255,0,0,0.05); border: 1px solid rgba(255,0,0,0.2);">' +
+                  '<div class="text-danger fw-bold mb-2 mb-md-0"><i class="bi bi-exclamation-circle-fill me-2"></i>วันที่ออกใบเตือน: ' + formatDate(w.date) + '</div>' +
+                  '<button onclick="openPreview(\'' + w.url + '\')" class="btn btn-sm btn-outline-danger px-4 rounded-pill"><i class="bi bi-eye me-1"></i>เปิดดูเอกสาร</button>' +
+              '</div>';
+          });
+      } else {
+          html = '<div class="text-center text-muted py-5 small opacity-50"><i class="bi bi-shield-check fs-1 d-block mb-3 text-success"></i>ไม่มีประวัติใบเตือน</div>';
+      }
+      document.getElementById('userWarningListTab').innerHTML = html;
+  }
+
+  function renderUserDocs(d) {
+      var docTypes = [
+          {key:'PHOTO', name:'รูปถ่ายหน้าตรง', icon:'bi-person-bounding-box'},
+          {key:'ID_CARD', name:'สำเนาบัตรประชาชน', icon:'bi-person-vcard'},
+          {key:'PASSPORT', name:'หนังสือเดินทาง', icon:'bi-passport'},
+          {key:'HOUSE_REG', name:'สำเนาทะเบียนบ้าน', icon:'bi-house-door'},
+          {key:'LICENSE', name:'ใบอนุญาตขับขี่', icon:'bi-car-front'},
+          {key:'CRIMINAL_RECORD', name:'ประวัติอาชญากรรม', icon:'bi-shield-check'},
+          {key:'HEALTH_CHECK', name:'ใบตรวจสุขภาพ', icon:'bi-heart-pulse'},
+          {key:'EDU_CERT', name:'วุฒิการศึกษา', icon:'bi-mortarboard'},
+          {key:'OTHER_1', name:'เอกสารอื่นๆ 1', icon:'bi-file-earmark-text'},
+          {key:'OTHER_2', name:'เอกสารอื่นๆ 2', icon:'bi-file-earmark-text'}
+      ];
+
+      var html = '';
+      var uploadedCount = 0;
+
+      docTypes.forEach(function(t, index) {
+          var hasFile = (d.docs[t.key] && d.docs[t.key].url);
+          if(hasFile) uploadedCount++;
+          
+          var statusBadge = hasFile 
+            ? '<span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 rounded-pill"><i class="bi bi-check-circle me-1"></i>มีไฟล์แล้ว</span>' 
+            : '<span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 rounded-pill">ว่าง</span>';
+          
+          var viewBtn = hasFile 
+            ? '<button onclick="openPreview(\'' + d.docs[t.key].url + '\')" class="btn btn-sm btn-dark border-secondary text-light ms-1 rounded-circle hover-scale" title="ดูไฟล์"><i class="bi bi-eye"></i></button>' 
+            : '<button class="btn btn-sm btn-dark border-secondary text-muted ms-1 rounded-circle" disabled><i class="bi bi-eye-slash"></i></button>';
+
+          var inputId = 'fileInput_' + index;
+          var spinnerId = 'spinner_' + index;
+
+          html += '<div class="col-md-6">' +
+              '<div class="p-3 rounded h-100 position-relative" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s;">' +
+                  '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                      '<div class="d-flex align-items-center"><i class="bi ' + t.icon + ' text-secondary fs-5 me-2"></i><span class="text-light fw-bold small">' + t.name + '</span></div>' +
+                      viewBtn +
+                  '</div>' +
+                  '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                      statusBadge +
+                      '<div id="' + spinnerId + '" class="spinner-border spinner-border-sm text-success" role="status" style="display:none;"></div>' +
+                  '</div>' +
+                  '<div class="input-group input-group-sm">' +
+                      '<input type="file" class="form-control bg-dark border-secondary text-secondary" id="' + inputId + '" onchange="handleSingleUpload(\'' + t.key + '\', \'' + inputId + '\', \'' + spinnerId + '\')">' +
+                  '</div>' +
+              '</div>' +
+          '</div>';
+      });
+      
+      document.getElementById('userDocList').innerHTML = html;
+      document.getElementById('docCountBadge').innerText = uploadedCount + '/' + docTypes.length;
+  }
+
+  function getBypassLoginUrl(rawUrl) {
+      if (!rawUrl) return '#';
+      var sUrl = String(rawUrl).trim();
+      var idMatch = sUrl.match(/[-\w]{25,}/);
+      if (idMatch && idMatch[0]) {
+          return "https://drive.google.com/uc?export=view&id=" + idMatch[0];
+      }
+      return sUrl;
+  }
+
+  function openPreview(rawUrl) {
+      if(!rawUrl) return;
+      var fileIdMatch = String(rawUrl).match(/[-\w]{25,}/);
+      
+      if(fileIdMatch) {
+          var fileId = fileIdMatch[0];
+          document.getElementById('previewLoading').style.display = 'block';
+          document.getElementById('previewImage').src = ""; 
+          document.getElementById('previewImage').src = "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w1200";
+          document.getElementById('previewFullLink').href = "https://drive.google.com/file/d/" + fileId + "/view";
+          var previewModal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+          previewModal.show();
+      }
+  }
+
+  async function handleSingleUpload(docKey, inputId, spinnerId) {
+      var fileInput = document.getElementById(inputId);
+      var spinner = document.getElementById(spinnerId);
+      if (fileInput.files.length === 0) return;
+
+      fileInput.disabled = true;
+      spinner.style.display = 'block';
+
+      var fileData = await getBase64User(fileInput.files[0]);
+      
+      var payload = {
+          empId: currentUserData.id,
+          currentUserRole: 'User',
+          username: currentUserData.username, password: currentUserData.password, 
+          fullname: currentUserData.name, position: currentUserData.position,
+          startDate: safeDate(currentUserData.startDate), phone: currentUserData.phone
+      };
+      payload[getBackendFileKey(docKey)] = fileData;
+
+      callAPI({ action: 'handleEmployeeSave', form: payload, mode: 'edit' }).then(function(res) {
+          spinner.style.display = 'none';
+          fileInput.disabled = false;
+          fileInput.value = ''; 
+          if(res.success) {
+              Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'อัปโหลดเรียบร้อย', showConfirmButton: false, timer: 1500, background: '#1e1e1e', color: '#fff'});
+              loadUserData();
+          } else {
+              Swal.fire({title:'ผิดพลาด', text:res.message, icon:'error'});
+          }
+      });
+  }
+  
+  function getBackendFileKey(key) {
+      var map = {
+          'PHOTO': 'filePhoto', 'ID_CARD': 'fileIdCard', 'PASSPORT': 'filePassport',
+          'HOUSE_REG': 'fileHouse', 'LICENSE': 'fileDrive', 'CRIMINAL_RECORD': 'fileCriminal',
+          'HEALTH_CHECK': 'fileHealth', 'EDU_CERT': 'fileEdu', 
+          'OTHER_1': 'fileOther1', 'OTHER_2': 'fileOther2'
+      };
+      return map[key];
+  }
+
+  function getBase64User(file) {
+     return new Promise(function(resolve) {
+        var reader = new FileReader();
+        reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); };
+        reader.readAsDataURL(file);
+     });
+  }
+
+  function openUserEditModal(id) {
+        openModal('edit', id, currentUserData); 
+        setTimeout(function() {
+            document.querySelector('#empModal .nav-pills').style.display = 'none';
+            var tab1 = new bootstrap.Tab(document.querySelector('button[data-bs-target="#tabInfo"]'));
+            tab1.show();
+        }, 200);
+  }
+
+  var globalYardData = []; 
+
+  function openYardModal(){
+    document.getElementById('yardSearchInput').value = ''; 
+    var modal = new bootstrap.Modal(document.getElementById('yardModal'));
+    modal.show();
+    loadYards();
+  }
+
+  function loadYards(){
+    document.getElementById("yardList").innerHTML = '<div class="text-center p-5"><div class="spinner-border text-info"></div><p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p></div>';
+    callAPI({ action: 'getYardData' }).then(function(list) {
+        globalYardData = list; 
+        populateZoneSelect(list); 
+        renderYards(list); 
+    });
+  }
+
+  function populateZoneSelect(list) {
+    var zones = [];
+    list.forEach(function(y) {
+      if(y.zone && y.zone !== "ไม่ระบุโซน" && y.zone !== "") {
+        if(zones.indexOf(y.zone) === -1) zones.push(y.zone);
+      }
+    });
+
+    var select = document.getElementById("yardZoneSelect");
+    select.innerHTML = '<option value="all" class="text-dark">🌐 แสดงทุกโซน</option>';
+    zones.sort().forEach(function(z) {
+      select.innerHTML += '<option value="' + z + '" class="text-dark">' + z + '</option>';
+    });
+  }
+
+  function filterYards() {
+    var searchTxt = document.getElementById("yardSearchInput").value.toLowerCase();
+    var selectedZone = document.getElementById("yardZoneSelect").value;
+
+    var filteredList = globalYardData.filter(function(y) {
+      var matchSearch = y.name.toLowerCase().includes(searchTxt) || y.location.toLowerCase().includes(searchTxt);
+      var matchZone = (selectedZone === "all") || (y.zone === selectedZone);
+      return matchSearch && matchZone;
+    });
+
+    renderYards(filteredList);
+  }
+
+  function renderYards(list){
+    var html = "";
+    if(!list || list.length === 0){
+      html = "<div class='col-12 text-center p-5 text-muted'>ไม่พบข้อมูลลานตู้คอนเทนเนอร์ที่ค้นหา</div>";
+    } else {
+      list.forEach(function(y) {
+        var zoneBadge = (y.zone && y.zone !== "ไม่ระบุโซน" && y.zone !== "") 
+                        ? '<span class="badge bg-secondary bg-opacity-50 border border-secondary text-light mb-2">' + y.zone + '</span>' 
+                        : '';
+        html += '<div class="col-md-6">' +
+          '<div class="card bg-black border-secondary h-100 hover-scale position-relative">' +
+            '<div class="card-body">' +
+              zoneBadge +
+              '<h5 class="text-info fw-bold mb-2">' + y.name + '</h5>' +
+              '<p class="small text-secondary mb-1"><i class="bi bi-geo-alt text-danger me-1"></i> ' + y.location + '</p>' +
+              '<p class="small text-secondary mb-3"><i class="bi bi-telephone text-success me-1"></i> ' + (y.contact || '-') + '</p>' +
+              '<table class="table table-dark table-sm border-secondary text-center align-middle mb-3" style="background: rgba(255,255,255,0.02);">' +
+                '<thead class="text-muted" style="border-bottom: 1px solid rgba(255,255,255,0.1);">' +
+                  '<tr><th></th><th>ตู้สั้น (20\')</th><th>ตู้ยาว (40\')</th></tr>' +
+                '</thead>' +
+                '<tbody>' +
+                  '<tr><td class="text-start text-warning">ตู้เปล่า</td><td>' + (y.emptyShort || '-') + '</td><td>' + (y.emptyLong || '-') + '</td></tr>' +
+                  '<tr><td class="text-start text-danger">ตู้หนัก</td><td>' + (y.fullShort || '-') + '</td><td>' + (y.fullLong || '-') + '</td></tr>' +
+                '</tbody>' +
+              '</table>' +
+              '<a href="' + y.map + '" target="_blank" class="btn btn-outline-info btn-sm w-100 rounded-pill">' +
+                '<i class="bi bi-map me-1"></i> เปิดแผนที่ (Google Map)' +
+              '</a>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      });
+    }
+    document.getElementById("yardList").innerHTML = html;
+  }
+
+  function openUserRepairModal() {
+      document.getElementById('userRepairForm').reset();
+      document.getElementById('repDate').valueAsDate = new Date();
+      
+      const container = document.getElementById('userRepairItemsContainer');
+      const rows = container.querySelectorAll('.user-repair-row');
+      rows.forEach((row, index) => { if(index > 0) row.remove(); });
+      
+      let firstRow = rows[0];
+      firstRow.querySelector('.rep-select').value = "";
+      firstRow.querySelector('.rep-custom').value = "";
+      firstRow.querySelector('.rep-custom').classList.add('d-none');
+      firstRow.querySelector('.rep-custom').required = false;
+
+      if (document.getElementById('repPlate').options.length <= 1) {
+           loadFleetVehicles();
+      }
+
+      new bootstrap.Modal(document.getElementById('userRepairModal')).show();
+  }
+
+  async function loadFleetVehicles() {
+      try {
+          const response = await fetch(FLEET_API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ action: 'getFleetAnalytics' })
+          });
+          const data = await response.json();
+          if (data.status === 'success' && data.data && data.data.summary) {
+              let options = '<option value="" disabled selected>-- เลือกทะเบียนรถ --</option>';
+              data.data.summary.forEach(v => {
+                  options += `<option value="${v.plate}">${v.plate} ${v.type ? '('+v.type+')' : ''}</option>`;
+              });
+              document.getElementById('repPlate').innerHTML = options;
+          }
+      } catch (e) {
+          document.getElementById('repPlate').innerHTML = '<option value="">โหลดข้อมูลทะเบียนล้มเหลว</option>';
+      }
+  }
+
+  function toggleUserCustomInput(selectElem) {
+      const customInput = selectElem.nextElementSibling;
+      const needsDetails = ["other", "สลับยาง", "เปลี่ยนยาง", "อัดจารบี"].includes(selectElem.value);
+      
+      if (needsDetails) {
+          customInput.classList.remove('d-none');
+          customInput.required = true;
+          customInput.focus();
+          if(selectElem.value !== "other") {
+              customInput.placeholder = "ระบุรายละเอียด (เช่น ตำแหน่งล้อ/จุดที่ทำ)";
+          } else {
+              customInput.placeholder = "ระบุรายการ/อาการ";
+          }
+      } else {
+          customInput.classList.add('d-none');
+          customInput.required = false;
+      }
+  }
+
+  function addUserRepairRow() {
+      const container = document.getElementById('userRepairItemsContainer');
+      const firstRow = container.querySelector('.user-repair-row');
+      const newRow = firstRow.cloneNode(true);
+      newRow.querySelector('.rep-select').value = "";
+      newRow.querySelector('.rep-custom').value = "";
+      newRow.querySelector('.rep-custom').classList.add('d-none');
+      newRow.querySelector('.rep-custom').required = false;
+      container.appendChild(newRow);
+  }
+
+  function removeUserRepairRow(btn) {
+      const rows = document.querySelectorAll('.user-repair-row');
+      if(rows.length > 1) {
+          btn.parentElement.remove();
+      } else {
+          Swal.fire({toast: true, position:'top', icon:'warning', title:'ต้องมีอย่างน้อย 1 รายการ', showConfirmButton: false, timer: 2000, background: '#1e1e1e', color: '#fff'});
+      }
+  }
+
+  async function submitUserRepair(e) {
+      e.preventDefault();
+      
+      let itemsList = [];
+      document.querySelectorAll('.user-repair-row').forEach(row => {
+          let selVal = row.querySelector('.rep-select').value;
+          let custVal = row.querySelector('.rep-custom').value;
+          let itemName = selVal;
+          
+          if (["other", "สลับยาง", "เปลี่ยนยาง", "อัดจารบี"].includes(selVal) && custVal.trim() !== "") {
+              itemName = (selVal === "other") ? custVal.trim() : `${selVal} - ${custVal.trim()}`;
+          }
+          
+          if(itemName) {
+              itemsList.push({ name: itemName, cost: 0 }); 
+          }
+      });
+
+      if(itemsList.length === 0) { 
+          Swal.fire({icon: 'warning', title: 'แจ้งเตือน', text: 'กรุณาระบุรายการซ่อมอย่างน้อย 1 รายการ', background: '#1e1e1e', color: '#fff'}); 
+          return; 
+      }
+
+      let userNote = document.getElementById('repNote').value;
+      let finalNote = userNote ? userNote + `\n(แจ้งโดย: ${currentUserData.name})` : `(แจ้งโดย: ${currentUserData.name})`;
+
+      let payload = {
+          action: 'manageRepair',
+          subAction: 'add',
+          date: document.getElementById('repDate').value,
+          plate: document.getElementById('repPlate').value,
+          mile: document.getElementById('repMile').value || 0,
+          mechanic: '', 
+          note: finalNote,
+          itemsJSON: JSON.stringify(itemsList)
+      };
+
+      let btn = document.getElementById('btnSubmitRep');
+      let originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังส่งคิวช่าง...';
+      btn.disabled = true;
+
+      try {
+          const res = await fetch(FLEET_API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+
+          if (data.status === 'success') {
+              Swal.fire({icon: 'success', title: 'แจ้งซ่อมสำเร็จ!', text: 'ข้อมูลถูกส่งเข้าคิวช่าง (สถานะ: รอซ่อม) เรียบร้อยแล้ว', background: '#1e1e1e', color: '#fff'});
+              bootstrap.Modal.getInstance(document.getElementById('userRepairModal')).hide();
+          } else {
+              throw new Error(data.message);
+          }
+      } catch(err) {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+          Swal.fire({icon: 'error', title: 'ผิดพลาด', text: 'ไม่สามารถส่งข้อมูลได้: ' + err.message, background: '#1e1e1e', color: '#fff'});
+      }
+  }
+</script>
