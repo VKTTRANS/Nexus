@@ -368,6 +368,25 @@
     </div>
   </div>
 
+  <div class="modal fade" id="imagePreviewModal" tabindex="-1" style="z-index: 10000;">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content bg-transparent border-0 shadow-none">
+              <div class="modal-header border-0 pb-0 justify-content-end">
+                  <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 10px;"></button>
+              </div>
+              <div class="modal-body text-center position-relative">
+                  <div id="previewLoading" class="spinner-border text-success position-absolute top-50 start-50 translate-middle" style="display:none; width: 3rem; height: 3rem;"></div>
+                  <img id="previewImage" src="" class="img-fluid rounded shadow-lg border border-secondary border-opacity-25" style="max-height: 75vh; object-fit: contain; background-color: #111;" onload="document.getElementById('previewLoading').style.display='none'">
+              </div>
+              <div class="modal-footer border-0 justify-content-center pt-0">
+                  <a id="previewFullLink" href="#" target="_blank" class="btn btn-outline-light btn-sm rounded-pill px-4" style="background: rgba(0,0,0,0.5);">
+                      <i class="bi bi-box-arrow-up-right me-2"></i>เปิดไฟล์ต้นฉบับ / PDF
+                  </a>
+              </div>
+          </div>
+      </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
@@ -422,6 +441,7 @@
       }
     };
 
+    // 🟢 ระบบโหลดไฟล์ย่อยที่ปรับปรุงแล้ว
     async function loadAllComponents() {
       const files = ['login.html', 'admin.html', 'recruit.html', 'user.html', 'accident.html'];
       for (let file of files) {
@@ -431,19 +451,18 @@
           const html = await response.text();
           const div = document.createElement('div');
           div.innerHTML = html;
-
+          
           const scripts = div.querySelectorAll('script');
-
+          
           while (div.firstChild) {
             document.body.appendChild(div.firstChild);
           }
-
+          
           scripts.forEach(s => {
             const newScript = document.createElement('script');
             newScript.textContent = s.innerHTML;
             document.body.appendChild(newScript);
           });
-          
         } catch (error) {
           console.error("Component error:", error);
         }
@@ -469,7 +488,10 @@
 
     function switchView(id) { 
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); 
-        document.getElementById(id).classList.add('active'); 
+        var targetView = document.getElementById(id);
+        if(targetView) {
+            targetView.classList.add('active'); 
+        }
         if(id === 'view-login' && typeof checkAutoLogin === 'function') { checkAutoLogin(); }
     }
 
@@ -489,6 +511,22 @@
       if(document.getElementById('adminWarnTableBody')) document.getElementById('adminWarnTableBody').innerHTML = '';
       switchView('view-login'); 
     }
+
+    // 🟢 ระบบดูรูปภาพส่วนกลาง
+    window.openPreview = function(rawUrl) {
+        if(!rawUrl || rawUrl === '-') return;
+        var fileIdMatch = String(rawUrl).match(/[-\w]{25,}/);
+        if(fileIdMatch) {
+            var fileId = fileIdMatch[0];
+            document.getElementById('previewLoading').style.display = 'block';
+            document.getElementById('previewImage').src = "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w1200";
+            document.getElementById('previewFullLink').href = "https://drive.google.com/file/d/" + fileId + "/view";
+            var previewModal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+            previewModal.show();
+        } else if(String(rawUrl).indexOf('http') === 0) {
+            window.open(rawUrl, '_blank');
+        }
+    };
 
     function toggleResignDate() { 
         var st = document.getElementById('empStatus').value; 
@@ -558,7 +596,7 @@
 
       } else {
         var isUser = (currentUser.role === 'User');
-        document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว alert' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน';
+        document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน';
         editSection.style.display = 'block'; 
         btnSave.style.display = 'block'; 
         document.getElementById('btnGenId').style.display = 'none';
