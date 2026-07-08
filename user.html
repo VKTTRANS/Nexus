@@ -192,6 +192,10 @@
 </div>
 
 <script>
+  // 🟢 ประกาศตัวแปรรับค่า API ทั้ง 2 ระบบให้ครบถ้วน
+  const FLEET_API_URL = "https://script.google.com/macros/s/AKfycbyw0mIjSyoLO_E1RJmsGpBiPNiNVQiotHNcrkgCBg849wjA83Fel4l6VHYSTe0PrIC-/exec";
+  const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOFq4yA2YaCvA5w9OXlM4wu5lGqCEt6AnMn-2_Pw_Fl-YpIB5hzAFM5YFIVlSPd7Tu-A/exec";
+
   function loadUserData() {
     document.getElementById('userLoading').style.display = 'block';
     document.getElementById('userProfileContent').style.display = 'none';
@@ -695,12 +699,12 @@
       btn.disabled = true;
 
       try {
-          const res = await fetch(FLEET_API_URL, {
+          const response = await fetch(FLEET_API_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
               body: JSON.stringify(payload)
           });
-          const data = await res.json();
+          const data = await response.json();
           
           btn.innerHTML = originalText;
           btn.disabled = false;
