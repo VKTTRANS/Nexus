@@ -556,7 +556,7 @@
                photoLinks.forEach(function(link) {
                    var cleanLink = link.trim();
                    if(cleanLink) {
-                       photoHtml += '<button onclick="event.stopPropagation(); openPreview(\'' + cleanLink + '\')" class="btn btn-sm btn-outline-info py-0 px-2 mb-1 me-1 shadow-sm"><i class="bi bi-image"></i></button>';
+                       photoHtml += '<button type="button" onclick="event.stopPropagation(); window.openPreview(\'' + cleanLink + '\')" class="btn btn-sm btn-outline-info py-0 px-2 mb-1 me-1 shadow-sm"><i class="bi bi-image"></i></button>';
                    }
                });
            }
