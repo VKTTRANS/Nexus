@@ -192,10 +192,6 @@
 </div>
 
 <script>
-  // 🟢 ประกาศตัวแปรรับค่า API ทั้ง 2 ระบบให้ครบถ้วน
-  const FLEET_API_URL = "https://script.google.com/macros/s/AKfycbyw0mIjSyoLO_E1RJmsGpBiPNiNVQiotHNcrkgCBg849wjA83Fel4l6VHYSTe0PrIC-/exec";
-  const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOFq4yA2YaCvA5w9OXlM4wu5lGqCEt6AnMn-2_Pw_Fl-YpIB5hzAFM5YFIVlSPd7Tu-A/exec";
-
   function loadUserData() {
     document.getElementById('userLoading').style.display = 'block';
     document.getElementById('userProfileContent').style.display = 'none';
@@ -373,7 +369,7 @@
           list.forEach(function(w) {
               html += '<div class="d-flex flex-wrap justify-content-between align-items-center p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(255,0,0,0.05); border: 1px solid rgba(255,0,0,0.2);">' +
                   '<div class="text-danger fw-bold mb-2 mb-md-0"><i class="bi bi-exclamation-circle-fill me-2"></i>วันที่ออกใบเตือน: ' + formatDate(w.date) + '</div>' +
-                  '<button onclick="openPreview(\'' + w.url + '\')" class="btn btn-sm btn-outline-danger px-4 rounded-pill"><i class="bi bi-eye me-1"></i>เปิดดูเอกสาร</button>' +
+                  '<button onclick="window.openPreview(\'' + w.url + '\')" class="btn btn-sm btn-outline-danger px-4 rounded-pill"><i class="bi bi-eye me-1"></i>เปิดดูเอกสาร</button>' +
               '</div>';
           });
       } else {
@@ -408,8 +404,8 @@
             : '<span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 rounded-pill">ว่าง</span>';
           
           var viewBtn = hasFile 
-            ? '<button onclick="openPreview(\'' + d.docs[t.key].url + '\')" class="btn btn-sm btn-dark border-secondary text-light ms-1 rounded-circle hover-scale" title="ดูไฟล์"><i class="bi bi-eye"></i></button>' 
-            : '<button class="btn btn-sm btn-dark border-secondary text-muted ms-1 rounded-circle" disabled><i class="bi bi-eye-slash"></i></button>';
+            ? '<button type="button" onclick="window.openPreview(\'' + d.docs[t.key].url + '\')" class="btn btn-sm btn-dark border-secondary text-light ms-1 rounded-circle hover-scale" title="ดูไฟล์"><i class="bi bi-eye"></i></button>' 
+            : '<button type="button" class="btn btn-sm btn-dark border-secondary text-muted ms-1 rounded-circle" disabled><i class="bi bi-eye-slash"></i></button>';
 
           var inputId = 'fileInput_' + index;
           var spinnerId = 'spinner_' + index;
