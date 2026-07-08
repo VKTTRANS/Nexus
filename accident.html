@@ -1,328 +1,276 @@
-<div id="view-recruit">
-  
-  <div class="modal fade" id="recruitModal" data-bs-backdrop="static">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content border-0" style="background: #121212;">
-        
-        <div class="modal-header border-bottom border-secondary border-opacity-25 py-3" style="background: rgba(30,30,30,0.5);">
-          <h5 class="modal-title fw-bold text-white">
-             <i class="bi bi-person-plus-fill me-2 text-success"></i>รายการผู้สมัครงานใหม่
-          </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+<div class="modal fade" id="accidentModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content" style="background: rgba(20,20,20,0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,50,50,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+            <div class="modal-header border-bottom border-danger border-opacity-25 pb-3">
+                <h5 class="modal-title fw-bold text-danger"><i class="bi bi-cone-striped me-2"></i>รายงานอุบัติเหตุ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="accidentForm" onsubmit="window.submitAccident(event)">
+                    
+                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2"><i class="bi bi-info-circle me-2"></i>ข้อมูลการเกิดเหตุ</h6>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">วันที่เกิดเหตุ *</label>
+                            <input type="date" class="form-control bg-dark text-light border-secondary" id="accDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">เวลาเกิดเหตุ *</label>
+                            <select class="form-select bg-dark text-light border-secondary" id="accTime" required>
+                                <option value="">- เลือกเวลาโดยประมาณ -</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">สถานที่เกิดเหตุ *</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accLocation" placeholder="ระบุสถานที่ หรือ ลิงก์พิกัด Google Maps" required>
+                        </div>
+                    </div>
+
+                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2"><i class="bi bi-truck me-2"></i>ข้อมูลยานพาหนะ</h6>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="small text-muted mb-1">ประเภทรถ *</label>
+                            <select class="form-select bg-dark text-light border-secondary" id="accVehicleType" required>
+                                <option value="">- เลือก -</option>
+                                <option value="รถ 4 ล้อ">รถ 4 ล้อ</option>
+                                <option value="รถ 6 ล้อ">รถ 6 ล้อ</option>
+                                <option value="รถ 6 ล้อพ่วง">รถ 6 ล้อพ่วง</option>
+                                <option value="รถ 10 ล้อ">รถ 10 ล้อ</option>
+                                <option value="รถ 10 ล้อพ่วง">รถ 10 ล้อพ่วง</option>
+                                <option value="รถ 12 ล้อพ่วง">รถ 12 ล้อพ่วง</option>
+                                <option value="รถ เทรลเลอร์">รถ เทรลเลอร์</option>
+                                <option value="รถบัส">รถบัส</option>
+                                <option value="รถโฟร์คลิฟ">รถโฟร์คลิฟ</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="small text-muted mb-1">ทะเบียนรถ (หัว) *</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accTruckPlate" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="small text-muted mb-1">ทะเบียนหาง (ถ้ามี)</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accTrailerPlate">
+                        </div>
+                    </div>
+
+                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2"><i class="bi bi-exclamation-triangle me-2"></i>สาเหตุและความเสียหาย</h6>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">สาเหตุ *</label>
+                            <select class="form-select bg-dark text-light border-secondary mb-2" id="accCause" onchange="window.toggleAccOther('accCause', 'divCauseOther')" required>
+                                <option value="">- เลือก -</option>
+                                <option value="เมาสุรา">เมาสุรา</option>
+                                <option value="ขับเร็วเกินกว่ากำหนด">ขับเร็วเกินกว่ากำหนด</option>
+                                <option value="ตัดหน้ากระชั้นชิด">ตัดหน้ากระชั้นชิด</option>
+                                <option value="ทัศนวิสัยไม่ดี">ทัศนวิสัยไม่ดี</option>
+                                <option value="หลับใน">หลับใน</option>
+                                <option value="ฝ่าฝืนสัญญาณไฟจราจร">ฝ่าฝืนสัญญาณไฟจราจร</option>
+                                <option value="แซงรถในที่คับขัน">แซงรถในที่คับขัน</option>
+                                <option value="โทรศัพท์ขณะขับขี่">โทรศัพท์ขณะขับขี่</option>
+                                <option value="น้ำหนักเกิน">น้ำหนักเกิน</option>
+                                <option value="มีสิ่งกีดขวางที่ไม่คาดคิดบนถนน">มีสิ่งกีดขวางที่ไม่คาดคิดบนถนน</option>
+                                <option value="ยางรั่ว/ยางแตก/ยางเบียด">ยางรั่ว/ยางแตก/ยางเบียด</option>
+                                <option value="อื่นๆ ระบุ">อื่นๆ ระบุ</option>
+                            </select>
+                            <div id="divCauseOther" style="display:none;">
+                                <input type="text" class="form-control bg-dark text-light border-warning" id="accCauseOther" placeholder="โปรดระบุสาเหตุอื่นๆ...">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">เหตุเกิดจาก *</label>
+                            <select class="form-select bg-dark text-light border-secondary mb-2" id="accCausedBy" onchange="window.toggleAccOther('accCausedBy', 'divCausedByOther')" required>
+                                <option value="">- เลือก -</option>
+                                <option value="เกิดจากบุคคล">เกิดจากบุคคล</option>
+                                <option value="เกิดจากรถ">เกิดจากรถ</option>
+                                <option value="เกิดจากทางและเครื่องหมายจราจร">เกิดจากทางและเครื่องหมายจราจร</option>
+                                <option value="เกิดจากธรรมชาติ">เกิดจากธรรมชาติ</option>
+                                <option value="อื่นๆ ระบุ">อื่นๆ ระบุ</option>
+                            </select>
+                            <div id="divCausedByOther" style="display:none;">
+                                <input type="text" class="form-control bg-dark text-light border-warning" id="accCausedByOther" placeholder="โปรดระบุเหตุเกิดจาก...">
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-1">
+                            <div class="p-3 rounded small" style="background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.1);">
+                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากบุคคล:</span> คนขับประมาท, ขับเร็ว, เมา, ใช้โทรศัพท์, คนข้ามถนนตัดหน้า</div>
+                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากรถ:</span> อุปกรณ์บกพร่อง เช่น เบรก, ไฟสัญญาณ, ยาง, ที่ปัดน้ำฝน</div>
+                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากทางฯ:</span> ทางแยก, ทางโค้ง, ถนนชำรุด, ป้ายสัญญาณชำรุด</div>
+                                <div class="text-light"><span class="text-warning fw-bold">จากธรรมชาติ:</span> ฝนตกหนัก, หมอกลงจัด ฯลฯ</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">ความเสียหาย *</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accDamage" placeholder="สรุปความเสียหายเบื้องต้น (เช่น กันชนหน้ายุบ, ไฟแตก)" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">รายละเอียดเหตุการณ์ *</label>
+                            <textarea class="form-control bg-dark text-light border-secondary" id="accDetail" rows="3" placeholder="อธิบายลำดับเหตุการณ์ที่เกิดขึ้น..." required></textarea>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(0,0,0,0.3);">
+                                <label class="small text-light mb-1 fw-bold"><i class="bi bi-camera me-2 text-info"></i>รูปถ่ายหน้างาน / หลักฐาน (ใส่ได้สูงสุด 2 รูป)</label>
+                                <div class="row g-2 mt-1">
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">รูปที่ 1</small>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary" id="accPhoto1" accept="image/*" capture="environment">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">รูปที่ 2 (ถ้ามี)</small>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary" id="accPhoto2" accept="image/*" capture="environment">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-danger rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitAccident">ส่งรายงานอุบัติเหตุ</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="modal-body p-0">
-          
-          <div id="recruitListView" class="p-4">
-             <div id="recruitLoading" class="text-center py-5">
-                <div class="spinner-border text-success" role="status"></div>
-                <p class="mt-3 text-muted small">กำลังโหลดข้อมูลใบสมัคร...</p>
-             </div>
-             <div class="row g-3" id="recruitListGroup"></div>
-          </div>
-          
-          <div id="recruitDetailView" class="d-none h-100">
-             <div class="p-4">
-                <button class="btn btn-sm btn-outline-secondary mb-4 rounded-pill px-4 text-light border-opacity-25 hover-scale" onclick="switchRecruitView('list')">
-                   <i class="bi bi-arrow-left me-1"></i> ย้อนกลับ
-                </button>
-
-                <div class="row g-4">
-                   <div class="col-lg-4 text-center border-end border-secondary border-opacity-10">
-                      <div class="position-relative d-inline-block mb-3">
-                          <div style="position: absolute; inset: -3px; background: linear-gradient(135deg, #00E676, transparent); border-radius: 50%; opacity: 0.5;"></div>
-                          <img id="d_photo" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
-                               class="rounded-circle shadow-lg position-relative object-fit-cover" 
-                               style="width: 160px; height: 160px; background-color: #222; border: 4px solid #121212;"
-                               referrerpolicy="no-referrer"
-                               onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
-                      </div>
-                      
-                      <h4 class="fw-bold text-white mb-1" id="d_name">-</h4>
-                      <span class="badge bg-dark border border-secondary text-success fw-normal px-3 py-2 mb-4" id="d_pos">-</span>
-                      
-                      <div class="card border-0 p-3 mb-4 text-center" style="background: rgba(255,255,255,0.03); border-radius: 16px;">
-                         <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 1px;">คะแนนสอบ (Quiz Score)</small>
-                         <div class="display-4 fw-bold mt-2" id="d_score_val" style="text-shadow: 0 0 10px rgba(0,0,0,0.5);">-</div>
-                      </div>
-
-                      <div class="d-grid gap-2">
-                         <button class="btn btn-success fw-bold py-3 shadow-lg text-dark rounded-pill" id="btnApprove" style="background: linear-gradient(135deg, #00E676, #00C853); border:none;">
-                            <i class="bi bi-check-circle-fill me-2"></i>รับเข้าทำงาน
-                         </button>
-                         <button class="btn btn-outline-danger py-2 rounded-pill border-opacity-50" id="btnReject">
-                            <i class="bi bi-x-circle me-2"></i>ปฏิเสธใบสมัคร
-                         </button>
-                      </div>
-                   </div>
-                   
-                   <div class="col-lg-8 ps-lg-4">
-                      <h6 class="text-success border-bottom border-secondary border-opacity-25 pb-2 mb-4 fw-bold">
-                          <i class="bi bi-person-lines-fill me-2"></i>ข้อมูลส่วนตัว
-                      </h6>
-                      
-                      <div class="row g-3 mb-4">
-                         <div class="col-md-6"><div class="p-3 rounded h-100 border-glass"><small class="text-muted d-block mb-1">วันเกิด</small><span id="d_birth" class="fw-bold text-light fs-5">-</span></div></div>
-                         <div class="col-md-6"><div class="p-3 rounded h-100 border-glass"><small class="text-muted d-block mb-1">อายุ</small><span id="d_age" class="fw-bold text-light fs-5">-</span></div></div>
-                         <div class="col-md-6"><div class="p-3 rounded h-100 border-glass"><small class="text-muted d-block mb-1">เลขบัตรประชาชน</small><span id="d_idcard" class="font-monospace text-warning fs-5">-</span></div></div>
-                         <div class="col-md-6"><div class="p-3 rounded h-100 border-glass"><small class="text-muted d-block mb-1">เบอร์โทรศัพท์</small><span id="d_phone" class="font-monospace text-light fs-5">-</span></div></div>
-                         <div class="col-md-6"><div class="p-3 rounded h-100 border-glass"><small class="text-muted d-block mb-1">ใบขับขี่</small><span id="d_licType" class="text-light fw-bold">-</span></div></div>
-                         <div class="col-md-6"><div class="p-3 rounded h-100 border-glass"><small class="text-muted d-block mb-1">วันหมดอายุใบขับขี่</small><span id="d_licExp" class="text-danger fw-bold">-</span></div></div>
-                         
-                         <div class="col-md-12">
-                             <div class="p-3 rounded h-100 border-glass" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.2);">
-                                 <small class="text-success d-block mb-1 fw-bold"><i class="bi bi-cash-stack me-1"></i>เงินเดือนที่คาดหวัง</small>
-                                 <span id="d_salary" class="fw-bold text-white fs-4">-</span>
-                             </div>
-                         </div>
-                      </div>
-
-                      <h6 class="text-success border-bottom border-secondary border-opacity-25 pb-2 mb-4 fw-bold">
-                          <i class="bi bi-paperclip me-2"></i>เอกสารแนบ
-                      </h6>
-                      <div class="d-flex gap-2 flex-wrap" id="d_docs_links"></div>
-                   </div>
-                </div>
-             </div>
-          </div>
-
-        </div>
-      </div>
     </div>
-  </div>
-
-  <style>
-    .swal2-container {
-        z-index: 20000 !important;
-    }
-    
-    .border-glass {
-        background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(255,255,255,0.05);
-    }
-    .card-recruit-hover {
-        transition: all 0.3s ease;
-        cursor: pointer !important; 
-    }
-    .card-recruit-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 230, 118, 0.15) !important;
-        border-color: var(--accent-color) !important;
-        background: rgba(40, 40, 40, 0.8) !important;
-    }
-  </style>
-
-  <script>
-    var recruitDataList = [];
-
-    function openRecruitModal() {
-      var modalEl = document.getElementById('recruitModal');
-      var modal = new bootstrap.Modal(modalEl, { focus: false });
-      modal.show();
-      switchRecruitView('list');
-      loadRecruitData();
-    }
-
-    function switchRecruitView(view) {
-      if(view === 'list') {
-         document.getElementById('recruitListView').classList.remove('d-none');
-         document.getElementById('recruitDetailView').classList.add('d-none');
-      } else {
-         document.getElementById('recruitListView').classList.add('d-none');
-         document.getElementById('recruitDetailView').classList.remove('d-none');
-      }
-    }
-
-    function getSafeImageUrl(rawUrl) {
-        var defaultImg = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-        if (!rawUrl) return defaultImg;
-        var sUrl = String(rawUrl).trim();
-        if (sUrl.indexOf('drive.google.com') !== -1) {
-            var idMatch = sUrl.match(/id=([-\w]{25,})/) || sUrl.match(/\/d\/([-\w]{25,})/);
-            if (idMatch && idMatch[1]) { return "https://drive.google.com/uc?export=view&id=" + idMatch[1]; }
-        }
-        if (sUrl.indexOf('http') === 0) return sUrl;
-        return defaultImg;
-    }
-
-    async function loadRecruitData() {
-      var container = document.getElementById('recruitListGroup');
-      var loader = document.getElementById('recruitLoading');
-      container.innerHTML = '';
-      loader.style.display = 'block';
-      
-      try {
-        const list = await callAPI({ action: 'getCandidateList' });
-        loader.style.display = 'none';
-        recruitDataList = list || [];
-        if (recruitDataList.length === 0) {
-          container.innerHTML = '<div class="col-12 text-center py-5"><p class="text-muted">ไม่พบข้อมูลใบสมัครใหม่</p></div>';
-          return;
-        }
-        var html = '';
-        recruitDataList.forEach(function(c, index) {
-          var d = {};
-          try { d = JSON.parse(c.rawData); } catch(e) {}
-          var scoreStr = String(d[63] || '0');
-          var scoreNum = parseFloat(scoreStr.split('/')[0]) || 0;
-          var badgeClass = scoreNum >= 7 ? 'bg-success text-dark' : 'bg-danger text-white';
-          var badgeText = scoreNum >= 7 ? 'ผ่าน' : 'พิจารณา';
-          var imgUrl = getSafeImageUrl(c.photo);
-
-          html += '<div class="col-md-6 col-lg-4">' +
-            '<div class="card h-100 border-0 shadow-sm card-recruit-hover" ' +
-                 'style="background: rgba(30,30,30,0.5); border: 1px solid rgba(255,255,255,0.05);" ' +
-                 'onclick="showRecruitDetail(' + index + ')">' +
-                '<div class="card-body p-3">' +
-                    '<div class="d-flex justify-content-between mb-3">' +
-                        '<span class="badge bg-dark border border-secondary text-muted rounded-pill">#' + (index+1) + '</span>' +
-                        '<span class="badge ' + badgeClass + ' rounded-pill">' + scoreStr + ' (' + badgeText + ')</span>' +
-                    '</div>' +
-                    '<div class="d-flex align-items-center mb-3">' +
-                        '<div class="flex-shrink-0 me-3">' +
-                            '<img src="' + imgUrl + '" class="rounded-circle border border-secondary" width="60" height="60" style="object-fit: cover;" referrerpolicy="no-referrer" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\'">' +
-                        '</div>' +
-                        '<div class="overflow-hidden">' +
-                            '<h6 class="fw-bold text-white mb-1 text-truncate">' + c.name + '</h6>' +
-                            '<small class="text-success d-block text-truncate"><i class="bi bi-briefcase me-1"></i>' + c.position + '</small>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25">' +
-                        '<small class="text-muted" style="font-size:0.75rem;"><i class="bi bi-clock me-1"></i>' + c.timestamp.split(' ')[0] + '</small>' +
-                        '<small class="text-white fw-bold" style="font-size:0.8rem;">ตรวจสอบ <i class="bi bi-chevron-right"></i></small>' +
-                    '</div>' +
-                '</div>' +
-            '</div>' +
-          '</div>';
-        });
-        container.innerHTML = html;
-      } catch (err) {
-        loader.style.display = 'none';
-        container.innerHTML = '<div class="col-12 text-center py-5"><p class="text-danger">เกิดข้อผิดพลาดในการดึงข้อมูลใบสมัคร</p></div>';
-      }
-    }
-
-    async function showRecruitDetail(index) {
-      var c = recruitDataList[index];
-      if (!c) return;
-      var d = {};
-      try { d = JSON.parse(c.rawData); } catch(e) {}
-
-      document.getElementById('d_name').innerText = c.name; 
-      document.getElementById('d_pos').innerText = c.position;
-      document.getElementById('d_phone').innerText = c.phone;
-      
-      var imgEl = document.getElementById('d_photo');
-      imgEl.src = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; 
-      if (c.photo && String(c.photo).length > 10) {
-          imgEl.style.opacity = "0.5"; 
-          try {
-             const res = await callAPI({ action: 'getDriveImageBase64', url: c.photo });
-             if (res && res.base64) { imgEl.src = res.base64; }
-          } catch(e) {}
-          imgEl.style.opacity = "1"; 
-      }
-
-      var bDate = '-';
-      if(d[5]) { try { bDate = new Date(d[5]).toLocaleDateString('th-TH'); } catch(e){} }
-      document.getElementById('d_birth').innerText = bDate;
-      document.getElementById('d_age').innerText = d[6] || '-'; 
-      document.getElementById('d_idcard').innerText = d[12] || '-'; 
-      document.getElementById('d_licType').innerText = d[14] || '-'; 
-      
-      var expText = '-';
-      if(d[16]) { try { expText = new Date(d[16]).toLocaleDateString('th-TH'); } catch(e) { expText = String(d[16]||'-'); } }
-      document.getElementById('d_licExp').innerText = expText;
-
-      document.getElementById('d_salary').innerText = d[20] || '-';
-
-      var rawScore = String(d[63] || '0');
-      var sEl = document.getElementById('d_score_val');
-      sEl.innerText = rawScore;
-      var sNum = parseFloat(rawScore.split('/')[0]) || 0;
-      sEl.className = sNum >= 7 ? "display-4 fw-bold mt-2 text-success" : "display-4 fw-bold mt-2 text-danger";
-
-      var docHTML = '';
-      var docMap = [
-         {n: 'บัตร ปชช. (หน้า)', i: 54}, {n: 'บัตร ปชช. (หลัง)', i: 55},
-         {n: 'ใบขับขี่', i: 56}, {n: 'ทะเบียนบ้าน', i: 57},
-         {n: 'วุฒิการศึกษา', i: 58}, {n: 'ประวัติอาชญากรรม', i: 59},
-         {n: 'ใบรับรองแพทย์', i: 60}, {n: 'เอกสารอื่นๆ 1', i: 61}, {n: 'เอกสารอื่นๆ 2', i: 62}
-      ];
-      docMap.forEach(function(k) {
-         var val = String(d[k.i] || '');
-         if(val.length > 5 && val.indexOf('http') !== -1) {
-            docHTML += '<a href="' + val + '" target="_blank" class="btn btn-sm btn-dark border-secondary text-light hover-scale mb-2 me-1"><i class="bi bi-file-earmark-check me-1 text-success"></i>' + k.n + '</a>';
-         }
-      });
-      if(c.pdf && String(c.pdf).indexOf('http') !== -1) {
-         docHTML += '<a href="' + c.pdf + '" target="_blank" class="btn btn-sm btn-warning fw-bold text-dark hover-scale mb-2 me-1"><i class="bi bi-file-pdf-fill me-1"></i>PDF ใบสมัคร</a>';
-      }
-      document.getElementById('d_docs_links').innerHTML = docHTML || '<span class="text-muted small opacity-50">- ไม่มีเอกสารแนบ -</span>';
-
-      document.getElementById('btnApprove').onclick = function() { processApprove(c.rowIndex, c.rawData); };
-      document.getElementById('btnReject').onclick = function() { processReject(c.rowIndex); };
-
-      switchRecruitView('detail');
-    }
-
-    function processApprove(idx, raw) {
-       setTimeout(function() {
-           Swal.fire({
-             title: 'ยืนยันรับเข้าทำงาน?',
-             text: 'ระบุเงินเดือนที่อนุมัติ (ถ้ามี)',
-             input: 'text',
-             inputPlaceholder: 'เช่น 15,000',
-             background: 'rgba(20,20,20,0.95)', color: '#fff',
-             showCancelButton: true,
-             confirmButtonColor: '#00E676',
-             cancelButtonColor: '#555',
-             confirmButtonText: 'ยืนยัน',
-             cancelButtonText: 'ยกเลิก',
-             didOpen: function() {
-                 try { Swal.getInput().focus(); } catch(e) {}
-             }
-           }).then(async function(result) {
-             if (result.isConfirmed) {
-                var approvedSalary = result.value || "";
-                Swal.fire({title:'กำลังประมวลผล...', background:'rgba(20,20,20,0.95)', color:'#fff', didOpen:function(){Swal.showLoading()}});
-                try {
-                  const res = await callAPI({ action: 'approveCandidate', rowIndex: idx, candidateJson: raw, approvedSalary: approvedSalary });
-                  Swal.fire({title:'สำเร็จ', text: res.message, icon:'success', background:'rgba(20,20,20,0.95)', color:'#fff'});
-                  switchRecruitView('list');
-                  loadRecruitData();
-                  if(typeof loadAdminData === 'function') loadAdminData(); 
-                } catch(err) {
-                  Swal.fire({title:'ผิดพลาด', text: err.message, icon:'error', background:'rgba(20,20,20,0.95)', color:'#fff'});
-                }
-             }
-           });
-       }, 100);
-    }
-
-    function processReject(idx) {
-       Swal.fire({
-         title: 'ปฏิเสธใบสมัคร?',
-         text: 'รายการนี้จะถูกย้ายไปสถานะ Rejected',
-         icon: 'warning',
-         background: 'rgba(20,20,20,0.95)', color: '#fff',
-         showCancelButton: true,
-         confirmButtonColor: '#d33',
-         cancelButtonColor: '#555',
-         confirmButtonText: 'ปฏิเสธ'
-       }).then(async function(result) {
-         if (result.isConfirmed) {
-            Swal.showLoading();
-            try {
-              const res = await callAPI({ action: 'rejectCandidate', rowIndex: idx });
-              Swal.fire({title:'เรียบร้อย', text: res.message, icon:'success', background:'rgba(20,20,20,0.95)', color:'#fff'});
-              switchRecruitView('list');
-              loadRecruitData();
-            } catch(err) {
-              Swal.fire({title:'ผิดพลาด', text: err.message, icon:'error', background:'rgba(20,20,20,0.95)', color:'#fff'});
-            }
-         }
-       });
-    }
-  </script>
 </div>
+
+<script>
+// ทำงานทันทีเมื่อโหลดสคริปต์
+(function() {
+    var timeSelect = document.getElementById('accTime');
+    if(timeSelect) {
+        timeSelect.innerHTML = '<option value="">- เลือกเวลาโดยประมาณ -</option>';
+        for (var h = 0; h < 24; h++) {
+            var hr = (h < 10 ? "0" : "") + h;
+            timeSelect.innerHTML += `<option value="${hr}:00">${hr}:00 น.</option>`;
+            timeSelect.innerHTML += `<option value="${hr}:30">${hr}:30 น.</option>`;
+        }
+    }
+})();
+
+window.toggleAccOther = function(selectId, divId) {
+    var val = document.getElementById(selectId).value;
+    var div = document.getElementById(divId);
+    var input = div.querySelector('input');
+    if (val === "อื่นๆ ระบุ") {
+        div.style.display = "block";
+        input.required = true;
+    } else {
+        div.style.display = "none";
+        input.required = false;
+        input.value = "";
+    }
+};
+
+window.openAccidentModal = function() {
+    document.getElementById('accidentForm').reset();
+    document.getElementById('divCauseOther').style.display = "none";
+    document.getElementById('divCausedByOther').style.display = "none";
+    new bootstrap.Modal(document.getElementById('accidentModal')).show();
+};
+
+window.getBase64Accident = function(file) {
+    return new Promise(function(resolve) {
+        var reader = new FileReader();
+        reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); };
+        reader.readAsDataURL(file);
+    });
+};
+
+window.submitAccident = async function(e) {
+    e.preventDefault();
+    
+    var btn = document.getElementById('btnSubmitAccident');
+    var originalText = btn.innerText;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังประมวลผล...';
+    btn.disabled = true;
+
+    var fileInput1 = document.getElementById('accPhoto1');
+    var photo1B64 = null, photo1Type = null;
+    if (fileInput1.files.length > 0) {
+        var fileData1 = await window.getBase64Accident(fileInput1.files[0]); 
+        photo1B64 = fileData1.base64;
+        photo1Type = fileData1.type;
+    }
+
+    var fileInput2 = document.getElementById('accPhoto2');
+    var photo2B64 = null, photo2Type = null;
+    if (fileInput2.files.length > 0) {
+        var fileData2 = await window.getBase64Accident(fileInput2.files[0]);
+        photo2B64 = fileData2.base64;
+        photo2Type = fileData2.type;
+    }
+
+    var empData = window.currentUserData || currentUser || {};
+    var tenureText = typeof calcTenure === 'function' ? calcTenure(empData.startDate || new Date()) : '-';
+
+    var payload = {
+        form: {
+            empId: empData.id || empData.empId,
+            empName: empData.name,
+            idCard: empData.idCardNum || '-',
+            phone: empData.phone || '-',
+            gender: empData.gender || '-',
+            tenure: tenureText.replace(/(<([^>]+)>)/gi, ""), 
+            
+            accDate: document.getElementById('accDate').value,
+            accTime: document.getElementById('accTime').value,
+            location: document.getElementById('accLocation').value,
+            vehicleType: document.getElementById('accVehicleType').value,
+            truckPlate: document.getElementById('accTruckPlate').value,
+            trailerPlate: document.getElementById('accTrailerPlate').value || '-',
+            cause: document.getElementById('accCause').value,
+            causeOther: document.getElementById('accCauseOther').value,
+            causedBy: document.getElementById('accCausedBy').value,
+            causedByOther: document.getElementById('accCausedByOther').value,
+            damage: document.getElementById('accDamage').value,
+            detail: document.getElementById('accDetail').value,
+            
+            filePhotoBase64: photo1B64,
+            filePhotoType: photo1Type,
+            filePhoto2Base64: photo2B64,
+            filePhoto2Type: photo2Type
+        }
+    };
+
+    try {
+      const res = await callAPI({ action: 'submitAccidentReport', ...payload });
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      
+      if(res.success) {
+          Swal.fire({
+              icon: 'success', 
+              title: 'ส่งรายงานสำเร็จ', 
+              html: 'บันทึกข้อมูลเรียบร้อยแล้ว<br>เลขที่อ้างอิง: <b class="text-success">' + res.docNo + '</b>',
+              background: '#1e1e1e', color: '#fff'
+          }).then(() => {
+              if (typeof currentUser !== 'undefined' && currentUser.role === 'Admin') {
+                  if (typeof loadAdminData === 'function') loadAdminData(); 
+              } else if (typeof currentUser !== 'undefined' && currentUser.role === 'User') {
+                  var accList = document.getElementById('userAccidentListTab');
+                  if (accList) accList.innerHTML = '<div class="text-center text-muted py-3 small opacity-50"><div class="spinner-border spinner-border-sm text-warning"></div> กำลังโหลด...</div>';
+                  callAPI({ action: 'getAccidentData', role: 'User', empId: currentUser.empId }).then(function(data) {
+                       globalUserAccidents = data || [];
+                       var accBadge = document.getElementById('accCountBadge');
+                       if (accBadge) accBadge.innerText = globalUserAccidents.length;
+                       if (typeof renderUserAccidentsList === 'function') renderUserAccidentsList();
+                  });
+              }
+          });
+          bootstrap.Modal.getInstance(document.getElementById('accidentModal')).hide();
+      } else {
+          Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message, background: '#1e1e1e', color: '#fff'});
+      }
+    } catch(err) {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+};
+</script>
