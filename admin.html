@@ -1,116 +1,42 @@
 <div id="view-admin" class="view-section container-fluid p-3 p-md-4">
   
   <style>
-    @keyframes fadeSlideIn { 
-        from { opacity: 0; transform: translateY(15px); } 
-        to { opacity: 1; transform: translateY(0); } 
-    }
+    @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     .stagger-1 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
     .stagger-2 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
     .stagger-3 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
     .stagger-4 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
     
-    .stat-card {
-      background: rgba(20, 20, 20, 0.6);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px; 
-      padding: 12px 18px;
-      transition: all 0.3s ease; position: relative; overflow: hidden;
-      cursor: default;
-    }
+    .stat-card { background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px 18px; transition: all 0.3s ease; position: relative; overflow: hidden; cursor: default; }
     .stat-card:hover { border-color: rgba(255, 255, 255, 0.2); }
-    
-    .stat-card.clickable:hover { 
-      transform: translateY(-3px); 
-      background: rgba(30, 30, 30, 0.8) !important;
-      border-color: var(--accent-color) !important; 
-      box-shadow: 0 8px 25px rgba(0, 230, 118, 0.12); 
-      cursor: pointer;
-    }
-    
-    .stat-icon {
-      width: 38px; height: 38px; border-radius: 10px;
-      background: rgba(255, 255, 255, 0.05);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; color: var(--accent-color);
-    }
-
-    .nav-tabs-custom {
-      background: rgba(0,0,0,0.3);
-      border-radius: 8px;
-      padding: 4px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .nav-tabs-custom .tab-btn {
-      background: transparent; color: #aaa; border: none;
-      padding: 6px 16px; border-radius: 6px; font-weight: 500; font-size: 0.9rem;
-      transition: all 0.3s;
-    }
-    .nav-tabs-custom .tab-btn.active {
-      background: rgba(255,255,255,0.1); color: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
+    .stat-card.clickable:hover { transform: translateY(-3px); background: rgba(30, 30, 30, 0.8) !important; border-color: var(--accent-color) !important; box-shadow: 0 8px 25px rgba(0, 230, 118, 0.12); cursor: pointer; }
+    .stat-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--accent-color); }
+    .nav-tabs-custom { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 4px; border: 1px solid rgba(255,255,255,0.08); }
+    .nav-tabs-custom .tab-btn { background: transparent; color: #aaa; border: none; padding: 6px 16px; border-radius: 6px; font-weight: 500; font-size: 0.9rem; transition: all 0.3s; }
+    .nav-tabs-custom .tab-btn.active { background: rgba(255,255,255,0.1); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
     .nav-tabs-custom .tab-btn:hover:not(.active) { color: #fff; }
-
-    .glass-container-table {
-      background: rgba(20, 20, 20, 0.5);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px; 
-      overflow: hidden;
-      display: flex; flex-direction: column;
-      height: 68vh; 
-    }
-
+    .glass-container-table { background: rgba(20, 20, 20, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; height: 68vh; }
     .table-responsive { flex-grow: 1; overflow-y: auto; min-height: 400px; }
-
-    .table-custom th {
-      background-color: rgba(15, 15, 15, 0.98) !important;
-      position: sticky; top: 0; z-index: 10;
-      color: #999; font-weight: 600; 
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      cursor: pointer; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;
-      padding: 12px 15px;
-    }
-
-    .table-custom td {
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-      color: #ddd; vertical-align: middle;
-      padding: 8px 15px; 
-      font-size: 0.85rem;
-    }
-    
-    .table-hover tbody tr:hover { background-color: rgba(0, 230, 118, 0.08) !important; }
-
-    .list-item-glass {
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; 
-      padding: 10px 15px; margin-bottom: 8px; transition: all 0.2s ease-in-out; 
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    
+    .table-custom th { background-color: rgba(15, 15, 15, 0.98) !important; position: sticky; top: 0; z-index: 10; color: #999; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; padding: 12px 15px; }
+    .table-custom td { border-bottom: 1px solid rgba(255,255,255,0.03); color: #ddd; vertical-align: middle; padding: 8px 15px; font-size: 0.85rem; }
+    .list-item-glass { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 10px 15px; margin-bottom: 8px; transition: all 0.2s ease-in-out; display: flex; justify-content: space-between; align-items: center; }
     .list-item-glass.clickable-item { cursor: pointer; }
     .list-item-glass.clickable-item:hover { background-color: rgba(0, 230, 118, 0.15) !important; border-color: var(--accent-color) !important; transform: translateX(5px); }
     .list-item-glass.static-item:hover { background-color: rgba(255, 255, 255, 0.05); }
-
     .dropdown-menu-dark { background-color: #202020; border-color: rgba(255,255,255,0.1); font-size: 0.85rem; }
-    .dropdown-item:hover { background-color: rgba(0, 230, 118, 0.2); color: #fff; }
   </style>
 
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 stagger-1">
     <div class="d-flex align-items-center gap-3 mb-2 mb-md-0">
       <h5 class="fw-bold text-white mb-0 d-flex align-items-center">
-        <div class="bg-success text-black rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px; height:28px; font-size:1rem;"><i class="bi bi-shield-check"></i></div>
-        Admin Console
+        <div class="bg-success text-black rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px; height:28px; font-size:1rem;"><i class="bi bi-shield-check"></i></div>Admin Console
       </h5>
-      
       <div class="nav-tabs-custom d-flex ms-md-3">
           <button class="tab-btn active" id="btnTabEmp" onclick="switchAdminTab('emp')"><i class="bi bi-people-fill me-1"></i>พนักงาน</button>
           <button class="tab-btn" id="btnTabAcc" onclick="switchAdminTab('acc')"><i class="bi bi-cone-striped me-1"></i>อุบัติเหตุ</button>
           <button class="tab-btn" id="btnTabWarn" onclick="switchAdminTab('warn')"><i class="bi bi-exclamation-triangle-fill me-1 text-danger"></i>ใบเตือน</button>
       </div>
     </div>
-    
     <div class="d-flex gap-2">
         <button class="btn btn-sm btn-dark border-secondary text-light rounded-pill px-3 admin-only hover-scale" onclick="if(typeof openRecruitModal === 'function') openRecruitModal();" style="display:none;"><i class="bi bi-file-earmark-person me-1"></i>ใบสมัคร</button>
         <button class="btn btn-sm btn-success rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="openModal('create')" style="display:none;"><i class="bi bi-plus-lg me-1"></i>เพิ่มพนักงาน</button>
@@ -119,25 +45,18 @@
   </div>
 
   <div id="section-admin-emp">
-      
       <div class="row g-2 mb-3 stagger-2">
         <div class="col-md-4">
           <div class="stat-card h-100 d-flex justify-content-between align-items-center">
-            <div>
-              <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">พนักงาน (Active)</div>
-              <h3 class="fw-bold text-white mb-0" id="statTotal">0</h3>
-            </div>
+            <div><div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">พนักงาน (Active)</div><h3 class="fw-bold text-white mb-0" id="statTotal">0</h3></div>
             <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="stat-card h-100 d-flex justify-content-between align-items-center">
-             <div>
-                <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:4px;">สัดส่วนเพศ</div>
+             <div><div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:4px;">สัดส่วนเพศ</div>
                 <div class="d-flex align-items-baseline gap-3">
-                   <div><span class="fs-5 fw-bold text-white" id="statMale">0</span> <span class="text-secondary small">ชาย</span></div>
-                   <div class="vr bg-secondary opacity-50" style="height: 15px;"></div>
-                   <div><span class="fs-5 fw-bold text-white" id="statFemale">0</span> <span class="text-secondary small">หญิง</span></div>
+                   <div><span class="fs-5 fw-bold text-white" id="statMale">0</span> <span class="text-secondary small">ชาย</span></div><div class="vr bg-secondary opacity-50" style="height: 15px;"></div><div><span class="fs-5 fw-bold text-white" id="statFemale">0</span> <span class="text-secondary small">หญิง</span></div>
                 </div>
              </div>
              <div class="stat-icon text-info bg-info bg-opacity-10"><i class="bi bi-gender-ambiguous"></i></div>
@@ -145,15 +64,11 @@
         </div>
         <div class="col-md-4">
           <div class="stat-card clickable h-100 d-flex justify-content-between align-items-center" onclick="openBirthdayModal()">
-             <div>
-               <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">วันเกิดเดือนนี้ <i class="bi bi-search text-success ms-1" style="font-size:0.6rem;"></i></div>
-               <h3 class="fw-bold text-white mb-0" id="statBirth">0</h3>
-             </div>
+             <div><div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">วันเกิดเดือนนี้ <i class="bi bi-search text-success ms-1" style="font-size:0.6rem;"></i></div><h3 class="fw-bold text-white mb-0" id="statBirth">0</h3></div>
              <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-cake2-fill"></i></div>
           </div>
         </div>
       </div>
-
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 p-2 rounded-3 border border-secondary border-opacity-25 bg-black bg-opacity-25 stagger-3">
           <div class="input-group input-group-sm" style="max-width: 280px;">
               <span class="input-group-text bg-transparent border-secondary text-secondary border-end-0"><i class="bi bi-search"></i></span>
@@ -167,14 +82,10 @@
               <button class="btn btn-sm btn-outline-secondary text-light px-3 rounded-pill hover-scale" onclick="openPositionStatsModal()"><i class="bi bi-pie-chart me-1"></i>ตำแหน่ง</button>
               <button class="btn btn-sm btn-outline-secondary text-light px-3 rounded-pill hover-scale" onclick="openYearlyStatsModal()"><i class="bi bi-graph-up me-1"></i>สถิติรายปี</button>
               <select class="form-select form-select-sm bg-dark border-secondary text-white rounded-pill cursor-pointer px-3 shadow-none" style="width:auto;" id="rowsPerPage" onchange="renderTable(currentDisplayData)">
-                  <option value="50" selected>50 แถว</option>
-                  <option value="80">80 แถว</option>
-                  <option value="100">100 แถว</option>
-                  <option value="all">ทั้งหมด</option>
+                  <option value="50" selected>50 แถว</option><option value="80">80 แถว</option><option value="100">100 แถว</option><option value="all">ทั้งหมด</option>
               </select>
           </div>
       </div>
-
       <div class="glass-container-table stagger-4">
         <div class="table-responsive">
           <table class="table table-hover table-custom mb-0" id="adminTable">
@@ -190,10 +101,7 @@
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
           <div class="stat-card clickable border-warning p-2 px-3 m-0 d-flex align-items-center gap-3" onclick="new bootstrap.Modal(document.getElementById('accTopCausesModal')).show()" style="background: rgba(255,165,0,0.05); min-width: 250px;">
               <div class="stat-icon text-warning m-0 bg-warning bg-opacity-10"><i class="bi bi-cone-striped"></i></div>
-              <div>
-                  <h6 class="text-secondary mb-0" style="font-size: 0.7rem;">อุบัติเหตุทั้งหมด <i class="bi bi-search ms-1 text-success" style="font-size: 0.6rem;"></i></h6>
-                  <h4 class="fw-bold text-warning mb-0"><span id="accTotalCount">0</span> <span class="fs-6 fw-normal text-muted">ครั้ง (Top 10)</span></h4>
-              </div>
+              <div><h6 class="text-secondary mb-0" style="font-size: 0.7rem;">อุบัติเหตุทั้งหมด <i class="bi bi-search ms-1 text-success" style="font-size: 0.6rem;"></i></h6><h4 class="fw-bold text-warning mb-0"><span id="accTotalCount">0</span> <span class="fs-6 fw-normal text-muted">ครั้ง (Top 10)</span></h4></div>
           </div>
           <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-25 px-2 py-1" style="max-width: 350px;">
               <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
@@ -214,30 +122,20 @@
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
           <div class="stat-card clickable border-danger p-2 px-3 m-0 d-flex align-items-center gap-3" onclick="new bootstrap.Modal(document.getElementById('warnTopEmpModal')).show()" style="background: rgba(255,0,0,0.05); min-width: 250px;">
               <div class="stat-icon text-danger m-0 bg-danger bg-opacity-10"><i class="bi bi-file-earmark-break"></i></div>
-              <div>
-                  <h6 class="text-secondary mb-0" style="font-size: 0.7rem;">ใบเตือนทั้งหมด <i class="bi bi-search ms-1 text-success" style="font-size: 0.6rem;"></i></h6>
-                  <h4 class="fw-bold text-danger mb-0"><span id="warnTotalCount">0</span> <span class="fs-6 fw-normal text-muted">ใบ (Top 10)</span></h4>
-              </div>
+              <div><h6 class="text-secondary mb-0" style="font-size: 0.7rem;">ใบเตือนทั้งหมด <i class="bi bi-search ms-1 text-success" style="font-size: 0.6rem;"></i></h6><h4 class="fw-bold text-danger mb-0"><span id="warnTotalCount">0</span> <span class="fs-6 fw-normal text-muted">ใบ (Top 10)</span></h4></div>
           </div>
           <div class="d-flex gap-2 align-items-center" style="flex-grow: 1; max-width: 450px; justify-content: flex-end;">
               <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-25 px-2 py-1 w-100">
-                  <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
-                  <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchWarnInput" onkeyup="filterWarnTable()" placeholder="ค้นหาชื่อ, รหัส, เลขที่ใบเตือน...">
+                  <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span><input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchWarnInput" onkeyup="filterWarnTable()" placeholder="ค้นหาชื่อ, รหัส, เลขที่ใบเตือน...">
               </div>
-              <button class="btn btn-danger btn-sm rounded-pill px-4 shadow-sm fw-bold hover-scale text-nowrap" onclick="openCreateWarningModal()">
-                  <i class="bi bi-plus-circle me-1"></i>ออกใบเตือน
-              </button>
+              <button class="btn btn-danger btn-sm rounded-pill px-4 shadow-sm fw-bold hover-scale text-nowrap" onclick="openCreateWarningModal()"><i class="bi bi-plus-circle me-1"></i>ออกใบเตือน</button>
           </div>
       </div>
       <div class="glass-container-table stagger-3">
         <div class="table-responsive">
           <table class="table table-hover table-custom mb-0 align-middle">
-            <thead>
-              <tr><th class="ps-4">เลขที่เอกสาร</th><th>พนักงาน</th><th>วันที่ออกใบเตือน</th><th>วันที่ทำผิด</th><th>ฐานความผิด</th><th class="text-center pe-4">เอกสาร PDF</th></tr>
-            </thead>
-            <tbody id="adminWarnTableBody">
-               <tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>
-            </tbody>
+            <thead><tr><th class="ps-4">เลขที่เอกสาร</th><th>พนักงาน</th><th>วันที่ออกใบเตือน</th><th>วันที่ทำผิด</th><th>ฐานความผิด</th><th class="text-center pe-4">เอกสาร PDF</th></tr></thead>
+            <tbody id="adminWarnTableBody"><tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -254,23 +152,12 @@
   <div class="modal fade" id="accidentDetailModal" tabindex="-1" style="z-index: 1055;">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content border border-warning border-opacity-50" style="background: rgba(20,20,20,0.98);">
-        <div class="modal-header border-bottom border-warning border-opacity-25 py-3">
-           <h5 class="modal-title text-warning fs-5 fw-bold"><i class="bi bi-clipboard-data me-2"></i>จัดการรายงานอุบัติเหตุ</h5>
-           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
+        <div class="modal-header border-bottom border-warning border-opacity-25 py-3"><h5 class="modal-title text-warning fs-5 fw-bold"><i class="bi bi-clipboard-data me-2"></i>จัดการรายงานอุบัติเหตุ</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
         <div class="modal-body p-4">
            <div class="row g-3 mb-4 text-light small bg-black bg-opacity-25 p-3 rounded border border-secondary border-opacity-25">
-               <div class="col-sm-6">
-                   <div class="mb-1"><span class="text-muted">เลขที่:</span> <span id="m_accDocNo" class="font-monospace text-warning"></span></div>
-                   <div class="mb-1"><span class="text-muted">พนักงาน:</span> <span id="m_accEmpName"></span></div>
-                   <div class="mb-1"><span class="text-muted">วันเวลา:</span> <span id="m_accDateTime"></span></div>
-               </div>
-               <div class="col-sm-6">
-                   <div class="mb-1"><span class="text-muted">รถ/ทะเบียน:</span> <span id="m_accVehicle"></span></div>
-                   <div class="mb-1"><span class="text-muted">สาเหตุ:</span> <span id="m_accCause" class="text-danger"></span></div>
-               </div>
-               <div class="col-12 mt-3 pt-3 border-top border-secondary border-opacity-25">
-                   <h6 class="text-info mb-3"><i class="bi bi-pencil-square me-2"></i>ส่วนแก้ไขข้อมูล (หากพนักงานพิมพ์ผิด)</h6>
+               <div class="col-sm-6"><div class="mb-1"><span class="text-muted">เลขที่:</span> <span id="m_accDocNo" class="font-monospace text-warning"></span></div><div class="mb-1"><span class="text-muted">พนักงาน:</span> <span id="m_accEmpName"></span></div><div class="mb-1"><span class="text-muted">วันเวลา:</span> <span id="m_accDateTime"></span></div></div>
+               <div class="col-sm-6"><div class="mb-1"><span class="text-muted">รถ/ทะเบียน:</span> <span id="m_accVehicle"></span></div><div class="mb-1"><span class="text-muted">สาเหตุ:</span> <span id="m_accCause" class="text-danger"></span></div></div>
+               <div class="col-12 mt-3 pt-3 border-top border-secondary border-opacity-25"><h6 class="text-info mb-3"><i class="bi bi-pencil-square me-2"></i>ส่วนแก้ไขข้อมูล (หากพนักงานพิมพ์ผิด)</h6>
                    <div class="row g-2">
                        <div class="col-md-6"><label class="form-label text-muted small mb-1">สถานที่เกิดเหตุ</label><input type="text" class="form-control form-control-sm bg-dark text-white border-secondary" id="m_accLocation"></div>
                        <div class="col-md-6"><label class="form-label text-muted small mb-1">ความเสียหาย</label><input type="text" class="form-control form-control-sm bg-dark text-white border-secondary" id="m_accDamage"></div>
@@ -286,13 +173,7 @@
                <div class="mb-3"><label class="form-label text-light small mb-1">ข้อปฏิบัติ / ป้องกัน (Preventive Action)</label><textarea class="form-control bg-dark text-white border-secondary" id="m_accPrevent" rows="3" placeholder="ระบุข้อปฏิบัติเพื่อป้องกันไม่ให้เกิดซ้ำ..."></textarea></div>
            </form>
         </div>
-        <div class="modal-footer border-top border-secondary border-opacity-25 justify-content-between">
-            <button type="button" class="btn btn-outline-danger rounded-pill px-3" onclick="deleteAccident()"><i class="bi bi-trash me-1"></i> ลบข้อมูล</button>
-            <div>
-              <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ปิด</button>
-              <button type="button" class="btn btn-success rounded-pill px-4 shadow-sm" onclick="saveAccidentResolution()"><i class="bi bi-save me-1"></i> บันทึกข้อมูล</button>
-            </div>
-        </div>
+        <div class="modal-footer border-top border-secondary border-opacity-25 justify-content-between"><button type="button" class="btn btn-outline-danger rounded-pill px-3" onclick="deleteAccident()"><i class="bi bi-trash me-1"></i> ลบข้อมูล</button><div><button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ปิด</button><button type="button" class="btn btn-success rounded-pill px-4 shadow-sm" onclick="saveAccidentResolution()"><i class="bi bi-save me-1"></i> บันทึกข้อมูล</button></div></div>
       </div>
     </div>
   </div>
@@ -300,16 +181,10 @@
   <div class="modal fade" id="warningDetailModal" tabindex="-1" style="z-index: 1055;">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content border border-danger border-opacity-50" style="background: rgba(20,20,20,0.98);">
-        <div class="modal-header border-bottom border-danger border-opacity-25 py-3">
-           <h5 class="modal-title text-danger fs-5 fw-bold"><i class="bi bi-file-earmark-break me-2"></i>จัดการรายละเอียดใบเตือน</h5>
-           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
+        <div class="modal-header border-bottom border-danger border-opacity-25 py-3"><h5 class="modal-title text-danger fs-5 fw-bold"><i class="bi bi-file-earmark-break me-2"></i>จัดการรายละเอียดใบเตือน</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
         <div class="modal-body p-4">
            <div class="mb-4 text-light small bg-black bg-opacity-25 p-3 rounded border border-secondary border-opacity-25">
-               <div class="d-flex justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-25">
-                   <div><span class="text-muted">เลขที่:</span> <span id="e_warnDocNo" class="font-monospace text-danger fw-bold"></span></div>
-                   <div><span class="text-muted">พนักงาน:</span> <span id="e_warnEmpName" class="text-white"></span></div>
-               </div>
+               <div class="d-flex justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-25"><div><span class="text-muted">เลขที่:</span> <span id="e_warnDocNo" class="font-monospace text-danger fw-bold"></span></div><div><span class="text-muted">พนักงาน:</span> <span id="e_warnEmpName" class="text-white"></span></div></div>
                <div><span class="text-muted">ผู้ออกใบเตือน:</span> <span id="e_warnIssuedByText"></span></div>
            </div>
            <form id="warnEditForm">
@@ -321,25 +196,11 @@
                    <div class="col-12"><label class="form-label text-muted small mb-1">ความผิดประการที่หนึ่ง</label><textarea class="form-control bg-dark text-white border-secondary" id="e_warnOffense1" rows="2"></textarea></div>
                    <div class="col-12"><label class="form-label text-muted small mb-1">ความผิดประการที่สอง</label><textarea class="form-control bg-dark text-white border-secondary" id="e_warnOffense2" rows="2"></textarea></div>
                    <div class="col-12"><label class="form-label text-muted small mb-1">หมายเหตุ</label><input type="text" class="form-control bg-dark text-white border-secondary" id="e_warnNotes"></div>
-                   <div class="col-12">
-                       <label class="form-label text-muted small mb-1">ออกโดย</label>
-                       <select class="form-select bg-dark text-white border-secondary" id="e_warnIssuedBy">
-                            <option value="นาย กิตติศักดิ์ อุส่าห์">นาย กิตติศักดิ์ อุส่าห์ (IT/จป.)</option>
-                            <option value="นางสาว จุฑารัตน์ แสงหงษา">นางสาว จุฑารัตน์ แสงหงษา (ผจก.บัญชี/บุคคล)</option>
-                            <option value="นาย วชิระ อังธนดิลก">นาย วชิระ อังธนดิลก (หุ้นส่วนผู้จัดการ)</option>
-                            <option value="นางสาว นิสา พรหมสูงวงษ์">นางสาว นิสา พรหมสูงวงษ์ (หุ้นส่วนผู้จัดการ)</option>
-                       </select>
-                   </div>
+                   <div class="col-12"><label class="form-label text-muted small mb-1">ออกโดย</label><select class="form-select bg-dark text-white border-secondary" id="e_warnIssuedBy"><option value="นาย กิตติศักดิ์ อุส่าห์">นาย กิตติศักดิ์ อุส่าห์ (IT/จป.)</option><option value="นางสาว จุฑารัตน์ แสงหงษา">นางสาว จุฑารัตน์ แสงหงษา (ผจก.บัญชี/บุคคล)</option><option value="นาย วชิระ อังธนดิลก">นาย วชิระ อังธนดิลก (หุ้นส่วนผู้จัดการ)</option><option value="นางสาว นิสา พรหมสูงวงษ์">นางสาว นิสา พรหมสูงวงษ์ (หุ้นส่วนผู้จัดการ)</option></select></div>
                </div>
            </form>
         </div>
-        <div class="modal-footer border-top border-secondary border-opacity-25 justify-content-between">
-            <button type="button" class="btn btn-outline-danger rounded-pill px-3" onclick="deleteWarning()"><i class="bi bi-trash me-1"></i> ลบข้อมูล</button>
-            <div>
-              <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ปิด</button>
-              <button type="button" class="btn btn-success rounded-pill px-4 shadow-sm" onclick="saveWarningResolution()"><i class="bi bi-save me-1"></i> บันทึกข้อมูล</button>
-            </div>
-        </div>
+        <div class="modal-footer border-top border-secondary border-opacity-25 justify-content-between"><button type="button" class="btn btn-outline-danger rounded-pill px-3" onclick="deleteWarning()"><i class="bi bi-trash me-1"></i> ลบข้อมูล</button><div><button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ปิด</button><button type="button" class="btn btn-success rounded-pill px-4 shadow-sm" onclick="saveWarningResolution()"><i class="bi bi-save me-1"></i> บันทึกข้อมูล</button></div></div>
       </div>
     </div>
   </div>
@@ -347,48 +208,21 @@
   <div class="modal fade" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
       <div class="modal-content border border-danger border-opacity-50" style="background: rgba(20,20,20,0.98); box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
-        <div class="modal-header border-bottom border-danger border-opacity-25 pb-3">
-            <h5 class="modal-title fw-bold text-danger"><i class="bi bi-file-earmark-break me-2"></i>ออกหนังสือเตือนพนักงาน</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
+        <div class="modal-header border-bottom border-danger border-opacity-25 pb-3"><h5 class="modal-title fw-bold text-danger"><i class="bi bi-file-earmark-break me-2"></i>ออกหนังสือเตือนพนักงาน</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
         <div class="modal-body p-4">
             <form id="warningForm" onsubmit="submitWarningForm(event)">
                 <div class="row g-3">
-                    <div class="col-md-12">
-                        <label class="small text-muted mb-1">เลือกพนักงานที่กระทำผิด *</label>
-                        <input list="warnEmpOptions" class="form-control bg-dark text-white border-danger" id="warnEmpInput" placeholder="-- พิมพ์ค้นหาชื่อ หรือ รหัสพนักงาน --" required autocomplete="off">
-                        <datalist id="warnEmpOptions"></datalist>
-                    </div>
+                    <div class="col-md-12"><label class="small text-muted mb-1">เลือกพนักงานที่กระทำผิด *</label><input list="warnEmpOptions" class="form-control bg-dark text-white border-danger" id="warnEmpInput" placeholder="-- พิมพ์ค้นหาชื่อ หรือ รหัสพนักงาน --" required autocomplete="off"><datalist id="warnEmpOptions"></datalist></div>
                     <div class="col-md-6"><label class="small text-muted mb-1">วันที่ออกเอกสารใบเตือน *</label><input type="date" class="form-control bg-dark text-white border-secondary" id="warnIssueDate" required></div>
                     <div class="col-md-6"><label class="small text-muted mb-1">วันที่กระทำผิด *</label><input type="date" class="form-control bg-dark text-white border-secondary" id="warnIncidentDate" required></div>
                     <div class="col-12"><label class="small text-muted mb-1">สิ่งที่แนบมาด้วย</label><input type="text" class="form-control bg-dark text-white border-secondary" id="warnAttachments" placeholder="เช่น รูปถ่าย, ภาพกล้องวงจรปิด..."></div>
                     <div class="col-12"><label class="small text-muted mb-1">ความผิดประการที่หนึ่ง *</label><textarea class="form-control bg-dark text-white border-secondary" id="warnOffense1" rows="2" placeholder="อธิบายการกระทำผิด และระเบียบข้อที่ฝ่าฝืน..." required></textarea></div>
                     <div class="col-12"><label class="small text-muted mb-1">ความผิดประการที่สอง *</label><textarea class="form-control bg-dark text-white border-secondary" id="warnOffense2" rows="2" placeholder="เช่น ให้ปรับปรุงตัว หากกระทำผิดอีกจะพิจารณาเลิกจ้าง..." required></textarea></div>
                     <div class="col-12"><label class="small text-muted mb-1">หมายเหตุเพิ่มเติม</label><input type="text" class="form-control bg-dark text-white border-secondary" id="warnNotes" placeholder="หมายเหตุ (ถ้ามี)"></div>
-                    <div class="col-12">
-                        <label class="small text-muted mb-1">ออกโดย *</label>
-                        <select class="form-select bg-dark text-white border-warning" id="warnIssuedBy" required>
-                            <option value="">-- เลือกผู้ออกใบเตือน --</option>
-                            <option value="นาย กิตติศักดิ์ อุส่าห์">นาย กิตติศักดิ์ อุส่าห์ (IT/จป.)</option>
-                            <option value="นางสาว จุฑารัตน์ แสงหงษา">นางสาว จุฑารัตน์ แสงหงษา (ผจก.บัญชี/บุคคล)</option>
-                            <option value="นาย วชิระ อังธนดิลก">นาย วชิระ อังธนดิลก (หุ้นส่วนผู้จัดการ)</option>
-                            <option value="นางสาว นิสา พรหมสูงวงษ์">นางสาว นิสา พรหมสูงวงษ์ (หุ้นส่วนผู้จัดการ)</option>
-                        </select>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(0,0,0,0.3);">
-                            <label class="small text-light mb-1 fw-bold"><i class="bi bi-camera me-2 text-danger"></i>รูปภาพประกอบ (สูงสุด 2 รูป)</label>
-                            <div class="row g-2 mt-1">
-                                <div class="col-md-6"><small class="text-muted d-block">รูปที่ 1</small><input type="file" class="form-control bg-dark text-light border-secondary" id="warnPhoto1" accept="image/*"></div>
-                                <div class="col-md-6"><small class="text-muted d-block">รูปที่ 2 (ถ้ามี)</small><input type="file" class="form-control bg-dark text-light border-secondary" id="warnPhoto2" accept="image/*"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="col-12"><label class="small text-muted mb-1">ออกโดย *</label><select class="form-select bg-dark text-white border-warning" id="warnIssuedBy" required><option value="">-- เลือกผู้ออกใบเตือน --</option><option value="นาย กิตติศักดิ์ อุส่าห์">นาย กิตติศักดิ์ อุส่าห์ (IT/จป.)</option><option value="นางสาว จุฑารัตน์ แสงหงษา">นางสาว จุฑารัตน์ แสงหงษา (ผจก.บัญชี/บุคคล)</option><option value="นาย วชิระ อังธนดิลก">นาย วชิระ อังธนดิลก (หุ้นส่วนผู้จัดการ)</option><option value="นางสาว นิสา พรหมสูงวงษ์">นางสาว นิสา พรหมสูงวงษ์ (หุ้นส่วนผู้จัดการ)</option></select></div>
+                    <div class="col-12 mt-3"><div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(0,0,0,0.3);"><label class="small text-light mb-1 fw-bold"><i class="bi bi-camera me-2 text-danger"></i>รูปภาพประกอบ (สูงสุด 2 รูป)</label><div class="row g-2 mt-1"><div class="col-md-6"><small class="text-muted d-block">รูปที่ 1</small><input type="file" class="form-control bg-dark text-light border-secondary" id="warnPhoto1" accept="image/*"></div><div class="col-md-6"><small class="text-muted d-block">รูปที่ 2 (ถ้ามี)</small><input type="file" class="form-control bg-dark text-light border-secondary" id="warnPhoto2" accept="image/*"></div></div></div></div>
                 </div>
-                <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
-                    <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
-                    <button type="submit" class="btn btn-danger rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitWarning">สร้างและส่งใบเตือน</button>
-                </div>
+                <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4"><button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button><button type="submit" class="btn btn-danger rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitWarning">สร้างและส่งใบเตือน</button></div>
             </form>
         </div>
       </div>
@@ -396,13 +230,6 @@
   </div>
 
   <script>
-    var currentDisplayData = [];
-    var currentSort = { key: 'id', order: 'asc' };
-    var allAccidentData = []; 
-    var currentAccidentDisplayData = []; 
-    var allWarningData = [];
-    var currentWarningDisplayData = [];
-
     function switchAdminTab(tab) {
         document.getElementById('btnTabEmp').classList.remove('active');
         document.getElementById('btnTabAcc').classList.remove('active');
@@ -410,123 +237,53 @@
         document.getElementById('section-admin-emp').classList.add('d-none');
         document.getElementById('section-admin-acc').classList.add('d-none');
         document.getElementById('section-admin-warn').classList.add('d-none');
-        
-        if (tab === 'emp') {
-            document.getElementById('btnTabEmp').classList.add('active');
-            document.getElementById('section-admin-emp').classList.remove('d-none');
-        } else if (tab === 'acc') {
-            document.getElementById('btnTabAcc').classList.add('active');
-            document.getElementById('section-admin-acc').classList.remove('d-none');
-        } else if (tab === 'warn') {
-            document.getElementById('btnTabWarn').classList.add('active');
-            document.getElementById('section-admin-warn').classList.remove('d-none');
-        }
+        if (tab === 'emp') { document.getElementById('btnTabEmp').classList.add('active'); document.getElementById('section-admin-emp').classList.remove('d-none'); } 
+        else if (tab === 'acc') { document.getElementById('btnTabAcc').classList.add('active'); document.getElementById('section-admin-acc').classList.remove('d-none'); } 
+        else if (tab === 'warn') { document.getElementById('btnTabWarn').classList.add('active'); document.getElementById('section-admin-warn').classList.remove('d-none'); }
     }
 
     function loadAdminData() {
       document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
       document.getElementById('adminAccidentTableBody').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลอุบัติเหตุ...</td></tr>';
       document.getElementById('adminWarnTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูลใบเตือน...</td></tr>';
-
       callAPI({ action: 'getAccidentData', role: 'Admin', empId: '' }).then(function(accData) {
-          allAccidentData = accData || []; 
-          currentAccidentDisplayData = allAccidentData;
-          
+          allAccidentData = accData || []; currentAccidentDisplayData = allAccidentData;
           callAPI({ action: 'getWarningData' }).then(function(warnData) {
-              allWarningData = warnData || [];
-              currentWarningDisplayData = allWarningData;
-
+              allWarningData = warnData || []; currentWarningDisplayData = allWarningData;
               callAPI({ action: 'getEmployeesByRole', role: currentUser.role, userId: currentUser.empId }).then(function(data) {
                   if (!data || !Array.isArray(data)) data = [];
-                  allEmpData = data; 
-                  currentDisplayData = data;
-                  
-                  if(currentUser.role !== 'Viewer') {
-                      var els = document.querySelectorAll('.admin-only');
-                      for(var i=0; i<els.length; i++) els[i].style.display = 'inline-block';
-                  }
-                  
-                  renderStats(data);
-                  filterTable(); 
-                  renderAccidentTable(currentAccidentDisplayData);
-                  renderWarningTable(currentWarningDisplayData);
+                  allEmpData = data; currentDisplayData = data;
+                  if(currentUser.role !== 'Viewer') { var els = document.querySelectorAll('.admin-only'); for(var i=0; i<els.length; i++) els[i].style.display = 'inline-block'; }
+                  renderStats(data); filterTable(); renderAccidentTable(currentAccidentDisplayData); renderWarningTable(currentWarningDisplayData);
               });
           });
       });
     }
 
     function renderTable(data) {
-       var tbody = document.getElementById('tableBody');
-       tbody.innerHTML = '';
+       var tbody = document.getElementById('tableBody'); tbody.innerHTML = '';
        var limit = document.getElementById('rowsPerPage').value;
        var list = (limit === 'all') ? data : data.slice(0, parseInt(limit));
-
-       if(list.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>';
-          document.getElementById('tableFooter').innerText = 'Total: 0';
-          return;
-       }
-
+       if(list.length === 0) { tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>'; document.getElementById('tableFooter').innerText = 'Total: 0'; return; }
        list.forEach(function(emp) {
           var badgeClass = 'bg-secondary text-white';
-          if(emp.status === 'Active') badgeClass = 'bg-success text-dark';
-          else if(emp.status === 'Resigned') badgeClass = 'bg-danger text-white';
-          else if(emp.status === 'Suspended') badgeClass = 'bg-warning text-dark';
-          
+          if(emp.status === 'Active') badgeClass = 'bg-success text-dark'; else if(emp.status === 'Resigned') badgeClass = 'bg-danger text-white'; else if(emp.status === 'Suspended') badgeClass = 'bg-warning text-dark';
           var accCount = allAccidentData.filter(function(a) { return String(a.empId).trim() === String(emp.id).trim(); }).length;
           var accBadge = accCount > 0 ? '<span class="badge bg-warning text-dark rounded-pill shadow-sm">' + accCount + ' ครั้ง</span>' : '<span class="text-muted small">-</span>';
-
           var warnCount = allWarningData.filter(function(w) { return String(w.empId).trim() === String(emp.id).trim(); }).length;
           var warnBadge = warnCount > 0 ? '<span class="badge bg-danger rounded-pill shadow-sm">' + warnCount + ' ครั้ง</span>' : '<span class="text-muted small">-</span>';
-
-          var editBtn = '';
-          if(currentUser.role !== 'Viewer') {
-              editBtn = '<button class="btn btn-sm btn-dark border-secondary text-warning rounded-circle hover-scale" onclick="event.stopPropagation(); openModal(\'edit\', \'' + emp.id + '\')" title="แก้ไข"><i class="bi bi-pencil-fill"></i></button>';
-          }
-
+          var editBtn = ''; if(currentUser.role !== 'Viewer') { editBtn = '<button class="btn btn-sm btn-dark border-secondary text-warning rounded-circle hover-scale" onclick="event.stopPropagation(); openModal(\'edit\', \'' + emp.id + '\')" title="แก้ไข"><i class="bi bi-pencil-fill"></i></button>'; }
           var docIcon = '<span class="text-muted small opacity-25">-</span>';
           if (emp.docs && Object.keys(emp.docs).length > 0) {
               var menuItems = '';
-              var docConfig = [
-                  { key: "PHOTO",           name: "รูปถ่าย",               icon: "bi-person-bounding-box" },
-                  { key: "ID_CARD",         name: "บัตรประชาชน (หน้า)",    icon: "bi-person-vcard" },
-                  { key: "ID_CARD_BACK",    name: "บัตรประชาชน (หลัง)",    icon: "bi-card-heading" },
-                  { key: "HOUSE_REG",       name: "ทะเบียนบ้าน",           icon: "bi-house-door" },
-                  { key: "LICENSE",         name: "ใบขับขี่",              icon: "bi-car-front" },
-                  { key: "EDU_CERT",        name: "วุฒิการศึกษา",           icon: "bi-mortarboard" },
-                  { key: "CRIMINAL_RECORD", name: "ประวัติอาชญากรรม",      icon: "bi-shield-exclamation" },
-                  { key: "HEALTH_CHECK",    name: "ใบรับรองแพทย์",          icon: "bi-heart-pulse" },
-                  { key: "OTHER_1",         name: "เอกสารอื่นๆ 1",          icon: "bi-file-earmark" },
-                  { key: "OTHER_2",         name: "เอกสารอื่นๆ 2",          icon: "bi-file-earmark" }
-              ];
+              var docConfig = [ { key: "PHOTO", name: "รูปถ่าย", icon: "bi-person-bounding-box" }, { key: "ID_CARD", name: "บัตรประชาชน (หน้า)", icon: "bi-person-vcard" }, { key: "ID_CARD_BACK", name: "บัตรประชาชน (หลัง)", icon: "bi-card-heading" }, { key: "HOUSE_REG", name: "ทะเบียนบ้าน", icon: "bi-house-door" }, { key: "LICENSE", name: "ใบขับขี่", icon: "bi-car-front" }, { key: "EDU_CERT", name: "วุฒิการศึกษา", icon: "bi-mortarboard" }, { key: "CRIMINAL_RECORD", name: "ประวัติอาชญากรรม", icon: "bi-shield-exclamation" }, { key: "HEALTH_CHECK", name: "ใบรับรองแพทย์", icon: "bi-heart-pulse" }, { key: "OTHER_1", name: "เอกสารอื่นๆ 1", icon: "bi-file-earmark" }, { key: "OTHER_2", name: "เอกสารอื่นๆ 2", icon: "bi-file-earmark" } ];
               var visibleCount = 0;
-              docConfig.forEach(function(conf) {
-                  if (emp.docs[conf.key] && emp.docs[conf.key].url) {
-                      var bgStyle = visibleCount % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.05)';
-                      menuItems += '<li style="background-color: ' + bgStyle + ';"><a class="dropdown-item text-light py-2 d-flex align-items-center gap-2 small" href="' + emp.docs[conf.key].url + '" target="_blank"><i class="bi ' + conf.icon + ' text-success opacity-75"></i>' + conf.name + '</a></li>';
-                      visibleCount++;
-                  }
-              });
-              if (menuItems !== '') {
-                  docIcon = '<div class="dropdown"><button class="btn btn-sm btn-link text-decoration-none text-success p-0 hover-scale" type="button" data-bs-toggle="dropdown" onclick="event.stopPropagation()"><i class="bi bi-folder2-open fs-5"></i></button><ul class="dropdown-menu dropdown-menu-dark shadow-lg border border-secondary border-opacity-25 p-0 overflow-hidden" style="min-width: 200px;">' + menuItems + '</ul></div>';
-              }
+              docConfig.forEach(function(conf) { if (emp.docs[conf.key] && emp.docs[conf.key].url) { var bgStyle = visibleCount % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.05)'; menuItems += '<li style="background-color: ' + bgStyle + ';"><a class="dropdown-item text-light py-2 d-flex align-items-center gap-2 small" href="' + emp.docs[conf.key].url + '" target="_blank"><i class="bi ' + conf.icon + ' text-success opacity-75"></i>' + conf.name + '</a></li>'; visibleCount++; } });
+              if (menuItems !== '') { docIcon = '<div class="dropdown"><button class="btn btn-sm btn-link text-decoration-none text-success p-0 hover-scale" type="button" data-bs-toggle="dropdown" onclick="event.stopPropagation()"><i class="bi bi-folder2-open fs-5"></i></button><ul class="dropdown-menu dropdown-menu-dark shadow-lg border border-secondary border-opacity-25 p-0 overflow-hidden" style="min-width: 200px;">' + menuItems + '</ul></div>'; }
           }
-
           var tr = document.createElement('tr');
-          tr.onclick = function(e) { 
-              if(!e.target.closest('button') && !e.target.closest('a') && !e.target.closest('select')) {
-                  openModal('view', emp.id, emp); 
-              }
-          };
-          tr.innerHTML = '<td class="ps-4"><span class="font-monospace text-success fw-bold">' + emp.id + '</span></td>' +
-                         '<td><div class="fw-bold text-white">' + emp.name + '</div><div class="small text-secondary" style="font-size:0.75rem;">' + (emp.nickname || '-') + '</div></td>' +
-                         '<td><span class="badge bg-dark border border-secondary fw-normal text-secondary px-2">' + (emp.position || '-') + '</span></td>' +
-                         '<td class="text-center small text-secondary">' + calcTenure(emp.startDate) + '</td>' +
-                         '<td class="text-center"><span class="badge rounded-pill ' + badgeClass + ' px-3 shadow-sm">' + emp.status + '</span></td>' +
-                         '<td class="text-center">' + accBadge + '</td>' +
-                         '<td class="text-center">' + warnBadge + '</td>' +
-                         '<td class="text-center">' + docIcon + '</td>' +
-                         '<td class="text-end pe-4">' + editBtn + '</td>';
+          tr.onclick = function(e) { if(!e.target.closest('button') && !e.target.closest('a') && !e.target.closest('select')) { openModal('view', emp.id, emp); } };
+          tr.innerHTML = '<td class="ps-4"><span class="font-monospace text-success fw-bold">' + emp.id + '</span></td><td><div class="fw-bold text-white">' + emp.name + '</div><div class="small text-secondary" style="font-size:0.75rem;">' + (emp.nickname || '-') + '</div></td><td><span class="badge bg-dark border border-secondary fw-normal text-secondary px-2">' + (emp.position || '-') + '</span></td><td class="text-center small text-secondary">' + calcTenure(emp.startDate) + '</td><td class="text-center"><span class="badge rounded-pill ' + badgeClass + ' px-3 shadow-sm">' + emp.status + '</span></td><td class="text-center">' + accBadge + '</td><td class="text-center">' + warnBadge + '</td><td class="text-center">' + docIcon + '</td><td class="text-end pe-4">' + editBtn + '</td>';
           tbody.appendChild(tr);
        });
        document.getElementById('tableFooter').innerText = 'แสดง ' + list.length + ' จาก ' + data.length + ' รายการ';
@@ -534,436 +291,117 @@
 
     function renderAccidentTable(data) {
        document.getElementById('accTotalCount').innerText = allAccidentData.length;
-       var accCounts = {};
-       allAccidentData.forEach(function(a) { accCounts[a.empName] = (accCounts[a.empName] || 0) + 1; });
+       var accCounts = {}; allAccidentData.forEach(function(a) { accCounts[a.empName] = (accCounts[a.empName] || 0) + 1; });
        var topAccs = Object.keys(accCounts).map(function(k) { return {name:k, count:accCounts[k]}; }).sort(function(a,b) { return b.count - a.count; }).slice(0,10);
        var topAccHtml = '';
-       topAccs.forEach(function(c, i) {
-          topAccHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-warning text-dark rounded-pill">' + c.count + ' ครั้ง</span></div>';
-       });
+       topAccs.forEach(function(c, i) { topAccHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-warning text-dark rounded-pill">' + c.count + ' ครั้ง</span></div>'; });
        document.getElementById('accTopCausesList').innerHTML = topAccHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
-
        var html = '';
        data.forEach(function(r) {
            var isResolved = (r.status === 'ปิดงานเรียบร้อย');
            var statClass = r.status === 'รอดำเนินการ' || r.status === 'Pending' ? 'bg-warning text-dark' : (isResolved ? 'bg-success text-white' : 'bg-secondary');
            var statText = r.status === 'Pending' ? 'รอดำเนินการ' : r.status;
            var pdfBtn = r.pdfUrl !== '-' ? '<a href="' + r.pdfUrl + '" target="_blank" onclick="event.stopPropagation()" class="btn btn-sm btn-outline-danger py-0 px-2 me-1 mb-1 shadow-sm"><i class="bi bi-file-pdf"></i> PDF</a>' : '';
-           
            var photoHtml = '';
-           if (r.photoUrl !== '-') {
-               var photoLinks = r.photoUrl.split(',');
-               photoLinks.forEach(function(link) {
-                   var cleanLink = link.trim();
-                   if(cleanLink) {
-                       photoHtml += '<button type="button" onclick="event.stopPropagation(); window.openPreview(\'' + cleanLink + '\')" class="btn btn-sm btn-outline-info py-0 px-2 mb-1 me-1 shadow-sm"><i class="bi bi-image"></i></button>';
-                   }
-               });
-           }
-           var docsHtml = pdfBtn + photoHtml;
-           if(docsHtml === '') docsHtml = '-';
+           if (r.photoUrl !== '-') { var photoLinks = r.photoUrl.split(','); photoLinks.forEach(function(link) { var cleanLink = link.trim(); if(cleanLink) { photoHtml += '<button type="button" onclick="event.stopPropagation(); window.openPreview(\'' + cleanLink + '\')" class="btn btn-sm btn-outline-info py-0 px-2 mb-1 me-1 shadow-sm"><i class="bi bi-image"></i></button>'; } }); }
+           var docsHtml = pdfBtn + photoHtml; if(docsHtml === '') docsHtml = '-';
            var trailerText = (r.trailerPlate && r.trailerPlate !== '-') ? '<br><small class="text-info">หาง: ' + r.trailerPlate + '</small>' : '';
-
-           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) openAccidentDetailByDocNo(\'' + r.docNo + '\')">' +
-                   '<td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td>' +
-                   '<td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td>' +
-                   '<td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td>' +
-                   '<td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td>' +
-                   '<td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td>' +
-                   '<td><span class="text-danger">' + r.cause + '</span><br><small class="text-muted">' + r.causedBy + '</small></td>' +
-                   '<td class="text-center pe-4">' + docsHtml + '</td></tr>';
+           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><span class="text-danger">' + r.cause + '</span><br><small class="text-muted">' + r.causedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
        });
        document.getElementById('adminAccidentTableBody').innerHTML = html || '<tr><td colspan="7" class="text-center py-4 text-muted">ไม่พบข้อมูลอุบัติเหตุ</td></tr>';
     }
 
-    function filterAccidentTable() {
-        var val = document.getElementById('searchAccidentInput').value.toLowerCase();
-        currentAccidentDisplayData = allAccidentData.filter(function(d) { 
-            return (d.docNo + d.empName + d.empId).toLowerCase().includes(val);
-        });
-        renderAccidentTable(currentAccidentDisplayData);
-    }
+    function filterAccidentTable() { var val = document.getElementById('searchAccidentInput').value.toLowerCase(); currentAccidentDisplayData = allAccidentData.filter(function(d) { return (d.docNo + d.empName + d.empId).toLowerCase().includes(val); }); renderAccidentTable(currentAccidentDisplayData); }
 
     function openAccidentDetailByDocNo(docNo) {
-        var data = allAccidentData.find(function(a) { return a.docNo === docNo; });
-        if(!data) return;
-
-        document.getElementById('m_accDocNo').innerText = data.docNo;
-        document.getElementById('m_accDocNoHidden').value = data.docNo;
-        document.getElementById('m_accEmpName').innerText = data.empName + " (" + data.empId + ")";
-        document.getElementById('m_accDateTime').innerText = data.accDate + " เวลา " + data.accTime;
-
+        var data = allAccidentData.find(function(a) { return a.docNo === docNo; }); if(!data) return;
+        document.getElementById('m_accDocNo').innerText = data.docNo; document.getElementById('m_accDocNoHidden').value = data.docNo; document.getElementById('m_accEmpName').innerText = data.empName + " (" + data.empId + ")"; document.getElementById('m_accDateTime').innerText = data.accDate + " เวลา " + data.accTime;
         var trailerInfo = (data.trailerPlate && data.trailerPlate !== '-') ? (" หาง: " + data.trailerPlate) : "";
-        document.getElementById('m_accVehicle').innerText = data.vehType + " ทะเบียนหัว: " + data.truckPlate + trailerInfo;
-        document.getElementById('m_accCause').innerText = data.cause;
-
-        document.getElementById('m_accLocation').value = data.location;
-        document.getElementById('m_accDamage').value = data.damage;
-        document.getElementById('m_accDetail').value = data.detail;
-
-        var stat = data.status === 'Pending' ? 'รอดำเนินการ' : data.status;
-        document.getElementById('m_accStatus').value = stat;
-        document.getElementById('m_accFix').value = data.fixText || "";
-        document.getElementById('m_accPrevent').value = data.preventText || "";
-
+        document.getElementById('m_accVehicle').innerText = data.vehType + " ทะเบียนหัว: " + data.truckPlate + trailerInfo; document.getElementById('m_accCause').innerText = data.cause; document.getElementById('m_accLocation').value = data.location; document.getElementById('m_accDamage').value = data.damage; document.getElementById('m_accDetail').value = data.detail;
+        var stat = data.status === 'Pending' ? 'รอดำเนินการ' : data.status; document.getElementById('m_accStatus').value = stat; document.getElementById('m_accFix').value = data.fixText || ""; document.getElementById('m_accPrevent').value = data.preventText || "";
         new bootstrap.Modal(document.getElementById('accidentDetailModal')).show();
     }
 
     function saveAccidentResolution() {
-        var payload = {
-            docNo: document.getElementById('m_accDocNoHidden').value,
-            status: document.getElementById('m_accStatus').value,
-            fixText: document.getElementById('m_accFix').value,
-            preventText: document.getElementById('m_accPrevent').value,
-            location: document.getElementById('m_accLocation').value,
-            damage: document.getElementById('m_accDamage').value,
-            detail: document.getElementById('m_accDetail').value
-        };
+        var payload = { docNo: document.getElementById('m_accDocNoHidden').value, status: document.getElementById('m_accStatus').value, fixText: document.getElementById('m_accFix').value, preventText: document.getElementById('m_accPrevent').value, location: document.getElementById('m_accLocation').value, damage: document.getElementById('m_accDamage').value, detail: document.getElementById('m_accDetail').value };
         if(!payload.docNo) return;
-
         Swal.fire({title: 'กำลังบันทึกและสร้าง PDF ใหม่...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
-
-        callAPI({ action: 'updateAccidentResolution', payload: payload }).then(function(res) {
-            if (res.success) {
-                Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message});
-                bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal')).hide();
-                loadAdminData(); 
-            } else {
-                Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
-            }
-        });
+        callAPI({ action: 'updateAccidentResolution', payload: payload }).then(function(res) { if (res.success) { Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message}); bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal')).hide(); loadAdminData(); } else { Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); } });
     }
 
     function deleteAccident() {
-        var docNo = document.getElementById('m_accDocNoHidden').value;
-        if(!docNo) return;
-
-        Swal.fire({
-            title: 'ยืนยันการลบ?',
-            text: 'ต้องการลบรายงานอุบัติเหตุเลขที่ ' + docNo + ' ใช่หรือไม่?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#555',
-            confirmButtonText: 'ใช่, ลบทิ้ง!',
-            cancelButtonText: 'ยกเลิก'
-        }).then(function(result) {
-            if (result.isConfirmed) {
-                Swal.fire({title: 'กำลังลบ...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
-                callAPI({ action: 'deleteAccidentRecord', docNo: docNo }).then(function(res) {
-                    if(res.success) {
-                        Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message});
-                        bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal')).hide();
-                        loadAdminData();
-                    } else {
-                        Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
-                    }
-                });
-            }
+        var docNo = document.getElementById('m_accDocNoHidden').value; if(!docNo) return;
+        Swal.fire({ title: 'ยืนยันการลบ?', text: 'ต้องการลบรายงานอุบัติเหตุเลขที่ ' + docNo + ' ใช่หรือไม่?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#555', confirmButtonText: 'ใช่, ลบทิ้ง!', cancelButtonText: 'ยกเลิก' }).then(function(result) {
+            if (result.isConfirmed) { Swal.fire({title: 'กำลังลบ...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }}); callAPI({ action: 'deleteAccidentRecord', docNo: docNo }).then(function(res) { if(res.success) { Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message}); bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal')).hide(); loadAdminData(); } else { Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); } }); }
         });
     }
 
     function renderWarningTable(data) {
        document.getElementById('warnTotalCount').innerText = allWarningData.length;
-       var warnCounts = {};
-       allWarningData.forEach(function(w) { warnCounts[w.empName] = (warnCounts[w.empName] || 0) + 1; });
+       var warnCounts = {}; allWarningData.forEach(function(w) { warnCounts[w.empName] = (warnCounts[w.empName] || 0) + 1; });
        var topWarns = Object.keys(warnCounts).map(function(k) { return {name:k, count:warnCounts[k]}; }).sort(function(a,b) { return b.count - a.count; }).slice(0,10);
-       var topHtml = '';
-       topWarns.forEach(function(c, i) {
-          topHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-danger rounded-pill">' + c.count + ' ครั้ง</span></div>';
-       });
-       document.getElementById('warnTopEmployeesList').innerHTML = topHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
-
+       var topHtml = ''; topWarns.forEach(function(c, i) { topHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-danger rounded-pill">' + c.count + ' ครั้ง</span></div>'; }); document.getElementById('warnTopEmployeesList').innerHTML = topHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
        var html = '';
        data.forEach(function(r) {
            var pdfBtn = r.pdfUrl && r.pdfUrl.indexOf('http') > -1 ? '<a href="' + r.pdfUrl + '" target="_blank" onclick="event.stopPropagation()" class="btn btn-sm btn-outline-danger py-0 px-3 rounded-pill shadow-sm"><i class="bi bi-file-pdf me-1"></i> เปิดดู</a>' : '-';
-           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) openWarningDetailByDocNo(\'' + r.docNo + '\')">' +
-                   '<td class="ps-4"><span class="text-danger font-monospace fw-bold">' + r.docNo + '</span></td>' +
-                   '<td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td>' +
-                   '<td>' + (r.issueDate.split(' ')[0] || r.issueDate) + '</td>' +
-                   '<td>' + (r.incidentDate.split(' ')[0] || r.incidentDate) + '</td>' +
-                   '<td><div class="text-truncate text-light" style="max-width:200px;" title="' + r.offense1 + '">' + r.offense1 + '</div></td>' +
-                   '<td class="text-center pe-4">' + pdfBtn + '</td></tr>';
+           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) openWarningDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-danger font-monospace fw-bold">' + r.docNo + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + (r.issueDate.split(' ')[0] || r.issueDate) + '</td><td>' + (r.incidentDate.split(' ')[0] || r.incidentDate) + '</td><td><div class="text-truncate text-light" style="max-width:200px;" title="' + r.offense1 + '">' + r.offense1 + '</div></td><td class="text-center pe-4">' + pdfBtn + '</td></tr>';
        });
        document.getElementById('adminWarnTableBody').innerHTML = html || '<tr><td colspan="6" class="text-center py-4 text-muted">ยังไม่มีข้อมูลการออกใบเตือน</td></tr>';
     }
 
-    function filterWarnTable() {
-        var val = document.getElementById('searchWarnInput').value.toLowerCase();
-        currentWarningDisplayData = allWarningData.filter(function(d) { 
-            return (d.docNo + d.empName + d.empId).toLowerCase().includes(val);
-        });
-        renderWarningTable(currentWarningDisplayData);
-    }
+    function filterWarnTable() { var val = document.getElementById('searchWarnInput').value.toLowerCase(); currentWarningDisplayData = allWarningData.filter(function(d) { return (d.docNo + d.empName + d.empId).toLowerCase().includes(val); }); renderWarningTable(currentWarningDisplayData); }
 
     function openWarningDetailByDocNo(docNo) {
-        var data = allWarningData.find(function(a) { return a.docNo === docNo; });
-        if(!data) return;
-
-        document.getElementById('e_warnDocNo').innerText = data.docNo;
-        document.getElementById('e_warnDocNoHidden').value = data.docNo;
-        document.getElementById('e_warnEmpName').innerText = data.empName + " (" + data.empId + ")";
-        
-        var issuedByShort = data.issuedBy.split('(')[0].trim();
-        document.getElementById('e_warnIssuedByText').innerText = issuedByShort;
-
-        document.getElementById('e_warnIssueDate').value = data.issueDateEdit;
-        document.getElementById('e_warnIncidentDate').value = data.incidentDateEdit;
-        document.getElementById('e_warnAttachments').value = data.attachments;
-        document.getElementById('e_warnOffense1').value = data.offense1;
-        document.getElementById('e_warnOffense2').value = data.offense2;
-        document.getElementById('e_warnNotes').value = data.notes;
-
-        var select = document.getElementById('e_warnIssuedBy');
-        for(var i=0; i<select.options.length; i++) {
-           if(select.options[i].value.includes(issuedByShort)) {
-               select.selectedIndex = i;
-               break;
-           }
-        }
+        var data = allWarningData.find(function(a) { return a.docNo === docNo; }); if(!data) return;
+        document.getElementById('e_warnDocNo').innerText = data.docNo; document.getElementById('e_warnDocNoHidden').value = data.docNo; document.getElementById('e_warnEmpName').innerText = data.empName + " (" + data.empId + ")";
+        var issuedByShort = data.issuedBy.split('(')[0].trim(); document.getElementById('e_warnIssuedByText').innerText = issuedByShort;
+        document.getElementById('e_warnIssueDate').value = data.issueDateEdit; document.getElementById('e_warnIncidentDate').value = data.incidentDateEdit; document.getElementById('e_warnAttachments').value = data.attachments; document.getElementById('e_warnOffense1').value = data.offense1; document.getElementById('e_warnOffense2').value = data.offense2; document.getElementById('e_warnNotes').value = data.notes;
+        var select = document.getElementById('e_warnIssuedBy'); for(var i=0; i<select.options.length; i++) { if(select.options[i].value.includes(issuedByShort)) { select.selectedIndex = i; break; } }
         new bootstrap.Modal(document.getElementById('warningDetailModal')).show();
     }
 
     function saveWarningResolution() {
-        var payload = {
-            docNo: document.getElementById('e_warnDocNoHidden').value,
-            issueDate: document.getElementById('e_warnIssueDate').value,
-            incidentDate: document.getElementById('e_warnIncidentDate').value,
-            attachments: document.getElementById('e_warnAttachments').value,
-            offense1: document.getElementById('e_warnOffense1').value,
-            offense2: document.getElementById('e_warnOffense2').value,
-            notes: document.getElementById('e_warnNotes').value,
-            issuedBy: document.getElementById('e_warnIssuedBy').value
-        };
+        var payload = { docNo: document.getElementById('e_warnDocNoHidden').value, issueDate: document.getElementById('e_warnIssueDate').value, incidentDate: document.getElementById('e_warnIncidentDate').value, attachments: document.getElementById('e_warnAttachments').value, offense1: document.getElementById('e_warnOffense1').value, offense2: document.getElementById('e_warnOffense2').value, notes: document.getElementById('e_warnNotes').value, issuedBy: document.getElementById('e_warnIssuedBy').value };
         if(!payload.docNo) return;
-
         Swal.fire({title: 'กำลังบันทึกและสร้าง PDF ใหม่...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
-
-        callAPI({ action: 'updateWarningResolution', payload: payload }).then(function(res) {
-            if (res.success) {
-                Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message});
-                bootstrap.Modal.getInstance(document.getElementById('warningDetailModal')).hide();
-                loadAdminData(); 
-            } else {
-                Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
-            }
-        });
+        callAPI({ action: 'updateWarningResolution', payload: payload }).then(function(res) { if (res.success) { Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message}); bootstrap.Modal.getInstance(document.getElementById('warningDetailModal')).hide(); loadAdminData(); } else { Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); } });
     }
 
     function deleteWarning() {
-        var docNo = document.getElementById('e_warnDocNoHidden').value;
-        if(!docNo) return;
-
-        Swal.fire({
-            title: 'ยืนยันการลบ?',
-            text: 'ต้องการลบใบเตือนเลขที่ ' + docNo + ' ใช่หรือไม่? (PDF และข้อมูลจะถูกลบออกทั้งหมด)',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#555',
-            confirmButtonText: 'ใช่, ลบทิ้ง!',
-            cancelButtonText: 'ยกเลิก'
-        }).then(function(result) {
-            if (result.isConfirmed) {
-                Swal.fire({title: 'กำลังลบ...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
-                callAPI({ action: 'deleteWarningRecord', docNo: docNo }).then(function(res) {
-                    if(res.success) {
-                        Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message});
-                        bootstrap.Modal.getInstance(document.getElementById('warningDetailModal')).hide();
-                        loadAdminData();
-                    } else {
-                        Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
-                    }
-                });
-            }
+        var docNo = document.getElementById('e_warnDocNoHidden').value; if(!docNo) return;
+        Swal.fire({ title: 'ยืนยันการลบ?', text: 'ต้องการลบใบเตือนเลขที่ ' + docNo + ' ใช่หรือไม่? (PDF และข้อมูลจะถูกลบออกทั้งหมด)', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#555', confirmButtonText: 'ใช่, ลบทิ้ง!', cancelButtonText: 'ยกเลิก' }).then(function(result) {
+            if (result.isConfirmed) { Swal.fire({title: 'กำลังลบ...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }}); callAPI({ action: 'deleteWarningRecord', docNo: docNo }).then(function(res) { if(res.success) { Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message}); bootstrap.Modal.getInstance(document.getElementById('warningDetailModal')).hide(); loadAdminData(); } else { Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); } }); }
         });
     }
 
-    function openCreateWarningModal() {
-        document.getElementById('warningForm').reset();
-        var datalist = document.getElementById('warnEmpOptions');
-        datalist.innerHTML = '';
-        var activeEmps = allEmpData.filter(function(e) { return e.status === 'Active'; });
-        activeEmps.forEach(function(e) {
-            datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">';
-        });
-        document.getElementById('warnIssueDate').valueAsDate = new Date();
-        document.getElementById('warnIncidentDate').valueAsDate = new Date();
-        new bootstrap.Modal(document.getElementById('warningCreateModal')).show();
-    }
+    function openCreateWarningModal() { document.getElementById('warningForm').reset(); var datalist = document.getElementById('warnEmpOptions'); datalist.innerHTML = ''; var activeEmps = allEmpData.filter(function(e) { return e.status === 'Active'; }); activeEmps.forEach(function(e) { datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">'; }); document.getElementById('warnIssueDate').valueAsDate = new Date(); document.getElementById('warnIncidentDate').valueAsDate = new Date(); new bootstrap.Modal(document.getElementById('warningCreateModal')).show(); }
 
-    function getBase64Warn(file) {
-       return new Promise(function(resolve) {
-          var reader = new FileReader();
-          reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); };
-          reader.readAsDataURL(file);
-       });
-    }
+    function getBase64Warn(file) { return new Promise(function(resolve) { var reader = new FileReader(); reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); }; reader.readAsDataURL(file); }); }
 
     async function submitWarningForm(e) {
-        e.preventDefault();
-        var inputValue = document.getElementById('warnEmpInput').value;
-        if (!inputValue || inputValue.indexOf(':') === -1) {
-            Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ถูกต้อง', text: 'กรุณาเลือกพนักงานจากรายชื่อที่กำหนด'});
-            return;
-        }
-        var btn = document.getElementById('btnSubmitWarning');
-        var originalText = btn.innerText;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังสร้าง PDF...';
-        btn.disabled = true;
-
-        var parts = inputValue.split(':');
-        var empIdValue = parts[0].trim();
-        var empNameText = parts[1] ? parts[1].trim() : '';
-        if(empNameText) empNameText = empNameText.split('(')[0].trim();
-
-        var file1 = document.getElementById('warnPhoto1').files[0];
-        var file2 = document.getElementById('warnPhoto2').files[0];
-        var b64_1 = null, type1 = null;
-        var b64_2 = null, type2 = null;
-
-        if (file1) { var data1 = await getBase64Warn(file1); b64_1 = data1.base64; type1 = data1.type; }
-        if (file2) { var data2 = await getBase64Warn(file2); b64_2 = data2.base64; type2 = data2.type; }
-
-        var payload = {
-            empId: empIdValue, empName: empNameText,
-            issueDate: document.getElementById('warnIssueDate').value,
-            incidentDate: document.getElementById('warnIncidentDate').value,
-            attachments: document.getElementById('warnAttachments').value,
-            offense1: document.getElementById('warnOffense1').value,
-            offense2: document.getElementById('warnOffense2').value,
-            notes: document.getElementById('warnNotes').value,
-            issuedBy: document.getElementById('warnIssuedBy').value, 
-            warnPhoto1Base64: b64_1, warnPhoto1Type: type1,
-            warnPhoto2Base64: b64_2, warnPhoto2Type: type2
-        };
-
-        callAPI({ action: 'submitWarningReport', form: payload }).then(function(res) {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            if(res.success) {
-                Swal.fire({icon: 'success', title: 'สร้างใบเตือนสำเร็จ', html: 'ส่งเข้าประวัติพนักงานเรียบร้อย<br>เลขที่อ้างอิง: <b class="text-danger">' + res.docNo + '</b>'});
-                bootstrap.Modal.getInstance(document.getElementById('warningCreateModal')).hide();
-                loadAdminData(); 
-            } else {
-                Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
-            }
-        });
+        e.preventDefault(); var inputValue = document.getElementById('warnEmpInput').value; if (!inputValue || inputValue.indexOf(':') === -1) { Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ถูกต้อง', text: 'กรุณาเลือกพนักงานจากรายชื่อที่กำหนด'}); return; }
+        var btn = document.getElementById('btnSubmitWarning'); var originalText = btn.innerText; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังสร้าง PDF...'; btn.disabled = true;
+        var parts = inputValue.split(':'); var empIdValue = parts[0].trim(); var empNameText = parts[1] ? parts[1].trim() : ''; if(empNameText) empNameText = empNameText.split('(')[0].trim();
+        var file1 = document.getElementById('warnPhoto1').files[0]; var file2 = document.getElementById('warnPhoto2').files[0]; var b64_1 = null, type1 = null; var b64_2 = null, type2 = null;
+        if (file1) { var data1 = await getBase64Warn(file1); b64_1 = data1.base64; type1 = data1.type; } if (file2) { var data2 = await getBase64Warn(file2); b64_2 = data2.base64; type2 = data2.type; }
+        var payload = { empId: empIdValue, empName: empNameText, issueDate: document.getElementById('warnIssueDate').value, incidentDate: document.getElementById('warnIncidentDate').value, attachments: document.getElementById('warnAttachments').value, offense1: document.getElementById('warnOffense1').value, offense2: document.getElementById('warnOffense2').value, notes: document.getElementById('warnNotes').value, issuedBy: document.getElementById('warnIssuedBy').value, warnPhoto1Base64: b64_1, warnPhoto1Type: type1, warnPhoto2Base64: b64_2, warnPhoto2Type: type2 };
+        callAPI({ action: 'submitWarningReport', form: payload }).then(function(res) { btn.innerHTML = originalText; btn.disabled = false; if(res.success) { Swal.fire({icon: 'success', title: 'สร้างใบเตือนสำเร็จ', html: 'ส่งเข้าประวัติพนักงานเรียบร้อย<br>เลขที่อ้างอิง: <b class="text-danger">' + res.docNo + '</b>'}); bootstrap.Modal.getInstance(document.getElementById('warningCreateModal')).hide(); loadAdminData(); } else { Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); } });
     }
 
-    function renderStats(data) {
-       var active = data.filter(function(d) { return d.status === 'Active'; });
-       document.getElementById('statTotal').innerText = active.length;
-       var male = active.filter(function(d) { return d.gender === 'ชาย'; }).length;
-       var female = active.filter(function(d) { return d.gender === 'หญิง'; }).length;
-       document.getElementById('statMale').innerText = male;
-       document.getElementById('statFemale').innerText = female;
+    function renderStats(data) { var active = data.filter(function(d) { return d.status === 'Active'; }); document.getElementById('statTotal').innerText = active.length; var male = active.filter(function(d) { return d.gender === 'ชาย'; }).length; var female = active.filter(function(d) { return d.gender === 'หญิง'; }).length; document.getElementById('statMale').innerText = male; document.getElementById('statFemale').innerText = female; var thisMonth = new Date().getMonth() + 1; var bdays = active.filter(function(d) { if(!d.birthDate) return false; try { return (new Date(d.birthDate).getMonth() + 1) === thisMonth; } catch(e){ return false; } }); document.getElementById('statBirth').innerText = bdays.length; }
 
-       var thisMonth = new Date().getMonth() + 1;
-       var bdays = active.filter(function(d) {
-          if(!d.birthDate) return false;
-          try { return (new Date(d.birthDate).getMonth() + 1) === thisMonth; } catch(e){ return false; }
-       });
-       document.getElementById('statBirth').innerText = bdays.length;
-    }
+    function filterTable() { var val = document.getElementById('searchInput').value.toLowerCase(); var showResigned = document.getElementById('showResignedCheck').checked; var filtered = allEmpData.filter(function(d) { var matchSearch = (d.name + d.id + d.position + (d.nickname||'')).toLowerCase().includes(val); var matchStatus = showResigned ? true : (d.status === 'Active'); return matchSearch && matchStatus; }); currentDisplayData = filtered; renderTable(filtered); }
 
-    function filterTable() {
-       var val = document.getElementById('searchInput').value.toLowerCase();
-       var showResigned = document.getElementById('showResignedCheck').checked; 
-       var filtered = allEmpData.filter(function(d) { 
-           var matchSearch = (d.name + d.id + d.position + (d.nickname||'')).toLowerCase().includes(val);
-           var matchStatus = showResigned ? true : (d.status === 'Active');
-           return matchSearch && matchStatus;
-       });
-       currentDisplayData = filtered;
-       renderTable(filtered);
-    }
-
-    function sortData(key) {
-       if (currentSort.key === key) currentSort.order = currentSort.order === 'asc' ? 'desc' : 'asc';
-       else { currentSort.key = key; currentSort.order = 'asc'; }
-       currentDisplayData.sort(function(a, b) {
-          if (key === 'startDate') {
-             var dateA = a.startDate ? new Date(a.startDate).getTime() : 0;
-             var dateB = b.startDate ? new Date(b.startDate).getTime() : 0;
-             return currentSort.order === 'asc' ? dateA - dateB : dateB - dateA;
-          }
-          var valA = (a[key] || '').toString();
-          var valB = (b[key] || '').toString();
-          return currentSort.order === 'asc' ? valA.localeCompare(valB, 'th', { numeric: true }) : valB.localeCompare(valA, 'th', { numeric: true });
-       });
-       renderTable(currentDisplayData);
-    }
+    function sortData(key) { if (currentSort.key === key) currentSort.order = currentSort.order === 'asc' ? 'desc' : 'asc'; else { currentSort.key = key; currentSort.order = 'asc'; } currentDisplayData.sort(function(a, b) { if (key === 'startDate') { var dateA = a.startDate ? new Date(a.startDate).getTime() : 0; var dateB = b.startDate ? new Date(b.startDate).getTime() : 0; return currentSort.order === 'asc' ? dateA - dateB : dateB - dateA; } var valA = (a[key] || '').toString(); var valB = (b[key] || '').toString(); return currentSort.order === 'asc' ? valA.localeCompare(valB, 'th', { numeric: true }) : valB.localeCompare(valA, 'th', { numeric: true }); }); renderTable(currentDisplayData); }
     
-    function openBirthdayModal() {
-       var thisMonth = new Date().getMonth() + 1;
-       var list = allEmpData.filter(function(d) { return d.status === 'Active' && d.birthDate && (new Date(d.birthDate).getMonth() + 1) === thisMonth; });
-       list.sort(function(a,b) { return new Date(a.birthDate).getDate() - new Date(b.birthDate).getDate(); });
-       var html = '';
-       if(list.length === 0) html = '<div class="text-center text-muted py-4">เดือนนี้ไม่มีวันเกิดพนักงาน</div>';
-       else {
-          list.forEach(function(e) {
-              var day = new Date(e.birthDate).getDate();
-              html += '<div class="list-item-glass clickable-item" onclick="openModal(\'view\',\'' + e.id + '\')"><div class="d-flex align-items-center"><div class="bg-dark border border-secondary rounded-circle d-flex align-items-center justify-content-center me-3 text-warning fw-bold" style="width:36px;height:36px;">' + day + '</div><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div></div><i class="bi bi-chevron-right text-muted small"></i></div>';
-          });
-       }
-       document.getElementById('birthdayListBody').innerHTML = html;
-       new bootstrap.Modal(document.getElementById('birthdayModal')).show();
-    }
+    function openBirthdayModal() { var thisMonth = new Date().getMonth() + 1; var list = allEmpData.filter(function(d) { return d.status === 'Active' && d.birthDate && (new Date(d.birthDate).getMonth() + 1) === thisMonth; }); list.sort(function(a,b) { return new Date(a.birthDate).getDate() - new Date(b.birthDate).getDate(); }); var html = ''; if(list.length === 0) html = '<div class="text-center text-muted py-4">เดือนนี้ไม่มีวันเกิดพนักงาน</div>'; else { list.forEach(function(e) { var day = new Date(e.birthDate).getDate(); html += '<div class="list-item-glass clickable-item" onclick="openModal(\'view\',\'' + e.id + '\')"><div class="d-flex align-items-center"><div class="bg-dark border border-secondary rounded-circle d-flex align-items-center justify-content-center me-3 text-warning fw-bold" style="width:36px;height:36px;">' + day + '</div><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div></div><i class="bi bi-chevron-right text-muted small"></i></div>'; }); } document.getElementById('birthdayListBody').innerHTML = html; new bootstrap.Modal(document.getElementById('birthdayModal')).show(); }
 
-    function openPositionStatsModal() {
-       var stats = {};
-       allEmpData.filter(function(d) { return d.status === 'Active'; }).forEach(function(row) { 
-          if(row.position) {
-              if (row.position.includes("รถร่วมบริการ")) {
-                  var k = "รถร่วมบริการ"; stats[k] = (stats[k] || 0) + 1;
-              } else {
-                  row.position.split(',').forEach(function(p) { var cp = p.trim(); if(cp) stats[cp] = (stats[cp] || 0) + 1; });
-              }
-          }
-       });
-       var sorted = Object.keys(stats).map(function(k) { return {n:k, c:stats[k]}; }).sort(function(a,b) { return b.c - a.c; });
-       var html = '<div class="row g-2">';
-       sorted.forEach(function(i) {
-          html += '<div class="col-sm-6"><div class="list-item-glass clickable-item" onclick="openPositionDetail(\'' + i.n + '\')"><span>' + i.n + '</span><span class="badge bg-success text-dark ms-2">' + i.c + '</span></div></div>';
-       });
-       document.getElementById('positionStatsList').innerHTML = html + '</div>';
-       new bootstrap.Modal(document.getElementById('positionStatsModal')).show();
-    }
+    function openPositionStatsModal() { var stats = {}; allEmpData.filter(function(d) { return d.status === 'Active'; }).forEach(function(row) { if(row.position) { if (row.position.includes("รถร่วมบริการ")) { var k = "รถร่วมบริการ"; stats[k] = (stats[k] || 0) + 1; } else { row.position.split(',').forEach(function(p) { var cp = p.trim(); if(cp) stats[cp] = (stats[cp] || 0) + 1; }); } } }); var sorted = Object.keys(stats).map(function(k) { return {n:k, c:stats[k]}; }).sort(function(a,b) { return b.c - a.c; }); var html = '<div class="row g-2">'; sorted.forEach(function(i) { html += '<div class="col-sm-6"><div class="list-item-glass clickable-item" onclick="openPositionDetail(\'' + i.n + '\')"><span>' + i.n + '</span><span class="badge bg-success text-dark ms-2">' + i.c + '</span></div></div>'; }); document.getElementById('positionStatsList').innerHTML = html + '</div>'; new bootstrap.Modal(document.getElementById('positionStatsModal')).show(); }
 
-    function openPositionDetail(pos) {
-       var list = allEmpData.filter(function(d) { return d.status === 'Active' && d.position && d.position.includes(pos); });
-       var html = '';
-       list.forEach(function(e) { html += '<div class="list-item-glass static-item"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + (e.phone || '-') + '</div></div></div>'; });
-       document.getElementById('positionDetailTitle').innerText = 'ตำแหน่ง: ' + pos;
-       document.getElementById('positionDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>';
-       new bootstrap.Modal(document.getElementById('positionDetailModal')).show();
-    }
+    function openPositionDetail(pos) { var list = allEmpData.filter(function(d) { return d.status === 'Active' && d.position && d.position.includes(pos); }); var html = ''; list.forEach(function(e) { html += '<div class="list-item-glass static-item"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + (e.phone || '-') + '</div></div></div>'; }); document.getElementById('positionDetailTitle').innerText = 'ตำแหน่ง: ' + pos; document.getElementById('positionDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; new bootstrap.Modal(document.getElementById('positionDetailModal')).show(); }
 
-    function openYearlyStatsModal() {
-       var yearMap = {};
-       allEmpData.forEach(function(d) {
-          if(d.startDate && !isNaN(new Date(d.startDate))) { var y = new Date(d.startDate).getFullYear(); if(!yearMap[y]) yearMap[y]={j:0,r:0}; yearMap[y].j++; }
-          if(d.status === 'Resigned' && d.resignDate && !isNaN(new Date(d.resignDate))) { var y2 = new Date(d.resignDate).getFullYear(); if(!yearMap[y2]) yearMap[y2]={j:0,r:0}; yearMap[y2].r++; }
-       });
-       var html = '', cum = 0;
-       Object.keys(yearMap).sort().forEach(function(y) {
-          var d = yearMap[y]; cum += (d.j - d.r);
-          html += '<tr class="static-item"><td class="py-3">' + y + '</td><td class="text-success clickable" style="cursor:pointer; text-decoration:underline;" onclick="openYearDetail(\'' + y + '\',\'join\')">+' + d.j + '</td><td class="text-danger clickable" style="cursor:pointer; text-decoration:underline;" onclick="openYearDetail(\'' + y + '\',\'resign\')">-' + d.r + '</td><td class="text-white">' + cum + '</td></tr>';
-       });
-       document.getElementById('yearStatsBodyModal').innerHTML = html;
-       new bootstrap.Modal(document.getElementById('yearlyStatsModal')).show();
-    }
+    function openYearlyStatsModal() { var yearMap = {}; allEmpData.forEach(function(d) { if(d.startDate && !isNaN(new Date(d.startDate))) { var y = new Date(d.startDate).getFullYear(); if(!yearMap[y]) yearMap[y]={j:0,r:0}; yearMap[y].j++; } if(d.status === 'Resigned' && d.resignDate && !isNaN(new Date(d.resignDate))) { var y2 = new Date(d.resignDate).getFullYear(); if(!yearMap[y2]) yearMap[y2]={j:0,r:0}; yearMap[y2].r++; } }); var html = '', cum = 0; Object.keys(yearMap).sort().forEach(function(y) { var d = yearMap[y]; cum += (d.j - d.r); html += '<tr class="static-item"><td class="py-3">' + y + '</td><td class="text-success clickable" style="cursor:pointer; text-decoration:underline;" onclick="openYearDetail(\'' + y + '\',\'join\')">+' + d.j + '</td><td class="text-danger clickable" style="cursor:pointer; text-decoration:underline;" onclick="openYearDetail(\'' + y + '\',\'resign\')">-' + d.r + '</td><td class="text-white">' + cum + '</td></tr>'; }); document.getElementById('yearStatsBodyModal').innerHTML = html; new bootstrap.Modal(document.getElementById('yearlyStatsModal')).show(); }
 
-    function openYearDetail(year, type) {
-         var list = []; var title = "";
-         if (type === 'join') { title = `เข้าใหม่ ปี ${year}`; list = allEmpData.filter(function(d) { return d.startDate && new Date(d.startDate).getFullYear() == year; }); } 
-         else if (type === 'resign') { title = `ลาออก ปี ${year}`; list = allEmpData.filter(function(d) { return d.status === 'Resigned' && d.resignDate && new Date(d.resignDate).getFullYear() == year; }); }
-         var html = '';
-         list.forEach(function(e) { html += '<div class="list-item-glass clickable-item" onclick="openModal(\'view\',\'' + e.id + '\')"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div><span class="badge bg-dark border border-secondary text-light">' + formatDate(type === 'join' ? e.startDate : e.resignDate) + '</span></div>'; });
-         document.getElementById('yearDetailTitle').innerText = title;
-         document.getElementById('yearDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>';
-         new bootstrap.Modal(document.getElementById('yearDetailModal')).show();
-    }
+    function openYearDetail(year, type) { var list = []; var title = ""; if (type === 'join') { title = `เข้าใหม่ ปี ${year}`; list = allEmpData.filter(function(d) { return d.startDate && new Date(d.startDate).getFullYear() == year; }); } else if (type === 'resign') { title = `ลาออก ปี ${year}`; list = allEmpData.filter(function(d) { return d.status === 'Resigned' && d.resignDate && new Date(d.resignDate).getFullYear() == year; }); } var html = ''; list.forEach(function(e) { html += '<div class="list-item-glass clickable-item" onclick="openModal(\'view\',\'' + e.id + '\')"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div><span class="badge bg-dark border border-secondary text-light">' + formatDate(type === 'join' ? e.startDate : e.resignDate) + '</span></div>'; }); document.getElementById('yearDetailTitle').innerText = title; document.getElementById('yearDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; new bootstrap.Modal(document.getElementById('yearDetailModal')).show(); }
   </script>
 </div>
