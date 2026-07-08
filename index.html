@@ -19,13 +19,13 @@
     /* ปรับแต่งสีใหม่ให้สว่างและอ่านง่ายขึ้น */
     :root {
       --glass-bg: #050505;              
-      --glass-panel: rgba(30, 30, 30, 0.75); /* ทำให้พื้นหลังทึบขึ้นเล็กน้อย */
-      --glass-border: rgba(255, 255, 255, 0.15); /* ทำให้เส้นขอบสว่างขึ้น */
+      --glass-panel: rgba(30, 30, 30, 0.75); 
+      --glass-border: rgba(255, 255, 255, 0.15); 
       --glass-blur: blur(15px);          
       --accent-color: #00E676;           
       --accent-glow: rgba(0, 230, 118, 0.3);
       --text-main: #ffffff;
-      --text-muted: #b8b8b8; /* ปรับสีเทาให้สว่างขึ้นมาก เพื่อให้อ่านง่าย */
+      --text-muted: #b8b8b8; 
     }
 
     body { 
@@ -39,7 +39,6 @@
       font-size: 1rem;
     }
 
-    /* บังคับสีเทาให้สว่างขึ้นทั้งระบบ */
     .text-muted { color: var(--text-muted) !important; }
     .text-secondary { color: #d0d0d0 !important; }
 
@@ -61,7 +60,6 @@
     .bg-success { background-color: var(--accent-color) !important; color: #000 !important; }
     .border-success { border-color: var(--accent-color) !important; }
     
-    /* ปรับช่องกรอกข้อมูลให้ชัดเจนขึ้น */
     .form-control, .form-select { 
       background-color: rgba(0, 0, 0, 0.6) !important; 
       border: 1px solid rgba(255, 255, 255, 0.25) !important; 
@@ -71,8 +69,13 @@
     }
 
     .form-control::placeholder {
-      color: #a0aab2 !important; /* ปรับสี placeholder ให้อ่านง่าย */
+      color: #a0aab2 !important; 
       opacity: 1;
+    }
+
+    /* 🟢 แก้ปัญหาตัวหนังสือทับกันในหน้า Login */
+    .form-floating > .form-control::placeholder {
+      color: transparent !important;
     }
 
     .form-control:focus, .form-select:focus { 
@@ -505,7 +508,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
   <script>
-    // 🟢 ประกาศตัวแปรทั้งหมดไว้ที่นี่ที่เดียว เพื่อให้ไฟล์อื่นเรียกใช้ได้โดยไม่ซ้ำซ้อน
     var BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOFq4yA2YaCvA5w9OXlM4wu5lGqCEt6AnMn-2_Pw_Fl-YpIB5hzAFM5YFIVlSPd7Tu-A/exec";
     var FLEET_API_URL = "https://script.google.com/macros/s/AKfycbyw0mIjSyoLO_E1RJmsGpBiPNiNVQiotHNcrkgCBg849wjA83Fel4l6VHYSTe0PrIC-/exec";
 
@@ -517,11 +519,13 @@
     var allHospitals = [];
     var allLicenseTypes = [];
     
+    // สำหรับหน้า User
     var currentUserData = {};
     var globalUserWarnings = [];
     var globalUserAccidents = [];
     var globalYardData = [];
     
+    // สำหรับหน้า Admin
     var currentDisplayData = [];
     var currentSort = { key: 'id', order: 'asc' };
     var allAccidentData = [];
