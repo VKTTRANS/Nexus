@@ -26,40 +26,108 @@
       --text-main: #ffffff;
       --text-muted: #a0a0a0;
     }
+
     body { 
       font-family: 'Sarabun', sans-serif; 
       background-color: var(--glass-bg);
       background-image: radial-gradient(circle at 10% 20%, rgba(0, 230, 118, 0.08) 0%, transparent 40%),
                         radial-gradient(circle at 90% 80%, rgba(0, 230, 118, 0.05) 0%, transparent 40%);
-      background-attachment: fixed; color: var(--text-main); overflow-x: hidden;
+      background-attachment: fixed; 
+      color: var(--text-main); 
+      overflow-x: hidden;
     }
-    .card { background: var(--glass-panel); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); border-radius: 16px; }
-    .card-header { background-color: rgba(255, 255, 255, 0.03) !important; border-bottom: 1px solid var(--glass-border); font-weight: 600; }
+
+    .card { 
+      background: var(--glass-panel); 
+      backdrop-filter: var(--glass-blur); 
+      border: 1px solid var(--glass-border); 
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); 
+      border-radius: 16px; 
+    }
+
+    .card-header { 
+      background-color: rgba(255, 255, 255, 0.03) !important; 
+      border-bottom: 1px solid var(--glass-border); 
+      font-weight: 600; 
+    }
+
     .text-success { color: var(--accent-color) !important; }
     .bg-success { background-color: var(--accent-color) !important; color: #000 !important; }
     .border-success { border-color: var(--accent-color) !important; }
-    .form-control, .form-select { background-color: rgba(0, 0, 0, 0.3) !important; border: 1px solid var(--glass-border) !important; color: #ffffff !important; border-radius: 8px; }
-    .form-control:focus, .form-select:focus { background-color: rgba(0, 0, 0, 0.5) !important; border-color: var(--accent-color) !important; box-shadow: 0 0 0 0.2rem var(--accent-glow); color: #ffffff !important; }
-    .modal-content { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 0 50px rgba(0,0,0,0.8); border-radius: 16px; color: var(--text-main); }
-    .btn-success { background: linear-gradient(135deg, var(--accent-color), #00b359); border: none; color: #000; font-weight: 600; }
+    
+    .form-control, .form-select { 
+      background-color: rgba(0, 0, 0, 0.3) !important; 
+      border: 1px solid var(--glass-border) !important; 
+      color: #ffffff !important; 
+      border-radius: 8px; 
+    }
+
+    .form-control:focus, .form-select:focus { 
+      background-color: rgba(0, 0, 0, 0.5) !important; 
+      border-color: var(--accent-color) !important; 
+      box-shadow: 0 0 0 0.2rem var(--accent-glow); 
+      color: #ffffff !important; 
+    }
+
+    .modal-content { 
+      background: rgba(18, 18, 18, 0.95); 
+      backdrop-filter: blur(20px); 
+      border: 1px solid var(--glass-border); 
+      box-shadow: 0 0 50px rgba(0,0,0,0.8); 
+      border-radius: 16px; 
+      color: var(--text-main); 
+    }
+
+    .btn-success { 
+      background: linear-gradient(135deg, var(--accent-color), #00b359); 
+      border: none; 
+      color: #000; 
+      font-weight: 600; 
+    }
+
     .nav-pills .nav-link { color: var(--text-muted); background: rgba(255,255,255,0.05); }
     .nav-pills .nav-link.active { background-color: var(--accent-color); color: #000; font-weight: bold; }
+    
     .table { color: var(--text-main); --bs-table-bg: transparent; }
     .table-hover tbody tr:hover { background-color: rgba(0, 230, 118, 0.1); }
     .table td, .table th { border-color: var(--glass-border); }
+    
     .view-section { display: none; }
     .view-section.active { display: block; }
-    .checkbox-list { max-height: 120px; overflow-y: auto; border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.2); display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    
+    .checkbox-list { 
+      max-height: 120px; 
+      overflow-y: auto; 
+      border: 1px solid var(--glass-border); 
+      padding: 10px; 
+      border-radius: 8px; 
+      background: rgba(0,0,0,0.2); 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 8px; 
+    }
+
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #000; }
     ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    
     .dropdown-menu { background-color: #1a1a1a; border-color: var(--glass-border); backdrop-filter: blur(10px); }
     .dropdown-item { color: var(--text-main); }
     .dropdown-item:hover { background-color: rgba(255,255,255,0.1); color: var(--accent-color); }
-    @media (max-width: 992px) { .checkbox-list { grid-template-columns: repeat(2, 1fr); } body { font-size: 0.95rem; } }
+
+    @media (max-width: 992px) { 
+      .checkbox-list { grid-template-columns: repeat(2, 1fr); } 
+      body { font-size: 0.95rem; } 
+    }
+
     ::-webkit-calendar-picker-indicator { filter: invert(1) brightness(1.5); }
     input[type="date"] { color-scheme: dark; }
-    #globalLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    
+    #globalLoader { 
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: #050505; z-index: 99999; 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
+    }
   </style>
 </head>
 <body>
@@ -73,136 +141,318 @@
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"> 
       <div class="modal-content">
         <div class="modal-header py-3 border-secondary border-opacity-25">
-          <h5 class="modal-title fw-bold fs-5 text-success" id="modalTitle"><i class="bi bi-person-vcard me-2"></i>จัดการข้อมูล</h5>
+          <h5 class="modal-title fw-bold fs-5 text-success" id="modalTitle">
+            <i class="bi bi-person-vcard me-2"></i>จัดการข้อมูล
+          </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
           <form id="empForm" onsubmit="submitEmpForm(event)">
             <input type="hidden" id="formMode">
+            
             <div class="card border-0 mb-4 bg-transparent shadow-none">
               <div class="card-body p-0">
                 <ul class="nav nav-pills nav-fill gap-2" id="myTab" role="tablist">
-                  <li class="nav-item"><button type="button" class="nav-link active rounded-pill small" data-bs-toggle="tab" data-bs-target="#tabInfo">1. ข้อมูลทั่วไป</button></li>
-                  <li class="nav-item"><button type="button" class="nav-link rounded-pill small" data-bs-toggle="tab" data-bs-target="#tabDocs">2. เอกสารแนบ</button></li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link active rounded-pill small" data-bs-toggle="tab" data-bs-target="#tabInfo">1. ข้อมูลทั่วไป</button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link rounded-pill small" data-bs-toggle="tab" data-bs-target="#tabDocs">2. เอกสารแนบ</button>
+                  </li>
                 </ul>
               </div>
             </div>
+
             <div class="tab-content">
               <div class="tab-pane fade show active" id="tabInfo">
+                
                 <div id="viewModeSection" style="display:none;">
                    <div class="row g-3">
                       <div class="col-12">
                           <div class="card border-0 position-relative overflow-hidden bg-black bg-opacity-25">
                              <div style="position:absolute; top:0; left:0; width:5px; height:100%; background:var(--accent-color);"></div>
                              <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3 ps-4">
-                                <div><h3 class="fw-bold text-white mb-0" id="view_fullname">...</h3>
-                                   <div class="text-muted small mt-2 d-flex align-items-center gap-2"><span id="view_nickname_badge" class="badge bg-dark border border-secondary text-light fw-normal">...</span><span class="text-secondary">|</span><span id="view_empId" class="font-monospace fw-bold text-success fs-5">...</span></div>
+                                <div>
+                                   <h3 class="fw-bold text-white mb-0" id="view_fullname">...</h3>
+                                   <div class="text-muted small mt-2 d-flex align-items-center gap-2">
+                                      <span id="view_nickname_badge" class="badge bg-dark border border-secondary text-light fw-normal">...</span>
+                                      <span class="text-secondary">|</span>
+                                      <span id="view_empId" class="font-monospace fw-bold text-success fs-5">...</span>
+                                   </div>
                                 </div>
-                                <div class="text-end"><span id="view_status_badge" class="badge rounded-pill fs-6 px-3 py-2">...</span></div>
+                                <div class="text-end">
+                                   <span id="view_status_badge" class="badge rounded-pill fs-6 px-3 py-2">...</span>
+                                </div>
                              </div>
                           </div>
                       </div>
+                      
                       <div class="col-lg-4">
                           <div class="card h-100 border-secondary border-opacity-25 bg-transparent">
-                             <div class="card-header text-success border-secondary border-opacity-25"><i class="bi bi-person-lines-fill me-2"></i>ข้อมูลส่วนตัว</div>
+                             <div class="card-header text-success border-secondary border-opacity-25">
+                                 <i class="bi bi-person-lines-fill me-2"></i>ข้อมูลส่วนตัว
+                             </div>
                              <div class="card-body">
                                 <ul class="list-group list-group-flush small bg-transparent">
-                                   <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25"><span class="text-muted">วันเกิด:</span> <span class="fw-bold text-light" id="view_birthDate">-</span></li>
-                                   <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25"><span class="text-muted">อายุ:</span> <span class="fw-bold text-light" id="view_age">-</span></li>
-                                   <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25"><span class="text-muted">เพศ:</span> <span class="fw-bold text-light" id="view_gender">-</span></li>
-                                   <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25"><span class="text-muted">เบอร์โทร:</span> <span class="fw-bold text-light" id="view_phone">-</span></li>
+                                   <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
+                                       <span class="text-muted">วันเกิด:</span> <span class="fw-bold text-light" id="view_birthDate">-</span>
+                                   </li>
+                                   <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
+                                       <span class="text-muted">อายุ:</span> <span class="fw-bold text-light" id="view_age">-</span>
+                                   </li>
+                                   <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
+                                       <span class="text-muted">เพศ:</span> <span class="fw-bold text-light" id="view_gender">-</span>
+                                   </li>
+                                   <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
+                                       <span class="text-muted">เบอร์โทร:</span> <span class="fw-bold text-light" id="view_phone">-</span>
+                                   </li>
                                 </ul>
                                 <div class="mt-3 pt-3 border-top border-secondary border-opacity-25">
-                                   <div class="mb-2"><small class="text-muted d-block mb-1">Username:</small><span class="badge bg-dark text-light border border-secondary font-monospace fw-normal" id="view_username">-</span></div>
-                                   <div class="mb-2"><small class="text-muted d-block mb-1">Password:</small><span class="badge bg-dark text-light border border-secondary font-monospace fw-normal" id="view_password">-</span></div>
-                                   <div class="mb-0"><small class="text-muted d-block mb-1">Role:</small><span class="fw-bold text-success" id="view_role">-</span></div>
+                                   <div class="mb-2">
+                                       <small class="text-muted d-block mb-1">Username:</small>
+                                       <span class="badge bg-dark text-light border border-secondary font-monospace fw-normal" id="view_username">-</span>
+                                   </div>
+                                   <div class="mb-2">
+                                       <small class="text-muted d-block mb-1">Password:</small>
+                                       <span class="badge bg-dark text-light border border-secondary font-monospace fw-normal" id="view_password">-</span>
+                                   </div>
+                                   <div class="mb-0">
+                                       <small class="text-muted d-block mb-1">Role:</small>
+                                       <span class="fw-bold text-success" id="view_role">-</span>
+                                   </div>
                                 </div>
                              </div>
                           </div>
                       </div>
+
                       <div class="col-lg-4">
                           <div class="card h-100 border-secondary border-opacity-25 bg-transparent">
-                             <div class="card-header text-info border-secondary border-opacity-25"><i class="bi bi-briefcase-fill me-2"></i>การทำงาน</div>
+                             <div class="card-header text-info border-secondary border-opacity-25">
+                                 <i class="bi bi-briefcase-fill me-2"></i>การทำงาน
+                             </div>
                              <div class="card-body">
-                                <div class="mb-3"><small class="text-muted d-block">วันเริ่มงาน:</small><span class="fw-bold text-light fs-5" id="view_startDate">-</span><div class="small text-success mt-1" id="view_tenure">-</div></div>
-                                <div class="mb-3"><small class="text-muted d-block">สิทธิ์ประกันสังคม:</small><span class="fw-bold text-info" id="view_ssoType">-</span></div>
-                                <div class="mb-3"><small class="text-muted d-block">โรงพยาบาล:</small><span class="text-light text-break" id="view_ssoHosp">-</span></div>
-                                <div class="p-3 bg-danger bg-opacity-10 rounded border border-danger mt-3" id="view_resign_section" style="display:none;"><small class="text-danger fw-bold d-block">ข้อมูลการลาออก:</small><div class="small text-light">วันที่: <span id="view_resignDate">-</span></div><div class="small text-light">เหตุผล: <span id="view_resignReason">-</span></div></div>
+                                <div class="mb-3">
+                                   <small class="text-muted d-block">วันเริ่มงาน:</small>
+                                   <span class="fw-bold text-light fs-5" id="view_startDate">-</span>
+                                   <div class="small text-success mt-1" id="view_tenure">-</div>
+                                </div>
+                                <div class="mb-3">
+                                   <small class="text-muted d-block">สิทธิ์ประกันสังคม:</small>
+                                   <span class="fw-bold text-info" id="view_ssoType">-</span>
+                                </div>
+                                <div class="mb-3">
+                                   <small class="text-muted d-block">โรงพยาบาล:</small>
+                                   <span class="text-light text-break" id="view_ssoHosp">-</span>
+                                </div>
+                                <div class="p-3 bg-danger bg-opacity-10 rounded border border-danger mt-3" id="view_resign_section" style="display:none;">
+                                   <small class="text-danger fw-bold d-block">ข้อมูลการลาออก:</small>
+                                   <div class="small text-light">วันที่: <span id="view_resignDate">-</span></div>
+                                   <div class="small text-light">เหตุผล: <span id="view_resignReason">-</span></div>
+                                </div>
                              </div>
                           </div>
                       </div>
+
                       <div class="col-lg-4">
                           <div class="card mb-3 border-secondary border-opacity-25 bg-transparent">
-                             <div class="card-header text-warning border-secondary border-opacity-25"><i class="bi bi-card-heading me-2"></i>ข้อมูลเอกสาร</div>
+                             <div class="card-header text-warning border-secondary border-opacity-25">
+                                 <i class="bi bi-card-heading me-2"></i>ข้อมูลเอกสาร
+                             </div>
                              <div class="card-body small">
-                                <div class="mb-2"><span class="text-muted d-block">บัตรประชาชน:</span><span class="fw-bold text-light" id="view_idCardNum">-</span><div class="text-danger" style="font-size:0.75rem;" id="view_idExp">-</div></div>
+                                <div class="mb-2">
+                                   <span class="text-muted d-block">บัตรประชาชน:</span>
+                                   <span class="fw-bold text-light" id="view_idCardNum">-</span>
+                                   <div class="text-danger" style="font-size:0.75rem;" id="view_idExp">-</div>
+                                </div>
                                 <hr class="my-2 border-secondary opacity-25">
-                                <div class="mb-2"><span class="text-muted d-block">ใบขับขี่:</span><span class="fw-bold text-light" id="view_licType">-</span><div class="text-light font-monospace" id="view_licNum">-</div><div class="text-danger" style="font-size:0.75rem;" id="view_licExp">-</div></div>
+                                <div class="mb-2">
+                                   <span class="text-muted d-block">ใบขับขี่:</span>
+                                   <span class="fw-bold text-light" id="view_licType">-</span>
+                                   <div class="text-light font-monospace" id="view_licNum">-</div>
+                                   <div class="text-danger" style="font-size:0.75rem;" id="view_licExp">-</div>
+                                </div>
                              </div>
                           </div>
+                          
                           <div class="card border-secondary border-opacity-25 bg-transparent">
-                             <div class="card-header text-white border-secondary border-opacity-25"><i class="bi bi-diagram-3-fill me-2"></i>ตำแหน่งงาน</div>
-                             <div class="card-body"><div id="view_positions_badges" class="d-flex flex-wrap gap-2"></div></div>
+                             <div class="card-header text-white border-secondary border-opacity-25">
+                                 <i class="bi bi-diagram-3-fill me-2"></i>ตำแหน่งงาน
+                             </div>
+                             <div class="card-body">
+                                <div id="view_positions_badges" class="d-flex flex-wrap gap-2"></div>
+                             </div>
                           </div>
                       </div>
                    </div>
                 </div>
+
                 <div id="editModeSection" style="display:none;">
-                   <div class="card border-secondary border-opacity-25 bg-transparent"><div class="card-body">
-                   <div class="row g-3">
-                      <div class="col-md-3"><label class="form-label small text-muted mb-0">รหัสพนักงาน</label><div class="input-group input-group-sm"><input type="text" class="form-control fw-bold" id="empId" required><button type="button" class="btn btn-outline-secondary" id="btnGenId" onclick="genId()"><i class="bi bi-arrow-clockwise"></i></button></div></div>
-                      <div class="col-md-3"><label class="form-label small text-muted mb-0">Role</label><select class="form-select form-select-sm" id="role"><option>User</option><option>Admin</option><option>Viewer</option></select></div>
-                      <div class="col-md-3"><label class="form-label small text-muted mb-0">Username</label><input type="text" class="form-control form-control-sm" id="username" required></div>
-                      <div class="col-md-3"><label class="form-label small text-muted mb-0">Password</label><input type="text" class="form-control form-control-sm" id="password" required></div>
-                      <div class="col-12"><hr class="my-1 border-secondary opacity-25"></div>
-                      <div class="col-md-3"><label class="form-label small text-danger fw-bold mb-0">สถานะ</label><select class="form-select form-select-sm border-danger" id="empStatus" onchange="toggleResignDate()"><option value="Active">Active (ปกติ)</option><option value="Suspended">Suspended (พักงาน)</option><option value="Resigned">Resigned (ลาออก)</option></select></div>
-                      <div class="col-md-3"><label class="form-label small text-danger fw-bold mb-0">วันที่ลาออก</label><input type="date" class="form-control form-control-sm border-danger" id="resignDate" disabled></div>
-                      <div class="col-md-6" id="divResignReason" style="display:none;"><label class="form-label small text-danger fw-bold mb-0">เหตุผลที่ลาออก</label><input type="text" class="form-control form-control-sm border-danger" id="resignReason" placeholder="ระบุสาเหตุ..."></div>
-                      <div class="col-md-3"><label class="form-label small text-info fw-bold mb-0">สิทธิ์ประกันสังคม</label><select class="form-select form-select-sm text-info" id="ssoType"><option value="">- เลือก -</option><option value="มาตรา 33">มาตรา 33</option><option value="มาตรา 39">มาตรา 40</option><option value="ไม่เข้าประกันสังคม">ไม่เข้าประกันสังคม</option></select></div>
-                      <div class="col-md-3"><label class="form-label small text-info fw-bold mb-0">โรงพยาบาล</label><select class="form-select form-select-sm" id="ssoHosp"><option value="">Loading...</option></select></div>
-                      <div class="col-md-2"><label class="form-label small text-muted mb-0">คำนำหน้า</label><select class="form-select form-select-sm" id="prefix"><option value="">-ระบุ-</option><option value="นาย">นาย</option><option value="นาง">นาง</option><option value="นางสาว">นางสาว</option></select></div>
-                      <div class="col-md-3"><label class="form-label small text-muted mb-0">ชื่อ-นามสกุล (จริง)</label><input type="text" class="form-control form-control-sm fw-bold" id="fullname" required></div>
-                      <div class="col-md-3"><label class="form-label small text-success fw-bold mb-0">ชื่อเล่น (แก้ไขได้)</label><input type="text" class="form-control form-control-sm" id="nickname"></div>
-                      <div class="col-md-4"><label class="form-label small text-muted mb-0">เพศ</label><select class="form-select form-select-sm" id="gender"><option value="">- ระบุ -</option><option value="ชาย">ชาย</option><option value="หญิง">หญิง</option><option value="อื่นๆ">อื่นๆ</option></select></div>
-                      <div class="col-md-4"><label class="form-label small text-muted mb-0">วันเดือนปีเกิด</label><input type="date" class="form-control form-control-sm" id="birthDate"></div>
-                      <div class="col-md-4"><label class="form-label small text-muted mb-0">วันเริ่มงาน</label><input type="date" class="form-control form-control-sm" id="startDate" required></div>
-                      <div class="col-md-4"><label class="form-label small text-success fw-bold mb-0">เบอร์โทรศัพท์ (แก้ไขได้)</label><input type="text" class="form-control form-control-sm" id="phone"></div>
-                      <div class="col-md-12 mt-2">
-                          <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
-                             <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-person-vcard me-2 text-info fs-5"></i>ข้อมูลบัตรประชาชน</label>
-                             <div class="row g-2"><div class="col-md-8"><input type="text" class="form-control form-control-sm" id="idCardNum" placeholder="เลขบัตรประชาชน 13 หลัก"></div><div class="col-md-4"><input type="date" class="form-control form-control-sm" id="idExp" title="วันหมดอายุบัตรประชาชน"></div></div>
+                   <div class="card border-secondary border-opacity-25 bg-transparent">
+                     <div class="card-body">
+                       <div class="row g-3">
+                          <div class="col-md-3">
+                              <label class="form-label small text-muted mb-0">รหัสพนักงาน</label>
+                              <div class="input-group input-group-sm">
+                                  <input type="text" class="form-control fw-bold" id="empId" required>
+                                  <button type="button" class="btn btn-outline-secondary" id="btnGenId" onclick="genId()"><i class="bi bi-arrow-clockwise"></i></button>
+                              </div>
                           </div>
-                      </div>
-                      <div class="col-md-12 mt-1">
-                          <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
-                             <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-car-front me-2 text-info fs-5"></i>ข้อมูลใบขับขี่</label>
-                             <div class="row g-2"><div class="col-md-4"><select class="form-select form-select-sm" id="licType"><option value="">- ประเภท -</option></select></div><div class="col-md-4"><input type="text" class="form-control form-control-sm" id="licNum" placeholder="เลขที่ใบขับขี่"></div><div class="col-md-4"><input type="date" class="form-control form-control-sm" id="licExp" title="วันหมดอายุใบขับขี่"></div></div>
+                          <div class="col-md-3">
+                              <label class="form-label small text-muted mb-0">Role</label>
+                              <select class="form-select form-select-sm" id="role">
+                                  <option>User</option><option>Admin</option><option>Viewer</option>
+                              </select>
                           </div>
-                      </div>
-                      <div class="col-12 mt-3">
-                          <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-diagram-3-fill me-2 text-info fs-5"></i>ตำแหน่ง (เลือกได้หลายข้อ)</label>
-                          <div id="positionCheckboxList" class="checkbox-list small"><small class="text-muted">Loading...</small></div>
-                      </div>
-                   </div></div></div>
+                          <div class="col-md-3">
+                              <label class="form-label small text-muted mb-0">Username</label>
+                              <input type="text" class="form-control form-control-sm" id="username" required>
+                          </div>
+                          <div class="col-md-3">
+                              <label class="form-label small text-muted mb-0">Password</label>
+                              <input type="text" class="form-control form-control-sm" id="password" required>
+                          </div>
+                          
+                          <div class="col-12"><hr class="my-1 border-secondary opacity-25"></div>
+                          
+                          <div class="col-md-3">
+                              <label class="form-label small text-danger fw-bold mb-0">สถานะ</label>
+                              <select class="form-select form-select-sm border-danger" id="empStatus" onchange="toggleResignDate()">
+                                  <option value="Active">Active (ปกติ)</option>
+                                  <option value="Suspended">Suspended (พักงาน)</option>
+                                  <option value="Resigned">Resigned (ลาออก)</option>
+                              </select>
+                          </div>
+                          <div class="col-md-3">
+                              <label class="form-label small text-danger fw-bold mb-0">วันที่ลาออก</label>
+                              <input type="date" class="form-control form-control-sm border-danger" id="resignDate" disabled>
+                          </div>
+                          <div class="col-md-6" id="divResignReason" style="display:none;">
+                              <label class="form-label small text-danger fw-bold mb-0">เหตุผลที่ลาออก</label>
+                              <input type="text" class="form-control form-control-sm border-danger" id="resignReason" placeholder="ระบุสาเหตุ...">
+                          </div>
+
+                          <div class="col-md-3">
+                              <label class="form-label small text-info fw-bold mb-0">สิทธิ์ประกันสังคม</label>
+                              <select class="form-select form-select-sm text-info" id="ssoType">
+                                  <option value="">- เลือก -</option>
+                                  <option value="มาตรา 33">มาตรา 33</option>
+                                  <option value="มาตรา 39">มาตรา 40</option>
+                                  <option value="ไม่เข้าประกันสังคม">ไม่เข้าประกันสังคม</option>
+                              </select>
+                          </div>
+                          <div class="col-md-3">
+                              <label class="form-label small text-info fw-bold mb-0">โรงพยาบาล</label>
+                              <select class="form-select form-select-sm" id="ssoHosp">
+                                  <option value="">Loading...</option>
+                              </select>
+                          </div>
+
+                          <div class="col-md-2">
+                              <label class="form-label small text-muted mb-0">คำนำหน้า</label>
+                              <select class="form-select form-select-sm" id="prefix">
+                                  <option value="">-ระบุ-</option>
+                                  <option value="นาย">นาย</option>
+                                  <option value="นาง">นาง</option>
+                                  <option value="นางสาว">นางสาว</option>
+                              </select>
+                          </div>
+                          <div class="col-md-3">
+                              <label class="form-label small text-muted mb-0">ชื่อ-นามสกุล (จริง)</label>
+                              <input type="text" class="form-control form-control-sm fw-bold" id="fullname" required>
+                          </div>
+                          <div class="col-md-3">
+                              <label class="form-label small text-success fw-bold mb-0">ชื่อเล่น (แก้ไขได้)</label>
+                              <input type="text" class="form-control form-control-sm" id="nickname">
+                          </div>
+
+                          <div class="col-md-4">
+                              <label class="form-label small text-muted mb-0">เพศ</label>
+                              <select class="form-select form-select-sm" id="gender">
+                                  <option value="">- ระบุ -</option>
+                                  <option value="ชาย">ชาย</option>
+                                  <option value="หญิง">หญิง</option>
+                                  <option value="อื่นๆ">อื่นๆ</option>
+                              </select>
+                          </div>
+                          <div class="col-md-4">
+                              <label class="form-label small text-muted mb-0">วันเดือนปีเกิด</label>
+                              <input type="date" class="form-control form-control-sm" id="birthDate">
+                          </div>
+                          <div class="col-md-4">
+                              <label class="form-label small text-muted mb-0">วันเริ่มงาน</label>
+                              <input type="date" class="form-control form-control-sm" id="startDate" required>
+                          </div>
+                          <div class="col-md-4">
+                              <label class="form-label small text-success fw-bold mb-0">เบอร์โทรศัพท์ (แก้ไขได้)</label>
+                              <input type="text" class="form-control form-control-sm" id="phone">
+                          </div>
+
+                          <div class="col-md-12 mt-2">
+                              <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
+                                 <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-person-vcard me-2 text-info fs-5"></i>ข้อมูลบัตรประชาชน</label>
+                                 <div class="row g-2">
+                                     <div class="col-md-8">
+                                         <input type="text" class="form-control form-control-sm" id="idCardNum" placeholder="เลขบัตรประชาชน 13 หลัก">
+                                     </div>
+                                     <div class="col-md-4">
+                                         <input type="date" class="form-control form-control-sm" id="idExp" title="วันหมดอายุบัตรประชาชน">
+                                     </div>
+                                 </div>
+                              </div>
+                          </div>
+                          
+                          <div class="col-md-12 mt-1">
+                              <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
+                                 <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-car-front me-2 text-info fs-5"></i>ข้อมูลใบขับขี่</label>
+                                 <div class="row g-2">
+                                     <div class="col-md-4">
+                                         <select class="form-select form-select-sm" id="licType">
+                                             <option value="">- ประเภท -</option>
+                                         </select>
+                                     </div>
+                                     <div class="col-md-4">
+                                         <input type="text" class="form-control form-control-sm" id="licNum" placeholder="เลขที่ใบขับขี่">
+                                     </div>
+                                     <div class="col-md-4">
+                                         <input type="date" class="form-control form-control-sm" id="licExp" title="วันหมดอายุใบขับขี่">
+                                     </div>
+                                 </div>
+                              </div>
+                          </div>
+
+                          <div class="col-12 mt-3">
+                              <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-diagram-3-fill me-2 text-info fs-5"></i>ตำแหน่ง (เลือกได้หลายข้อ)</label>
+                              <div id="positionCheckboxList" class="checkbox-list small"><small class="text-muted">Loading...</small></div>
+                          </div>
+                       </div>
+                     </div>
+                   </div>
                 </div> 
               </div>
+
               <div class="tab-pane fade" id="tabDocs">
-                <div class="card border-secondary border-opacity-25 bg-transparent"><div class="card-body">
-                <div class="alert alert-dark border border-secondary border-opacity-50 small text-info p-2 mb-3 bg-black bg-opacity-50"><i class="bi bi-info-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการเปลี่ยน</div>
-                <div class="row g-3">
-                  <div class="col-md-3"><label class="small fw-bold mb-0">รูปถ่ายหน้าตรง</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="filePhoto"></div>
-                  <div class="col-md-3"><label class="small fw-bold mb-0">สำเนาบัตรประชาชน</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileIdCard"></div>
-                  <div class="col-md-3"><label class="small fw-bold mb-0 text-info">หนังสือเดินทาง (Passport)</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="filePassport"></div>
-                  <div class="col-md-3"><label class="small fw-bold mb-0">สำเนาทะเบียนบ้าน</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileHouse"></div>
-                  <div class="col-md-3"><label class="small fw-bold mb-0">ใบอนุญาตขับขี่</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileDrive"></div>
-                  <div class="col-md-3"><label class="small fw-bold mb-0 text-info">ประวัติอาชญากรรม</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileCriminal"></div>
-                  <div class="col-md-3"><label class="small fw-bold mb-0 text-info">ใบตรวจสุขภาพ</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileHealth"></div>
-                  <div class="col-md-3"><label class="small mb-0 text-muted">วุฒิการศึกษา</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileEdu"></div>
-                  <div class="col-md-3"><label class="small mb-0 text-muted">เอกสารอื่นๆ 1</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileOther1"></div>
-                  <div class="col-md-3"><label class="small mb-0 text-muted">เอกสารอื่นๆ 2</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileOther2"></div>
-                </div></div></div>
+                <div class="card border-secondary border-opacity-25 bg-transparent">
+                  <div class="card-body">
+                    <div class="alert alert-dark border border-secondary border-opacity-50 small text-info p-2 mb-3 bg-black bg-opacity-50">
+                        <i class="bi bi-info-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการเปลี่ยน
+                    </div>
+                    <div class="row g-3">
+                      <div class="col-md-3"><label class="small fw-bold mb-0">รูปถ่ายหน้าตรง</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="filePhoto"></div>
+                      <div class="col-md-3"><label class="small fw-bold mb-0">สำเนาบัตรประชาชน</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileIdCard"></div>
+                      <div class="col-md-3"><label class="small fw-bold mb-0 text-info">หนังสือเดินทาง (Passport)</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="filePassport"></div>
+                      <div class="col-md-3"><label class="small fw-bold mb-0">สำเนาทะเบียนบ้าน</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileHouse"></div>
+                      <div class="col-md-3"><label class="small fw-bold mb-0">ใบอนุญาตขับขี่</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileDrive"></div>
+                      <div class="col-md-3"><label class="small fw-bold mb-0 text-info">ประวัติอาชญากรรม</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileCriminal"></div>
+                      <div class="col-md-3"><label class="small fw-bold mb-0 text-info">ใบตรวจสุขภาพ</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileHealth"></div>
+                      <div class="col-md-3"><label class="small mb-0 text-muted">วุฒิการศึกษา</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileEdu"></div>
+                      <div class="col-md-3"><label class="small mb-0 text-muted">เอกสารอื่นๆ 1</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileOther1"></div>
+                      <div class="col-md-3"><label class="small mb-0 text-muted">เอกสารอื่นๆ 2</label><input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileOther2"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+
             <div class="modal-footer border-secondary border-opacity-25 pb-0 pe-0 mt-3 pt-3">
                 <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">ปิด</button>
                 <button type="submit" class="btn btn-success btn-sm px-4 shadow-sm rounded-pill" id="btnSaveModal">บันทึกข้อมูล</button>
@@ -236,9 +486,9 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
   <script>
-    // 🟢 ประกาศตัวแปรทั้งหมดไว้ที่นี่ที่เดียว (ป้องกัน Error Identifier has already been declared)
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOFq4yA2YaCvA5w9OXlM4wu5lGqCEt6AnMn-2_Pw_Fl-YpIB5hzAFM5YFIVlSPd7Tu-A/exec";
-    const FLEET_API_URL = "https://script.google.com/macros/s/AKfycbyw0mIjSyoLO_E1RJmsGpBiPNiNVQiotHNcrkgCBg849wjA83Fel4l6VHYSTe0PrIC-/exec";
+    // 🟢 ประกาศตัวแปรทั้งหมดไว้ที่นี่ที่เดียว เพื่อให้ไฟล์อื่นเรียกใช้ได้โดยไม่ซ้ำซ้อน
+    var BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOFq4yA2YaCvA5w9OXlM4wu5lGqCEt6AnMn-2_Pw_Fl-YpIB5hzAFM5YFIVlSPd7Tu-A/exec";
+    var FLEET_API_URL = "https://script.google.com/macros/s/AKfycbyw0mIjSyoLO_E1RJmsGpBiPNiNVQiotHNcrkgCBg849wjA83Fel4l6VHYSTe0PrIC-/exec";
 
     var AUTO_FILLED_USER = "";
     var currentUser = {};
@@ -247,10 +497,14 @@
     var allPositionsList = [];
     var allHospitals = [];
     var allLicenseTypes = [];
+    
+    // สำหรับหน้า User
     var currentUserData = {};
     var globalUserWarnings = [];
     var globalUserAccidents = [];
     var globalYardData = [];
+    
+    // สำหรับหน้า Admin
     var currentDisplayData = [];
     var currentSort = { key: 'id', order: 'asc' };
     var allAccidentData = [];
@@ -292,8 +546,13 @@
               return;
           }
           if (currentUser && currentUser.role) {
-             if (currentUser.role === 'Admin' || currentUser.role === 'Viewer') { switchView('view-admin'); if(typeof loadAdminData === 'function') loadAdminData(); } 
-             else { switchView('view-user'); if(typeof loadUserData === 'function') loadUserData(); }
+             if (currentUser.role === 'Admin' || currentUser.role === 'Viewer') { 
+                 switchView('view-admin'); 
+                 if(typeof window.loadAdminData === 'function') window.loadAdminData(); 
+             } else { 
+                 switchView('view-user'); 
+                 if(typeof window.loadUserData === 'function') window.loadUserData(); 
+             }
              return;
           }
         }
@@ -315,9 +574,11 @@
           div.innerHTML = html;
           
           const scripts = div.querySelectorAll('script');
+          
           while (div.firstChild) {
             document.body.appendChild(div.firstChild);
           }
+          
           scripts.forEach(s => {
             const newScript = document.createElement('script');
             newScript.textContent = s.innerHTML;
@@ -352,7 +613,7 @@
         if(targetView) {
             targetView.classList.add('active'); 
         }
-        if(id === 'view-login' && typeof checkAutoLogin === 'function') { checkAutoLogin(); }
+        if(id === 'view-login' && typeof window.checkAutoLogin === 'function') { window.checkAutoLogin(); }
     }
 
     function logout() { 
@@ -360,7 +621,7 @@
       currentUser = {}; 
       if(document.getElementById('loginUser')) document.getElementById('loginUser').value = ''; 
       if(document.getElementById('loginPass')) document.getElementById('loginPass').value = ''; 
-      if(typeof switchAdminTab === 'function') switchAdminTab('emp');
+      if(typeof window.switchAdminTab === 'function') window.switchAdminTab('emp');
       if(document.getElementById('searchInput')) document.getElementById('searchInput').value = '';
       if(document.getElementById('searchAccidentInput')) document.getElementById('searchAccidentInput').value = '';
       if(document.getElementById('searchWarnInput')) document.getElementById('searchWarnInput').value = '';
@@ -398,7 +659,7 @@
         } 
     }
     
-    function openModal(mode, targetId, preloadedData) { 
+    window.openModal = function(mode, targetId, preloadedData) { 
         document.getElementById('empForm').reset(); 
         document.getElementById('formMode').value = mode; 
         
@@ -422,7 +683,7 @@
                 document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = true);
             }
         }); 
-    }
+    };
     
     function setupModalData(mode, d) {
       var btnSave = document.getElementById('btnSaveModal');
@@ -446,11 +707,13 @@
         lockPositions(false);
         document.getElementById('btnGenId').style.display = 'inline-block'; genId();
         document.getElementById('empStatus').value = 'Active'; lock('empStatus', false); toggleResignDate();
+        
       } else if (mode === 'view' || currentUser.role === 'Viewer') {
         document.getElementById('modalTitle').innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)';
         viewSection.style.display = 'block'; 
         document.getElementById('btnGenId').style.display = 'none';
         if(d) fillData(d, true); 
+
       } else {
         var isUser = (currentUser.role === 'User');
         document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน';
@@ -559,7 +822,9 @@
         }
     }
     
-    function getSelectedPositions() { var s=[]; document.querySelectorAll('input[name="posCheckbox"]:checked').forEach(c=>s.push(c.value)); return s.join(', '); }
+    function getSelectedPositions() { 
+        var s=[]; document.querySelectorAll('input[name="posCheckbox"]:checked').forEach(c=>s.push(c.value)); return s.join(', '); 
+    }
     
     async function loadSettings(cb) { 
         try {
@@ -590,7 +855,7 @@
         } catch(e) {}
     }
 
-    async function submitEmpForm(e) { 
+    window.submitEmpForm = async function(e) { 
         e.preventDefault(); 
         Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()}); 
         var form = { 
@@ -634,32 +899,42 @@
           if(res.success) { 
               Swal.fire('สำเร็จ', res.message, 'success'); 
               modalObj.hide(); 
-              if(currentUser.role === 'Admin') loadAdminData(); 
-              else loadUserData(); 
+              if(currentUser.role === 'Admin') window.loadAdminData(); 
+              else window.loadUserData(); 
           } else { 
               Swal.fire('เกิดข้อผิดพลาด', res.message, 'error'); 
           } 
         } catch(err) {}
-    }
+    };
 
-    async function genId() { 
+    function genId() { 
        document.getElementById('empId').value='...'; 
        try {
-         const res = await callAPI({ action: 'getNextEmployeeId' });
-         document.getElementById('empId').value = res.empId;
+         callAPI({ action: 'getNextEmployeeId' }).then(res => {
+             document.getElementById('empId').value = res.empId;
+         });
        } catch(e) {}
     }
     
     window.getBase64User = function(file) { 
       return new Promise(function(resolve) {
-         if (!file) resolve(null);
+         if (!file) { resolve(null); return; }
          var reader = new FileReader();
          reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); };
          reader.readAsDataURL(file);
       });
     };
 
-    function calcAge(d) { if(!d) return "-"; var today = new Date(); var birthDate = new Date(d); if(isNaN(birthDate)) return "-"; var age = today.getFullYear() - birthDate.getFullYear(); var m = today.getMonth() - birthDate.getMonth(); if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } return age + " ปี"; }
+    function calcAge(d) { 
+        if(!d) return "-"; 
+        var today = new Date(); var birthDate = new Date(d); 
+        if(isNaN(birthDate)) return "-"; 
+        var age = today.getFullYear() - birthDate.getFullYear(); 
+        var m = today.getMonth() - birthDate.getMonth(); 
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } 
+        return age + " ปี"; 
+    }
+
     function formatDate(d) { 
         if(!d) return '-'; 
         try {
@@ -669,7 +944,7 @@
         } catch(e) { return '-'; }
     }
     
-    function calcTenure(dateString) { 
+    window.calcTenure = function(dateString) { 
         if(!dateString) return '-'; 
         var start = new Date(dateString); 
         var now = new Date(); 
@@ -700,7 +975,7 @@
         if (days > 0) result.push(days + " วัน"); 
         if (result.length === 0) return "เริ่มงานวันนี้"; 
         return result.join(" "); 
-    }
+    };
   </script>
 </body>
 </html>
