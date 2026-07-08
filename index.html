@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-title" content="VKT Nexus"> 
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <link rel="icon" type="image/png" href="https://drive.google.com/uc?export=view&id=1_jSdNmS0pr8HoFuAINPBGqjrNq8xcwCG">
@@ -371,7 +372,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
   <script>
-    // 🔴🔴🔴 แปะลิงก์ Web App API หลังบ้านของคุณตรงนี้ 🔴🔴🔴
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOFq4yA2YaCvA5w9OXlM4wu5lGqCEt6AnMn-2_Pw_Fl-YpIB5hzAFM5YFIVlSPd7Tu-A/exec";
 
     var AUTO_FILLED_USER = "";
@@ -423,7 +423,7 @@
     };
 
     async function loadAllComponents() {
-      const files = ['Login.html', 'Admin.html', 'Recruit.html', 'User.html', 'Accident.html'];
+      const files = ['login.html', 'admin.html', 'recruit.html', 'user.html', 'accident.html'];
       for (let file of files) {
         try {
           const response = await fetch(file);
