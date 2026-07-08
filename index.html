@@ -236,12 +236,28 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
   <script>
-    // 🟢 เปลี่ยนจาก const เป็น var เพื่อแก้ไขปัญหาชนกันของสคริปต์
-    var BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOFq4yA2YaCvA5w9OXlM4wu5lGqCEt6AnMn-2_Pw_Fl-YpIB5hzAFM5YFIVlSPd7Tu-A/exec";
-    var FLEET_API_URL = "https://script.google.com/macros/s/AKfycbyw0mIjSyoLO_E1RJmsGpBiPNiNVQiotHNcrkgCBg849wjA83Fel4l6VHYSTe0PrIC-/exec";
+    // 🟢 ประกาศตัวแปรทั้งหมดไว้ที่นี่ที่เดียว (ป้องกัน Error Identifier has already been declared)
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOFq4yA2YaCvA5w9OXlM4wu5lGqCEt6AnMn-2_Pw_Fl-YpIB5hzAFM5YFIVlSPd7Tu-A/exec";
+    const FLEET_API_URL = "https://script.google.com/macros/s/AKfycbyw0mIjSyoLO_E1RJmsGpBiPNiNVQiotHNcrkgCBg849wjA83Fel4l6VHYSTe0PrIC-/exec";
 
     var AUTO_FILLED_USER = "";
-    var currentUser = {}, allEmpData = [], modalObj, allPositionsList = [], allHospitals = [], allLicenseTypes = [];
+    var currentUser = {};
+    var allEmpData = [];
+    var modalObj = null;
+    var allPositionsList = [];
+    var allHospitals = [];
+    var allLicenseTypes = [];
+    var currentUserData = {};
+    var globalUserWarnings = [];
+    var globalUserAccidents = [];
+    var globalYardData = [];
+    var currentDisplayData = [];
+    var currentSort = { key: 'id', order: 'asc' };
+    var allAccidentData = [];
+    var currentAccidentDisplayData = [];
+    var allWarningData = [];
+    var currentWarningDisplayData = [];
+    var recruitDataList = [];
 
     window.onload = async function() {
       await loadAllComponents();
@@ -276,8 +292,8 @@
               return;
           }
           if (currentUser && currentUser.role) {
-             if (currentUser.role === 'Admin' || currentUser.role === 'Viewer') { switchView('view-admin'); loadAdminData(); } 
-             else { switchView('view-user'); loadUserData(); }
+             if (currentUser.role === 'Admin' || currentUser.role === 'Viewer') { switchView('view-admin'); if(typeof loadAdminData === 'function') loadAdminData(); } 
+             else { switchView('view-user'); if(typeof loadUserData === 'function') loadUserData(); }
              return;
           }
         }
@@ -299,11 +315,9 @@
           div.innerHTML = html;
           
           const scripts = div.querySelectorAll('script');
-          
           while (div.firstChild) {
             document.body.appendChild(div.firstChild);
           }
-          
           scripts.forEach(s => {
             const newScript = document.createElement('script');
             newScript.textContent = s.innerHTML;
@@ -432,13 +446,11 @@
         lockPositions(false);
         document.getElementById('btnGenId').style.display = 'inline-block'; genId();
         document.getElementById('empStatus').value = 'Active'; lock('empStatus', false); toggleResignDate();
-        
       } else if (mode === 'view' || currentUser.role === 'Viewer') {
         document.getElementById('modalTitle').innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)';
         viewSection.style.display = 'block'; 
         document.getElementById('btnGenId').style.display = 'none';
         if(d) fillData(d, true); 
-
       } else {
         var isUser = (currentUser.role === 'User');
         document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน';
@@ -605,17 +617,17 @@
             startDate: document.getElementById('startDate').value, 
             phone: document.getElementById('phone').value, 
             currentUserRole: currentUser.role, 
-            filePhoto: await getBase64('filePhoto'), 
-            fileIdCard: await getBase64('fileIdCard'), 
-            filePassport: await getBase64('filePassport'), 
-            fileHouse: await getBase64('fileHouse'), 
-            fileDrive: await getBase64('fileDrive'), 
-            fileEdu: await getBase64('fileEdu'), 
-            fileCriminal: await getBase64('fileCriminal'), 
-            fileHealth: await getBase64('fileHealth'), 
+            filePhoto: await getBase64User(document.getElementById('filePhoto').files[0]), 
+            fileIdCard: await getBase64User(document.getElementById('fileIdCard').files[0]), 
+            filePassport: await getBase64User(document.getElementById('filePassport').files[0]), 
+            fileHouse: await getBase64User(document.getElementById('fileHouse').files[0]), 
+            fileDrive: await getBase64User(document.getElementById('fileDrive').files[0]), 
+            fileEdu: await getBase64User(document.getElementById('fileEdu').files[0]), 
+            fileCriminal: await getBase64User(document.getElementById('fileCriminal').files[0]), 
+            fileHealth: await getBase64User(document.getElementById('fileHealth').files[0]), 
             fileWarn: null, 
-            fileOther1: await getBase64('fileOther1'), 
-            fileOther2: await getBase64('fileOther2') 
+            fileOther1: await getBase64User(document.getElementById('fileOther1').files[0]), 
+            fileOther2: await getBase64User(document.getElementById('fileOther2').files[0]) 
         }; 
         try {
           const res = await callAPI({ action: 'handleEmployeeSave', form: form, mode: document.getElementById('formMode').value });
@@ -638,7 +650,15 @@
        } catch(e) {}
     }
     
-    function getBase64(id) { return new Promise(r=>{ var i=document.getElementById(id); if(!i||i.files.length==0) r(null); else { var fr=new FileReader(); fr.onload=()=>r({base64:fr.result.split(',')[1],type:i.files[0].type}); fr.readAsDataURL(i.files[0]); } }); }
+    window.getBase64User = function(file) { 
+      return new Promise(function(resolve) {
+         if (!file) resolve(null);
+         var reader = new FileReader();
+         reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); };
+         reader.readAsDataURL(file);
+      });
+    };
+
     function calcAge(d) { if(!d) return "-"; var today = new Date(); var birthDate = new Date(d); if(isNaN(birthDate)) return "-"; var age = today.getFullYear() - birthDate.getFullYear(); var m = today.getMonth() - birthDate.getMonth(); if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } return age + " ปี"; }
     function formatDate(d) { 
         if(!d) return '-'; 
