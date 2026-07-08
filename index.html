@@ -16,15 +16,16 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
   <style>
+    /* ปรับแต่งสีใหม่ให้สว่างและอ่านง่ายขึ้น */
     :root {
       --glass-bg: #050505;              
-      --glass-panel: rgba(30, 30, 30, 0.6); 
-      --glass-border: rgba(255, 255, 255, 0.08); 
-      --glass-blur: blur(12px);          
+      --glass-panel: rgba(30, 30, 30, 0.75); /* ทำให้พื้นหลังทึบขึ้นเล็กน้อย */
+      --glass-border: rgba(255, 255, 255, 0.15); /* ทำให้เส้นขอบสว่างขึ้น */
+      --glass-blur: blur(15px);          
       --accent-color: #00E676;           
       --accent-glow: rgba(0, 230, 118, 0.3);
       --text-main: #ffffff;
-      --text-muted: #a0a0a0;
+      --text-muted: #b8b8b8; /* ปรับสีเทาให้สว่างขึ้นมาก เพื่อให้อ่านง่าย */
     }
 
     body { 
@@ -35,37 +36,49 @@
       background-attachment: fixed; 
       color: var(--text-main); 
       overflow-x: hidden;
+      font-size: 1rem;
     }
 
+    /* บังคับสีเทาให้สว่างขึ้นทั้งระบบ */
+    .text-muted { color: var(--text-muted) !important; }
+    .text-secondary { color: #d0d0d0 !important; }
+
     .card { 
-      background: var(--glass-panel); 
-      backdrop-filter: var(--glass-blur); 
-      border: 1px solid var(--glass-border); 
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); 
-      border-radius: 16px; 
+        background: var(--glass-panel); 
+        backdrop-filter: var(--glass-blur); 
+        border: 1px solid var(--glass-border); 
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); 
+        border-radius: 16px; 
     }
 
     .card-header { 
-      background-color: rgba(255, 255, 255, 0.03) !important; 
-      border-bottom: 1px solid var(--glass-border); 
-      font-weight: 600; 
+        background-color: rgba(255, 255, 255, 0.05) !important; 
+        border-bottom: 1px solid var(--glass-border); 
+        font-weight: 600; 
     }
 
     .text-success { color: var(--accent-color) !important; }
     .bg-success { background-color: var(--accent-color) !important; color: #000 !important; }
     .border-success { border-color: var(--accent-color) !important; }
     
+    /* ปรับช่องกรอกข้อมูลให้ชัดเจนขึ้น */
     .form-control, .form-select { 
-      background-color: rgba(0, 0, 0, 0.3) !important; 
-      border: 1px solid var(--glass-border) !important; 
+      background-color: rgba(0, 0, 0, 0.6) !important; 
+      border: 1px solid rgba(255, 255, 255, 0.25) !important; 
       color: #ffffff !important; 
       border-radius: 8px; 
+      font-weight: 500;
+    }
+
+    .form-control::placeholder {
+      color: #a0aab2 !important; /* ปรับสี placeholder ให้อ่านง่าย */
+      opacity: 1;
     }
 
     .form-control:focus, .form-select:focus { 
-      background-color: rgba(0, 0, 0, 0.5) !important; 
+      background-color: rgba(0, 0, 0, 0.8) !important; 
       border-color: var(--accent-color) !important; 
-      box-shadow: 0 0 0 0.2rem var(--accent-glow); 
+      box-shadow: 0 0 0 0.25rem var(--accent-glow); 
       color: #ffffff !important; 
     }
 
@@ -109,7 +122,8 @@
 
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #000; }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
     
     .dropdown-menu { background-color: #1a1a1a; border-color: var(--glass-border); backdrop-filter: blur(10px); }
     .dropdown-item { color: var(--text-main); }
@@ -117,7 +131,6 @@
 
     @media (max-width: 992px) { 
       .checkbox-list { grid-template-columns: repeat(2, 1fr); } 
-      body { font-size: 0.95rem; } 
     }
 
     ::-webkit-calendar-picker-indicator { filter: invert(1) brightness(1.5); }
@@ -147,7 +160,7 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
-          <form id="empForm" onsubmit="submitEmpForm(event)">
+          <form id="empForm" onsubmit="window.submitEmpForm(event)">
             <input type="hidden" id="formMode">
             
             <div class="card border-0 mb-4 bg-transparent shadow-none">
@@ -294,7 +307,7 @@
                               <label class="form-label small text-muted mb-0">รหัสพนักงาน</label>
                               <div class="input-group input-group-sm">
                                   <input type="text" class="form-control fw-bold" id="empId" required>
-                                  <button type="button" class="btn btn-outline-secondary" id="btnGenId" onclick="genId()"><i class="bi bi-arrow-clockwise"></i></button>
+                                  <button type="button" class="btn btn-outline-secondary" id="btnGenId" onclick="window.genId()"><i class="bi bi-arrow-clockwise"></i></button>
                               </div>
                           </div>
                           <div class="col-md-3">
@@ -316,7 +329,7 @@
                           
                           <div class="col-md-3">
                               <label class="form-label small text-danger fw-bold mb-0">สถานะ</label>
-                              <select class="form-select form-select-sm border-danger" id="empStatus" onchange="toggleResignDate()">
+                              <select class="form-select form-select-sm border-danger" id="empStatus" onchange="window.toggleResignDate()">
                                   <option value="Active">Active (ปกติ)</option>
                                   <option value="Suspended">Suspended (พักงาน)</option>
                                   <option value="Resigned">Resigned (ลาออก)</option>
@@ -389,7 +402,9 @@
 
                           <div class="col-md-12 mt-2">
                               <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
-                                 <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-person-vcard me-2 text-info fs-5"></i>ข้อมูลบัตรประชาชน</label>
+                                 <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
+                                     <i class="bi bi-person-vcard me-2 text-info fs-5"></i>ข้อมูลบัตรประชาชน
+                                 </label>
                                  <div class="row g-2">
                                      <div class="col-md-8">
                                          <input type="text" class="form-control form-control-sm" id="idCardNum" placeholder="เลขบัตรประชาชน 13 หลัก">
@@ -403,7 +418,9 @@
                           
                           <div class="col-md-12 mt-1">
                               <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
-                                 <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-car-front me-2 text-info fs-5"></i>ข้อมูลใบขับขี่</label>
+                                 <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
+                                     <i class="bi bi-car-front me-2 text-info fs-5"></i>ข้อมูลใบขับขี่
+                                 </label>
                                  <div class="row g-2">
                                      <div class="col-md-4">
                                          <select class="form-select form-select-sm" id="licType">
@@ -421,7 +438,9 @@
                           </div>
 
                           <div class="col-12 mt-3">
-                              <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6"><i class="bi bi-diagram-3-fill me-2 text-info fs-5"></i>ตำแหน่ง (เลือกได้หลายข้อ)</label>
+                              <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
+                                  <i class="bi bi-diagram-3-fill me-2 text-info fs-5"></i>ตำแหน่ง (เลือกได้หลายข้อ)
+                              </label>
                               <div id="positionCheckboxList" class="checkbox-list small"><small class="text-muted">Loading...</small></div>
                           </div>
                        </div>
@@ -498,13 +517,11 @@
     var allHospitals = [];
     var allLicenseTypes = [];
     
-    // สำหรับหน้า User
     var currentUserData = {};
     var globalUserWarnings = [];
     var globalUserAccidents = [];
     var globalYardData = [];
     
-    // สำหรับหน้า Admin
     var currentDisplayData = [];
     var currentSort = { key: 'id', order: 'asc' };
     var allAccidentData = [];
@@ -523,15 +540,15 @@
 
       if (userParam) {
         AUTO_FILLED_USER = userParam;
-        if(typeof checkAutoLogin === 'function') checkAutoLogin();
+        if(typeof window.checkAutoLogin === 'function') window.checkAutoLogin();
       } else if (tagParam) {
         try {
           Swal.fire({title: 'กำลังตรวจสอบ Tag NFC...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
-          const res = await callAPI({ action: 'getUserByNfcTag', tag: tagParam });
+          const res = await window.callAPI({ action: 'getUserByNfcTag', tag: tagParam });
           Swal.close();
           if (res && res.username) {
             AUTO_FILLED_USER = res.username;
-            if(typeof checkAutoLogin === 'function') checkAutoLogin();
+            if(typeof window.checkAutoLogin === 'function') window.checkAutoLogin();
           }
         } catch(e) { Swal.close(); }
       }
@@ -542,15 +559,15 @@
           currentUser = JSON.parse(savedSession);
           var now = new Date().getTime();
           if (currentUser.loginTime && (now - currentUser.loginTime > 14400000)) {
-              logout();
+              window.logout();
               return;
           }
           if (currentUser && currentUser.role) {
              if (currentUser.role === 'Admin' || currentUser.role === 'Viewer') { 
-                 switchView('view-admin'); 
+                 window.switchView('view-admin'); 
                  if(typeof window.loadAdminData === 'function') window.loadAdminData(); 
              } else { 
-                 switchView('view-user'); 
+                 window.switchView('view-user'); 
                  if(typeof window.loadUserData === 'function') window.loadUserData(); 
              }
              return;
@@ -559,7 +576,7 @@
       } catch (e) { console.warn("Local storage blocked:", e); }
       
       if (!AUTO_FILLED_USER) {
-        switchView('view-login');
+        window.switchView('view-login');
       }
     };
 
@@ -590,7 +607,7 @@
       }
     }
 
-    async function callAPI(payload) {
+    window.callAPI = async function(payload) {
       try {
         const response = await fetch(BACKEND_URL, {
           method: 'POST',
@@ -605,18 +622,18 @@
         Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ฐานข้อมูล VKT ได้', 'error');
         throw error;
       }
-    }
+    };
 
-    function switchView(id) { 
+    window.switchView = function(id) { 
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); 
         var targetView = document.getElementById(id);
         if(targetView) {
             targetView.classList.add('active'); 
         }
         if(id === 'view-login' && typeof window.checkAutoLogin === 'function') { window.checkAutoLogin(); }
-    }
+    };
 
-    function logout() { 
+    window.logout = function() { 
       try { localStorage.removeItem('hr_user_session'); } catch(e){} 
       currentUser = {}; 
       if(document.getElementById('loginUser')) document.getElementById('loginUser').value = ''; 
@@ -630,8 +647,8 @@
       if(document.getElementById('tableBody')) document.getElementById('tableBody').innerHTML = '';
       if(document.getElementById('adminAccidentTableBody')) document.getElementById('adminAccidentTableBody').innerHTML = '';
       if(document.getElementById('adminWarnTableBody')) document.getElementById('adminWarnTableBody').innerHTML = '';
-      switchView('view-login'); 
-    }
+      window.switchView('view-login'); 
+    };
 
     window.openPreview = function(rawUrl) {
         if(!rawUrl || rawUrl === '-') return;
@@ -648,7 +665,7 @@
         }
     };
 
-    function toggleResignDate() { 
+    window.toggleResignDate = function() { 
         var st = document.getElementById('empStatus').value; 
         var rd = document.getElementById('resignDate'); 
         var divReason = document.getElementById('divResignReason');
@@ -657,7 +674,7 @@
         } else { 
             rd.disabled = true; if(st !== 'Resigned') { rd.value = ''; document.getElementById('resignReason').value = ''; } divReason.style.display = 'none';
         } 
-    }
+    };
     
     window.openModal = function(mode, targetId, preloadedData) { 
         document.getElementById('empForm').reset(); 
@@ -674,9 +691,9 @@
         setupModalData(mode, targetData);
         modalObj.show(); 
         
-        loadSettings(function() {
+        window.loadSettings(function() {
             if (mode !== 'view' && targetData) {
-                fillData(targetData, false);
+                window.fillData(targetData, false);
             }
             var isUser = (currentUser.role === 'User');
             if (isUser || mode === 'view' || currentUser.role === 'Viewer') {
@@ -705,14 +722,14 @@
         btnSave.style.display = 'block';
         allFields.forEach(f=>lock(f,false));
         lockPositions(false);
-        document.getElementById('btnGenId').style.display = 'inline-block'; genId();
-        document.getElementById('empStatus').value = 'Active'; lock('empStatus', false); toggleResignDate();
+        document.getElementById('btnGenId').style.display = 'inline-block'; window.genId();
+        document.getElementById('empStatus').value = 'Active'; lock('empStatus', false); window.toggleResignDate();
         
       } else if (mode === 'view' || currentUser.role === 'Viewer') {
         document.getElementById('modalTitle').innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)';
         viewSection.style.display = 'block'; 
         document.getElementById('btnGenId').style.display = 'none';
-        if(d) fillData(d, true); 
+        if(d) window.fillData(d, true); 
 
       } else {
         var isUser = (currentUser.role === 'User');
@@ -721,7 +738,7 @@
         btnSave.style.display = 'block'; 
         document.getElementById('btnGenId').style.display = 'none';
         
-        if(d) fillData(d, false);
+        if(d) window.fillData(d, false);
         lock('empId', true);
         if (isUser) {
            lock('role', true); lock('empStatus', true); lock('resignDate', true); lock('resignReason', true); lock('username', true); 
@@ -732,7 +749,7 @@
            lock('idCardNum', false); lock('licNum', false); lock('licType', false);
            lockPositions(true);
         } else {
-           lock('role', false); lock('empStatus', false); toggleResignDate();
+           lock('role', false); lock('empStatus', false); window.toggleResignDate();
            lock('username', false); lock('password', false); lock('fullname', false); lock('prefix', false); lock('startDate', false); lock('birthDate', false); lock('gender', false);
            lock('ssoType', false); lock('ssoHosp', false); lock('nickname', false);
            lock('idExp', false); lock('licExp', false);
@@ -745,7 +762,7 @@
 
     function safeDate(d) { if(!d) return ''; try { var date = new Date(d); if(isNaN(date.getTime())) return ''; return date.toISOString().split('T')[0]; } catch(e) { return ''; } }
     
-    function fillData(d, isViewMode) { 
+    window.fillData = function(d, isViewMode) { 
         if(!d) return; 
         document.getElementById('empId').value = d.id; 
         document.getElementById('fullname').value = d.name; 
@@ -774,7 +791,7 @@
         
         var currentPos = (d.position || '').split(',').map(p => p.trim()); 
         document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => { cb.checked = currentPos.includes(cb.value); }); 
-        toggleResignDate(); 
+        window.toggleResignDate(); 
 
         if (isViewMode) {
            document.getElementById('view_fullname').innerText = d.name;
@@ -785,32 +802,32 @@
            statusEl.innerText = d.status;
            statusEl.className = 'badge rounded-pill fs-6 px-3 py-2 ' + statusClass;
            
-           document.getElementById('view_birthDate').innerText = formatDate(d.birthDate);
-           document.getElementById('view_age').innerText = calcAge(d.birthDate);
+           document.getElementById('view_birthDate').innerText = window.formatDate(d.birthDate);
+           document.getElementById('view_age').innerText = window.calcAge(d.birthDate);
            document.getElementById('view_gender').innerText = d.gender || '-';
            document.getElementById('view_phone').innerText = d.phone || '-';
            document.getElementById('view_username').innerText = d.username;
            document.getElementById('view_password').innerText = d.password;
            document.getElementById('view_role').innerText = d.role;
            
-           document.getElementById('view_startDate').innerText = formatDate(d.startDate);
-           document.getElementById('view_tenure').innerHTML = 'อายุงาน: ' + calcTenure(d.startDate);
+           document.getElementById('view_startDate').innerText = window.formatDate(d.startDate);
+           document.getElementById('view_tenure').innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate);
            document.getElementById('view_ssoType').innerText = d.ssoType || '-';
            document.getElementById('view_ssoHosp').innerText = d.ssoHosp || '-';
            
            if(d.status === 'Resigned') {
               document.getElementById('view_resign_section').style.display = 'block';
-              document.getElementById('view_resignDate').innerText = formatDate(d.resignDate);
+              document.getElementById('view_resignDate').innerText = window.formatDate(d.resignDate);
               document.getElementById('view_resignReason').innerText = d.resignReason || '-';
            } else {
               document.getElementById('view_resign_section').style.display = 'none';
            }
            
            document.getElementById('view_idCardNum').innerText = d.idCardNum || '-';
-           document.getElementById('view_idExp').innerText = d.idExp ? 'หมดอายุ: ' + formatDate(d.idExp) : '';
+           document.getElementById('view_idExp').innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : '';
            document.getElementById('view_licType').innerText = d.licType || '-';
            document.getElementById('view_licNum').innerText = d.licNum ? 'เลขที่: ' + d.licNum : '';
-           document.getElementById('view_licExp').innerText = d.licExp ? 'หมดอายุ: ' + formatDate(d.licExp) : '';
+           document.getElementById('view_licExp').innerText = d.licExp ? 'หมดอายุ: ' + window.formatDate(d.licExp) : '';
            
            var posContainer = document.getElementById('view_positions_badges');
            posContainer.innerHTML = '';
@@ -820,15 +837,15 @@
               posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>';
            }
         }
-    }
+    };
     
-    function getSelectedPositions() { 
+    window.getSelectedPositions = function() { 
         var s=[]; document.querySelectorAll('input[name="posCheckbox"]:checked').forEach(c=>s.push(c.value)); return s.join(', '); 
-    }
+    };
     
-    async function loadSettings(cb) { 
+    window.loadSettings = async function(cb) { 
         try {
-          const res = await callAPI({ action: 'getSettingsData' });
+          const res = await window.callAPI({ action: 'getSettingsData' });
           allPositionsList = res.positions || []; 
           allHospitals = res.hospitals || []; 
           allLicenseTypes = res.licenseTypes || [];
@@ -853,7 +870,7 @@
 
           if(cb) cb();
         } catch(e) {}
-    }
+    };
 
     window.submitEmpForm = async function(e) { 
         e.preventDefault(); 
@@ -878,24 +895,24 @@
             licNum: document.getElementById('licNum').value,
             licType: document.getElementById('licType').value,
             resignReason: document.getElementById('resignReason').value,
-            position: getSelectedPositions(), 
+            position: window.getSelectedPositions(), 
             startDate: document.getElementById('startDate').value, 
             phone: document.getElementById('phone').value, 
             currentUserRole: currentUser.role, 
-            filePhoto: await getBase64User(document.getElementById('filePhoto').files[0]), 
-            fileIdCard: await getBase64User(document.getElementById('fileIdCard').files[0]), 
-            filePassport: await getBase64User(document.getElementById('filePassport').files[0]), 
-            fileHouse: await getBase64User(document.getElementById('fileHouse').files[0]), 
-            fileDrive: await getBase64User(document.getElementById('fileDrive').files[0]), 
-            fileEdu: await getBase64User(document.getElementById('fileEdu').files[0]), 
-            fileCriminal: await getBase64User(document.getElementById('fileCriminal').files[0]), 
-            fileHealth: await getBase64User(document.getElementById('fileHealth').files[0]), 
+            filePhoto: await window.getBase64User(document.getElementById('filePhoto').files[0]), 
+            fileIdCard: await window.getBase64User(document.getElementById('fileIdCard').files[0]), 
+            filePassport: await window.getBase64User(document.getElementById('filePassport').files[0]), 
+            fileHouse: await window.getBase64User(document.getElementById('fileHouse').files[0]), 
+            fileDrive: await window.getBase64User(document.getElementById('fileDrive').files[0]), 
+            fileEdu: await window.getBase64User(document.getElementById('fileEdu').files[0]), 
+            fileCriminal: await window.getBase64User(document.getElementById('fileCriminal').files[0]), 
+            fileHealth: await window.getBase64User(document.getElementById('fileHealth').files[0]), 
             fileWarn: null, 
-            fileOther1: await getBase64User(document.getElementById('fileOther1').files[0]), 
-            fileOther2: await getBase64User(document.getElementById('fileOther2').files[0]) 
+            fileOther1: await window.getBase64User(document.getElementById('fileOther1').files[0]), 
+            fileOther2: await window.getBase64User(document.getElementById('fileOther2').files[0]) 
         }; 
         try {
-          const res = await callAPI({ action: 'handleEmployeeSave', form: form, mode: document.getElementById('formMode').value });
+          const res = await window.callAPI({ action: 'handleEmployeeSave', form: form, mode: document.getElementById('formMode').value });
           if(res.success) { 
               Swal.fire('สำเร็จ', res.message, 'success'); 
               modalObj.hide(); 
@@ -907,14 +924,14 @@
         } catch(err) {}
     };
 
-    function genId() { 
+    window.genId = function() { 
        document.getElementById('empId').value='...'; 
        try {
-         callAPI({ action: 'getNextEmployeeId' }).then(res => {
+         window.callAPI({ action: 'getNextEmployeeId' }).then(res => {
              document.getElementById('empId').value = res.empId;
          });
        } catch(e) {}
-    }
+    };
     
     window.getBase64User = function(file) { 
       return new Promise(function(resolve) {
@@ -925,7 +942,7 @@
       });
     };
 
-    function calcAge(d) { 
+    window.calcAge = function(d) { 
         if(!d) return "-"; 
         var today = new Date(); var birthDate = new Date(d); 
         if(isNaN(birthDate)) return "-"; 
@@ -933,16 +950,16 @@
         var m = today.getMonth() - birthDate.getMonth(); 
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } 
         return age + " ปี"; 
-    }
+    };
 
-    function formatDate(d) { 
+    window.formatDate = function(d) { 
         if(!d) return '-'; 
         try {
             var date = new Date(d);
             if(isNaN(date.getTime())) return '-';
             return date.toLocaleDateString('th-TH-u-ca-gregory', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
         } catch(e) { return '-'; }
-    }
+    };
     
     window.calcTenure = function(dateString) { 
         if(!dateString) return '-'; 
