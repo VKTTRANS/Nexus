@@ -366,6 +366,187 @@
       </div>
   </div>
 
+  <div class="modal fade" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content border border-danger border-opacity-50" style="background: #1a1a1a;">
+              <div class="modal-header border-bottom border-danger border-opacity-25 py-2">
+                  <h5 class="modal-title text-danger fs-6 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>ออกใบเตือนพนักงาน</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-4">
+                  <form id="warningForm" onsubmit="window.submitWarningForm(event)">
+                      <div class="row g-3">
+                          <div class="col-md-12">
+                              <label class="small text-muted mb-1">พนักงานที่กระทำผิด *</label>
+                              <input type="text" class="form-control bg-dark text-light border-secondary" id="warnEmpInput" list="warnEmpOptions" placeholder="ค้นหาชื่อ หรือ รหัสพนักงาน..." autocomplete="off" required>
+                              <datalist id="warnEmpOptions"></datalist>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="small text-muted mb-1">วันที่ออกใบเตือน *</label>
+                              <input type="date" class="form-control bg-dark text-light border-secondary" id="warnIssueDate" required>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="small text-muted mb-1">วันที่กระทำผิด *</label>
+                              <input type="date" class="form-control bg-dark text-light border-secondary" id="warnIncidentDate" required>
+                          </div>
+                          <div class="col-12">
+                              <label class="small text-muted mb-1">ฐานความผิด (ข้อ 1) *</label>
+                              <input type="text" class="form-control bg-dark text-light border-secondary" id="warnOffense1" required>
+                          </div>
+                          <div class="col-12">
+                              <label class="small text-muted mb-1">ฐานความผิด (ข้อ 2)</label>
+                              <input type="text" class="form-control bg-dark text-light border-secondary" id="warnOffense2">
+                          </div>
+                          <div class="col-12">
+                              <label class="small text-muted mb-1">หมายเหตุ / รายละเอียดเพิ่มเติม</label>
+                              <textarea class="form-control bg-dark text-light border-secondary" id="warnNotes" rows="2"></textarea>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="small text-muted mb-1">ผู้ออกใบเตือน *</label>
+                              <select class="form-select bg-dark text-light border-secondary" id="warnIssuedBy" required>
+                                  <option value="ฝ่ายบุคคล (HR)">ฝ่ายบุคคล (HR)</option>
+                                  <option value="หัวหน้างาน (Manager)">หัวหน้างาน (Manager)</option>
+                                  <option value="ผู้บริหาร (Director)">ผู้บริหาร (Director)</option>
+                              </select>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="small text-muted mb-1">เอกสารแนบ (ถ้ามี)</label>
+                              <input type="text" class="form-control bg-dark text-light border-secondary" id="warnAttachments" placeholder="เช่น รูปถ่ายความเสียหาย">
+                          </div>
+                          <div class="col-md-6">
+                              <label class="small text-muted mb-1">รูปหลักฐาน 1</label>
+                              <input type="file" class="form-control bg-dark text-light border-secondary" id="warnPhoto1" accept="image/*">
+                          </div>
+                          <div class="col-md-6">
+                              <label class="small text-muted mb-1">รูปหลักฐาน 2</label>
+                              <input type="file" class="form-control bg-dark text-light border-secondary" id="warnPhoto2" accept="image/*">
+                          </div>
+                      </div>
+                      <div class="mt-4 text-end">
+                          <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                          <button type="submit" class="btn btn-danger rounded-pill px-5 fw-bold" id="btnSubmitWarning">สร้างใบเตือน</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="warningDetailModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content border border-danger border-opacity-50" style="background: #1a1a1a;">
+              <div class="modal-header border-bottom border-danger border-opacity-25 py-2">
+                  <h5 class="modal-title text-danger fs-6 fw-bold">แก้ไข/ตรวจสอบใบเตือน: <span id="e_warnDocNo"></span></h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-4">
+                  <input type="hidden" id="e_warnDocNoHidden">
+                  <div class="mb-3">
+                      <span class="text-muted small">พนักงาน: </span><span id="e_warnEmpName" class="text-white fw-bold"></span>
+                  </div>
+                  <div class="row g-3">
+                      <div class="col-md-6">
+                          <label class="small text-muted mb-1">วันที่ออกใบเตือน</label>
+                          <input type="date" class="form-control bg-dark text-light border-secondary" id="e_warnIssueDate">
+                      </div>
+                      <div class="col-md-6">
+                          <label class="small text-muted mb-1">วันที่กระทำผิด</label>
+                          <input type="date" class="form-control bg-dark text-light border-secondary" id="e_warnIncidentDate">
+                      </div>
+                      <div class="col-12">
+                          <label class="small text-muted mb-1">ฐานความผิด (ข้อ 1)</label>
+                          <input type="text" class="form-control bg-dark text-light border-secondary" id="e_warnOffense1">
+                      </div>
+                      <div class="col-12">
+                          <label class="small text-muted mb-1">ฐานความผิด (ข้อ 2)</label>
+                          <input type="text" class="form-control bg-dark text-light border-secondary" id="e_warnOffense2">
+                      </div>
+                      <div class="col-12">
+                          <label class="small text-muted mb-1">หมายเหตุ</label>
+                          <textarea class="form-control bg-dark text-light border-secondary" id="e_warnNotes" rows="2"></textarea>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="small text-muted mb-1">ผู้ออกใบเตือน (<span id="e_warnIssuedByText" class="text-info"></span>)</label>
+                          <select class="form-select bg-dark text-light border-secondary" id="e_warnIssuedBy">
+                              <option value="ฝ่ายบุคคล (HR)">ฝ่ายบุคคล (HR)</option>
+                              <option value="หัวหน้างาน (Manager)">หัวหน้างาน (Manager)</option>
+                              <option value="ผู้บริหาร (Director)">ผู้บริหาร (Director)</option>
+                          </select>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="small text-muted mb-1">เอกสารแนบ</label>
+                          <input type="text" class="form-control bg-dark text-light border-secondary" id="e_warnAttachments">
+                      </div>
+                  </div>
+                  <div class="mt-4 d-flex justify-content-between">
+                      <button type="button" class="btn btn-outline-danger rounded-pill px-4" onclick="window.deleteWarning()"><i class="bi bi-trash"></i> ลบเอกสาร</button>
+                      <div>
+                          <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                          <button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.saveWarningResolution()">บันทึกการแก้ไข</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="accidentDetailModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content border border-warning border-opacity-50" style="background: #1a1a1a;">
+              <div class="modal-header border-bottom border-warning border-opacity-25 py-2">
+                  <h5 class="modal-title text-warning fs-6 fw-bold">จัดการอุบัติเหตุ: <span id="m_accDocNo"></span></h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-4">
+                  <input type="hidden" id="m_accDocNoHidden">
+                  <div class="row mb-3 text-light small bg-dark p-3 rounded mx-0">
+                      <div class="col-md-6 mb-2"><span class="text-muted">พนักงาน:</span> <span id="m_accEmpName" class="fw-bold"></span></div>
+                      <div class="col-md-6 mb-2"><span class="text-muted">วันเวลา:</span> <span id="m_accDateTime"></span></div>
+                      <div class="col-md-6 mb-2"><span class="text-muted">ยานพาหนะ:</span> <span id="m_accVehicle"></span></div>
+                      <div class="col-md-6 mb-2"><span class="text-muted">สาเหตุ:</span> <span id="m_accCause" class="text-danger"></span></div>
+                  </div>
+                  
+                  <div class="row g-3">
+                      <div class="col-12">
+                          <label class="small text-muted mb-1">สถานที่เกิดเหตุ</label>
+                          <input type="text" class="form-control bg-dark text-light border-secondary" id="m_accLocation">
+                      </div>
+                      <div class="col-12">
+                          <label class="small text-muted mb-1">ความเสียหาย</label>
+                          <input type="text" class="form-control bg-dark text-light border-secondary" id="m_accDamage">
+                      </div>
+                      <div class="col-12">
+                          <label class="small text-muted mb-1">รายละเอียด</label>
+                          <textarea class="form-control bg-dark text-light border-secondary" id="m_accDetail" rows="3"></textarea>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="small text-muted mb-1">แนวทางการแก้ไข</label>
+                          <textarea class="form-control bg-dark text-light border-secondary" id="m_accFix" rows="2"></textarea>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="small text-muted mb-1">ข้อปฏิบัติเพื่อป้องกัน</label>
+                          <textarea class="form-control bg-dark text-light border-secondary" id="m_accPrevent" rows="2"></textarea>
+                      </div>
+                      <div class="col-md-12">
+                          <label class="small text-muted mb-1">สถานะเอกสาร</label>
+                          <select class="form-select bg-dark text-light border-warning" id="m_accStatus">
+                              <option value="รอดำเนินการ">รอดำเนินการ</option>
+                              <option value="ปิดงานเรียบร้อย">ปิดงานเรียบร้อย</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="mt-4 d-flex justify-content-between">
+                      <button type="button" class="btn btn-outline-danger rounded-pill px-4" onclick="window.deleteAccident()"><i class="bi bi-trash"></i> ลบเอกสาร</button>
+                      <div>
+                          <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                          <button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.saveAccidentResolution()">บันทึกการแก้ไข</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
   <script>
     window.switchAdminTab = function(tab) {
         document.getElementById('btnTabEmp').classList.remove('active');
