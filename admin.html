@@ -717,6 +717,12 @@
         var data = window.allAccidentData.find(function(a) { return a.docNo === docNo; }); 
         if(!data) return;
         
+        var modalEl = document.getElementById('accidentDetailModal');
+        if(!modalEl) {
+            Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
+            return;
+        }
+
         document.getElementById('m_accDocNo').innerText = data.docNo; 
         document.getElementById('m_accDocNoHidden').value = data.docNo; 
         document.getElementById('m_accEmpName').innerText = data.empName + " (" + data.empId + ")"; 
@@ -734,7 +740,7 @@
         document.getElementById('m_accFix').value = data.fixText || ""; 
         document.getElementById('m_accPrevent').value = data.preventText || "";
         
-        new bootstrap.Modal(document.getElementById('accidentDetailModal')).show();
+        new bootstrap.Modal(modalEl).show();
     };
 
     window.saveAccidentResolution = function() {
@@ -823,7 +829,14 @@
         var data = window.allWarningData.find(function(a) { return a.docNo === docNo; }); 
         if(!data) return;
 
-        document.getElementById('e_warnDocNo').innerText = data.docNo; 
+        var el = document.getElementById('e_warnDocNo');
+        var modalEl = document.getElementById('warningDetailModal');
+        if(!el || !modalEl) {
+            Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
+            return;
+        }
+
+        el.innerText = data.docNo; 
         document.getElementById('e_warnDocNoHidden').value = data.docNo; 
         document.getElementById('e_warnEmpName').innerText = data.empName + " (" + data.empId + ")";
         
@@ -844,7 +857,7 @@
                 break; 
             } 
         }
-        new bootstrap.Modal(document.getElementById('warningDetailModal')).show();
+        new bootstrap.Modal(modalEl).show();
     };
 
     window.saveWarningResolution = function() {
@@ -903,16 +916,28 @@
     };
 
     window.openCreateWarningModal = function() { 
-        document.getElementById('warningForm').reset(); 
+        var form = document.getElementById('warningForm'); 
+        var modalEl = document.getElementById('warningCreateModal');
+        
+        if (!form || !modalEl) {
+            Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'ระบบไม่พบฟอร์มใบเตือน กรุณากดล้างแคชโดยกด Ctrl + Shift + R (บนคอม) หรือลบประวัติการท่องเว็บ (บนมือถือ)'});
+            return;
+        }
+
+        form.reset(); 
         var datalist = document.getElementById('warnEmpOptions'); 
-        datalist.innerHTML = ''; 
+        if(datalist) datalist.innerHTML = ''; 
         var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; }); 
         activeEmps.forEach(function(e) { 
-            datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">'; 
+            if(datalist) datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">'; 
         }); 
-        document.getElementById('warnIssueDate').valueAsDate = new Date(); 
-        document.getElementById('warnIncidentDate').valueAsDate = new Date(); 
-        new bootstrap.Modal(document.getElementById('warningCreateModal')).show(); 
+        
+        var issueDate = document.getElementById('warnIssueDate');
+        if(issueDate) issueDate.valueAsDate = new Date(); 
+        var incidentDate = document.getElementById('warnIncidentDate');
+        if(incidentDate) incidentDate.valueAsDate = new Date(); 
+        
+        new bootstrap.Modal(modalEl).show(); 
     };
 
     window.getBase64Warn = function(file) { 
