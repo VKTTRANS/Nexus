@@ -13,7 +13,6 @@
         
         <div class="modal-body p-0">
           
-          <!-- หน้าต่างแสดงรายการผู้สมัคร -->
           <div id="recruitListView" class="p-4">
              <div id="recruitLoading" class="text-center py-5">
                  <div class="spinner-border text-success" role="status"></div>
@@ -22,7 +21,6 @@
              <div class="row g-3" id="recruitListGroup"></div>
           </div>
           
-          <!-- หน้าต่างแสดงรายละเอียด -->
           <div id="recruitDetailView" class="d-none h-100">
              <div class="p-4">
                 <button class="btn btn-sm btn-outline-secondary mb-4 rounded-pill px-4 text-light border-opacity-25 hover-scale" onclick="window.switchRecruitView('list')">
@@ -30,7 +28,6 @@
                 </button>
                 
                 <div class="row g-4">
-                   <!-- แถบด้านซ้าย รูป+คะแนน -->
                    <div class="col-lg-4 text-center border-end border-secondary border-opacity-10">
                       <div class="position-relative d-inline-block mb-3">
                           <div style="position: absolute; inset: -3px; background: linear-gradient(135deg, #00E676, transparent); border-radius: 50%; opacity: 0.5;"></div>
@@ -55,7 +52,6 @@
                       </div>
                    </div>
                    
-                   <!-- แถบด้านขวา ข้อมูลส่วนตัว -->
                    <div class="col-lg-8 ps-lg-4">
                       <h6 class="text-success border-bottom border-secondary border-opacity-25 pb-2 mb-4 fw-bold">
                           <i class="bi bi-person-lines-fill me-2"></i>ข้อมูลส่วนตัว
@@ -218,6 +214,7 @@
         
         var docHTML = ''; 
         var docMap = [ 
+            {n: 'รูปถ่ายหน้าตรง', i: 53}, 
             {n: 'บัตร ปชช. (หน้า)', i: 54}, {n: 'บัตร ปชช. (หลัง)', i: 55}, {n: 'ใบขับขี่', i: 56}, 
             {n: 'ทะเบียนบ้าน', i: 57}, {n: 'วุฒิการศึกษา', i: 58}, {n: 'ประวัติอาชญากรรม', i: 59}, 
             {n: 'ใบรับรองแพทย์', i: 60}, {n: 'เอกสารอื่นๆ 1', i: 61}, {n: 'เอกสารอื่นๆ 2', i: 62} 
@@ -275,19 +272,23 @@
     window.processReject = function(idx) { 
         Swal.fire({ 
             title: 'ปฏิเสธใบสมัคร?', 
-            text: 'รายการนี้จะถูกย้ายไปสถานะ Rejected', 
+            text: 'โปรดระบุเหตุผลในการปฏิเสธ (ถ้ามี)', 
+            input: 'text',
+            inputPlaceholder: 'เช่น เอกสารไม่ครบ, คุณสมบัติไม่ตรง...',
             icon: 'warning', 
             background: 'rgba(20,20,20,0.95)', 
             color: '#fff', 
             showCancelButton: true, 
             confirmButtonColor: '#d33', 
             cancelButtonColor: '#555', 
-            confirmButtonText: 'ปฏิเสธ' 
+            confirmButtonText: 'ยืนยันปฏิเสธ',
+            cancelButtonText: 'ยกเลิก'
         }).then(async function(result) { 
             if (result.isConfirmed) { 
-                Swal.showLoading(); 
+                var reason = result.value || "ไม่ผ่านการพิจารณา";
+                Swal.fire({title:'กำลังประมวลผล...', background:'rgba(20,20,20,0.95)', color:'#fff', didOpen:function(){Swal.showLoading()}}); 
                 try { 
-                    const res = await window.callAPI({ action: 'rejectCandidate', rowIndex: idx }); 
+                    const res = await window.callAPI({ action: 'rejectCandidate', rowIndex: idx, reason: reason }); 
                     Swal.fire({title:'เรียบร้อย', text: res.message, icon:'success', background:'rgba(20,20,20,0.95)', color:'#fff'}); 
                     window.switchRecruitView('list'); 
                     window.loadRecruitData(); 
