@@ -1,22 +1,53 @@
 <div id="view-user" class="view-section container p-3 p-md-4">
 
     <style>
-        /* --- Theme โลจิสติกส์ สำหรับฟอร์มพนักงาน --- */
-        .logistics-modal { border: 1px solid #ffc107; background: #121212 !important; }
-        .logistics-modal-header { background: linear-gradient(90deg, #1a1a1a 0%, #2c2c2c 100%); border-bottom: 2px solid #ffc107; }
-        .logistics-section-title { font-size: 0.9rem; font-weight: 700; color: #ffc107; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; }
-        .logistics-section-title i { font-size: 1.2rem; margin-right: 8px; }
-        .logistics-card { background: rgba(25, 25, 25, 0.8); border: 1px solid #333; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-        .input-dark { background-color: #0a0a0a !important; border: 1px solid #444 !important; color: #e0e0e0 !important; font-size: 0.9rem; }
-        .input-dark:focus { border-color: #ffc107 !important; box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25) !important; }
-        .input-dark:disabled, .input-dark[readonly] { background-color: #1a1a1a !important; color: #777 !important; border-color: #333 !important; }
-        .label-logistics { color: #aaa; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; }
+        /* --- Cyber Logistics Theme 2026 สำหรับ User --- */
+        #view-user {
+            --cyber-primary: #00E5FF;
+            --cyber-secondary: #0077FF;
+            --cyber-warning: #FF9100;
+            --cyber-danger: #FF1744;
+            --panel-bg: rgba(11, 16, 26, 0.85);
+            --panel-border: rgba(0, 229, 255, 0.15);
+            --glass-blur: blur(16px);
+        }
+
+        #view-user .text-success { color: var(--cyber-primary) !important; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+        #view-user .bg-success { background: linear-gradient(135deg, var(--cyber-primary), var(--cyber-secondary)) !important; color: #fff !important; }
+        #view-user .border-success { border-color: var(--cyber-primary) !important; box-shadow: 0 0 8px rgba(0, 229, 255, 0.2); }
+        
+        #view-user .text-warning { color: var(--cyber-warning) !important; text-shadow: 0 0 10px rgba(255, 145, 0, 0.4); }
+        #view-user .bg-warning { background: linear-gradient(135deg, var(--cyber-warning), #FF3D00) !important; color: #fff !important; }
+        
+        #view-user .text-info { color: #2979FF !important; text-shadow: 0 0 10px rgba(41, 121, 255, 0.4); }
+        #view-user .text-danger { color: var(--cyber-danger) !important; text-shadow: 0 0 10px rgba(255, 23, 68, 0.4); }
+
+        #view-user .btn-success { background: linear-gradient(135deg, var(--cyber-primary), var(--cyber-secondary)); border: none; color: #000 !important; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3); transition: all 0.3s ease;}
+        #view-user .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5); }
+        
+        .logistics-modal { border: 1px solid rgba(0, 229, 255, 0.3); background: rgba(11, 16, 26, 0.95) !important; backdrop-filter: blur(25px); border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,229,255,0.05); }
+        .logistics-modal-header { background: rgba(0,0,0,0.3); border-bottom: 2px solid var(--cyber-primary); border-radius: 20px 20px 0 0; }
+        .logistics-section-title { font-size: 0.95rem; font-weight: 700; color: var(--cyber-primary); margin-bottom: 15px; display: flex; align-items: center; border-bottom: 1px solid rgba(0, 229, 255, 0.2); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+        .logistics-section-title i { font-size: 1.2rem; margin-right: 10px; text-shadow: 0 0 8px rgba(0, 229, 255, 0.5); }
+        .logistics-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+        
+        .input-dark { background-color: rgba(5, 10, 15, 0.8) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #fff !important; font-size: 0.9rem; border-radius: 8px; transition: 0.3s; }
+        .input-dark:focus { border-color: var(--cyber-primary) !important; box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.1) !important; background-color: #000 !important; }
+        .input-dark:disabled, .input-dark[readonly] { background-color: rgba(0,0,0,0.5) !important; color: #6b7280 !important; border-color: transparent !important; }
+        .label-logistics { color: #8a9bb0; font-size: 0.75rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        
+        .nav-pills .nav-link { color: #8a9bb0; font-weight: 600; transition: all 0.3s; }
+        .nav-pills .nav-link.active { background: rgba(0, 229, 255, 0.15) !important; color: #fff !important; border: 1px solid rgba(0, 229, 255, 0.3); box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); }
+        
+        .pos-checkbox-wrapper { background: rgba(5, 10, 15, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; max-height: 160px; overflow-y: auto;}
+        .pos-checkbox-wrapper .form-check { border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; margin-bottom: 8px;}
+        .pos-checkbox-wrapper .form-check:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
     </style>
 
     <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
         <div>
             <h4 class="fw-bold text-white mb-0">
-                <i class="bi bi-person-circle text-success me-2"></i>หน้าหลักพนักงาน
+                <i class="bi bi-person-circle text-success me-2"></i>ศูนย์ควบคุมโปรไฟล์พนักงาน
             </h4>
             <small class="text-secondary opacity-75">
                 ยินดีต้อนรับ, <span id="userNameHeader" class="fw-bold text-success">...</span>
@@ -38,7 +69,7 @@
             </div>
         </div>
         <div class="col-lg-8">
-            <div class="card border-0 shadow-lg" style="background: rgba(30,30,30,0.5); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px;">
+            <div class="card border-0 shadow-lg" style="background: var(--panel-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--panel-border); border-radius: 20px;">
                 <div class="card-header bg-transparent border-bottom border-secondary border-opacity-25 p-0">
                     <ul class="nav nav-pills nav-fill p-2 gap-2" id="userTabs" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -56,13 +87,13 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link rounded-pill small py-2 text-danger" id="tab-btn-warns" data-bs-toggle="tab" data-bs-target="#tab-content-warns" type="button" role="tab">
                                 <i class="bi bi-exclamation-triangle-fill me-1"></i> ใบเตือน
-                                <span class="badge bg-danger ms-1" id="warnCountBadge">0</span>
+                                <span class="badge bg-danger ms-1 text-white" id="warnCountBadge">0</span>
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link rounded-pill small py-2 text-warning" id="tab-btn-accs" data-bs-toggle="tab" data-bs-target="#tab-content-accs" type="button" role="tab">
                                 <i class="bi bi-cone-striped me-1"></i> อุบัติเหตุ
-                                <span class="badge bg-warning text-dark ms-1" id="accCountBadge">0</span>
+                                <span class="badge bg-warning text-white ms-1" id="accCountBadge">0</span>
                             </button>
                         </li>
                     </ul>
@@ -86,7 +117,7 @@
                             </div>
                             <div id="userPayslipListTab">
                                 <div class="text-center text-muted py-4 small opacity-50">
-                                    <div class="spinner-border spinner-border-sm text-success mb-2"></div><br>กำลังโหลดประวัติ...
+                                    <div class="spinner-border spinner-border-sm text-success mb-2"></div><br>กำลังซิงค์ประวัติ...
                                 </div>
                             </div>
                         </div>
@@ -129,29 +160,30 @@
     </div>
 </div>
 
+<!-- Modal สำหรับลานตู้ -->
 <div class="modal fade" id="yardModal" tabindex="-1" style="z-index: 1060;">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content bg-dark text-light border border-info border-opacity-50">
-            <div class="modal-header border-secondary border-opacity-50 pb-3">
+        <div class="modal-content bg-dark text-light border border-info border-opacity-50 logistics-modal">
+            <div class="modal-header logistics-modal-header pb-3">
                 <h5 class="modal-title text-info fw-bold">
                     <i class="bi bi-geo-alt-fill me-2"></i>ลานรับ-คืนตู้
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
-                <div class="row g-2 mb-4 p-3 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="row g-2 mb-4 p-3 rounded logistics-card">
                     <div class="col-md-6">
-                        <label class="small text-muted mb-1">ค้นหาลาน หรือ ที่อยู่</label>
+                        <label class="label-logistics">ค้นหาลาน หรือ ที่อยู่</label>
                         <div class="input-group">
                             <span class="input-group-text bg-transparent border-secondary text-info">
                                 <i class="bi bi-search"></i>
                             </span>
-                            <input type="text" id="yardSearchInput" class="form-control bg-transparent text-light border-secondary shadow-none" placeholder="พิมพ์ชื่อลาน..." onkeyup="window.filterYards()">
+                            <input type="text" id="yardSearchInput" class="form-control input-dark shadow-none" placeholder="พิมพ์ชื่อลาน..." onkeyup="window.filterYards()">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="small text-muted mb-1">แยกตามโซน</label>
-                        <select id="yardZoneSelect" class="form-select bg-transparent text-light border-secondary shadow-none" onchange="window.filterYards()">
+                        <label class="label-logistics">แยกตามโซน</label>
+                        <select id="yardZoneSelect" class="form-select input-dark shadow-none" onchange="window.filterYards()">
                             <option value="all" class="text-dark">🌐 แสดงทุกโซน</option>
                         </select>
                     </div>
@@ -159,7 +191,7 @@
                 <div id="yardList" class="row g-3">
                     <div class="text-center p-5">
                         <div class="spinner-border text-info"></div>
-                        <p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p>
+                        <p class="mt-2 text-muted">กำลังโหลดข้อมูลระบบพิกัดตู้คอนเทนเนอร์...</p>
                     </div>
                 </div>
             </div>
@@ -167,37 +199,38 @@
     </div>
 </div>
 
+<!-- Modal สำหรับแจ้งซ่อม -->
 <div class="modal fade" id="userRepairModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content" style="background: rgba(20,20,20,0.98); backdrop-filter: blur(20px); border: 1px solid rgba(13, 110, 253, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
-            <div class="modal-header border-bottom border-primary border-opacity-25 pb-3">
+        <div class="modal-content logistics-modal border-primary border-opacity-50">
+            <div class="modal-header logistics-modal-header border-bottom border-primary border-opacity-25 pb-3">
                 <h5 class="modal-title fw-bold text-primary">
-                    <i class="bi bi-wrench me-2"></i>ใบแจ้งซ่อมบำรุงรถ / ปัญหาการใช้งาน
+                    <i class="bi bi-wrench me-2"></i>แจ้งซ่อมบำรุง / ปัญหาการใช้งาน
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
                 <form id="userRepairForm" onsubmit="window.submitUserRepair(event)">
-                    <div class="row g-3 mb-3">
+                    <div class="row g-3 mb-3 logistics-card border-0 p-3">
                         <div class="col-md-6">
-                            <label class="small text-muted mb-1">วันที่แจ้งซ่อม *</label>
-                            <input type="date" class="form-control bg-dark text-light border-secondary" id="repDate" required>
+                            <label class="label-logistics">วันที่แจ้งซ่อม *</label>
+                            <input type="date" class="form-control input-dark" id="repDate" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="small text-muted mb-1">ทะเบียนรถ *</label>
-                            <select class="form-select bg-dark text-light border-secondary" id="repPlate" required>
-                                <option value="">กำลังโหลดทะเบียน...</option>
+                            <label class="label-logistics">ทะเบียนรถ *</label>
+                            <select class="form-select input-dark" id="repPlate" required>
+                                <option value="">กำลังเชื่อมต่อฐานข้อมูลรถ...</option>
                             </select>
                         </div>
                         <div class="col-md-12">
-                            <label class="small text-muted mb-1">เลขไมล์ปัจจุบัน (ถ้ามี)</label>
-                            <input type="number" class="form-control bg-dark text-light border-secondary" id="repMile" placeholder="เช่น 125000">
+                            <label class="label-logistics">เลขไมล์ปัจจุบัน (ถ้ามี)</label>
+                            <input type="number" class="form-control input-dark" id="repMile" placeholder="เช่น 125000">
                         </div>
                     </div>
-                    <div class="mb-3 p-3 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="mb-3 p-3 rounded logistics-card border-0">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <label class="small text-light fw-bold m-0">
-                                <i class="bi bi-list-check me-2"></i>รายการซ่อมบำรุง
+                                <i class="bi bi-list-check me-2 text-primary"></i>รายการซ่อมบำรุง
                             </label>
                             <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="window.addUserRepairRow()">
                                 <i class="bi bi-plus"></i> เพิ่มรายการ
@@ -205,7 +238,7 @@
                         </div>
                         <div id="userRepairItemsContainer">
                             <div class="input-group input-group-sm mb-2 user-repair-row">
-                                <select class="form-select bg-dark text-light border-secondary rep-select" style="max-width: 45%;" onchange="window.toggleUserCustomInput(this)" required>
+                                <select class="form-select input-dark rep-select" style="max-width: 45%;" onchange="window.toggleUserCustomInput(this)" required>
                                     <option value="" disabled selected>เลือกรายการ...</option>
                                     <option value="ถ่ายน้ำมันเครื่อง">ถ่ายน้ำมันเครื่อง</option>
                                     <option value="เปลี่ยนกรองน้ำมันเครื่อง">เปลี่ยนกรองน้ำมันเครื่อง</option>
@@ -219,7 +252,7 @@
                                     <option value="เปลี่ยนยาง">เปลี่ยนยาง</option>
                                     <option value="other">อื่นๆ (ระบุเอง)</option>
                                 </select>
-                                <input type="text" class="form-control bg-dark text-light border-warning rep-custom d-none" placeholder="ระบุอาการ/รายการ">
+                                <input type="text" class="form-control input-dark border-warning rep-custom d-none" placeholder="ระบุอาการ/รายการ">
                                 <button type="button" class="btn btn-outline-danger btn-remove-rep" onclick="window.removeUserRepairRow(this)">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -227,13 +260,13 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="small text-muted mb-1">หมายเหตุ / อาการเพิ่มเติม</label>
-                        <textarea class="form-control bg-dark text-light border-secondary" id="repNote" rows="2" placeholder="อธิบายอาการเบื้องต้น หรือ ตำแหน่งเพิ่มเติม..."></textarea>
+                        <label class="label-logistics">หมายเหตุ / อาการเพิ่มเติม</label>
+                        <textarea class="form-control input-dark" id="repNote" rows="2" placeholder="อธิบายอาการเบื้องต้น หรือ ตำแหน่งเพิ่มเติม..."></textarea>
                     </div>
                     <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
                         <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
                         <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitRep">
-                            <i class="bi bi-send-fill me-2"></i>ส่งใบแจ้งซ่อม
+                            <i class="bi bi-send-fill me-2"></i>ส่งคิวแจ้งซ่อม
                         </button>
                     </div>
                 </form>
@@ -242,13 +275,13 @@
     </div>
 </div>
 
-<!-- Modal สำหรับแก้ไข/จัดการพนักงานในมุมมอง User (ออกแบบใหม่ตามสไตล์ขนส่ง) -->
+<!-- Modal สำหรับแก้ไข/จัดการพนักงานในมุมมอง User -->
 <div class="modal fade" id="empModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content logistics-modal">
             <div class="modal-header py-3 logistics-modal-header">
                 <h5 class="modal-title fw-bold fs-5 text-warning" id="modalTitle">
-                    <i class="bi bi-person-vcard me-2"></i>จัดการข้อมูลส่วนตัว
+                    <i class="bi bi-person-vcard me-2"></i>อัปเดตฐานข้อมูลส่วนบุคคล
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -275,7 +308,7 @@
                                 <div class="row g-3">
                                     <div class="col-12">
                                         <div class="logistics-card position-relative overflow-hidden p-4 mb-3">
-                                            <div style="position:absolute; top:0; left:0; width:6px; height:100%; background:#ffc107;"></div>
+                                            <div style="position:absolute; top:0; left:0; width:6px; height:100%; background:var(--cyber-warning);"></div>
                                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 ps-2">
                                                 <div>
                                                     <h2 class="fw-bold text-white mb-1" id="view_fullname">...</h2>
@@ -423,7 +456,7 @@
                                     
                                     <!-- Section 2: ข้อมูลส่วนตัว -->
                                     <div class="col-12">
-                                        <div class="logistics-card">
+                                        <div class="logistics-card border-success border-opacity-25">
                                             <div class="logistics-section-title text-success"><i class="bi bi-person-fill"></i> ข้อมูลส่วนตัว (Personal Info)</div>
                                             <div class="row g-3">
                                                 <div class="col-md-2">
@@ -440,11 +473,11 @@
                                                     <input type="text" class="form-control input-dark form-control-sm fw-bold" id="fullname" required>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="label-logistics text-success">ชื่อเล่น</label>
+                                                    <label class="label-logistics text-success">ชื่อเล่น (แก้ไขได้)</label>
                                                     <input type="text" class="form-control input-dark form-control-sm" id="nickname">
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="label-logistics text-success">เบอร์โทรศัพท์</label>
+                                                    <label class="label-logistics text-success">เบอร์โทรศัพท์ (แก้ไขได้)</label>
                                                     <input type="text" class="form-control input-dark form-control-sm font-monospace" id="phone">
                                                 </div>
                                                 <div class="col-md-4">
@@ -466,7 +499,7 @@
 
                                     <!-- Section 3: ข้อมูลการทำงานและประกันสังคม -->
                                     <div class="col-12">
-                                        <div class="logistics-card">
+                                        <div class="logistics-card border-info border-opacity-25">
                                             <div class="logistics-section-title text-info"><i class="bi bi-briefcase-fill"></i> ข้อมูลการจ้างงาน (Employment Info)</div>
                                             <div class="row g-3">
                                                 <div class="col-md-3">
@@ -508,8 +541,8 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-12 mt-4">
-                                                    <label class="label-logistics text-white mb-2"><i class="bi bi-diagram-3-fill me-1"></i> ตำแหน่ง (เลือกได้หลายข้อ)</label>
-                                                    <div id="positionCheckboxList" class="checkbox-list small p-3 rounded" style="background: rgba(0,0,0,0.5); border: 1px solid #444;">
+                                                    <label class="label-logistics text-white mb-2"><i class="bi bi-diagram-3-fill me-1"></i> ตำแหน่ง (อ่านได้อย่างเดียว)</label>
+                                                    <div id="positionCheckboxList" class="pos-checkbox-wrapper">
                                                         <small class="text-muted">Loading...</small>
                                                     </div>
                                                 </div>
@@ -554,7 +587,7 @@
                         </div>
                         <!-- Tab: เอกสารแนบ -->
                         <div class="tab-pane fade" id="tabDocs">
-                            <div class="logistics-card">
+                            <div class="logistics-card border-0">
                                 <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50">
                                     <i class="bi bi-exclamation-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการอัปเดต / เปลี่ยนแปลง หากไม่ต้องการเปลี่ยนให้ปล่อยว่างไว้
                                 </div>
@@ -605,8 +638,8 @@
                     </div>
                     <div class="modal-footer border-top border-secondary pt-4 mt-2 px-0 pb-0">
                         <button type="button" class="btn btn-secondary rounded-pill px-5" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm" id="btnSaveModal">
-                            <i class="bi bi-save-fill me-2"></i>บันทึกข้อมูลบุคลากร
+                        <button type="submit" class="btn btn-success fw-bold text-dark rounded-pill px-5 shadow-sm" id="btnSaveModal">
+                            <i class="bi bi-save-fill me-2"></i>อัปเดตข้อมูล
                         </button>
                     </div>
                 </form>
@@ -688,43 +721,43 @@
         var ssoText = (d.ssoHosp && d.ssoHosp !== '-') ? d.ssoHosp : (d.ssoType || 'ไม่มีข้อมูล');
         
         var html = `
-        <div class="card border-0 shadow-lg text-center overflow-hidden position-relative" style="background: rgba(20,20,20,0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;">
-            <div style="height: 100px; background: linear-gradient(135deg, #00E676 0%, #007bb5 100%); opacity: 0.8;"></div>
+        <div class="card border-0 shadow-lg text-center overflow-hidden position-relative" style="background: rgba(11, 16, 26, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(0, 229, 255, 0.15); border-radius: 20px;">
+            <div style="height: 100px; background: linear-gradient(135deg, #00E5FF 0%, #0077FF 100%); opacity: 0.85;"></div>
             <div class="card-body p-4 pt-0 position-relative">
                 <div class="position-relative d-inline-block mb-3" style="margin-top: -55px;">
-                    <div style="position: absolute; inset: -4px; background: #121212; border-radius: 50%;"></div>
-                    <img src="${photoUrl}" class="rounded-circle shadow-lg position-relative object-fit-cover" style="width: 110px; height: 110px; background-color: #222; border: 3px solid #00E676;">
+                    <div style="position: absolute; inset: -4px; background: #0b101a; border-radius: 50%;"></div>
+                    <img src="${photoUrl}" class="rounded-circle shadow-lg position-relative object-fit-cover" style="width: 110px; height: 110px; background-color: #222; border: 3px solid #00E5FF; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">
                 </div>
                 <h4 class="fw-bold mb-0 text-white">${d.name}</h4>
                 <p class="text-success small mb-2 fw-bold">${nicknameText}</p>
-                <span class="badge bg-dark border border-secondary text-light fw-normal mb-4 px-3 py-2 rounded-pill shadow-sm">
-                    <i class="bi bi-briefcase me-1"></i> ${d.position}
+                <span class="badge bg-dark border border-secondary text-light fw-normal mb-4 px-3 py-2 rounded-pill shadow-sm" style="border-color: rgba(0, 229, 255, 0.3) !important;">
+                    <i class="bi bi-briefcase me-1 text-success"></i> ${d.position}
                 </span>
                 
                 <div class="text-start bg-black bg-opacity-25 p-3 rounded-4 border border-secondary border-opacity-25 mb-4">
                     <div class="d-flex align-items-center mb-2 pb-2 border-bottom border-secondary border-opacity-25">
-                        <div class="bg-dark rounded p-2 me-3 text-muted"><i class="bi bi-person-vcard fs-5"></i></div>
+                        <div class="bg-dark rounded p-2 me-3 text-muted"><i class="bi bi-person-vcard fs-5 text-info"></i></div>
                         <div class="flex-grow-1">
-                            <div class="small text-muted" style="font-size: 0.75rem;">รหัสพนักงาน</div>
+                            <div class="small text-muted" style="font-size: 0.75rem;">รหัสประจำตัวพนักงาน</div>
                             <div class="text-light font-monospace fw-bold">${d.id}</div>
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-2 pb-2 border-bottom border-secondary border-opacity-25">
-                        <div class="bg-dark rounded p-2 me-3 text-muted"><i class="bi bi-telephone fs-5"></i></div>
+                        <div class="bg-dark rounded p-2 me-3 text-muted"><i class="bi bi-telephone fs-5 text-success"></i></div>
                         <div class="flex-grow-1">
-                            <div class="small text-muted" style="font-size: 0.75rem;">เบอร์ติดต่อ</div>
+                            <div class="small text-muted" style="font-size: 0.75rem;">ช่องทางติดต่อ</div>
                             <div class="text-light fw-bold">${phoneText}</div>
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-2 pb-2 border-bottom border-secondary border-opacity-25">
-                        <div class="bg-dark rounded p-2 me-3 text-muted"><i class="bi bi-hospital fs-5"></i></div>
+                        <div class="bg-dark rounded p-2 me-3 text-muted"><i class="bi bi-hospital fs-5 text-danger"></i></div>
                         <div class="flex-grow-1 overflow-hidden">
-                            <div class="small text-muted" style="font-size: 0.75rem;">โรงพยาบาลประกันสังคม</div>
+                            <div class="small text-muted" style="font-size: 0.75rem;">สิทธิ์รักษาพยาบาล</div>
                             <div class="text-info fw-bold text-truncate" title="${ssoText}">${ssoText}</div>
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
-                        <div class="bg-dark rounded p-2 me-3 text-muted"><i class="bi bi-calendar-check fs-5"></i></div>
+                        <div class="bg-dark rounded p-2 me-3 text-muted"><i class="bi bi-calendar-check fs-5 text-warning"></i></div>
                         <div class="flex-grow-1">
                             <div class="small text-muted" style="font-size: 0.75rem;">อายุงาน (เริ่ม: ${window.formatDate(d.startDate)})</div>
                             <div class="text-warning fw-bold">${window.calcTenure(d.startDate)}</div>
@@ -732,29 +765,29 @@
                     </div>
                 </div>
 
-                <button class="btn btn-outline-light rounded-pill btn-sm border-opacity-25 w-100 mb-3 hover-scale py-2 fw-bold" onclick="window.openUserEditModal('${d.id}')">
-                    <i class="bi bi-pencil-square me-2"></i>อัปเดตข้อมูลส่วนตัว
+                <button class="btn btn-outline-info rounded-pill btn-sm border-opacity-50 w-100 mb-3 hover-scale py-2 fw-bold" onclick="window.openUserEditModal('${d.id}')">
+                    <i class="bi bi-pencil-square me-2"></i>แก้ไขและอัปเดตข้อมูล
                 </button>
 
-                <h6 class="text-start text-muted small fw-bold mb-2">เมนูด่วน (Quick Actions)</h6>
+                <h6 class="text-start text-success small fw-bold mb-2">เมนูลัด (Quick Launch)</h6>
                 <div class="row g-2">
                     <div class="col-6">
-                        <a href="${finalLeaveUrl}" target="_blank" class="btn btn-dark w-100 rounded-4 btn-sm border border-warning text-warning hover-scale py-3 d-flex flex-column align-items-center gap-1 shadow-sm">
+                        <a href="${finalLeaveUrl}" target="_blank" class="btn w-100 rounded-4 btn-sm hover-scale py-3 d-flex flex-column align-items-center gap-1 shadow-sm" style="background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.3); color: #00E5FF;">
                             <i class="bi bi-calendar2-week fs-4"></i>ลางาน
                         </a>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openAccidentModal()" class="btn btn-dark w-100 rounded-4 btn-sm border border-danger text-danger hover-scale py-3 d-flex flex-column align-items-center gap-1 shadow-sm">
+                        <button onclick="window.openAccidentModal()" class="btn w-100 rounded-4 btn-sm hover-scale py-3 d-flex flex-column align-items-center gap-1 shadow-sm" style="background: rgba(255, 145, 0, 0.1); border: 1px solid rgba(255, 145, 0, 0.3); color: #FF9100;">
                             <i class="bi bi-cone-striped fs-4"></i>อุบัติเหตุ
                         </button>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openUserRepairModal()" class="btn btn-dark w-100 rounded-4 btn-sm border border-primary text-primary hover-scale py-3 d-flex flex-column align-items-center gap-1 shadow-sm">
+                        <button onclick="window.openUserRepairModal()" class="btn w-100 rounded-4 btn-sm hover-scale py-3 d-flex flex-column align-items-center gap-1 shadow-sm" style="background: rgba(41, 121, 255, 0.1); border: 1px solid rgba(41, 121, 255, 0.3); color: #2979FF;">
                             <i class="bi bi-wrench-adjustable fs-4"></i>แจ้งซ่อม
                         </button>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openYardModal()" class="btn btn-dark w-100 rounded-4 btn-sm border border-info text-info hover-scale py-3 d-flex flex-column align-items-center gap-1 shadow-sm">
+                        <button onclick="window.openYardModal()" class="btn w-100 rounded-4 btn-sm hover-scale py-3 d-flex flex-column align-items-center gap-1 shadow-sm" style="background: rgba(255, 23, 68, 0.1); border: 1px solid rgba(255, 23, 68, 0.3); color: #FF1744;">
                             <i class="bi bi-geo-alt fs-4"></i>ลานตู้
                         </button>
                     </div>
@@ -772,7 +805,7 @@
             list.forEach(function(p) {
                 var formattedDate = window.formatDate(p.payDate);
                 html += `
-                <div class="d-flex flex-wrap justify-content-between align-items-center p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(0,230,118,0.05); border: 1px solid rgba(0,230,118,0.2);">
+                <div class="d-flex flex-wrap justify-content-between align-items-center p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(0,229,255,0.05); border: 1px solid rgba(0,229,255,0.2);">
                     <div>
                         <div class="text-success fw-bold mb-1">
                             <i class="bi bi-calendar2-check-fill me-2"></i>งวดวันที่: ${formattedDate}
@@ -803,7 +836,7 @@
                 var statusColor = (a.status === 'Pending' || a.status === 'รอดำเนินการ') ? 'text-warning' : 'text-success'; 
                 var statusText = a.status === 'Pending' ? 'รอดำเนินการ' : a.status; 
                 html += `
-                <div class="p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(255,165,0,0.05); border: 1px solid rgba(255,165,0,0.2);">
+                <div class="p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(255,145,0,0.05); border: 1px solid rgba(255,145,0,0.2);">
                     <div class="d-flex justify-content-between align-items-center mb-2 border-bottom border-warning border-opacity-25 pb-2">
                         <span class="font-monospace text-warning fw-bold"><i class="bi bi-hash"></i>${a.docNo}</span>
                         <span class="badge bg-dark border border-secondary ${statusColor} px-3 py-2 rounded-pill">${statusText}</span>
@@ -833,7 +866,7 @@
         if (list.length > 0) { 
             list.forEach(function(w) { 
                 html += `
-                <div class="d-flex flex-wrap justify-content-between align-items-center p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(255,0,0,0.05); border: 1px solid rgba(255,0,0,0.2);">
+                <div class="d-flex flex-wrap justify-content-between align-items-center p-3 mb-3 rounded shadow-sm hover-scale" style="background: rgba(255,23,68,0.05); border: 1px solid rgba(255,23,68,0.2);">
                     <div class="text-danger fw-bold mb-2 mb-md-0">
                         <i class="bi bi-exclamation-circle-fill me-2"></i>วันที่ออกใบเตือน: ${window.formatDate(w.date)}
                     </div>
@@ -870,7 +903,7 @@
             if(hasFile) uploadedCount++;
             
             var statusBadge = hasFile ? '<span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 rounded-pill"><i class="bi bi-check-circle me-1"></i>มีไฟล์แล้ว</span>' : '<span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 rounded-pill">ว่าง</span>';
-            var viewBtn = hasFile ? `<button type="button" onclick="window.openPreview('${d.docs[t.key].url}')" class="btn btn-sm btn-dark border-secondary text-light ms-1 rounded-circle hover-scale" title="ดูไฟล์"><i class="bi bi-eye"></i></button>` : '<button type="button" class="btn btn-sm btn-dark border-secondary text-muted ms-1 rounded-circle" disabled><i class="bi bi-eye-slash"></i></button>';
+            var viewBtn = hasFile ? `<button type="button" onclick="window.openPreview('${d.docs[t.key].url}')" class="btn btn-sm btn-dark border-secondary text-info ms-1 rounded-circle hover-scale" title="ดูไฟล์"><i class="bi bi-eye"></i></button>` : '<button type="button" class="btn btn-sm btn-dark border-secondary text-muted ms-1 rounded-circle" disabled><i class="bi bi-eye-slash"></i></button>';
             
             var inputId = 'fileInput_' + index; 
             var spinnerId = 'spinner_' + index;
@@ -933,7 +966,7 @@
                     toast: true, 
                     position: 'top-end', 
                     icon: 'success', 
-                    title: 'อัปโหลดเรียบร้อย', 
+                    title: 'อัปโหลดสำเร็จ', 
                     showConfirmButton: false, 
                     timer: 1500, 
                     background: '#1e1e1e', 
@@ -941,7 +974,7 @@
                 }); 
                 window.loadUserData(); 
             } else { 
-                Swal.fire({title:'ผิดพลาด', text:res.message, icon:'error'}); 
+                Swal.fire({title:'ผิดพลาด', text:res.message, icon:'error', background: '#1e1e1e', color: '#fff'}); 
             } 
         });
     };
@@ -958,7 +991,7 @@
     window.openYardModal = function() { 
         document.getElementById('yardSearchInput').value = ''; 
         new bootstrap.Modal(document.getElementById('yardModal')).show(); 
-        document.getElementById("yardList").innerHTML = '<div class="text-center p-5"><div class="spinner-border text-info"></div><p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p></div>'; 
+        document.getElementById("yardList").innerHTML = '<div class="text-center p-5"><div class="spinner-border text-info"></div><p class="mt-2 text-muted">กำลังโหลดพิกัด...</p></div>'; 
         
         window.callAPI({ action: 'getYardData' }).then(function(list) { 
             window.globalYardData = list; 
@@ -991,7 +1024,7 @@
     window.renderYards = function(list) { 
         var html = ""; 
         if(!list || list.length === 0){ 
-            html = "<div class='col-12 text-center p-5 text-muted'>ไม่พบข้อมูลลานตู้คอนเทนเนอร์ที่ค้นหา</div>"; 
+            html = "<div class='col-12 text-center p-5 text-muted'>ไม่พบข้อมูลลานตู้คอนเทนเนอร์</div>"; 
         } else { 
             list.forEach(function(y) { 
                 var zoneBadge = (y.zone && y.zone !== "ไม่ระบุโซน" && y.zone !== "") ? '<span class="badge bg-secondary bg-opacity-50 border border-secondary text-light mb-2">' + y.zone + '</span>' : ''; 
@@ -1012,7 +1045,7 @@
                                     <tr><td class="text-start text-danger">ตู้หนัก</td><td>${y.fullShort || '-'}</td><td>${y.fullLong || '-'}</td></tr>
                                 </tbody>
                             </table>
-                            <a href="${y.map}" target="_blank" class="btn btn-outline-info btn-sm w-100 rounded-pill"><i class="bi bi-map me-1"></i> เปิดแผนที่ (Google Map)</a>
+                            <a href="${y.map}" target="_blank" class="btn btn-outline-info btn-sm w-100 rounded-pill"><i class="bi bi-map me-1"></i> เปิดระบบแผนที่นำทาง</a>
                         </div>
                     </div>
                 </div>`; 
@@ -1094,14 +1127,8 @@
             btn.parentElement.remove(); 
         } else { 
             Swal.fire({
-                toast: true, 
-                position:'top', 
-                icon:'warning', 
-                title:'ต้องมีอย่างน้อย 1 รายการ', 
-                showConfirmButton: false, 
-                timer: 2000, 
-                background: '#1e1e1e', 
-                color: '#fff'
+                toast: true, position:'top', icon:'warning', title:'ต้องมีอย่างน้อย 1 รายการ', 
+                showConfirmButton: false, timer: 2000, background: '#1e1e1e', color: '#fff'
             }); 
         } 
     };
@@ -1122,13 +1149,7 @@
         }); 
         
         if(itemsList.length === 0) { 
-            Swal.fire({
-                icon: 'warning', 
-                title: 'แจ้งเตือน', 
-                text: 'กรุณาระบุรายการซ่อมอย่างน้อย 1 รายการ', 
-                background: '#1e1e1e', 
-                color: '#fff'
-            }); 
+            Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'กรุณาระบุรายการซ่อมอย่างน้อย 1 รายการ', background: '#1e1e1e', color: '#fff' }); 
             return; 
         } 
         
@@ -1148,7 +1169,7 @@
         
         let btn = document.getElementById('btnSubmitRep'); 
         let originalText = btn.innerHTML; 
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังส่งคิวช่าง...'; 
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>ส่งข้อมูล...'; 
         btn.disabled = true; 
         
         try { 
@@ -1161,13 +1182,7 @@
             btn.innerHTML = originalText; 
             btn.disabled = false; 
             if (data.status === 'success') { 
-                Swal.fire({
-                    icon: 'success', 
-                    title: 'แจ้งซ่อมสำเร็จ!', 
-                    text: 'ข้อมูลถูกส่งเข้าคิวช่าง (สถานะ: รอซ่อม) เรียบร้อยแล้ว', 
-                    background: '#1e1e1e', 
-                    color: '#fff'
-                }); 
+                Swal.fire({ icon: 'success', title: 'สำเร็จ!', text: 'ข้อมูลส่งเข้าคิวช่างเรียบร้อยแล้ว', background: '#1e1e1e', color: '#fff' }); 
                 bootstrap.Modal.getInstance(document.getElementById('userRepairModal')).hide(); 
             } else { 
                 throw new Error(data.message); 
@@ -1175,13 +1190,7 @@
         } catch(err) { 
             btn.innerHTML = originalText; 
             btn.disabled = false; 
-            Swal.fire({
-                icon: 'error', 
-                title: 'ผิดพลาด', 
-                text: 'ไม่สามารถส่งข้อมูลได้: ' + err.message, 
-                background: '#1e1e1e', 
-                color: '#fff'
-            }); 
+            Swal.fire({ icon: 'error', title: 'ผิดพลาด', text: 'ไม่สามารถส่งข้อมูลได้: ' + err.message, background: '#1e1e1e', color: '#fff' }); 
         } 
     };
 
@@ -1246,7 +1255,7 @@
         var allFields = ['empId','role','username','password','fullname','nickname','startDate','phone','birthDate','gender','ssoType','ssoHosp','idExp','licExp','idCardNum','licNum','licType','resignReason','prefix'];
 
         if (mode === 'create') {
-            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>เพิ่มพนักงานใหม่';
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>ลงทะเบียนใหม่';
             editSection.style.display = 'block';
             btnSave.style.display = 'block';
             allFields.forEach(f => lock(f,false));
@@ -1263,7 +1272,7 @@
             if(d) window.fillData(d, true);
         } else {
             var isUser = (currentUser.role === 'User');
-            document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน';
+            document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>อัปเดตฐานข้อมูลส่วนบุคคล' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน';
             editSection.style.display = 'block';
             btnSave.style.display = 'block';
             document.getElementById('btnGenId').style.display = 'none';
@@ -1406,7 +1415,7 @@
                 posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>';
             }
         }
-    };
+    }
 
     window.getSelectedPositions = function() {
         var s = [];
@@ -1419,6 +1428,7 @@
         Swal.fire({
             title: 'กำลังบันทึกข้อมูล...',
             allowOutsideClick: false,
+            background: '#1e1e1e', color: '#fff',
             didOpen: () => Swal.showLoading()
         });
         
@@ -1467,7 +1477,7 @@
             });
             
             if(res.success) {
-                Swal.fire('สำเร็จ', res.message, 'success');
+                Swal.fire({title: 'สำเร็จ', text: res.message, icon: 'success', background: '#1e1e1e', color: '#fff'});
                 modalObj.hide();
                 if(currentUser.role === 'Admin') {
                     window.loadAdminData();
@@ -1475,7 +1485,7 @@
                     window.loadUserData();
                 }
             } else {
-                Swal.fire('เกิดข้อผิดพลาด', res.message, 'error');
+                Swal.fire({title: 'เกิดข้อผิดพลาด', text: res.message, icon: 'error', background: '#1e1e1e', color: '#fff'});
             }
         } catch(err) {
             console.error(err);
