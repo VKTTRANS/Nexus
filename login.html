@@ -161,8 +161,66 @@
             เข้าสู่ระบบ <i class="bi bi-arrow-right-short ms-1 fs-5 d-inline-block align-middle"></i>
         </button>
       </form>
+
+      <!-- ปุ่มตรวจสอบรหัสผ่านด้วยเลขบัตร ปชช. + เบอร์โทร -->
+      <div class="mt-4">
+          <a href="#" onclick="window.openRecoverModal(event)" class="text-success small text-decoration-none hover-scale d-inline-block">
+              <i class="bi bi-search me-1"></i> ลืมรหัสผ่าน / ตรวจสอบบัญชีเข้าใช้งาน?
+          </a>
+      </div>
+
       <div class="mt-4 text-muted small opacity-25 font-monospace">© 2026 VKT Transport System</div>
     </div>
+  </div>
+
+  <!-- Modal สำหรับค้นหารหัสผ่านด้วยเลขบัตรประชาชน + เบอร์โทร -->
+  <div class="modal fade" id="recoverModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="background: rgba(20,20,20,0.98); border: 1px solid rgba(0, 230, 118, 0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+              <div class="modal-header border-bottom border-success border-opacity-25 pb-3">
+                  <h5 class="modal-title fw-bold text-success">
+                      <i class="bi bi-person-vcard me-2"></i>ตรวจสอบรหัสเข้าใช้งาน
+                  </h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-4 text-start">
+                  <form id="recoverForm" onsubmit="window.submitRecoverAccount(event)">
+                      <div class="mb-3">
+                          <label class="small text-muted mb-2 fw-bold">1. เลขบัตรประจำตัวประชาชน (13 หลัก)</label>
+                          <input type="text" class="form-control bg-dark text-light border-success shadow-none font-monospace" id="recoverIdCard" placeholder="x-xxxx-xxxxx-xx-x" maxlength="13" required>
+                      </div>
+                      <div class="mb-3">
+                          <label class="small text-muted mb-2 fw-bold">2. เบอร์โทรศัพท์ที่ลงทะเบียนไว้</label>
+                          <input type="text" class="form-control bg-dark text-light border-success shadow-none font-monospace" id="recoverPhone" placeholder="08xxxxxxxx" maxlength="10" required>
+                      </div>
+                      <small class="text-secondary mt-2 d-block border-top border-secondary border-opacity-25 pt-2" style="font-size: 0.75rem;">
+                          * ข้อมูลทั้ง 2 ส่วนต้องตรงกับฐานข้อมูลของบริษัท ระบบจึงจะแสดงรหัสผ่านให้
+                      </small>
+                      
+                      <!-- พื้นที่แสดงผลลัพธ์ -->
+                      <div id="recoverResult" class="d-none mt-4 p-3 rounded" style="background: rgba(0, 230, 118, 0.1); border: 1px dashed rgba(0, 230, 118, 0.5);">
+                          <h6 class="text-success fw-bold mb-3"><i class="bi bi-check-circle-fill me-2"></i>ยืนยันตัวตนสำเร็จ:</h6>
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                              <span class="text-muted small">ชื่อผู้ใช้งาน (Username):</span>
+                              <span class="text-white font-monospace fw-bold fs-6" id="resUsername"></span>
+                          </div>
+                          <div class="d-flex justify-content-between align-items-center">
+                              <span class="text-muted small">รหัสผ่าน (Password):</span>
+                              <span class="text-white font-monospace fw-bold fs-6" id="resPassword"></span>
+                          </div>
+                          <button type="button" class="btn btn-success btn-sm w-100 rounded-pill mt-3 fw-bold" onclick="window.useRecoveredAccount()">
+                              นำไปเข้าสู่ระบบทันที
+                          </button>
+                      </div>
+
+                      <div class="mt-4 text-end" id="recoverActionBtns">
+                          <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                          <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold" id="btnCheckRecover">ตรวจสอบข้อมูล</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
   </div>
 </div>
 
@@ -206,5 +264,65 @@
           Swal.fire({ icon: 'error', title: 'เข้าสู่ระบบไม่สำเร็จ', text: res.message, background: 'rgba(20,20,20,0.95)', color: '#fff', confirmButtonColor: '#d33' }); 
       }
     } catch(err) { }
+  };
+
+  // --- โค้ดส่วนระบบค้นหารหัสผ่านด้วยเลขบัตร ปชช. + เบอร์โทร ---
+  window.openRecoverModal = function(e) {
+      e.preventDefault();
+      document.getElementById('recoverForm').reset();
+      document.getElementById('recoverResult').classList.add('d-none');
+      document.getElementById('recoverActionBtns').classList.remove('d-none');
+      new bootstrap.Modal(document.getElementById('recoverModal')).show();
+  };
+
+  window.submitRecoverAccount = async function(e) {
+      e.preventDefault();
+      var idCard = document.getElementById('recoverIdCard').value.replace(/-/g, '').trim();
+      var phone = document.getElementById('recoverPhone').value.replace(/-/g, '').trim();
+      
+      if(idCard.length !== 13) {
+          Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก', background: '#1e1e1e', color: '#fff'});
+          return;
+      }
+      if(phone.length < 9) {
+          Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง', background: '#1e1e1e', color: '#fff'});
+          return;
+      }
+
+      var btn = document.getElementById('btnCheckRecover');
+      var originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังตรวจสอบ...';
+      btn.disabled = true;
+
+      try {
+          const res = await window.callAPI({ action: 'recoverAccount', idCard: idCard, phone: phone });
+          
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+
+          if (res && res.success) {
+              document.getElementById('resUsername').innerText = res.username;
+              document.getElementById('resPassword').innerText = res.password;
+              document.getElementById('recoverResult').classList.remove('d-none');
+              document.getElementById('recoverActionBtns').classList.add('d-none');
+          } else {
+              Swal.fire({icon: 'error', title: 'ไม่พบข้อมูล', text: res.message || 'ข้อมูลไม่ตรงกับในระบบ กรุณาลองใหม่อีกครั้ง', background: '#1e1e1e', color: '#fff'});
+          }
+      } catch (err) {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+          Swal.fire({icon: 'error', title: 'การเชื่อมต่อล้มเหลว', text: 'ระบบค้นหายังไม่พร้อมใช้งาน', background: '#1e1e1e', color: '#fff'});
+      }
+  };
+
+  window.useRecoveredAccount = function() {
+      var u = document.getElementById('resUsername').innerText;
+      var p = document.getElementById('resPassword').innerText;
+      
+      document.getElementById('loginUser').value = u;
+      document.getElementById('loginPass').value = p;
+      
+      bootstrap.Modal.getInstance(document.getElementById('recoverModal')).hide();
+      setTimeout(function() { document.querySelector('#view-login form button[type="submit"]').click(); }, 300);
   };
 </script>
