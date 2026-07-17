@@ -401,282 +401,13 @@
         </div>
     </div>
 
-    <!-- Modal สำหรับสร้างสลิปเงินเดือน (Payroll) -->
-    <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal">
-                <div class="modal-header py-3 logistics-modal-header">
-                    <h5 class="modal-title fw-bold fs-5 text-warning">
-                        <i class="bi bi-cash-stack me-2"></i>จัดทำสลิปเงินเดือน
-                    </h5>
-                    <div class="form-check form-switch ms-4 mb-0" id="keepPrevDataContainer">
-                        <input class="form-check-input border-warning" type="checkbox" id="keepPrevData" onchange="window.toggleKeepData()" style="cursor:pointer;">
-                        <label class="form-check-label text-warning small ms-1" for="keepPrevData" style="cursor:pointer; padding-top:2px;">ดึงประวัติ ดึงทุกช่องอัตโนมัติ</label>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4 bg-black bg-opacity-50">
-                    <form id="payrollForm" onsubmit="window.submitPayrollForm(event)">
-                        <input type="hidden" id="pr_empId">
-                        <input type="hidden" id="pr_prefix">
-                        <input type="hidden" id="pr_firstName">
-                        <input type="hidden" id="pr_lastName">
-                        <input type="hidden" id="pr_position">
-                        <input type="hidden" id="pr_email">
-                        
-                        <div class="logistics-card p-3 mb-4">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <label class="label-logistics">พนักงาน</label>
-                                    <div class="text-white fw-bold fs-5 text-truncate" id="pr_empName">...</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="label-logistics">วันที่จ่ายเงิน *</label>
-                                    <input type="date" class="form-control input-dark" id="pr_payDate" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="label-logistics text-success">เงินเดือน ค่าจ้าง (บาท) *</label>
-                                    <input type="number" class="form-control bg-dark text-success fw-bold border-success fs-5 text-end" id="pr_baseSalary" oninput="window.calcPayrollTotals();" required step="0.01">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row g-4">
-                            <!-- ฝั่งรายได้ -->
-                            <div class="col-md-6">
-                                <div class="logistics-card h-100 mb-0">
-                                    <div class="logistics-section-title text-success"><i class="bi bi-plus-circle"></i> รายได้ (Income)</div>
-                                    <div class="row g-2">
-                                        <!-- โชว์ช่องประกันสังคมออกให้ ให้อ่านอย่างเดียว คำนวณออโต้ -->
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ประกันสังคม (ออกให้)</span></span>
-                                                <input type="number" id="pr_inc1" class="form-control payroll-input text-warning" readonly step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่าเที่ยว</span></span>
-                                                <input type="number" id="pr_inc2" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc2')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่ายกชน</span></span>
-                                                <input type="number" id="pr_inc3" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc3')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่าดูแลลูกพ่วง/หาง</span></span>
-                                                <input type="number" id="pr_inc4" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc4')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>เบี้ยขยัน</span></span>
-                                                <input type="number" id="pr_inc5" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc5')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>เบี้ยพิเศษ</span></span>
-                                                <input type="number" id="pr_inc6" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc6')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>เงินเบี้ยเลี้ยง</span></span>
-                                                <input type="number" id="pr_inc7" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc7')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่าล่วงเวลา</span></span>
-                                                <input type="number" id="pr_inc8" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc8')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>รายได้อื่นๆ</span></span>
-                                                <input type="number" id="pr_inc9" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc9')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 d-none">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>อื่นๆ</span></span>
-                                                <input type="number" id="pr_inc10" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc10')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- ฝั่งรายการหัก -->
-                            <div class="col-md-6">
-                                <div class="logistics-card h-100 mb-0">
-                                    <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
-                                    <div class="row g-2">
-                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% -->
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ภาษีหัก ณ ที่จ่าย (1%)</span></span>
-                                                <input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ประกันสังคม</span></span>
-                                                <input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>เงินประกัน</span></span>
-                                                <input type="number" id="pr_dec3" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec3')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>เงินเบิกล่วงหน้า</span></span>
-                                                <input type="number" id="pr_dec4" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec4')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่าไฟ</span></span>
-                                                <input type="number" id="pr_dec5" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec5')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่าผ่อนโทรศัพท์</span></span>
-                                                <input type="number" id="pr_dec6" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec6')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>เงินกู้ยืม</span></span>
-                                                <input type="number" id="pr_dec7" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec7')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่าเสียหายรถ</span></span>
-                                                <input type="number" id="pr_dec8" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec8')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่างวดรถส่วนตัว</span></span>
-                                                <input type="number" id="pr_dec9" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec9')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit"><span>ค่าค้างตู้</span></span>
-                                                <input type="number" id="pr_dec10" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec10')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 p-3 logistics-card border-warning text-center shadow-lg">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <small class="text-success d-block fw-bold mb-1">รวมรายได้ (บาท)</small>
-                                    <h3 class="text-white fw-bold mb-0" id="pr_totalIncomeShow">0.00</h3>
-                                </div>
-                                <div class="col-md-4 border-start border-end border-secondary">
-                                    <small class="text-danger d-block fw-bold mb-1">รวมรายการหัก (บาท)</small>
-                                    <h3 class="text-white fw-bold mb-0" id="pr_totalDeductShow">0.00</h3>
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="text-warning d-block fw-bold mb-1">รายได้สุทธิ (Net)</small>
-                                    <h2 class="text-warning fw-bold mb-0" id="pr_netSalaryShow" style="text-shadow: 0 0 10px rgba(255,193,7,0.3);">0.00</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- เพิ่มส่วนสรุปประกันสังคมด้านล่าง -->
-                        <div class="mt-3 p-3 logistics-card border-secondary text-center" style="background: rgba(0, 230, 118, 0.05); padding: 15px !important;">
-                            <div class="fw-bold text-success mb-2"><i class="bi bi-shield-check me-1"></i> สรุปข้อมูลประกันสังคมนำส่ง</div>
-                            <div class="d-flex justify-content-center gap-4 flex-wrap">
-                                <div><small class="text-muted">ส่วนของลูกจ้าง (หักจากเงินเดือน):</small> <span id="sso_emp_show" class="fw-bold text-danger ms-1 fs-6">0.00</span> <small class="text-muted">บาท</small></div>
-                                <div class="vr bg-secondary opacity-50 d-none d-sm-block"></div>
-                                <div><small class="text-muted">ส่วนของนายจ้าง (บริษัทสมทบ):</small> <span id="sso_employer_show" class="fw-bold text-success ms-1 fs-6">0.00</span> <small class="text-muted">บาท</small></div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 text-end">
-                            <button type="button" class="btn btn-secondary rounded-pill px-5 me-2" data-bs-dismiss="modal">ยกเลิก</button>
-                            <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm" id="btnSubmitPayroll"><i class="bi bi-save-fill me-2"></i>บันทึกและออกสลิปเงินเดือน</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal สำหรับดูประวัติเงินเดือนย้อนหลัง -->
-    <div class="modal fade" id="payrollHistoryModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content logistics-modal border-warning border-opacity-50">
-                <div class="modal-header py-3 logistics-modal-header">
-                    <h5 class="modal-title text-warning fw-bold"><i class="bi bi-clock-history me-2"></i>ประวัติสลิปเงินเดือน</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-dark table-striped table-hover mb-0 align-middle">
-                            <thead>
-                                <tr>
-                                    <th class="ps-4">เดือนที่จ่าย</th>
-                                    <th class="text-end">รวมรับ</th>
-                                    <th class="text-end">รวมหัก</th>
-                                    <th class="text-end text-warning">สุทธิ</th>
-                                    <th class="text-center">PDF</th>
-                                    <th class="text-center pe-4">จัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="payrollHistoryBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal สำหรับแก้ไข/จัดการพนักงานในมุมมอง Admin -->
+    <!-- Modal สำหรับจัดการข้อมูลพนักงาน (ปรับใหม่แบบ Logistics Theme) -->
     <div class="modal fade" id="empModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content logistics-modal">
                 <div class="modal-header py-3 logistics-modal-header">
                     <h5 class="modal-title fw-bold fs-5 text-warning" id="modalTitle">
-                        <i class="bi bi-person-vcard me-2"></i>ระบบจัดการบุคลากร (HR Portal)
+                        <i class="bi bi-person-vcard me-2"></i>ระบบจัดการบุคลากร
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -816,47 +547,98 @@
                                 
                                 <!-- Edit Mode -->
                                 <div id="editModeSection" style="display:none;">
-                                    <div class="row g-3">
+                                    <div class="row g-4">
                                         <!-- Section 1: ข้อมูลระบบ -->
                                         <div class="col-12">
-                                            <div class="logistics-card">
-                                                <div class="logistics-section-title"><i class="bi bi-shield-lock-fill"></i> ข้อมูลระบบ (System Info)</div>
+                                            <div class="logistics-card p-3 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                                                <div class="logistics-section-title text-warning mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                                    <i class="bi bi-shield-lock-fill me-2"></i>ข้อมูลระบบ (System Info)
+                                                </div>
                                                 <div class="row g-3">
                                                     <div class="col-md-3">
-                                                        <label class="label-logistics">รหัสพนักงาน</label>
+                                                        <label class="small text-muted mb-1 fw-bold">รหัสพนักงาน</label>
                                                         <div class="input-group input-group-sm">
-                                                            <input type="text" class="form-control input-dark fw-bold text-warning" id="empId" required>
-                                                            <button type="button" class="btn btn-warning fw-bold" id="btnGenId" onclick="window.genId()">Gen</button>
+                                                            <input type="text" class="form-control bg-dark text-warning border-secondary fw-bold" id="empId" required>
+                                                            <button type="button" class="btn btn-warning fw-bold px-3" id="btnGenId" onclick="window.genId()">Gen</button>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="label-logistics">Role การใช้งาน</label>
-                                                        <select class="form-select input-dark form-select-sm" id="role">
-                                                            <option>User</option>
-                                                            <option>Admin</option>
-                                                            <option>Viewer</option>
+                                                        <label class="small text-muted mb-1 fw-bold">Role การใช้งาน</label>
+                                                        <select class="form-select form-select-sm bg-dark text-light border-secondary" id="role">
+                                                            <option>User</option><option>Admin</option><option>Viewer</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="label-logistics">Username</label>
-                                                        <input type="text" class="form-control input-dark form-control-sm font-monospace" id="username" required>
+                                                        <label class="small text-muted mb-1 fw-bold">Username</label>
+                                                        <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="username" required>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="label-logistics">Password</label>
-                                                        <input type="text" class="form-control input-dark form-control-sm font-monospace" id="password" required>
+                                                        <label class="small text-muted mb-1 fw-bold">Password</label>
+                                                        <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="password" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section 2: สถานะและการจ้างงาน -->
+                                        <div class="col-12">
+                                            <div class="logistics-card p-3 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                                                <div class="logistics-section-title text-info mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                                    <i class="bi bi-briefcase-fill me-2"></i>สถานะและการจ้างงาน
+                                                </div>
+                                                <div class="row g-3">
+                                                    <div class="col-md-3">
+                                                        <label class="small text-danger mb-1 fw-bold">สถานะพนักงาน</label>
+                                                        <select class="form-select form-select-sm bg-dark text-danger border-danger fw-bold" id="empStatus" onchange="window.toggleResignDate()">
+                                                            <option value="Active">Active (ปกติ)</option>
+                                                            <option value="Suspended">Suspended (พักงาน)</option>
+                                                            <option value="Resigned">Resigned (ลาออก)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="small text-danger mb-1 fw-bold">วันที่ลาออก</label>
+                                                        <input type="date" class="form-control form-control-sm bg-dark text-light border-danger" id="resignDate" disabled>
+                                                    </div>
+                                                    <div class="col-md-6" id="divResignReason" style="display:none;">
+                                                        <label class="small text-danger mb-1 fw-bold">เหตุผลที่ลาออก</label>
+                                                        <input type="text" class="form-control form-control-sm bg-dark text-light border-danger" id="resignReason" placeholder="ระบุสาเหตุ...">
+                                                    </div>
+                                                    
+                                                    <div class="col-12"><hr class="my-1 border-secondary opacity-25"></div>
+
+                                                    <div class="col-md-3">
+                                                        <label class="small text-info mb-1 fw-bold">สิทธิ์ประกันสังคม</label>
+                                                        <select class="form-select form-select-sm bg-dark text-info border-secondary fw-bold" id="ssoType">
+                                                            <option value="">- เลือก -</option>
+                                                            <option value="มาตรา 33">มาตรา 33</option>
+                                                            <option value="มาตรา 39">มาตรา 39/40</option>
+                                                            <option value="ไม่เข้าประกันสังคม">ไม่เข้าประกันสังคม</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <label class="small text-info mb-1 fw-bold">โรงพยาบาลประกันสังคม</label>
+                                                        <select class="form-select form-select-sm bg-dark text-light border-secondary" id="ssoHosp">
+                                                            <option value="">Loading...</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="small text-success mb-1 fw-bold">วันเริ่มงาน</label>
+                                                        <input type="date" class="form-control form-control-sm bg-dark text-light border-secondary" id="startDate" required>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         
-                                        <!-- Section 2: ข้อมูลส่วนตัว -->
+                                        <!-- Section 3: ข้อมูลส่วนตัว -->
                                         <div class="col-12">
-                                            <div class="logistics-card">
-                                                <div class="logistics-section-title text-success"><i class="bi bi-person-fill"></i> ข้อมูลส่วนตัว (Personal Info)</div>
+                                            <div class="logistics-card p-3 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                                                <div class="logistics-section-title text-success mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                                    <i class="bi bi-person-fill me-2"></i>ข้อมูลส่วนตัว (Personal Info)
+                                                </div>
                                                 <div class="row g-3">
                                                     <div class="col-md-2">
-                                                        <label class="label-logistics">คำนำหน้า</label>
-                                                        <select class="form-select input-dark form-select-sm" id="prefix">
+                                                        <label class="small text-muted mb-1 fw-bold">คำนำหน้า</label>
+                                                        <select class="form-select form-select-sm bg-dark text-light border-secondary" id="prefix">
                                                             <option value="">-ระบุ-</option>
                                                             <option value="นาย">นาย</option>
                                                             <option value="นาง">นาง</option>
@@ -864,20 +646,21 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <label class="label-logistics">ชื่อ-นามสกุล (จริง)</label>
-                                                        <input type="text" class="form-control input-dark form-control-sm fw-bold" id="fullname" required>
+                                                        <label class="small text-muted mb-1 fw-bold">ชื่อ-นามสกุล (จริง) *</label>
+                                                        <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary fw-bold" id="fullname" required>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="label-logistics text-success">ชื่อเล่น</label>
-                                                        <input type="text" class="form-control input-dark form-control-sm" id="nickname">
+                                                        <label class="small text-success mb-1 fw-bold">ชื่อเล่น</label>
+                                                        <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" id="nickname">
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="label-logistics text-success">เบอร์โทรศัพท์</label>
-                                                        <input type="text" class="form-control input-dark form-control-sm font-monospace" id="phone">
+                                                        <label class="small text-success mb-1 fw-bold">เบอร์โทรศัพท์</label>
+                                                        <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="phone">
                                                     </div>
+                                                    
                                                     <div class="col-md-4">
-                                                        <label class="label-logistics">เพศ</label>
-                                                        <select class="form-select input-dark form-select-sm" id="gender">
+                                                        <label class="small text-muted mb-1 fw-bold">เพศ</label>
+                                                        <select class="form-select form-select-sm bg-dark text-light border-secondary" id="gender">
                                                             <option value="">- ระบุ -</option>
                                                             <option value="ชาย">ชาย</option>
                                                             <option value="หญิง">หญิง</option>
@@ -885,98 +668,68 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <label class="label-logistics">วันเดือนปีเกิด</label>
-                                                        <input type="date" class="form-control input-dark form-control-sm" id="birthDate">
+                                                        <label class="small text-muted mb-1 fw-bold">วันเดือนปีเกิด</label>
+                                                        <input type="date" class="form-control form-control-sm bg-dark text-light border-secondary" id="birthDate">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Section 3: ข้อมูลการทำงานและประกันสังคม -->
+                                        <!-- Section 4: ข้อมูลบัตรและใบขับขี่ -->
                                         <div class="col-12">
-                                            <div class="logistics-card">
-                                                <div class="logistics-section-title text-info"><i class="bi bi-briefcase-fill"></i> ข้อมูลการจ้างงาน (Employment Info)</div>
-                                                <div class="row g-3">
-                                                    <div class="col-md-3">
-                                                        <label class="label-logistics">วันเริ่มงาน</label>
-                                                        <input type="date" class="form-control input-dark form-control-sm" id="startDate" required>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="logistics-card p-3 h-100 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                                                        <div class="logistics-section-title text-white mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                                            <i class="bi bi-person-vcard me-2 text-info"></i>บัตรประชาชน
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="small text-muted mb-1 fw-bold">เลขบัตรประชาชน 13 หลัก</label>
+                                                            <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary font-monospace" id="idCardNum" placeholder="x-xxxx-xxxxx-xx-x">
+                                                        </div>
+                                                        <div>
+                                                            <label class="small text-muted mb-1 fw-bold">วันหมดอายุบัตรประชาชน</label>
+                                                            <input type="date" class="form-control form-control-sm bg-dark text-light border-secondary" id="idExp">
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <label class="label-logistics text-danger">สถานะพนักงาน</label>
-                                                        <select class="form-select input-dark border-danger text-danger fw-bold form-select-sm" id="empStatus" onchange="window.toggleResignDate()">
-                                                            <option value="Active">Active (ปกติ)</option>
-                                                            <option value="Suspended">Suspended (พักงาน)</option>
-                                                            <option value="Resigned">Resigned (ลาออก)</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <label class="label-logistics text-danger">วันที่ลาออก</label>
-                                                        <input type="date" class="form-control input-dark border-danger form-control-sm" id="resignDate" disabled>
-                                                    </div>
-                                                    <div class="col-md-3" id="divResignReason" style="display:none;">
-                                                        <label class="label-logistics text-danger">เหตุผลที่ลาออก</label>
-                                                        <input type="text" class="form-control input-dark border-danger form-control-sm" id="resignReason" placeholder="ระบุสาเหตุ...">
-                                                    </div>
-                                                    
-                                                    <div class="col-12"><hr class="my-2 border-secondary opacity-50"></div>
-                                                    
-                                                    <div class="col-md-4">
-                                                        <label class="label-logistics text-info">สิทธิ์ประกันสังคม</label>
-                                                        <select class="form-select input-dark text-info fw-bold form-select-sm" id="ssoType">
-                                                            <option value="">- เลือก -</option>
-                                                            <option value="มาตรา 33">มาตรา 33</option>
-                                                            <option value="มาตรา 39">มาตรา 39/40</option>
-                                                            <option value="ไม่เข้าประกันสังคม">ไม่เข้าประกันสังคม</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <label class="label-logistics text-info">โรงพยาบาล</label>
-                                                        <select class="form-select input-dark form-select-sm" id="ssoHosp">
-                                                            <option value="">Loading...</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-12 mt-4">
-                                                        <label class="label-logistics text-white mb-2"><i class="bi bi-diagram-3-fill me-1"></i> ตำแหน่ง (เลือกได้หลายข้อ)</label>
-                                                        <div id="positionCheckboxList" class="pos-checkbox-wrapper">
-                                                            <small class="text-muted">Loading...</small>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="logistics-card p-3 h-100 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                                                        <div class="logistics-section-title text-white mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                                            <i class="bi bi-car-front me-2 text-info"></i>ใบอนุญาตขับขี่
+                                                        </div>
+                                                        <div class="row g-2">
+                                                            <div class="col-6 mb-2">
+                                                                <label class="small text-warning mb-1 fw-bold">ประเภท</label>
+                                                                <select class="form-select form-select-sm bg-dark text-light border-warning" id="licType">
+                                                                    <option value="">- เลือกประเภท -</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label class="small text-warning mb-1 fw-bold">เลขที่ใบขับขี่</label>
+                                                                <input type="text" class="form-control form-control-sm bg-dark text-light border-warning font-monospace" id="licNum" placeholder="ระบุเลขที่">
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <label class="small text-warning mb-1 fw-bold">วันหมดอายุใบขับขี่</label>
+                                                                <input type="date" class="form-control form-control-sm bg-dark text-warning fw-bold border-warning" id="licExp">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Section 4: ข้อมูลรถยนต์ และใบขับขี่ -->
+                                        <!-- Section 5: ตำแหน่งงาน -->
                                         <div class="col-12">
-                                            <div class="logistics-card border-warning border-opacity-50">
-                                                <div class="logistics-section-title text-warning"><i class="bi bi-card-heading"></i> ข้อมูลเอกสารประจำตัว & ใบขับขี่</div>
-                                                <div class="row g-3">
-                                                    <div class="col-md-6">
-                                                        <label class="label-logistics">เลขบัตรประชาชน 13 หลัก</label>
-                                                        <input type="text" class="form-control input-dark form-control-sm font-monospace" id="idCardNum" placeholder="x-xxxx-xxxxx-xx-x">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="label-logistics">วันหมดอายุบัตรประชาชน</label>
-                                                        <input type="date" class="form-control input-dark form-control-sm" id="idExp">
-                                                    </div>
-                                                    <div class="col-12"><hr class="my-2 border-warning opacity-25"></div>
-                                                    <div class="col-md-4">
-                                                        <label class="label-logistics text-warning">ประเภทใบขับขี่</label>
-                                                        <select class="form-select input-dark border-warning form-select-sm" id="licType">
-                                                            <option value="">- เลือกประเภท -</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="label-logistics text-warning">เลขที่ใบขับขี่</label>
-                                                        <input type="text" class="form-control input-dark border-warning form-control-sm font-monospace" id="licNum" placeholder="ระบุเลขที่">
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="label-logistics text-warning">วันหมดอายุใบขับขี่</label>
-                                                        <input type="date" class="form-control input-dark border-warning form-control-sm text-warning fw-bold" id="licExp">
-                                                    </div>
+                                            <div class="logistics-card p-3 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                                                <div class="logistics-section-title text-white mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                                    <i class="bi bi-diagram-3-fill me-2 text-info"></i>ตำแหน่ง (เลือกได้หลายข้อ)
+                                                </div>
+                                                <div id="positionCheckboxList" class="checkbox-list small p-3 rounded" style="background: rgba(0,0,0,0.5); border: 1px solid #444; max-height: 180px; overflow-y: auto;">
+                                                    <small class="text-muted">Loading...</small>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -1043,6 +796,246 @@
         </div>
     </div>
 
+    <!-- Modal สำหรับสร้างสลิปเงินเดือน (Payroll) -->
+    <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content logistics-modal">
+                <div class="modal-header py-3 logistics-modal-header">
+                    <h5 class="modal-title fw-bold fs-5 text-warning">
+                        <i class="bi bi-cash-stack me-2"></i>จัดทำสลิปเงินเดือน
+                    </h5>
+                    <div class="form-check form-switch ms-4 mb-0" id="keepPrevDataContainer">
+                        <input class="form-check-input border-warning" type="checkbox" id="keepPrevData" onchange="window.toggleKeepData()" style="cursor:pointer;">
+                        <label class="form-check-label text-warning small ms-1" for="keepPrevData" style="cursor:pointer; padding-top:2px;">ดึงประวัติ ดึงทุกช่องอัตโนมัติ</label>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 bg-black bg-opacity-50">
+                    <form id="payrollForm" onsubmit="window.submitPayrollForm(event)">
+                        <input type="hidden" id="pr_empId">
+                        <input type="hidden" id="pr_prefix">
+                        <input type="hidden" id="pr_firstName">
+                        <input type="hidden" id="pr_lastName">
+                        <input type="hidden" id="pr_position">
+                        <input type="hidden" id="pr_email">
+                        
+                        <div class="logistics-card p-3 mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="label-logistics">พนักงาน</label>
+                                    <div class="text-white fw-bold fs-5 text-truncate" id="pr_empName">...</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="label-logistics">วันที่จ่ายเงิน *</label>
+                                    <input type="date" class="form-control input-dark" id="pr_payDate" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="label-logistics text-success">เงินเดือน ค่าจ้าง (บาท) *</label>
+                                    <input type="number" class="form-control bg-dark text-success fw-bold border-success fs-5 text-end" id="pr_baseSalary" oninput="window.calcPayrollTotals();" required step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <!-- ฝั่งรายได้ -->
+                            <div class="col-md-6">
+                                <div class="logistics-card h-100 mb-0">
+                                    <div class="logistics-section-title text-success"><i class="bi bi-plus-circle"></i> รายได้ (Income)</div>
+                                    <div class="row g-2">
+                                        <!-- โชว์ช่องประกันสังคมออกให้ ให้อ่านอย่างเดียว คำนวณออโต้ -->
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ประกันสังคม (ออกให้)</span></span>
+                                                <input type="number" id="pr_inc1" class="form-control payroll-input text-warning" readonly step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่าเที่ยว</span></span>
+                                                <input type="number" id="pr_inc2" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc2')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่ายกชน</span></span>
+                                                <input type="number" id="pr_inc3" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc3')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่าดูแลลูกพ่วง/หาง</span></span>
+                                                <input type="number" id="pr_inc4" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc4')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>เบี้ยขยัน</span></span>
+                                                <input type="number" id="pr_inc5" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc5')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>เบี้ยพิเศษ</span></span>
+                                                <input type="number" id="pr_inc6" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc6')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>เงินเบี้ยเลี้ยง</span></span>
+                                                <input type="number" id="pr_inc7" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc7')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่าล่วงเวลา</span></span>
+                                                <input type="number" id="pr_inc8" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc8')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>รายได้อื่นๆ</span></span>
+                                                <input type="number" id="pr_inc9" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc9')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-none">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>อื่นๆ</span></span>
+                                                <input type="number" id="pr_inc10" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc10')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ฝั่งรายการหัก -->
+                            <div class="col-md-6">
+                                <div class="logistics-card h-100 mb-0">
+                                    <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
+                                    <div class="row g-2">
+                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% (ไร้ Checkbox) -->
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ภาษีหัก ณ ที่จ่าย (1%)</span></span>
+                                                <input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ประกันสังคม</span></span>
+                                                <input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>เงินประกัน</span></span>
+                                                <input type="number" id="pr_dec3" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec3')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>เงินเบิกล่วงหน้า</span></span>
+                                                <input type="number" id="pr_dec4" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec4')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่าไฟ</span></span>
+                                                <input type="number" id="pr_dec5" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec5')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่าผ่อนโทรศัพท์</span></span>
+                                                <input type="number" id="pr_dec6" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec6')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>เงินกู้ยืม</span></span>
+                                                <input type="number" id="pr_dec7" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec7')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่าเสียหายรถ</span></span>
+                                                <input type="number" id="pr_dec8" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec8')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่างวดรถส่วนตัว</span></span>
+                                                <input type="number" id="pr_dec9" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec9')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ค่าค้างตู้</span></span>
+                                                <input type="number" id="pr_dec10" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec10')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-3 logistics-card border-warning text-center shadow-lg">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <small class="text-success d-block fw-bold mb-1">รวมรายได้ (บาท)</small>
+                                    <h3 class="text-white fw-bold mb-0" id="pr_totalIncomeShow">0.00</h3>
+                                </div>
+                                <div class="col-md-4 border-start border-end border-secondary">
+                                    <small class="text-danger d-block fw-bold mb-1">รวมรายการหัก (บาท)</small>
+                                    <h3 class="text-white fw-bold mb-0" id="pr_totalDeductShow">0.00</h3>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-warning d-block fw-bold mb-1">รายได้สุทธิ (Net)</small>
+                                    <h2 class="text-warning fw-bold mb-0" id="pr_netSalaryShow" style="text-shadow: 0 0 10px rgba(255,193,7,0.3);">0.00</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- เพิ่มส่วนสรุปประกันสังคมด้านล่าง -->
+                        <div class="mt-3 p-3 logistics-card border-secondary text-center" style="background: rgba(0, 230, 118, 0.05); padding: 15px !important;">
+                            <div class="fw-bold text-success mb-2"><i class="bi bi-shield-check me-1"></i> สรุปข้อมูลประกันสังคมนำส่ง</div>
+                            <div class="d-flex justify-content-center gap-4 flex-wrap">
+                                <div><small class="text-muted">ส่วนของลูกจ้าง (หักจากเงินเดือน):</small> <span id="sso_emp_show" class="fw-bold text-danger ms-1 fs-6">0.00</span> <small class="text-muted">บาท</small></div>
+                                <div class="vr bg-secondary opacity-50 d-none d-sm-block"></div>
+                                <div><small class="text-muted">ส่วนของนายจ้าง (บริษัทสมทบ):</small> <span id="sso_employer_show" class="fw-bold text-success ms-1 fs-6">0.00</span> <small class="text-muted">บาท</small></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-secondary rounded-pill px-5 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                            <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm" id="btnSubmitPayroll"><i class="bi bi-save-fill me-2"></i>บันทึกและออกสลิปเงินเดือน</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- โค้ด Modal ย่อย (Birthday, Position, Yearly, Accident, Warning) ซ่อนไว้เพราะยาวเกินไป -->
     <div class="modal fade" id="birthdayModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border border-secondary" style="background: #1a1a1a;"><div class="modal-header border-bottom border-secondary border-opacity-25 py-2"><h5 class="modal-title text-warning fs-6 fw-bold"><i class="bi bi-cake2 me-2"></i>พนักงานที่เกิดเดือนนี้</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3" id="birthdayListBody" style="max-height: 400px; overflow-y: auto;"></div></div></div></div>
     <div class="modal fade" id="positionStatsModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-xl"><div class="modal-content border border-secondary" style="background: #1a1a1a;"><div class="modal-header border-bottom border-secondary border-opacity-25 py-2"><h5 class="modal-title text-success fs-6 fw-bold"><i class="bi bi-pie-chart me-2"></i>สรุปตำแหน่ง</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3" id="positionStatsList"></div></div></div></div>
@@ -1056,7 +1049,6 @@
 
     <script>
         window.switchAdminTab = function(tab) {
-            // ซ่อน Section ทั้งหมด
             document.getElementById('btnTabEmp').classList.remove('active');
             document.getElementById('btnTabAcc').classList.remove('active');
             document.getElementById('btnTabWarn').classList.remove('active');
@@ -1067,7 +1059,6 @@
             document.getElementById('section-admin-warn').classList.add('d-none');
             document.getElementById('section-admin-payroll').classList.add('d-none');
             
-            // รีเซ็ตค่า Input ค้นหาทุกครั้งที่เปลี่ยนแท็บ
             var searchEmp = document.getElementById('searchInput'); if(searchEmp) searchEmp.value = '';
             var searchAcc = document.getElementById('searchAccidentInput'); if(searchAcc) searchAcc.value = '';
             var searchWarn = document.getElementById('searchWarnInput'); if(searchWarn) searchWarn.value = '';
