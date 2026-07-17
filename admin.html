@@ -95,11 +95,22 @@
 
     .dropdown-menu-dark { background-color: #202020; border-color: rgba(255,255,255,0.1); font-size: 0.85rem; }
     .dropdown-item:hover { background-color: rgba(0, 230, 118, 0.2); color: #fff; }
-
+    
     .payroll-input { background: rgba(0,0,0,0.5) !important; color: #00E676 !important; font-weight: bold; border-color: rgba(255,255,255,0.2) !important; text-align: right; }
     .payroll-input:focus { border-color: #00E676 !important; box-shadow: none !important; }
     .payroll-dec { color: #ff4d4d !important; }
     .lbl-fit { font-size: 0.75rem; width: 140px; text-align: left; padding: 0.375rem 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; }
+
+    /* --- Theme โลจิสติกส์ สำหรับฟอร์มพนักงาน --- */
+    .logistics-modal { border: 1px solid #ffc107; background: #121212 !important; }
+    .logistics-modal-header { background: linear-gradient(90deg, #1a1a1a 0%, #2c2c2c 100%); border-bottom: 2px solid #ffc107; }
+    .logistics-section-title { font-size: 0.9rem; font-weight: 700; color: #ffc107; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; }
+    .logistics-section-title i { font-size: 1.2rem; margin-right: 8px; }
+    .logistics-card { background: rgba(25, 25, 25, 0.8); border: 1px solid #333; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+    .input-dark { background-color: #0a0a0a !important; border: 1px solid #444 !important; color: #e0e0e0 !important; font-size: 0.9rem; }
+    .input-dark:focus { border-color: #ffc107 !important; box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25) !important; }
+    .input-dark:disabled, .input-dark[readonly] { background-color: #1a1a1a !important; color: #777 !important; border-color: #333 !important; }
+    .label-logistics { color: #aaa; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; }
   </style>
 
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 stagger-1">
@@ -119,7 +130,7 @@
     
     <div class="d-flex gap-2">
         <button class="btn btn-sm btn-dark border-secondary text-light rounded-pill px-3 admin-only hover-scale" onclick="if(typeof window.openRecruitModal === 'function') window.openRecruitModal();" style="display:none;"><i class="bi bi-file-earmark-person me-1"></i>ใบสมัคร</button>
-        <button class="btn btn-sm btn-success rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="window.openModal('create')" style="display:none;"><i class="bi bi-plus-lg me-1"></i>เพิ่มพนักงาน</button>
+        <button class="btn btn-sm btn-warning rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="window.openModal('create')" style="display:none;"><i class="bi bi-person-plus-fill me-1"></i>เพิ่มพนักงานใหม่</button>
         <button class="btn btn-sm btn-outline-danger rounded-pill px-2 hover-scale" onclick="window.logout()" title="ออกจากระบบ"><i class="bi bi-power"></i></button>
     </div>
   </div>
@@ -281,7 +292,6 @@
       </div>
   </div>
 
-  <!-- โซน: ระบบจัดการเงินเดือน (Payroll) -->
   <div id="section-admin-payroll" class="d-none">
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
           <div class="d-flex gap-2">
@@ -316,13 +326,11 @@
       </div>
   </div>
 
-  <!-- Modal สำหรับสร้างสลิปเงินเดือน (Payroll) -->
   <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
       <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-          <div class="modal-content border border-warning border-opacity-50" style="background: #1a1a1a;">
-              <div class="modal-header border-bottom border-warning border-opacity-25 py-3">
+          <div class="modal-content border border-warning border-opacity-50 logistics-modal">
+              <div class="modal-header py-3 logistics-modal-header">
                   <h5 class="modal-title text-warning fw-bold mb-0"><i class="bi bi-cash-stack me-2"></i>จัดทำสลิปเงินเดือน</h5>
-                  <!-- สวิตช์เปิดปิด ดึงข้อมูลเก่า -->
                   <div class="form-check form-switch ms-4 mb-0" id="keepPrevDataContainer">
                       <input class="form-check-input border-warning" type="checkbox" id="keepPrevData" onchange="window.toggleKeepData()" style="cursor:pointer;">
                       <label class="form-check-label text-warning small ms-1" for="keepPrevData" style="cursor:pointer; padding-top:2px;">ดึงประวัติรายได้/หัก เดือนล่าสุดมาใช้</label>
@@ -338,25 +346,24 @@
                       <input type="hidden" id="pr_position">
                       <input type="hidden" id="pr_email">
                       
-                      <div class="row g-3 mb-4 bg-black bg-opacity-25 p-3 rounded border border-secondary border-opacity-25">
+                      <div class="row g-3 mb-4 bg-black bg-opacity-50 p-3 rounded border border-secondary border-opacity-50">
                           <div class="col-md-4">
-                              <label class="small text-muted mb-1">พนักงาน</label>
+                              <label class="label-logistics">พนักงาน</label>
                               <div class="text-white fw-bold fs-5 text-truncate" id="pr_empName">...</div>
                           </div>
                           <div class="col-md-4">
-                              <label class="small text-muted mb-1">วันที่จ่ายเงิน *</label>
-                              <input type="date" class="form-control bg-dark text-light border-secondary" id="pr_payDate" required>
+                              <label class="label-logistics">วันที่จ่ายเงิน *</label>
+                              <input type="date" class="form-control input-dark" id="pr_payDate" required>
                           </div>
                           <div class="col-md-4">
                               <label class="small text-success fw-bold mb-1">เงินเดือน ค่าจ้าง (บาท) *</label>
-                              <input type="number" class="form-control bg-dark text-success fw-bold border-success" id="pr_baseSalary" oninput="window.calcSSO(); window.calcPayrollTotals();" required step="0.01">
+                              <input type="number" class="form-control bg-dark text-success fw-bold border-success text-end fs-5" id="pr_baseSalary" oninput="window.calcSSO(); window.calcPayrollTotals();" required step="0.01">
                           </div>
                       </div>
 
                       <div class="row g-4">
-                          <!-- ฝั่งรายได้ -->
                           <div class="col-md-6">
-                              <h6 class="text-success border-bottom border-success border-opacity-25 pb-2 mb-3"><i class="bi bi-plus-circle me-1"></i>รายได้ (Income)</h6>
+                              <h6 class="text-success border-bottom border-success border-opacity-25 pb-2 mb-3 fw-bold"><i class="bi bi-plus-circle me-1"></i>รายได้ (Income)</h6>
                               <div class="row g-2">
                                   <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ประกันสังคม (ออกให้)</span><input type="number" id="pr_inc1" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
                                   <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่าเที่ยว</span><input type="number" id="pr_inc2" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
@@ -370,9 +377,8 @@
                                   <div class="col-12 d-none"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">อื่นๆ</span><input type="number" id="pr_inc10" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
                               </div>
                           </div>
-                          <!-- ฝั่งรายการหัก -->
                           <div class="col-md-6">
-                              <h6 class="text-danger border-bottom border-danger border-opacity-25 pb-2 mb-3"><i class="bi bi-dash-circle me-1"></i>รายการหัก (Deduction)</h6>
+                              <h6 class="text-danger border-bottom border-danger border-opacity-25 pb-2 mb-3 fw-bold"><i class="bi bi-dash-circle me-1"></i>รายการหัก (Deduction)</h6>
                               <div class="row g-2">
                                   <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ภาษีหัก ณ ที่จ่าย</span><input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
                                   <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ประกันสังคม</span><input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
@@ -388,26 +394,26 @@
                           </div>
                       </div>
 
-                      <div class="mt-4 p-3 bg-dark border border-warning rounded">
+                      <div class="mt-4 p-3 bg-black border border-warning rounded shadow-sm">
                           <div class="row text-center">
                               <div class="col-md-4">
-                                  <small class="text-success d-block">รวมรายได้ (บาท)</small>
-                                  <h4 class="text-white fw-bold mb-0" id="pr_totalIncomeShow">0.00</h4>
+                                  <small class="text-success d-block fw-bold">รวมรายได้ (บาท)</small>
+                                  <h3 class="text-white fw-bold mb-0" id="pr_totalIncomeShow">0.00</h3>
                               </div>
                               <div class="col-md-4 border-start border-end border-secondary">
-                                  <small class="text-danger d-block">รวมรายการหัก (บาท)</small>
-                                  <h4 class="text-white fw-bold mb-0" id="pr_totalDeductShow">0.00</h4>
+                                  <small class="text-danger d-block fw-bold">รวมรายการหัก (บาท)</small>
+                                  <h3 class="text-white fw-bold mb-0" id="pr_totalDeductShow">0.00</h3>
                               </div>
                               <div class="col-md-4">
-                                  <small class="text-warning d-block">รายได้สุทธิ (Net)</small>
-                                  <h3 class="text-warning fw-bold mb-0" id="pr_netSalaryShow">0.00</h3>
+                                  <small class="text-warning d-block fw-bold">รายได้สุทธิ (Net)</small>
+                                  <h2 class="text-warning fw-bold mb-0" id="pr_netSalaryShow" style="text-shadow: 0 0 10px rgba(255,193,7,0.3);">0.00</h2>
                               </div>
                           </div>
                       </div>
 
                       <div class="mt-4 text-end">
                           <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
-                          <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold" id="btnSubmitPayroll">บันทึกและออกสลิปเงินเดือน</button>
+                          <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold" id="btnSubmitPayroll"><i class="bi bi-save me-2"></i>บันทึกและออกสลิปเงินเดือน</button>
                       </div>
                   </form>
               </div>
@@ -415,11 +421,10 @@
       </div>
   </div>
 
-  <!-- Modal สำหรับดูประวัติเงินเดือนย้อนหลัง -->
   <div class="modal fade" id="payrollHistoryModal" tabindex="-1">
       <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content border border-warning border-opacity-50" style="background: #1a1a1a;">
-              <div class="modal-header border-bottom border-warning border-opacity-25 py-3">
+          <div class="modal-content border border-warning border-opacity-50 logistics-modal">
+              <div class="modal-header py-3 logistics-modal-header">
                   <h5 class="modal-title text-warning fw-bold"><i class="bi bi-clock-history me-2"></i>ประวัติสลิปเงินเดือน</h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
               </div>
@@ -542,8 +547,8 @@
 
   <div class="modal fade" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static">
       <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content border border-danger border-opacity-50" style="background: #1a1a1a;">
-              <div class="modal-header border-bottom border-danger border-opacity-25 py-2">
+          <div class="modal-content border border-danger border-opacity-50 logistics-modal">
+              <div class="modal-header py-3 logistics-modal-header">
                   <h5 class="modal-title text-danger fs-6 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>ออกใบเตือนพนักงาน</h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
               </div>
@@ -551,33 +556,33 @@
                   <form id="warningForm" onsubmit="window.submitWarningForm(event)">
                       <div class="row g-3">
                           <div class="col-md-12">
-                              <label class="small text-muted mb-1">พนักงานที่กระทำผิด *</label>
-                              <input type="text" class="form-control bg-dark text-light border-secondary" id="warnEmpInput" list="warnEmpOptions" placeholder="ค้นหาชื่อ หรือ รหัสพนักงาน..." autocomplete="off" required>
+                              <label class="label-logistics">พนักงานที่กระทำผิด *</label>
+                              <input type="text" class="form-control input-dark" id="warnEmpInput" list="warnEmpOptions" placeholder="ค้นหาชื่อ หรือ รหัสพนักงาน..." autocomplete="off" required>
                               <datalist id="warnEmpOptions"></datalist>
                           </div>
                           <div class="col-md-6">
-                              <label class="small text-muted mb-1">วันที่ออกใบเตือน *</label>
-                              <input type="date" class="form-control bg-dark text-light border-secondary" id="warnIssueDate" required>
+                              <label class="label-logistics">วันที่ออกใบเตือน *</label>
+                              <input type="date" class="form-control input-dark" id="warnIssueDate" required>
                           </div>
                           <div class="col-md-6">
-                              <label class="small text-muted mb-1">วันที่กระทำผิด *</label>
-                              <input type="date" class="form-control bg-dark text-light border-secondary" id="warnIncidentDate" required>
+                              <label class="label-logistics">วันที่กระทำผิด *</label>
+                              <input type="date" class="form-control input-dark" id="warnIncidentDate" required>
                           </div>
                           <div class="col-12">
-                              <label class="small text-muted mb-1">ฐานความผิด (ข้อ 1) *</label>
-                              <input type="text" class="form-control bg-dark text-light border-secondary" id="warnOffense1" required>
+                              <label class="label-logistics">ฐานความผิด (ข้อ 1) *</label>
+                              <input type="text" class="form-control input-dark" id="warnOffense1" required>
                           </div>
                           <div class="col-12">
-                              <label class="small text-muted mb-1">ฐานความผิด (ข้อ 2)</label>
-                              <input type="text" class="form-control bg-dark text-light border-secondary" id="warnOffense2">
+                              <label class="label-logistics">ฐานความผิด (ข้อ 2)</label>
+                              <input type="text" class="form-control input-dark" id="warnOffense2">
                           </div>
                           <div class="col-12">
-                              <label class="small text-muted mb-1">หมายเหตุ / รายละเอียดเพิ่มเติม</label>
-                              <textarea class="form-control bg-dark text-light border-secondary" id="warnNotes" rows="2"></textarea>
+                              <label class="label-logistics">หมายเหตุ / รายละเอียดเพิ่มเติม</label>
+                              <textarea class="form-control input-dark" id="warnNotes" rows="2"></textarea>
                           </div>
                           <div class="col-md-6">
-                              <label class="small text-muted mb-1">ผู้ออกใบเตือน *</label>
-                              <select class="form-select bg-dark text-light border-secondary" id="warnIssuedBy" required>
+                              <label class="label-logistics">ผู้ออกใบเตือน *</label>
+                              <select class="form-select input-dark" id="warnIssuedBy" required>
                                   <option value="นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)">นาย กิตติศักดิ์ อุส่าห์</option>
                                   <option value="นางสาว จุฑารัตน์ แสงหงษา (HR)">นางสาว จุฑารัตน์ แสงหงษา</option>
                                   <option value="นาย วชิระ อังธนดิลก (ผู้จัดการ)">นาย วชิระ อังธนดิลก</option>
@@ -585,16 +590,16 @@
                               </select>
                           </div>
                           <div class="col-md-6">
-                              <label class="small text-muted mb-1">เอกสารแนบ (ถ้ามี)</label>
-                              <input type="text" class="form-control bg-dark text-light border-secondary" id="warnAttachments" placeholder="เช่น รูปถ่ายความเสียหาย">
+                              <label class="label-logistics">เอกสารแนบ (ถ้ามี)</label>
+                              <input type="text" class="form-control input-dark" id="warnAttachments" placeholder="เช่น รูปถ่ายความเสียหาย">
                           </div>
                           <div class="col-md-6">
-                              <label class="small text-muted mb-1">รูปหลักฐาน 1</label>
-                              <input type="file" class="form-control bg-dark text-light border-secondary" id="warnPhoto1" accept="image/*">
+                              <label class="label-logistics">รูปหลักฐาน 1</label>
+                              <input type="file" class="form-control input-dark" id="warnPhoto1" accept="image/*">
                           </div>
                           <div class="col-md-6">
-                              <label class="small text-muted mb-1">รูปหลักฐาน 2</label>
-                              <input type="file" class="form-control bg-dark text-light border-secondary" id="warnPhoto2" accept="image/*">
+                              <label class="label-logistics">รูปหลักฐาน 2</label>
+                              <input type="file" class="form-control input-dark" id="warnPhoto2" accept="image/*">
                           </div>
                       </div>
                       <div class="mt-4 text-end">
@@ -609,40 +614,40 @@
 
   <div class="modal fade" id="warningDetailModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content border border-danger border-opacity-50" style="background: #1a1a1a;">
-              <div class="modal-header border-bottom border-danger border-opacity-25 py-2">
+          <div class="modal-content border border-danger border-opacity-50 logistics-modal">
+              <div class="modal-header py-3 logistics-modal-header">
                   <h5 class="modal-title text-danger fs-6 fw-bold">แก้ไข/ตรวจสอบใบเตือน: <span id="e_warnDocNo"></span></h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body p-4">
                   <input type="hidden" id="e_warnDocNoHidden">
-                  <div class="mb-3">
+                  <div class="mb-3 p-3 bg-black rounded">
                       <span class="text-muted small">พนักงาน: </span><span id="e_warnEmpName" class="text-white fw-bold"></span>
                   </div>
                   <div class="row g-3">
                       <div class="col-md-6">
-                          <label class="small text-muted mb-1">วันที่ออกใบเตือน</label>
-                          <input type="date" class="form-control bg-dark text-light border-secondary" id="e_warnIssueDate">
+                          <label class="label-logistics">วันที่ออกใบเตือน</label>
+                          <input type="date" class="form-control input-dark" id="e_warnIssueDate">
                       </div>
                       <div class="col-md-6">
-                          <label class="small text-muted mb-1">วันที่กระทำผิด</label>
-                          <input type="date" class="form-control bg-dark text-light border-secondary" id="e_warnIncidentDate">
+                          <label class="label-logistics">วันที่กระทำผิด</label>
+                          <input type="date" class="form-control input-dark" id="e_warnIncidentDate">
                       </div>
                       <div class="col-12">
-                          <label class="small text-muted mb-1">ฐานความผิด (ข้อ 1)</label>
-                          <input type="text" class="form-control bg-dark text-light border-secondary" id="e_warnOffense1">
+                          <label class="label-logistics">ฐานความผิด (ข้อ 1)</label>
+                          <input type="text" class="form-control input-dark" id="e_warnOffense1">
                       </div>
                       <div class="col-12">
-                          <label class="small text-muted mb-1">ฐานความผิด (ข้อ 2)</label>
-                          <input type="text" class="form-control bg-dark text-light border-secondary" id="e_warnOffense2">
+                          <label class="label-logistics">ฐานความผิด (ข้อ 2)</label>
+                          <input type="text" class="form-control input-dark" id="e_warnOffense2">
                       </div>
                       <div class="col-12">
-                          <label class="small text-muted mb-1">หมายเหตุ</label>
-                          <textarea class="form-control bg-dark text-light border-secondary" id="e_warnNotes" rows="2"></textarea>
+                          <label class="label-logistics">หมายเหตุ</label>
+                          <textarea class="form-control input-dark" id="e_warnNotes" rows="2"></textarea>
                       </div>
                       <div class="col-md-6">
-                          <label class="small text-muted mb-1">ผู้ออกใบเตือน (<span id="e_warnIssuedByText" class="text-info"></span>)</label>
-                          <select class="form-select bg-dark text-light border-secondary" id="e_warnIssuedBy">
+                          <label class="label-logistics">ผู้ออกใบเตือน (<span id="e_warnIssuedByText" class="text-info"></span>)</label>
+                          <select class="form-select input-dark" id="e_warnIssuedBy">
                               <option value="นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)">นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)</option>
                               <option value="นางสาว จุฑารัตน์ แสงหงษา (HR)">นางสาว จุฑารัตน์ แสงหงษา (HR)</option>
                               <option value="นาย วชิระ อังธนดิลก (ผู้จัดการ)">นาย วชิระ อังธนดิลก (ผู้จัดการ)</option>
@@ -650,14 +655,12 @@
                           </select>
                       </div>
                       <div class="col-md-6">
-                          <label class="small text-muted mb-1">เอกสารแนบ</label>
-                          <input type="text" class="form-control bg-dark text-light border-secondary" id="e_warnAttachments">
+                          <label class="label-logistics">เอกสารแนบ</label>
+                          <input type="text" class="form-control input-dark" id="e_warnAttachments">
                       </div>
                   </div>
-                  <div class="mt-4 d-flex justify-content-between">
-                      <button type="button" class="btn btn-outline-danger rounded-pill px-4" onclick="window.deleteWarning()">
-                          <i class="bi bi-trash"></i> ลบเอกสาร
-                      </button>
+                  <div class="mt-4 d-flex justify-content-between pt-3 border-top border-secondary">
+                      <button type="button" class="btn btn-outline-danger rounded-pill px-4" onclick="window.deleteWarning()"><i class="bi bi-trash"></i> ลบเอกสาร</button>
                       <div>
                           <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
                           <button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.saveWarningResolution()">บันทึกการแก้ไข</button>
@@ -670,53 +673,51 @@
 
   <div class="modal fade" id="accidentDetailModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content border border-warning border-opacity-50" style="background: #1a1a1a;">
-              <div class="modal-header border-bottom border-warning border-opacity-25 py-2">
+          <div class="modal-content border border-warning border-opacity-50 logistics-modal">
+              <div class="modal-header py-3 logistics-modal-header">
                   <h5 class="modal-title text-warning fs-6 fw-bold">จัดการอุบัติเหตุ: <span id="m_accDocNo"></span></h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body p-4">
                   <input type="hidden" id="m_accDocNoHidden">
-                  <div class="row mb-3 text-light small bg-dark p-3 rounded mx-0">
-                      <div class="col-md-6 mb-2"><span class="text-muted">พนักงาน:</span> <span id="m_accEmpName" class="fw-bold"></span></div>
-                      <div class="col-md-6 mb-2"><span class="text-muted">วันเวลา:</span> <span id="m_accDateTime"></span></div>
-                      <div class="col-md-6 mb-2"><span class="text-muted">ยานพาหนะ:</span> <span id="m_accVehicle"></span></div>
-                      <div class="col-md-6 mb-2"><span class="text-muted">สาเหตุ:</span> <span id="m_accCause" class="text-danger"></span></div>
+                  <div class="row mb-4 text-light small bg-black p-3 rounded mx-0 border border-secondary border-opacity-25">
+                      <div class="col-md-6 mb-2"><span class="text-muted">พนักงาน:</span> <span id="m_accEmpName" class="fw-bold text-warning"></span></div>
+                      <div class="col-md-6 mb-2"><span class="text-muted">วันเวลา:</span> <span id="m_accDateTime" class="fw-bold"></span></div>
+                      <div class="col-md-6 mb-2"><span class="text-muted">ยานพาหนะ:</span> <span id="m_accVehicle" class="fw-bold text-info"></span></div>
+                      <div class="col-md-6 mb-2"><span class="text-muted">สาเหตุ:</span> <span id="m_accCause" class="fw-bold text-danger"></span></div>
                   </div>
                   
                   <div class="row g-3">
                       <div class="col-12">
-                          <label class="small text-muted mb-1">สถานที่เกิดเหตุ</label>
-                          <input type="text" class="form-control bg-dark text-light border-secondary" id="m_accLocation">
+                          <label class="label-logistics">สถานที่เกิดเหตุ</label>
+                          <input type="text" class="form-control input-dark" id="m_accLocation">
                       </div>
                       <div class="col-12">
-                          <label class="small text-muted mb-1">ความเสียหาย</label>
-                          <input type="text" class="form-control bg-dark text-light border-secondary" id="m_accDamage">
+                          <label class="label-logistics">ความเสียหาย</label>
+                          <input type="text" class="form-control input-dark" id="m_accDamage">
                       </div>
                       <div class="col-12">
-                          <label class="small text-muted mb-1">รายละเอียด</label>
-                          <textarea class="form-control bg-dark text-light border-secondary" id="m_accDetail" rows="3"></textarea>
+                          <label class="label-logistics">รายละเอียด</label>
+                          <textarea class="form-control input-dark" id="m_accDetail" rows="3"></textarea>
                       </div>
                       <div class="col-md-6">
-                          <label class="small text-muted mb-1">แนวทางการแก้ไข</label>
-                          <textarea class="form-control bg-dark text-light border-secondary" id="m_accFix" rows="2"></textarea>
+                          <label class="label-logistics text-warning">แนวทางการแก้ไข</label>
+                          <textarea class="form-control input-dark border-warning border-opacity-50" id="m_accFix" rows="3"></textarea>
                       </div>
                       <div class="col-md-6">
-                          <label class="small text-muted mb-1">ข้อปฏิบัติเพื่อป้องกัน</label>
-                          <textarea class="form-control bg-dark text-light border-secondary" id="m_accPrevent" rows="2"></textarea>
+                          <label class="label-logistics text-info">ข้อปฏิบัติเพื่อป้องกัน</label>
+                          <textarea class="form-control input-dark border-info border-opacity-50" id="m_accPrevent" rows="3"></textarea>
                       </div>
-                      <div class="col-md-12">
-                          <label class="small text-muted mb-1">สถานะเอกสาร</label>
-                          <select class="form-select bg-dark text-light border-warning" id="m_accStatus">
+                      <div class="col-md-12 mt-4 pt-3 border-top border-secondary">
+                          <label class="label-logistics">สถานะเอกสาร</label>
+                          <select class="form-select input-dark border-warning text-warning fw-bold" id="m_accStatus" style="width: 200px;">
                               <option value="รอดำเนินการ">รอดำเนินการ</option>
-                              <option value="ปิดงานเรียบร้อย">ปิดงานเรียบร้อย</option>
+                              <option value="ปิดงานเรียบร้อย" class="text-success">ปิดงานเรียบร้อย</option>
                           </select>
                       </div>
                   </div>
-                  <div class="mt-4 d-flex justify-content-between">
-                      <button type="button" class="btn btn-outline-danger rounded-pill px-4" onclick="window.deleteAccident()">
-                          <i class="bi bi-trash"></i> ลบเอกสาร
-                      </button>
+                  <div class="mt-4 d-flex justify-content-between pt-3">
+                      <button type="button" class="btn btn-outline-danger rounded-pill px-4" onclick="window.deleteAccident()"><i class="bi bi-trash"></i> ลบเอกสาร</button>
                       <div>
                           <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
                           <button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.saveAccidentResolution()">บันทึกการแก้ไข</button>
@@ -727,26 +728,27 @@
       </div>
   </div>
 
+  <!-- Modal สำหรับหน้าจัดการพนักงาน (ออกแบบใหม่ตามสไตล์ขนส่ง) -->
   <div class="modal fade" id="empModal" tabindex="-1" data-bs-backdrop="static">
       <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-          <div class="modal-content">
-              <div class="modal-header py-3 border-secondary border-opacity-25">
-                  <h5 class="modal-title fw-bold fs-5 text-success" id="modalTitle">
-                      <i class="bi bi-person-vcard me-2"></i>จัดการข้อมูล
+          <div class="modal-content logistics-modal">
+              <div class="modal-header py-3 logistics-modal-header">
+                  <h5 class="modal-title fw-bold fs-5 text-warning" id="modalTitle">
+                      <i class="bi bi-person-vcard me-2"></i>ระบบจัดการบุคลากร (HR Portal)
                   </h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
               </div>
-              <div class="modal-body p-4">
+              <div class="modal-body p-4 bg-black bg-opacity-50">
                   <form id="empForm" onsubmit="window.submitEmpForm(event)">
                       <input type="hidden" id="formMode">
                       <div class="card border-0 mb-4 bg-transparent shadow-none">
                           <div class="card-body p-0">
                               <ul class="nav nav-pills nav-fill gap-2" id="myTab" role="tablist">
                                   <li class="nav-item">
-                                      <button type="button" class="nav-link active rounded-pill small" data-bs-toggle="tab" data-bs-target="#tabInfo">1. ข้อมูลทั่วไป</button>
+                                      <button type="button" class="nav-link active rounded-pill fw-bold" data-bs-toggle="tab" data-bs-target="#tabInfo">1. ข้อมูลพนักงาน</button>
                                   </li>
                                   <li class="nav-item">
-                                      <button type="button" class="nav-link rounded-pill small" data-bs-toggle="tab" data-bs-target="#tabDocs">2. เอกสารแนบ</button>
+                                      <button type="button" class="nav-link rounded-pill fw-bold" data-bs-toggle="tab" data-bs-target="#tabDocs">2. เอกสารแนบ</button>
                                   </li>
                               </ul>
                           </div>
@@ -756,54 +758,54 @@
                               <div id="viewModeSection" style="display:none;">
                                   <div class="row g-3">
                                       <div class="col-12">
-                                          <div class="card border-0 position-relative overflow-hidden bg-black bg-opacity-25">
-                                              <div style="position:absolute; top:0; left:0; width:5px; height:100%; background:var(--accent-color);"></div>
-                                              <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3 ps-4">
+                                          <div class="logistics-card position-relative overflow-hidden p-4 mb-3">
+                                              <div style="position:absolute; top:0; left:0; width:6px; height:100%; background:#ffc107;"></div>
+                                              <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 ps-2">
                                                   <div>
-                                                      <h3 class="fw-bold text-white mb-0" id="view_fullname">...</h3>
-                                                      <div class="text-muted small mt-2 d-flex align-items-center gap-2">
-                                                          <span id="view_nickname_badge" class="badge bg-dark border border-secondary text-light fw-normal">...</span>
-                                                          <span class="text-secondary">|</span>
-                                                          <span id="view_empId" class="font-monospace fw-bold text-success fs-5">...</span>
+                                                      <h2 class="fw-bold text-white mb-1" id="view_fullname">...</h2>
+                                                      <div class="text-muted mt-2 d-flex align-items-center gap-3">
+                                                          <span id="view_nickname_badge" class="badge bg-dark border border-secondary text-warning fw-normal fs-6 px-3 py-1">...</span>
+                                                          <span class="text-secondary opacity-50">|</span>
+                                                          <span id="view_empId" class="font-monospace fw-bold text-info fs-5">...</span>
                                                       </div>
                                                   </div>
                                                   <div class="text-end">
-                                                      <span id="view_status_badge" class="badge rounded-pill fs-6 px-3 py-2">...</span>
+                                                      <span id="view_status_badge" class="badge rounded-pill fs-5 px-4 py-2">...</span>
                                                   </div>
                                               </div>
                                           </div>
                                       </div>
                                       <div class="col-lg-4">
-                                          <div class="card h-100 border-secondary border-opacity-25 bg-transparent">
-                                              <div class="card-header text-success border-secondary border-opacity-25">
-                                                  <i class="bi bi-person-lines-fill me-2"></i>ข้อมูลส่วนตัว
+                                          <div class="logistics-card h-100 p-0 overflow-hidden">
+                                              <div class="p-3 border-bottom border-secondary bg-black bg-opacity-25">
+                                                  <div class="logistics-section-title mb-0 text-success"><i class="bi bi-person-lines-fill"></i> ข้อมูลส่วนตัว</div>
                                               </div>
-                                              <div class="card-body">
-                                                  <ul class="list-group list-group-flush small bg-transparent">
-                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
-                                                          <span class="text-muted">วันเกิด:</span> <span class="fw-bold text-light" id="view_birthDate">-</span>
+                                              <div class="p-3">
+                                                  <ul class="list-group list-group-flush bg-transparent">
+                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25 text-light">
+                                                          <span class="text-muted small">วันเกิด</span> <span class="fw-bold" id="view_birthDate">-</span>
                                                       </li>
-                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
-                                                          <span class="text-muted">อายุ:</span> <span class="fw-bold text-light" id="view_age">-</span>
+                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25 text-light">
+                                                          <span class="text-muted small">อายุ</span> <span class="fw-bold" id="view_age">-</span>
                                                       </li>
-                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
-                                                          <span class="text-muted">เพศ:</span> <span class="fw-bold text-light" id="view_gender">-</span>
+                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25 text-light">
+                                                          <span class="text-muted small">เพศ</span> <span class="fw-bold" id="view_gender">-</span>
                                                       </li>
-                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
-                                                          <span class="text-muted">เบอร์โทร:</span> <span class="fw-bold text-light" id="view_phone">-</span>
+                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25 text-light">
+                                                          <span class="text-muted small">เบอร์โทร</span> <span class="fw-bold font-monospace text-info" id="view_phone">-</span>
                                                       </li>
                                                   </ul>
-                                                  <div class="mt-3 pt-3 border-top border-secondary border-opacity-25">
-                                                      <div class="mb-2">
-                                                          <small class="text-muted d-block mb-1">Username:</small>
-                                                          <span class="badge bg-dark text-light border border-secondary font-monospace fw-normal" id="view_username">-</span>
+                                                  <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
+                                                      <div class="mb-2 d-flex justify-content-between align-items-center">
+                                                          <small class="text-muted">Username</small>
+                                                          <span class="badge bg-dark text-light border border-secondary font-monospace" id="view_username">-</span>
                                                       </div>
-                                                      <div class="mb-2">
-                                                          <small class="text-muted d-block mb-1">Password:</small>
-                                                          <span class="badge bg-dark text-light border border-secondary font-monospace fw-normal" id="view_password">-</span>
+                                                      <div class="mb-2 d-flex justify-content-between align-items-center">
+                                                          <small class="text-muted">Password</small>
+                                                          <span class="badge bg-dark text-light border border-secondary font-monospace" id="view_password">-</span>
                                                       </div>
-                                                      <div class="mb-0">
-                                                          <small class="text-muted d-block mb-1">Role:</small>
+                                                      <div class="d-flex justify-content-between align-items-center">
+                                                          <small class="text-muted">Role</small>
                                                           <span class="fw-bold text-success" id="view_role">-</span>
                                                       </div>
                                                   </div>
@@ -811,57 +813,56 @@
                                           </div>
                                       </div>
                                       <div class="col-lg-4">
-                                          <div class="card h-100 border-secondary border-opacity-25 bg-transparent">
-                                              <div class="card-header text-info border-secondary border-opacity-25">
-                                                  <i class="bi bi-briefcase-fill me-2"></i>การทำงาน
+                                          <div class="logistics-card h-100 p-0 overflow-hidden">
+                                              <div class="p-3 border-bottom border-secondary bg-black bg-opacity-25">
+                                                  <div class="logistics-section-title mb-0 text-info"><i class="bi bi-briefcase-fill"></i> ข้อมูลการจ้างงาน</div>
                                               </div>
-                                              <div class="card-body">
-                                                  <div class="mb-3">
-                                                      <small class="text-muted d-block">วันเริ่มงาน:</small>
+                                              <div class="p-3">
+                                                  <div class="mb-4">
+                                                      <small class="text-muted d-block mb-1">วันเริ่มงาน</small>
                                                       <span class="fw-bold text-light fs-5" id="view_startDate">-</span>
-                                                      <div class="small text-success mt-1" id="view_tenure">-</div>
+                                                      <div class="small text-success mt-1 fw-bold" id="view_tenure">-</div>
                                                   </div>
                                                   <div class="mb-3">
-                                                      <small class="text-muted d-block">สิทธิ์ประกันสังคม:</small>
-                                                      <span class="fw-bold text-info" id="view_ssoType">-</span>
+                                                      <small class="text-muted d-block mb-1">สิทธิ์ประกันสังคม</small>
+                                                      <span class="fw-bold text-info fs-6" id="view_ssoType">-</span>
                                                   </div>
                                                   <div class="mb-3">
-                                                      <small class="text-muted d-block">โรงพยาบาล:</small>
-                                                      <span class="text-light text-break" id="view_ssoHosp">-</span>
+                                                      <small class="text-muted d-block mb-1">โรงพยาบาล</small>
+                                                      <span class="text-light fw-bold" id="view_ssoHosp">-</span>
                                                   </div>
-                                                  <div class="p-3 bg-danger bg-opacity-10 rounded border border-danger mt-3" id="view_resign_section" style="display:none;">
-                                                      <small class="text-danger fw-bold d-block">ข้อมูลการลาออก:</small>
-                                                      <div class="small text-light">วันที่: <span id="view_resignDate">-</span></div>
-                                                      <div class="small text-light">เหตุผล: <span id="view_resignReason">-</span></div>
+                                                  <div class="p-3 bg-danger bg-opacity-10 rounded border border-danger border-opacity-50 mt-4" id="view_resign_section" style="display:none;">
+                                                      <small class="text-danger fw-bold d-block mb-2"><i class="bi bi-x-circle-fill me-1"></i>ข้อมูลการลาออก</small>
+                                                      <div class="small text-light mb-1">วันที่: <span id="view_resignDate" class="fw-bold">-</span></div>
+                                                      <div class="small text-light">เหตุผล: <span id="view_resignReason" class="text-danger">-</span></div>
                                                   </div>
                                               </div>
                                           </div>
                                       </div>
                                       <div class="col-lg-4">
-                                          <div class="card mb-3 border-secondary border-opacity-25 bg-transparent">
-                                              <div class="card-header text-warning border-secondary border-opacity-25">
-                                                  <i class="bi bi-card-heading me-2"></i>ข้อมูลเอกสาร
+                                          <div class="logistics-card mb-3 p-0 overflow-hidden border-warning border-opacity-50">
+                                              <div class="p-3 border-bottom border-warning border-opacity-25 bg-black bg-opacity-25">
+                                                  <div class="logistics-section-title mb-0 text-warning"><i class="bi bi-card-heading"></i> ข้อมูลเอกสาร & ใบขับขี่</div>
                                               </div>
-                                              <div class="card-body small">
-                                                  <div class="mb-2">
-                                                      <span class="text-muted d-block">บัตรประชาชน:</span>
-                                                      <span class="fw-bold text-light" id="view_idCardNum">-</span>
-                                                      <div class="text-danger" style="font-size:0.75rem;" id="view_idExp">-</div>
+                                              <div class="p-3 small text-light">
+                                                  <div class="mb-3">
+                                                      <span class="text-muted d-block mb-1">บัตรประชาชน</span>
+                                                      <span class="fw-bold fs-6 font-monospace" id="view_idCardNum">-</span>
+                                                      <div class="text-danger mt-1" style="font-size:0.75rem;" id="view_idExp">-</div>
                                                   </div>
-                                                  <hr class="my-2 border-secondary opacity-25">
+                                                  <hr class="my-3 border-secondary opacity-25">
                                                   <div class="mb-2">
-                                                      <span class="text-muted d-block">ใบขับขี่:</span>
-                                                      <span class="fw-bold text-light" id="view_licType">-</span>
-                                                      <div class="text-light font-monospace" id="view_licNum">-</div>
+                                                      <span class="text-muted d-block mb-1">ใบอนุญาตขับขี่ <span class="badge bg-warning text-dark ms-2" id="view_licType">-</span></span>
+                                                      <div class="text-white fw-bold fs-6 font-monospace mb-1" id="view_licNum">-</div>
                                                       <div class="text-danger" style="font-size:0.75rem;" id="view_licExp">-</div>
                                                   </div>
                                               </div>
                                           </div>
-                                          <div class="card border-secondary border-opacity-25 bg-transparent">
-                                              <div class="card-header text-white border-secondary border-opacity-25">
-                                                  <i class="bi bi-diagram-3-fill me-2"></i>ตำแหน่งงาน
+                                          <div class="logistics-card p-0 overflow-hidden">
+                                              <div class="p-3 border-bottom border-secondary bg-black bg-opacity-25">
+                                                  <div class="logistics-section-title mb-0 text-white"><i class="bi bi-diagram-3-fill"></i> ตำแหน่งงาน</div>
                                               </div>
-                                              <div class="card-body">
+                                              <div class="p-3">
                                                   <div id="view_positions_badges" class="d-flex flex-wrap gap-2"></div>
                                               </div>
                                           </div>
@@ -869,207 +870,223 @@
                                   </div>
                               </div>
                               <div id="editModeSection" style="display:none;">
-                                  <div class="card border-secondary border-opacity-25 bg-transparent">
-                                      <div class="card-body">
-                                          <div class="row g-3">
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-muted mb-0">รหัสพนักงาน</label>
-                                                  <div class="input-group input-group-sm">
-                                                      <input type="text" class="form-control fw-bold" id="empId" required>
-                                                      <button type="button" class="btn btn-outline-secondary" id="btnGenId" onclick="window.genId()">
-                                                          <i class="bi bi-arrow-clockwise"></i>
-                                                      </button>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-muted mb-0">Role</label>
-                                                  <select class="form-select form-select-sm" id="role">
-                                                      <option>User</option>
-                                                      <option>Admin</option>
-                                                      <option>Viewer</option>
-                                                  </select>
-                                              </div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-muted mb-0">Username</label>
-                                                  <input type="text" class="form-control form-control-sm" id="username" required>
-                                              </div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-muted mb-0">Password</label>
-                                                  <input type="text" class="form-control form-control-sm" id="password" required>
-                                              </div>
-                                              <div class="col-12"><hr class="my-1 border-secondary opacity-25"></div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-danger fw-bold mb-0">สถานะ</label>
-                                                  <select class="form-select form-select-sm border-danger" id="empStatus" onchange="window.toggleResignDate()">
-                                                      <option value="Active">Active (ปกติ)</option>
-                                                      <option value="Suspended">Suspended (พักงาน)</option>
-                                                      <option value="Resigned">Resigned (ลาออก)</option>
-                                                  </select>
-                                              </div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-danger fw-bold mb-0">วันที่ลาออก</label>
-                                                  <input type="date" class="form-control form-control-sm border-danger" id="resignDate" disabled>
-                                              </div>
-                                              <div class="col-md-6" id="divResignReason" style="display:none;">
-                                                  <label class="form-label small text-danger fw-bold mb-0">เหตุผลที่ลาออก</label>
-                                                  <input type="text" class="form-control form-control-sm border-danger" id="resignReason" placeholder="ระบุสาเหตุ...">
-                                              </div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-info fw-bold mb-0">สิทธิ์ประกันสังคม</label>
-                                                  <select class="form-select form-select-sm text-info" id="ssoType">
-                                                      <option value="">- เลือก -</option>
-                                                      <option value="มาตรา 33">มาตรา 33</option>
-                                                      <option value="มาตรา 39">มาตรา 40</option>
-                                                      <option value="ไม่เข้าประกันสังคม">ไม่เข้าประกันสังคม</option>
-                                                  </select>
-                                              </div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-info fw-bold mb-0">โรงพยาบาล</label>
-                                                  <select class="form-select form-select-sm" id="ssoHosp">
-                                                      <option value="">Loading...</option>
-                                                  </select>
-                                              </div>
-                                              <div class="col-md-2">
-                                                  <label class="form-label small text-muted mb-0">คำนำหน้า</label>
-                                                  <select class="form-select form-select-sm" id="prefix">
-                                                      <option value="">-ระบุ-</option>
-                                                      <option value="นาย">นาย</option>
-                                                      <option value="นาง">นาง</option>
-                                                      <option value="นางสาว">นางสาว</option>
-                                                  </select>
-                                              </div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-muted mb-0">ชื่อ-นามสกุล (จริง)</label>
-                                                  <input type="text" class="form-control form-control-sm fw-bold" id="fullname" required>
-                                              </div>
-                                              <div class="col-md-3">
-                                                  <label class="form-label small text-success fw-bold mb-0">ชื่อเล่น (แก้ไขได้)</label>
-                                                  <input type="text" class="form-control form-control-sm" id="nickname">
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label class="form-label small text-muted mb-0">เพศ</label>
-                                                  <select class="form-select form-select-sm" id="gender">
-                                                      <option value="">- ระบุ -</option>
-                                                      <option value="ชาย">ชาย</option>
-                                                      <option value="หญิง">หญิง</option>
-                                                      <option value="อื่นๆ">อื่นๆ</option>
-                                                  </select>
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label class="form-label small text-muted mb-0">วันเดือนปีเกิด</label>
-                                                  <input type="date" class="form-control form-control-sm" id="birthDate">
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label class="form-label small text-muted mb-0">วันเริ่มงาน</label>
-                                                  <input type="date" class="form-control form-control-sm" id="startDate" required>
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label class="form-label small text-success fw-bold mb-0">เบอร์โทรศัพท์ (แก้ไขได้)</label>
-                                                  <input type="text" class="form-control form-control-sm" id="phone">
-                                              </div>
-                                              <div class="col-md-12 mt-2">
-                                                  <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
-                                                      <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
-                                                          <i class="bi bi-person-vcard me-2 text-info fs-5"></i>ข้อมูลบัตรประชาชน
-                                                      </label>
-                                                      <div class="row g-2">
-                                                          <div class="col-md-8">
-                                                              <input type="text" class="form-control form-control-sm" id="idCardNum" placeholder="เลขบัตรประชาชน 13 หลัก">
-                                                          </div>
-                                                          <div class="col-md-4">
-                                                              <input type="date" class="form-control form-control-sm" id="idExp" title="วันหมดอายุบัตรประชาชน">
-                                                          </div>
+                                  <div class="row g-3">
+                                      <!-- Section 1: ข้อมูลระบบ -->
+                                      <div class="col-12">
+                                          <div class="logistics-card">
+                                              <div class="logistics-section-title"><i class="bi bi-shield-lock-fill"></i> ข้อมูลระบบ (System Info)</div>
+                                              <div class="row g-3">
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics">รหัสพนักงาน</label>
+                                                      <div class="input-group input-group-sm">
+                                                          <input type="text" class="form-control input-dark fw-bold text-warning" id="empId" required>
+                                                          <button type="button" class="btn btn-warning fw-bold" id="btnGenId" onclick="window.genId()">Gen</button>
                                                       </div>
                                                   </div>
-                                              </div>
-                                              <div class="col-md-12 mt-1">
-                                                  <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
-                                                      <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
-                                                          <i class="bi bi-car-front me-2 text-info fs-5"></i>ข้อมูลใบขับขี่
-                                                      </label>
-                                                      <div class="row g-2">
-                                                          <div class="col-md-4">
-                                                              <select class="form-select form-select-sm" id="licType">
-                                                                  <option value="">- ประเภท -</option>
-                                                              </select>
-                                                          </div>
-                                                          <div class="col-md-4">
-                                                              <input type="text" class="form-control form-control-sm" id="licNum" placeholder="เลขที่ใบขับขี่">
-                                                          </div>
-                                                          <div class="col-md-4">
-                                                              <input type="date" class="form-control form-control-sm" id="licExp" title="วันหมดอายุใบขับขี่">
-                                                          </div>
-                                                      </div>
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics">Role การใช้งาน</label>
+                                                      <select class="form-select input-dark form-select-sm" id="role">
+                                                          <option>User</option>
+                                                          <option>Admin</option>
+                                                          <option>Viewer</option>
+                                                      </select>
                                                   </div>
-                                              </div>
-                                              <div class="col-12 mt-3">
-                                                  <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
-                                                      <i class="bi bi-diagram-3-fill me-2 text-info fs-5"></i>ตำแหน่ง (เลือกได้หลายข้อ)
-                                                  </label>
-                                                  <div id="positionCheckboxList" class="checkbox-list small">
-                                                      <small class="text-muted">Loading...</small>
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics">Username</label>
+                                                      <input type="text" class="form-control input-dark form-control-sm font-monospace" id="username" required>
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics">Password</label>
+                                                      <input type="text" class="form-control input-dark form-control-sm font-monospace" id="password" required>
                                                   </div>
                                               </div>
                                           </div>
                                       </div>
+                                      
+                                      <!-- Section 2: ข้อมูลส่วนตัว -->
+                                      <div class="col-12">
+                                          <div class="logistics-card">
+                                              <div class="logistics-section-title text-success"><i class="bi bi-person-fill"></i> ข้อมูลส่วนตัว (Personal Info)</div>
+                                              <div class="row g-3">
+                                                  <div class="col-md-2">
+                                                      <label class="label-logistics">คำนำหน้า</label>
+                                                      <select class="form-select input-dark form-select-sm" id="prefix">
+                                                          <option value="">-ระบุ-</option>
+                                                          <option value="นาย">นาย</option>
+                                                          <option value="นาง">นาง</option>
+                                                          <option value="นางสาว">นางสาว</option>
+                                                      </select>
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                      <label class="label-logistics">ชื่อ-นามสกุล (จริง)</label>
+                                                      <input type="text" class="form-control input-dark form-control-sm fw-bold" id="fullname" required>
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics text-success">ชื่อเล่น</label>
+                                                      <input type="text" class="form-control input-dark form-control-sm" id="nickname">
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics text-success">เบอร์โทรศัพท์</label>
+                                                      <input type="text" class="form-control input-dark form-control-sm font-monospace" id="phone">
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                      <label class="label-logistics">เพศ</label>
+                                                      <select class="form-select input-dark form-select-sm" id="gender">
+                                                          <option value="">- ระบุ -</option>
+                                                          <option value="ชาย">ชาย</option>
+                                                          <option value="หญิง">หญิง</option>
+                                                          <option value="อื่นๆ">อื่นๆ</option>
+                                                      </select>
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                      <label class="label-logistics">วันเดือนปีเกิด</label>
+                                                      <input type="date" class="form-control input-dark form-control-sm" id="birthDate">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <!-- Section 3: ข้อมูลการทำงานและประกันสังคม -->
+                                      <div class="col-12">
+                                          <div class="logistics-card">
+                                              <div class="logistics-section-title text-info"><i class="bi bi-briefcase-fill"></i> ข้อมูลการจ้างงาน (Employment Info)</div>
+                                              <div class="row g-3">
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics">วันเริ่มงาน</label>
+                                                      <input type="date" class="form-control input-dark form-control-sm" id="startDate" required>
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics text-danger">สถานะพนักงาน</label>
+                                                      <select class="form-select input-dark border-danger text-danger fw-bold form-select-sm" id="empStatus" onchange="window.toggleResignDate()">
+                                                          <option value="Active">Active (ปกติ)</option>
+                                                          <option value="Suspended">Suspended (พักงาน)</option>
+                                                          <option value="Resigned">Resigned (ลาออก)</option>
+                                                      </select>
+                                                  </div>
+                                                  <div class="col-md-3">
+                                                      <label class="label-logistics text-danger">วันที่ลาออก</label>
+                                                      <input type="date" class="form-control input-dark border-danger form-control-sm" id="resignDate" disabled>
+                                                  </div>
+                                                  <div class="col-md-3" id="divResignReason" style="display:none;">
+                                                      <label class="label-logistics text-danger">เหตุผลที่ลาออก</label>
+                                                      <input type="text" class="form-control input-dark border-danger form-control-sm" id="resignReason" placeholder="ระบุสาเหตุ...">
+                                                  </div>
+                                                  
+                                                  <div class="col-12"><hr class="my-2 border-secondary opacity-50"></div>
+                                                  
+                                                  <div class="col-md-4">
+                                                      <label class="label-logistics text-info">สิทธิ์ประกันสังคม</label>
+                                                      <select class="form-select input-dark text-info fw-bold form-select-sm" id="ssoType">
+                                                          <option value="">- เลือก -</option>
+                                                          <option value="มาตรา 33">มาตรา 33</option>
+                                                          <option value="มาตรา 39">มาตรา 39/40</option>
+                                                          <option value="ไม่เข้าประกันสังคม">ไม่เข้าประกันสังคม</option>
+                                                      </select>
+                                                  </div>
+                                                  <div class="col-md-8">
+                                                      <label class="label-logistics text-info">โรงพยาบาล</label>
+                                                      <select class="form-select input-dark form-select-sm" id="ssoHosp">
+                                                          <option value="">Loading...</option>
+                                                      </select>
+                                                  </div>
+                                                  <div class="col-12 mt-4">
+                                                      <label class="label-logistics text-white mb-2"><i class="bi bi-diagram-3-fill me-1"></i> ตำแหน่ง (เลือกได้หลายข้อ)</label>
+                                                      <div id="positionCheckboxList" class="checkbox-list small p-3 rounded" style="background: rgba(0,0,0,0.5); border: 1px solid #444;">
+                                                          <small class="text-muted">Loading...</small>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <!-- Section 4: ข้อมูลรถยนต์ และใบขับขี่ -->
+                                      <div class="col-12">
+                                          <div class="logistics-card border-warning border-opacity-50">
+                                              <div class="logistics-section-title text-warning"><i class="bi bi-card-heading"></i> ข้อมูลเอกสารประจำตัว & ใบขับขี่</div>
+                                              <div class="row g-3">
+                                                  <div class="col-md-6">
+                                                      <label class="label-logistics">เลขบัตรประชาชน 13 หลัก</label>
+                                                      <input type="text" class="form-control input-dark form-control-sm font-monospace" id="idCardNum" placeholder="x-xxxx-xxxxx-xx-x">
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                      <label class="label-logistics">วันหมดอายุบัตรประชาชน</label>
+                                                      <input type="date" class="form-control input-dark form-control-sm" id="idExp">
+                                                  </div>
+                                                  <div class="col-12"><hr class="my-2 border-warning opacity-25"></div>
+                                                  <div class="col-md-4">
+                                                      <label class="label-logistics text-warning">ประเภทใบขับขี่</label>
+                                                      <select class="form-select input-dark border-warning form-select-sm" id="licType">
+                                                          <option value="">- เลือกประเภท -</option>
+                                                      </select>
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                      <label class="label-logistics text-warning">เลขที่ใบขับขี่</label>
+                                                      <input type="text" class="form-control input-dark border-warning form-control-sm font-monospace" id="licNum" placeholder="ระบุเลขที่">
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                      <label class="label-logistics text-warning">วันหมดอายุใบขับขี่</label>
+                                                      <input type="date" class="form-control input-dark border-warning form-control-sm text-warning fw-bold" id="licExp">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+
                                   </div>
                               </div>
                           </div>
                           <div class="tab-pane fade" id="tabDocs">
-                              <div class="card border-secondary border-opacity-25 bg-transparent">
-                                  <div class="card-body">
-                                      <div class="alert alert-dark border border-secondary border-opacity-50 small text-info p-2 mb-3 bg-black bg-opacity-50">
-                                          <i class="bi bi-info-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการเปลี่ยน
+                              <div class="logistics-card">
+                                  <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50">
+                                      <i class="bi bi-exclamation-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการอัปเดต / เปลี่ยนแปลง หากไม่ต้องการเปลี่ยนให้ปล่อยว่างไว้
+                                  </div>
+                                  <div class="row g-4">
+                                      <div class="col-md-4">
+                                          <label class="label-logistics text-white">รูปถ่ายหน้าตรง</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="filePhoto">
                                       </div>
-                                      <div class="row g-3">
-                                          <div class="col-md-3">
-                                              <label class="small fw-bold mb-0">รูปถ่ายหน้าตรง</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="filePhoto">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small fw-bold mb-0">สำเนาบัตรประชาชน</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileIdCard">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small fw-bold mb-0 text-info">หนังสือเดินทาง (Passport)</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="filePassport">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small fw-bold mb-0">สำเนาทะเบียนบ้าน</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileHouse">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small fw-bold mb-0">ใบอนุญาตขับขี่</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileDrive">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small fw-bold mb-0 text-info">ประวัติอาชญากรรม</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileCriminal">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small fw-bold mb-0 text-info">ใบตรวจสุขภาพ</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileHealth">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small mb-0 text-muted">วุฒิการศึกษา</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileEdu">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small mb-0 text-muted">เอกสารอื่นๆ 1</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileOther1">
-                                          </div>
-                                          <div class="col-md-3">
-                                              <label class="small mb-0 text-muted">เอกสารอื่นๆ 2</label>
-                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileOther2">
-                                          </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics text-white">สำเนาบัตรประชาชน</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="fileIdCard">
+                                      </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics text-warning">ใบอนุญาตขับขี่ (สำคัญ)</label>
+                                          <input type="file" class="form-control input-dark border-warning form-control-sm" id="fileDrive">
+                                      </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics">หนังสือเดินทาง (Passport)</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="filePassport">
+                                      </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics">สำเนาทะเบียนบ้าน</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="fileHouse">
+                                      </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics text-info">ประวัติอาชญากรรม</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="fileCriminal">
+                                      </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics text-info">ใบตรวจสุขภาพ</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="fileHealth">
+                                      </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics">วุฒิการศึกษา</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="fileEdu">
+                                      </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics text-muted">เอกสารอื่นๆ 1</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="fileOther1">
+                                      </div>
+                                      <div class="col-md-4">
+                                          <label class="label-logistics text-muted">เอกสารอื่นๆ 2</label>
+                                          <input type="file" class="form-control input-dark form-control-sm" id="fileOther2">
                                       </div>
                                   </div>
                               </div>
                           </div>
                       </div>
-                      <div class="modal-footer border-secondary border-opacity-25 pb-0 pe-0 mt-3 pt-3">
-                          <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">ปิด</button>
-                          <button type="submit" class="btn btn-success btn-sm px-4 shadow-sm rounded-pill" id="btnSaveModal">บันทึกข้อมูล</button>
+                      <div class="modal-footer border-top border-secondary pt-4 mt-2 px-0 pb-0">
+                          <button type="button" class="btn btn-secondary rounded-pill px-5" data-bs-dismiss="modal">ยกเลิก</button>
+                          <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm" id="btnSaveModal"><i class="bi bi-save-fill me-2"></i>บันทึกข้อมูลบุคลากร</button>
                       </div>
                   </form>
               </div>
@@ -1077,7 +1094,7 @@
       </div>
   </div>
 
-<script>
+  <script>
     window.switchAdminTab = function(tab) {
         document.getElementById('btnTabEmp').classList.remove('active');
         document.getElementById('btnTabAcc').classList.remove('active');
@@ -1261,7 +1278,7 @@
         if (!window.allEmpData) return;
         var val = document.getElementById('searchPayrollInput').value.toLowerCase(); 
         var posVal = document.getElementById('filterPayrollPosition').value;
-        var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; });
+        var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; }); // แสดงเฉพาะที่ยังทำงานอยู่
         
         var filtered = activeEmps.filter(function(d) { 
             var matchName = (d.name + d.id).toLowerCase().includes(val); 
@@ -1276,6 +1293,8 @@
             filtered.forEach(function(r) {
                 var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === r.id; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
                 var slipCount = empSlips.length;
+                
+                // 🟢 ดึงฐานเงินเดือนล่าสุดจากประวัติ ถ้าไม่มีให้ดึงจากโปรไฟล์พนักงาน
                 var baseSal = slipCount > 0 ? empSlips[0].baseSalary : (r.appSalary || r.reqSalary || '0');
                 
                 var badge = slipCount > 0 ? `<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="window.openPayrollHistory('${r.id}')">${slipCount} เดือน</button>` : `<span class="text-muted small">-</span>`;
@@ -1321,13 +1340,14 @@
         new bootstrap.Modal(document.getElementById('payrollHistoryModal')).show();
     };
 
+    // 🟢 ระบบคำนวณประกันสังคมตามเพดานใหม่ (17,500 บาท สูงสุด 875 บาท)
     window.calcSSO = function() {
         var empId = document.getElementById('pr_empId').value;
         var emp = window.allEmpData.find(function(e) { return e.id === empId; });
         
         if (emp && emp.ssoType && emp.ssoType.includes("33")) {
             var baseSal = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
-            var ssoBase = baseSal > 17500 ? 17500 : baseSal;
+            var ssoBase = baseSal > 17500 ? 17500 : baseSal; // เพดานใหม่ 17,500
             var ssoAmt = Math.round(ssoBase * 0.05); 
             document.getElementById('pr_inc1').value = ssoAmt; 
             document.getElementById('pr_dec2').value = ssoAmt; 
@@ -1398,12 +1418,14 @@
             new bootstrap.Modal(document.getElementById('payrollModal')).show();
         } else {
             document.getElementById('keepPrevDataContainer').style.display = 'flex';
-            document.getElementById('keepPrevData').checked = false;
+            document.getElementById('keepPrevData').checked = false; // ค่าตั้งต้นคือไม่ดึง
             document.getElementById('pr_payDate').valueAsDate = new Date();
             
+            // 🟢 ดึงฐานเงินเดือนล่าสุดจากประวัติ ถ้าไม่มีให้ดึงจากโปรไฟล์พนักงาน
             var defaultBase = empSlips.length > 0 ? empSlips[0].baseSalary : parseFloat(emp.appSalary || emp.reqSalary || 0);
             document.getElementById('pr_baseSalary').value = defaultBase;
 
+            // ล้างค่าเก่าทั้งหมด
             for (var i=1; i<=10; i++) {
                 document.getElementById('pr_inc'+i).value = '';
                 document.getElementById('pr_dec'+i).value = '';
