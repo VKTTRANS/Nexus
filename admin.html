@@ -1,181 +1,93 @@
 <div id="view-admin" class="view-section container-fluid p-3 p-md-4">
     
     <style>
-        /* --- Cyber Logistics Theme 2026 --- */
+        /* --- Cyber Logistics 2026 Theme Override --- */
         #view-admin {
-            --cyber-primary: #00E5FF;
-            --cyber-secondary: #0077FF;
-            --cyber-warning: #FF9100;
-            --cyber-danger: #FF1744;
-            --panel-bg: rgba(11, 17, 26, 0.85);
+            --cyber-cyan: #00E5FF;
+            --cyber-orange: #FF9100;
+            --cyber-blue: #2979FF;
+            --cyber-red: #FF1744;
+            --panel-bg: rgba(11, 16, 26, 0.85);
             --panel-border: rgba(0, 229, 255, 0.15);
-            --glass-blur: blur(16px);
         }
-
-        /* Overrides Bootstrap Colors for Admin context */
-        #view-admin .text-success { color: var(--cyber-primary) !important; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
-        #view-admin .bg-success { background: linear-gradient(135deg, var(--cyber-primary), var(--cyber-secondary)) !important; color: #fff !important; }
-        #view-admin .border-success { border-color: var(--cyber-primary) !important; box-shadow: 0 0 8px rgba(0, 229, 255, 0.2); }
         
-        #view-admin .text-warning { color: var(--cyber-warning) !important; text-shadow: 0 0 10px rgba(255, 145, 0, 0.4); }
-        #view-admin .bg-warning { background: linear-gradient(135deg, var(--cyber-warning), #FF3D00) !important; color: #fff !important; }
-        #view-admin .border-warning { border-color: var(--cyber-warning) !important; box-shadow: 0 0 8px rgba(255, 145, 0, 0.2); }
-
-        #view-admin .text-info { color: #2979FF !important; text-shadow: 0 0 10px rgba(41, 121, 255, 0.4); }
-        #view-admin .bg-info { background: linear-gradient(135deg, #2979FF, #1565C0) !important; color: #fff !important; }
-
-        #view-admin .btn-success { background: linear-gradient(135deg, var(--cyber-primary), var(--cyber-secondary)); border: none; color: #000 !important; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3); transition: all 0.3s ease;}
+        #view-admin .text-success { color: var(--cyber-cyan) !important; text-shadow: 0 0 8px rgba(0, 229, 255, 0.4); }
+        #view-admin .bg-success { background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-blue)) !important; color: #fff !important; }
+        #view-admin .text-warning { color: var(--cyber-orange) !important; text-shadow: 0 0 8px rgba(255, 145, 0, 0.4); }
+        #view-admin .bg-warning { background: linear-gradient(135deg, var(--cyber-orange), #FF3D00) !important; color: #fff !important; }
+        #view-admin .text-danger { color: var(--cyber-red) !important; text-shadow: 0 0 8px rgba(255, 23, 68, 0.4); }
+        #view-admin .bg-danger { background: linear-gradient(135deg, var(--cyber-red), #D50000) !important; color: #fff !important; }
+        #view-admin .text-info { color: var(--cyber-blue) !important; text-shadow: 0 0 8px rgba(41, 121, 255, 0.4); }
+        
+        #view-admin .btn-success { background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-blue)); border: none; color: #000 !important; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3); transition: 0.3s; }
         #view-admin .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5); }
+        #view-admin .btn-danger { background: linear-gradient(135deg, var(--cyber-red), #D50000); border: none; color: #fff !important; font-weight: bold; box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3); transition: 0.3s; }
+        #view-admin .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 23, 68, 0.5); }
 
-        #view-admin .btn-warning { background: linear-gradient(135deg, var(--cyber-warning), #FF3D00); border: none; color: #fff !important; font-weight: bold; box-shadow: 0 4px 15px rgba(255, 145, 0, 0.3); transition: all 0.3s ease;}
-        #view-admin .btn-warning:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 145, 0, 0.5); }
-
-        @keyframes fadeSlideIn { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        .stagger-1 { animation: fadeSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s both; }
-        .stagger-2 { animation: fadeSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
-        .stagger-3 { animation: fadeSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both; }
-        .stagger-4 { animation: fadeSlideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s both; }
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .stagger-1 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+        .stagger-2 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+        .stagger-3 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+        .stagger-4 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
         
         .stat-card {
-            background: var(--panel-bg);
-            backdrop-filter: var(--glass-blur); 
-            border: 1px solid var(--panel-border);
-            border-radius: 16px; 
-            padding: 16px 20px;
-            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
-            position: relative; 
-            overflow: hidden;
-            cursor: default;
+            background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--panel-border);
+            border-radius: 12px; padding: 12px 18px; transition: all 0.3s ease; position: relative; overflow: hidden; cursor: default;
         }
-        .stat-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: var(--cyber-primary); box-shadow: 0 0 10px var(--cyber-primary);
-            opacity: 0.5; transition: 0.4s;
-        }
-        .stat-card:hover { border-color: var(--cyber-primary); box-shadow: 0 8px 30px rgba(0, 229, 255, 0.1); }
-        .stat-card:hover::before { opacity: 1; width: 6px; }
-        
-        .stat-card.clickable:hover { 
-            transform: translateY(-5px); 
-            background: rgba(15, 25, 40, 0.9) !important;
-            cursor: pointer;
-        }
-        
-        .stat-icon {
-            width: 48px; height: 48px; border-radius: 12px;
-            background: rgba(0, 229, 255, 0.1);
-            border: 1px solid rgba(0, 229, 255, 0.2);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; color: var(--cyber-primary);
-            box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.05);
-        }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--cyber-cyan); box-shadow: 0 0 10px var(--cyber-cyan); opacity: 0.5; transition: 0.4s; }
+        .stat-card:hover { border-color: var(--cyber-cyan); box-shadow: 0 8px 30px rgba(0, 229, 255, 0.1); }
+        .stat-card.clickable:hover { transform: translateY(-3px); cursor: pointer; background: rgba(15, 25, 40, 0.9) !important; }
+        .stat-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(0, 229, 255, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--cyber-cyan); border: 1px solid rgba(0, 229, 255, 0.2); }
 
-        .nav-tabs-custom {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 12px;
-            padding: 5px;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-        }
-        .nav-tabs-custom .tab-btn {
-            background: transparent; color: #8a9bb0; border: none;
-            padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
-            transition: all 0.3s ease; letter-spacing: 0.5px;
-        }
-        .nav-tabs-custom .tab-btn.active {
-            background: rgba(0, 229, 255, 0.15); color: #fff;
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1);
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
-        }
-        .nav-tabs-custom .tab-btn:hover:not(.active) { color: #fff; background: rgba(255,255,255,0.05); }
+        .nav-tabs-custom { background: rgba(0,0,0,0.4); border-radius: 8px; padding: 4px; border: 1px solid rgba(255,255,255,0.08); }
+        .nav-tabs-custom .tab-btn { background: transparent; color: #8a9bb0; border: none; padding: 6px 16px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s; }
+        .nav-tabs-custom .tab-btn.active { background: rgba(0, 229, 255, 0.15); color: #fff; border: 1px solid rgba(0, 229, 255, 0.3); box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); text-shadow: 0 0 8px rgba(0, 229, 255, 0.5); }
+        .nav-tabs-custom .tab-btn:hover:not(.active) { color: #fff; }
 
-        .glass-container-table {
-            background: var(--panel-bg);
-            backdrop-filter: var(--glass-blur); 
-            border: 1px solid var(--panel-border);
-            border-radius: 16px; 
-            overflow: hidden;
-            display: flex; flex-direction: column;
-            height: 68vh; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-
+        .glass-container-table { background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--panel-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; height: 68vh; }
         .table-responsive { flex-grow: 1; overflow-y: auto; min-height: 400px; }
-        .table-responsive::-webkit-scrollbar { width: 6px; height: 6px; }
-        .table-responsive::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.3); border-radius: 10px; }
-        .table-responsive::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.6); }
-
-        .table-custom th {
-            background-color: rgba(10, 15, 22, 0.95) !important;
-            position: sticky; top: 0; z-index: 10;
-            color: #8a9bb0; font-weight: 700; 
-            border-bottom: 2px solid rgba(0, 229, 255, 0.2) !important;
-            cursor: pointer; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;
-            padding: 15px;
-        }
-
-        .table-custom td {
-            border-bottom: 1px solid rgba(255,255,255,0.02);
-            color: #d1d5db; vertical-align: middle;
-            padding: 12px 15px; 
-            font-size: 0.85rem;
-        }
-        
-        .table-hover tbody tr { transition: background-color 0.2s ease; }
+        .table-custom th { background-color: rgba(10, 15, 22, 0.95) !important; position: sticky; top: 0; z-index: 10; color: #8a9bb0; font-weight: 700; border-bottom: 2px solid rgba(0, 229, 255, 0.2) !important; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; padding: 12px 15px; }
+        .table-custom td { border-bottom: 1px solid rgba(255,255,255,0.02); color: #d1d5db; vertical-align: middle; padding: 8px 15px; font-size: 0.85rem; }
         .table-hover tbody tr:hover { background-color: rgba(0, 229, 255, 0.05) !important; }
 
-        .list-item-glass {
-            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; 
-            padding: 12px 18px; margin-bottom: 10px; transition: all 0.3s ease; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        
+        .list-item-glass { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 10px 15px; margin-bottom: 8px; transition: all 0.2s ease-in-out; display: flex; justify-content: space-between; align-items: center; }
         .list-item-glass.clickable-item { cursor: pointer; }
-        .list-item-glass.clickable-item:hover { 
-            background-color: rgba(0, 229, 255, 0.08) !important; 
-            border-color: rgba(0, 229, 255, 0.3) !important; 
-            transform: translateX(6px); 
-            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.05);
-        }
+        .list-item-glass.clickable-item:hover { background-color: rgba(0, 229, 255, 0.08) !important; border-color: rgba(0, 229, 255, 0.3) !important; transform: translateX(5px); }
+        .list-item-glass.static-item:hover { background-color: rgba(255, 255, 255, 0.05); }
 
-        .dropdown-menu-dark { background-color: rgba(15, 20, 30, 0.95); border: 1px solid rgba(0, 229, 255, 0.2); backdrop-filter: blur(20px); border-radius: 12px; padding: 8px;}
-        .dropdown-item { border-radius: 6px; padding: 8px 15px; margin-bottom: 2px; }
-        .dropdown-item:hover { background-color: rgba(0, 229, 255, 0.15); color: var(--cyber-primary); }
+        .dropdown-menu-dark { background-color: rgba(15, 20, 30, 0.95); border-color: rgba(0, 229, 255, 0.2); font-size: 0.85rem; }
+        .dropdown-item:hover { background-color: rgba(0, 229, 255, 0.15); color: var(--cyber-cyan); }
 
-        /* --- Theme โลจิสติกส์ สำหรับฟอร์มพนักงานและเงินเดือน --- */
-        .logistics-modal { border: 1px solid rgba(0, 229, 255, 0.3); background: rgba(11, 16, 26, 0.95) !important; backdrop-filter: blur(25px); border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,229,255,0.05); }
-        .logistics-modal-header { background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(0, 229, 255, 0.2); border-radius: 20px 20px 0 0; }
-        .logistics-section-title { font-size: 0.95rem; font-weight: 700; color: var(--cyber-primary); margin-bottom: 15px; display: flex; align-items: center; border-bottom: 1px solid rgba(0, 229, 255, 0.2); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
-        .logistics-section-title i { margin-right: 10px; font-size: 1.1rem; text-shadow: 0 0 8px rgba(0, 229, 255, 0.5); }
-        .logistics-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
-        .input-dark { background-color: rgba(5, 10, 15, 0.8) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #fff !important; font-size: 0.9rem; border-radius: 8px; transition: 0.3s; }
-        .input-dark:focus { border-color: var(--cyber-primary) !important; box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.1) !important; background-color: #000 !important; }
-        .input-dark:disabled, .input-dark[readonly] { background-color: rgba(0,0,0,0.5) !important; color: #6b7280 !important; border-color: transparent !important; }
-        .label-logistics { color: #8a9bb0; font-size: 0.75rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        .logistics-modal { border: 1px solid rgba(0, 229, 255, 0.3); background: rgba(11, 16, 26, 0.95) !important; backdrop-filter: blur(25px); box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,229,255,0.05); }
+        .logistics-modal-header { background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(0, 229, 255, 0.2); }
+        .logistics-section-title { font-size: 0.95rem; font-weight: 700; color: var(--cyber-cyan); margin-bottom: 15px; display: flex; align-items: center; border-bottom: 1px solid rgba(0, 229, 255, 0.2); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+        .logistics-section-title i { margin-right: 8px; text-shadow: 0 0 8px rgba(0, 229, 255, 0.5); }
+        .logistics-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
         
-        .payroll-input { background: rgba(5, 10, 15, 0.8) !important; color: #fff !important; border-color: rgba(255,255,255,0.1) !important; text-align: right; font-family: monospace; font-size: 1rem; }
-        .payroll-input:focus { border-color: var(--cyber-primary) !important; }
-        .payroll-dec { color: var(--cyber-danger) !important; }
+        .input-dark { background-color: rgba(5, 10, 15, 0.8) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #fff !important; font-size: 0.9rem; transition: 0.3s; }
+        .input-dark:focus { border-color: var(--cyber-cyan) !important; box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.2) !important; background-color: #000 !important; }
+        .input-dark:disabled, .input-dark[readonly] { background-color: rgba(0,0,0,0.5) !important; color: #666 !important; border-color: transparent !important; }
+        .label-logistics { color: #8a9bb0; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; font-weight: 600; }
+        
+        .payroll-input { background: rgba(5, 10, 15, 0.8) !important; color: #fff !important; border-color: rgba(255,255,255,0.1) !important; text-align: right; }
+        .payroll-input:focus { border-color: var(--cyber-cyan) !important; box-shadow: none !important; }
+        .payroll-dec { color: var(--cyber-red) !important; }
         .lbl-fit { font-size: 0.8rem; width: 175px; text-align: left; padding: 0.375rem 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: space-between; background-color: rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.1); color: #8a9bb0;}
         
-        .pos-checkbox-wrapper { background: rgba(5, 10, 15, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; max-height: 160px; overflow-y: auto;}
-        .pos-checkbox-wrapper .form-check { border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; margin-bottom: 8px;}
+        .pos-checkbox-wrapper { background: rgba(5, 10, 15, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px; max-height: 150px; overflow-y: auto;}
+        .pos-checkbox-wrapper .form-check { border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; margin-bottom: 5px;}
         .pos-checkbox-wrapper .form-check:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
     </style>
 
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 stagger-1">
         <div class="d-flex align-items-center gap-3 mb-2 mb-md-0">
             <h5 class="fw-bold text-white mb-0 d-flex align-items-center">
-                <div class="bg-success text-black rounded-circle d-flex align-items-center justify-content-center me-2" style="width:32px; height:32px; font-size:1.1rem;"><i class="bi bi-shield-check"></i></div>
-                Fleet Command
+                <div class="bg-success text-black rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px; height:28px; font-size:1rem;"><i class="bi bi-shield-check"></i></div>
+                Admin Console
             </h5>
             
             <div class="nav-tabs-custom d-flex ms-md-3">
-                <button class="tab-btn active" id="btnTabEmp" onclick="window.switchAdminTab('emp')"><i class="bi bi-people-fill me-1"></i>บุคลากร</button>
+                <button class="tab-btn active" id="btnTabEmp" onclick="window.switchAdminTab('emp')"><i class="bi bi-people-fill me-1"></i>พนักงาน</button>
                 <button class="tab-btn" id="btnTabAcc" onclick="window.switchAdminTab('acc')"><i class="bi bi-cone-striped me-1"></i>อุบัติเหตุ</button>
                 <button class="tab-btn" id="btnTabWarn" onclick="window.switchAdminTab('warn')"><i class="bi bi-exclamation-triangle-fill me-1 text-danger"></i>ใบเตือน</button>
                 <button class="tab-btn" id="btnTabPayroll" onclick="window.switchAdminTab('payroll')"><i class="bi bi-cash-coin me-1 text-warning"></i>เงินเดือน</button>
@@ -183,8 +95,8 @@
         </div>
         
         <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-dark border-secondary text-light rounded-pill px-3 admin-only hover-scale" onclick="if(typeof window.openRecruitModal === 'function') window.openRecruitModal();" style="display:none;"><i class="bi bi-file-earmark-person me-1"></i>คัดเลือกพนักงาน</button>
-            <button class="btn btn-sm btn-success rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="window.openModal('create')" style="display:none;"><i class="bi bi-person-plus-fill me-1"></i>ลงทะเบียนใหม่</button>
+            <button class="btn btn-sm btn-dark border-secondary text-light rounded-pill px-3 admin-only hover-scale" onclick="if(typeof window.openRecruitModal === 'function') window.openRecruitModal();" style="display:none;"><i class="bi bi-file-earmark-person me-1"></i>ใบสมัคร</button>
+            <button class="btn btn-sm btn-success rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="window.openModal('create')" style="display:none;"><i class="bi bi-person-plus-fill me-1"></i>เพิ่มพนักงานใหม่</button>
             <button class="btn btn-sm btn-outline-danger rounded-pill px-2 hover-scale" onclick="window.logout()" title="ออกจากระบบ"><i class="bi bi-power"></i></button>
         </div>
     </div>
@@ -211,7 +123,7 @@
                             <div><span class="fs-5 fw-bold text-white" id="statFemale">0</span> <span class="text-secondary small">หญิง</span></div>
                         </div>
                     </div>
-                    <div class="stat-icon text-info bg-info bg-opacity-10" style="border-color: rgba(41, 121, 255, 0.2); box-shadow: inset 0 0 15px rgba(41, 121, 255, 0.05);"><i class="bi bi-gender-ambiguous"></i></div>
+                    <div class="stat-icon text-info bg-info bg-opacity-10"><i class="bi bi-gender-ambiguous"></i></div>
                 </div>
             </div>
             <div class="col-md-4">
@@ -220,7 +132,7 @@
                         <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">วันเกิดเดือนนี้ <i class="bi bi-search text-success ms-1" style="font-size:0.6rem;"></i></div>
                         <h3 class="fw-bold text-white mb-0" id="statBirth">0</h3>
                     </div>
-                    <div class="stat-icon text-warning bg-warning bg-opacity-10" style="border-color: rgba(255, 145, 0, 0.2); box-shadow: inset 0 0 15px rgba(255, 145, 0, 0.05);"><i class="bi bi-cake2-fill"></i></div>
+                    <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-cake2-fill"></i></div>
                 </div>
             </div>
         </div>
@@ -233,10 +145,10 @@
             <div class="d-flex gap-2 align-items-center flex-wrap">
                 <div class="form-check form-switch me-2 mb-0 d-flex align-items-center">
                     <input class="form-check-input border-secondary shadow-none" type="checkbox" role="switch" id="showResignedCheck" onchange="window.filterTable()" style="cursor:pointer; width: 2em;">
-                    <label class="form-check-label text-secondary small ms-2" for="showResignedCheck" style="cursor:pointer; padding-top:2px;">รวมประวัติเก่า (ลาออก/พักงาน)</label>
+                    <label class="form-check-label text-secondary small ms-2" for="showResignedCheck" style="cursor:pointer; padding-top:2px;">รวมลาออก/พักงาน</label>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary text-light px-3 rounded-pill hover-scale" onclick="window.openPositionStatsModal()"><i class="bi bi-pie-chart me-1"></i>โครงสร้างตำแหน่ง</button>
-                <button class="btn btn-sm btn-outline-secondary text-light px-3 rounded-pill hover-scale" onclick="window.openYearlyStatsModal()"><i class="bi bi-graph-up me-1"></i>สถิติบุคลากร</button>
+                <button class="btn btn-sm btn-outline-secondary text-light px-3 rounded-pill hover-scale" onclick="window.openPositionStatsModal()"><i class="bi bi-pie-chart me-1"></i>ตำแหน่ง</button>
+                <button class="btn btn-sm btn-outline-secondary text-light px-3 rounded-pill hover-scale" onclick="window.openYearlyStatsModal()"><i class="bi bi-graph-up me-1"></i>สถิติรายปี</button>
                 <select class="form-select form-select-sm bg-dark border-secondary text-white rounded-pill cursor-pointer px-3 shadow-none" style="width:auto;" id="rowsPerPage" onchange="window.renderTable(window.currentDisplayData)">
                     <option value="50" selected>50 แถว</option>
                     <option value="80">80 แถว</option>
@@ -263,7 +175,7 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <tr><td colspan="9" class="text-center py-5 text-muted">กำลังซิงค์ข้อมูลศูนย์กลาง...</td></tr>
+                        <tr><td colspan="9" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -274,10 +186,10 @@
     <!-- Section: อุบัติเหตุ -->
     <div id="section-admin-acc" class="d-none">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
-            <div class="stat-card clickable p-2 px-3 m-0 d-flex align-items-center gap-3" onclick="new bootstrap.Modal(document.getElementById('accTopCausesModal')).show()" style="border-color: rgba(255,145,0,0.3); min-width: 250px;">
-                <div class="stat-icon text-warning m-0 bg-warning bg-opacity-10" style="border-color: rgba(255,145,0,0.2);"><i class="bi bi-cone-striped"></i></div>
+            <div class="stat-card clickable border-warning p-2 px-3 m-0 d-flex align-items-center gap-3" onclick="new bootstrap.Modal(document.getElementById('accTopCausesModal')).show()" style="background: rgba(255,165,0,0.05); min-width: 250px;">
+                <div class="stat-icon text-warning m-0 bg-warning bg-opacity-10"><i class="bi bi-cone-striped"></i></div>
                 <div>
-                    <h6 class="text-secondary mb-0" style="font-size: 0.7rem; text-transform: uppercase;">อุบัติเหตุทั้งหมด <i class="bi bi-search ms-1 text-success" style="font-size: 0.6rem;"></i></h6>
+                    <h6 class="text-secondary mb-0" style="font-size: 0.7rem;">อุบัติเหตุทั้งหมด <i class="bi bi-search ms-1 text-success" style="font-size: 0.6rem;"></i></h6>
                     <h4 class="fw-bold text-warning mb-0"><span id="accTotalCount">0</span> <span class="fs-6 fw-normal text-muted">ครั้ง (Top 10)</span></h4>
                 </div>
             </div>
@@ -301,7 +213,7 @@
                         </tr>
                     </thead>
                     <tbody id="adminAccidentTableBody">
-                        <tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> ดึงประวัติอุบัติเหตุ...</td></tr>
+                        <tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -311,10 +223,10 @@
     <!-- Section: ใบเตือน -->
     <div id="section-admin-warn" class="d-none">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
-            <div class="stat-card clickable p-2 px-3 m-0 d-flex align-items-center gap-3" onclick="new bootstrap.Modal(document.getElementById('warnTopEmpModal')).show()" style="border-color: rgba(255,23,68,0.3); min-width: 250px;">
-                <div class="stat-icon text-danger m-0 bg-danger bg-opacity-10" style="border-color: rgba(255,23,68,0.2);"><i class="bi bi-file-earmark-break"></i></div>
+            <div class="stat-card clickable border-danger p-2 px-3 m-0 d-flex align-items-center gap-3" onclick="new bootstrap.Modal(document.getElementById('warnTopEmpModal')).show()" style="background: rgba(255,0,0,0.05); min-width: 250px;">
+                <div class="stat-icon text-danger m-0 bg-danger bg-opacity-10"><i class="bi bi-file-earmark-break"></i></div>
                 <div>
-                    <h6 class="text-secondary mb-0" style="font-size: 0.7rem; text-transform: uppercase;">ใบเตือนทั้งหมด <i class="bi bi-search ms-1 text-success" style="font-size: 0.6rem;"></i></h6>
+                    <h6 class="text-secondary mb-0" style="font-size: 0.7rem;">ใบเตือนทั้งหมด <i class="bi bi-search ms-1 text-success" style="font-size: 0.6rem;"></i></h6>
                     <h4 class="fw-bold text-danger mb-0"><span id="warnTotalCount">0</span> <span class="fs-6 fw-normal text-muted">ใบ (Top 10)</span></h4>
                 </div>
             </div>
@@ -323,8 +235,8 @@
                     <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchWarnInput" onkeyup="window.filterWarnTable()" placeholder="ค้นหาชื่อ, รหัส, เลขที่ใบเตือน...">
                 </div>
-                <button class="btn btn-danger btn-sm rounded-pill px-4 shadow-sm fw-bold hover-scale text-nowrap" style="background: linear-gradient(135deg, #FF1744, #D50000); border:none;" onclick="window.openCreateWarningModal()">
-                    <i class="bi bi-plus-circle me-1"></i>สร้างใบเตือน
+                <button class="btn btn-danger btn-sm rounded-pill px-4 shadow-sm fw-bold hover-scale text-nowrap" onclick="window.openCreateWarningModal()">
+                    <i class="bi bi-plus-circle me-1"></i>ออกใบเตือน
                 </button>
             </div>
         </div>
@@ -342,7 +254,7 @@
                         </tr>
                     </thead>
                     <tbody id="adminWarnTableBody">
-                        <tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> ดึงข้อมูลประวัติการทำผิด...</td></tr>
+                        <tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -352,36 +264,36 @@
     <!-- Section: เงินเดือน (Payroll) -->
     <div id="section-admin-payroll" class="d-none">
         
-        <!-- การ์ดสรุปยอดเงินเดือน -->
+        <!-- การ์ดสรุปยอดเงินเดือน (ตามเดือนที่เลือกกรอง) -->
         <div class="row g-2 mb-3 stagger-2">
             <div class="col-md-4">
-                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 4px solid var(--cyber-primary);">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #00E676;">
                     <div>
-                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">รวมเงินเดือนสุทธิ (เดือนที่กรอง)</div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">รวมเงินเดือนสุทธิ (เดือนที่เลือก)</div>
                         <h3 class="fw-bold text-success mb-0" id="statPayrollNet">0.00</h3>
                         <div class="small text-muted mt-1" style="font-size:0.65rem;">เฉพาะรายชื่อที่กรองและออกสลิปแล้ว</div>
                     </div>
-                    <div class="stat-icon"><i class="bi bi-cash"></i></div>
+                    <div class="stat-icon text-success bg-success bg-opacity-10"><i class="bi bi-cash"></i></div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 4px solid #2979FF;">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #0dcaf0;">
                     <div>
                         <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">รวมประกันสังคม (นำส่ง)</div>
                         <h3 class="fw-bold text-info mb-0" id="statPayrollSSO">0.00</h3>
                         <div class="small text-muted mt-1" style="font-size:0.65rem;">(หักจากลูกจ้าง + บริษัทสมทบแล้ว)</div>
                     </div>
-                    <div class="stat-icon text-info bg-info bg-opacity-10" style="border-color: rgba(41, 121, 255, 0.2); box-shadow: inset 0 0 15px rgba(41, 121, 255, 0.05);"><i class="bi bi-shield-plus"></i></div>
+                    <div class="stat-icon text-info bg-info bg-opacity-10"><i class="bi bi-shield-plus"></i></div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 4px solid var(--cyber-warning);">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #ffc107;">
                     <div>
                         <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">จำนวนสลิปที่ออกแล้ว</div>
                         <h3 class="fw-bold text-warning mb-0"><span id="statPayrollCount">0</span> <span class="fs-6 fw-normal text-muted">ใบ</span></h3>
                         <div class="small text-muted mt-1" style="font-size:0.65rem;">ประจำเดือนที่เลือกกรอง</div>
                     </div>
-                    <div class="stat-icon text-warning bg-warning bg-opacity-10" style="border-color: rgba(255, 145, 0, 0.2); box-shadow: inset 0 0 15px rgba(255, 145, 0, 0.05);"><i class="bi bi-file-earmark-check"></i></div>
+                    <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-file-earmark-check"></i></div>
                 </div>
             </div>
         </div>
@@ -424,7 +336,7 @@
                     <option value="pending">⏳ ยังไม่ออก</option>
                 </select>
             </div>
-            <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.loadAdminData()"><i class="bi bi-arrow-clockwise me-1"></i>รีเฟรชข้อมูล</button>
+            <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.loadAdminData()"><i class="bi bi-arrow-clockwise me-1"></i>รีเฟรช</button>
         </div>
         
         <div class="glass-container-table stagger-4">
@@ -439,11 +351,11 @@
                             <th class="text-end text-success">ยอดรับสุทธิ</th>
                             <th class="text-end text-info">ประกันสังคม</th>
                             <th class="text-center">ประวัติสลิป</th>
-                            <th class="text-end pe-4">จัดการระบบ</th>
+                            <th class="text-end pe-4">จัดการเงินเดือน</th>
                         </tr>
                     </thead>
                     <tbody id="adminPayrollTableBody">
-                        <tr><td colspan="8" class="text-center py-5 text-muted">กำลังโหลดข้อมูลและเชื่อมต่อฐานข้อมูลเงินเดือน...</td></tr>
+                        <tr><td colspan="8" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -456,11 +368,11 @@
             <div class="modal-content logistics-modal">
                 <div class="modal-header py-3 logistics-modal-header">
                     <h5 class="modal-title fw-bold fs-5 text-warning">
-                        <i class="bi bi-cash-stack me-2"></i>ระบบจัดทำสลิปเงินเดือน (Payroll Generator)
+                        <i class="bi bi-cash-stack me-2"></i>จัดทำสลิปเงินเดือน
                     </h5>
                     <div class="form-check form-switch ms-4 mb-0" id="keepPrevDataContainer">
                         <input class="form-check-input border-warning" type="checkbox" id="keepPrevData" onchange="window.toggleKeepData()" style="cursor:pointer;">
-                        <label class="form-check-label text-warning small ms-1 fw-bold" for="keepPrevData" style="cursor:pointer; padding-top:2px;">AI: ดึงประวัติเดือนล่าสุดอัตโนมัติ</label>
+                        <label class="form-check-label text-warning small ms-1" for="keepPrevData" style="cursor:pointer; padding-top:2px;">ดึงประวัติ ดึงทุกช่องอัตโนมัติ</label>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -473,7 +385,7 @@
                         <input type="hidden" id="pr_position">
                         <input type="hidden" id="pr_email">
                         
-                        <div class="logistics-card p-3 mb-4 border-success border-opacity-50">
+                        <div class="logistics-card p-3 mb-4">
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label class="label-logistics">พนักงาน</label>
@@ -485,7 +397,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="label-logistics text-success">เงินเดือน ค่าจ้าง (บาท) *</label>
-                                    <input type="number" class="form-control bg-dark text-success fw-bold border-success fs-5 text-end shadow-sm" id="pr_baseSalary" oninput="window.calcPayrollTotals();" required step="0.01">
+                                    <input type="number" class="form-control bg-dark text-success fw-bold border-success fs-5 text-end" id="pr_baseSalary" oninput="window.calcPayrollTotals();" required step="0.01">
                                 </div>
                             </div>
                         </div>
@@ -499,9 +411,9 @@
                                         <!-- โชว์ช่องประกันสังคมออกให้ ให้อ่านอย่างเดียว คำนวณออโต้ -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit text-success fw-bold"><span>ประกันสังคม (ออกให้)</span></span>
-                                                <input type="number" id="pr_inc1" class="form-control payroll-input text-success fw-bold" readonly step="0.01" style="background: rgba(0,229,255,0.05) !important;">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-robot"></i></button>
+                                                <span class="input-group-text lbl-fit"><span>ประกันสังคม (ออกให้)</span></span>
+                                                <input type="number" id="pr_inc1" class="form-control payroll-input text-warning" readonly step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
                                             </div>
                                         </div>
                                         
@@ -561,6 +473,13 @@
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc9')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>อื่นๆ</span></span>
+                                                <input type="number" id="pr_inc10" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc10')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -572,16 +491,16 @@
                                         <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% (ไร้ Checkbox) -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit text-danger fw-bold"><span>ภาษีหัก ณ ที่จ่าย (1%)</span></span>
-                                                <input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec text-danger fw-bold" readonly step="0.01" style="background: rgba(255,23,68,0.05) !important;">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-robot"></i></button>
+                                                <span class="input-group-text lbl-fit"><span>ภาษีหัก ณ ที่จ่าย (1%)</span></span>
+                                                <input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit text-danger fw-bold"><span>ประกันสังคม</span></span>
-                                                <input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec text-danger fw-bold" readonly step="0.01" style="background: rgba(255,23,68,0.05) !important;">
-                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-robot"></i></button>
+                                                <span class="input-group-text lbl-fit"><span>ประกันสังคม</span></span>
+                                                <input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
                                             </div>
                                         </div>
                                         
@@ -646,7 +565,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 p-3 logistics-card border-warning text-center shadow-lg" style="box-shadow: inset 0 0 30px rgba(255,145,0,0.1);">
+                        <div class="mt-4 p-3 logistics-card border-warning text-center shadow-lg">
                             <div class="row">
                                 <div class="col-md-4">
                                     <small class="text-success d-block fw-bold mb-1">รวมรายได้ (บาท)</small>
@@ -658,12 +577,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <small class="text-warning d-block fw-bold mb-1">รายได้สุทธิ (Net)</small>
-                                    <h2 class="text-warning fw-bold mb-0" id="pr_netSalaryShow" style="text-shadow: 0 0 15px rgba(255,145,0,0.5);">0.00</h2>
+                                    <h2 class="text-warning fw-bold mb-0" id="pr_netSalaryShow" style="text-shadow: 0 0 10px rgba(255,193,7,0.3);">0.00</h2>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mt-3 p-3 logistics-card border-secondary text-center" style="background: rgba(0, 229, 255, 0.05); padding: 15px !important;">
+                        <!-- เพิ่มส่วนสรุปประกันสังคมด้านล่าง -->
+                        <div class="mt-3 p-3 logistics-card border-secondary text-center" style="background: rgba(0, 230, 118, 0.05); padding: 15px !important;">
                             <div class="fw-bold text-success mb-2"><i class="bi bi-shield-check me-1"></i> สรุปข้อมูลประกันสังคมนำส่ง</div>
                             <div class="d-flex justify-content-center gap-4 flex-wrap">
                                 <div><small class="text-muted">ส่วนของลูกจ้าง (หักจากเงินเดือน):</small> <span id="sso_emp_show" class="fw-bold text-danger ms-1 fs-6">0.00</span> <small class="text-muted">บาท</small></div>
@@ -674,7 +594,7 @@
 
                         <div class="mt-4 text-end">
                             <button type="button" class="btn btn-secondary rounded-pill px-5 me-2" data-bs-dismiss="modal">ยกเลิก</button>
-                            <button type="submit" class="btn btn-warning fw-bold rounded-pill px-5 shadow-sm" id="btnSubmitPayroll"><i class="bi bi-save-fill me-2"></i>บันทึกและสร้างเอกสาร (PDF)</button>
+                            <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm" id="btnSubmitPayroll"><i class="bi bi-save-fill me-2"></i>บันทึกและออกสลิปเงินเดือน</button>
                         </div>
                     </form>
                 </div>
@@ -717,7 +637,7 @@
             <div class="modal-content logistics-modal">
                 <div class="modal-header py-3 logistics-modal-header">
                     <h5 class="modal-title fw-bold fs-5 text-warning" id="modalTitle">
-                        <i class="bi bi-person-vcard me-2"></i>ระบบจัดการทรัพยากรบุคคล
+                        <i class="bi bi-person-vcard me-2"></i>ระบบจัดการบุคลากร (HR Portal)
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -744,7 +664,7 @@
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <div class="logistics-card position-relative overflow-hidden p-4 mb-3">
-                                                <div style="position:absolute; top:0; left:0; width:6px; height:100%; background:var(--cyber-primary); box-shadow: 0 0 15px var(--cyber-primary);"></div>
+                                                <div style="position:absolute; top:0; left:0; width:6px; height:100%; background:#ffc107;"></div>
                                                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 ps-2">
                                                     <div>
                                                         <h2 class="fw-bold text-white mb-1" id="view_fullname">...</h2>
@@ -761,8 +681,8 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
-                                            <div class="logistics-card h-100 p-0 overflow-hidden border-success border-opacity-25">
-                                                <div class="p-3 border-bottom border-success border-opacity-25 bg-black bg-opacity-25">
+                                            <div class="logistics-card h-100 p-0 overflow-hidden">
+                                                <div class="p-3 border-bottom border-secondary bg-black bg-opacity-25">
                                                     <div class="logistics-section-title mb-0 text-success"><i class="bi bi-person-lines-fill"></i> ข้อมูลส่วนตัว</div>
                                                 </div>
                                                 <div class="p-3">
@@ -798,8 +718,8 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
-                                            <div class="logistics-card h-100 p-0 overflow-hidden border-info border-opacity-25">
-                                                <div class="p-3 border-bottom border-info border-opacity-25 bg-black bg-opacity-25">
+                                            <div class="logistics-card h-100 p-0 overflow-hidden">
+                                                <div class="p-3 border-bottom border-secondary bg-black bg-opacity-25">
                                                     <div class="logistics-section-title mb-0 text-info"><i class="bi bi-briefcase-fill"></i> ข้อมูลการจ้างงาน</div>
                                                 </div>
                                                 <div class="p-3">
@@ -1023,7 +943,7 @@
                             </div>
                             <!-- Tab: เอกสารแนบ -->
                             <div class="tab-pane fade" id="tabDocs">
-                                <div class="logistics-card">
+                                <div class="logistics-card border-0">
                                     <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50">
                                         <i class="bi bi-exclamation-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการอัปเดต / เปลี่ยนแปลง หากไม่ต้องการเปลี่ยนให้ปล่อยว่างไว้
                                     </div>
@@ -1074,7 +994,7 @@
                         </div>
                         <div class="modal-footer border-top border-secondary pt-4 mt-2 px-0 pb-0">
                             <button type="button" class="btn btn-secondary rounded-pill px-5" data-bs-dismiss="modal">ยกเลิก</button>
-                            <button type="submit" class="btn btn-success fw-bold rounded-pill px-5 shadow-sm" id="btnSaveModal">
+                            <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm" id="btnSaveModal">
                                 <i class="bi bi-save-fill me-2"></i>บันทึกข้อมูลบุคลากร
                             </button>
                         </div>
@@ -1083,17 +1003,6 @@
             </div>
         </div>
     </div>
-
-    <!-- โค้ด Modal ย่อย (Birthday, Position, Yearly, Accident, Warning) ซ่อนไว้เพราะยาวเกินไป -->
-    <div class="modal fade" id="birthdayModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content logistics-modal"><div class="modal-header logistics-modal-header py-2"><h5 class="modal-title text-warning fs-6 fw-bold"><i class="bi bi-cake2 me-2"></i>พนักงานที่เกิดเดือนนี้</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3" id="birthdayListBody" style="max-height: 400px; overflow-y: auto;"></div></div></div></div>
-    <div class="modal fade" id="positionStatsModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-xl"><div class="modal-content logistics-modal"><div class="modal-header logistics-modal-header py-2"><h5 class="modal-title text-success fs-6 fw-bold"><i class="bi bi-pie-chart me-2"></i>โครงสร้างตำแหน่ง</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3" id="positionStatsList"></div></div></div></div>
-    <div class="modal fade" id="positionDetailModal" tabindex="-1" style="z-index: 1060;"><div class="modal-dialog modal-dialog-centered"><div class="modal-content logistics-modal"><div class="modal-header logistics-modal-header py-2"><h5 class="modal-title text-white fs-6 fw-bold" id="positionDetailTitle">...</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3" id="positionDetailList" style="max-height: 400px; overflow-y: auto;"></div></div></div></div>
-    <div class="modal fade" id="yearlyStatsModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content logistics-modal"><div class="modal-header logistics-modal-header py-2"><h5 class="modal-title text-white fs-6 fw-bold"><i class="bi bi-graph-up me-2"></i>สถิติเข้า-ออก รายปี</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-0"><table class="table table-dark table-striped mb-0 text-center small bg-transparent"><thead><tr><th>ปี</th><th class="text-success">เข้าใหม่</th><th class="text-danger">ลาออก</th><th>คงเหลือสะสม</th></tr></thead><tbody id="yearStatsBodyModal"></tbody></table></div></div></div></div>
-    <div class="modal fade" id="yearDetailModal" tabindex="-1" style="z-index: 1060;"><div class="modal-dialog modal-dialog-centered"><div class="modal-content logistics-modal"><div class="modal-header logistics-modal-header py-2"><h5 class="modal-title text-white fs-6 fw-bold" id="yearDetailTitle">...</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3" id="yearDetailList" style="max-height: 400px; overflow-y: auto;"></div></div></div></div>
-    <div class="modal fade" id="accTopCausesModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border border-warning border-opacity-50 logistics-modal"><div class="modal-header logistics-modal-header py-2"><h5 class="modal-title text-warning fs-6 fw-bold"><i class="bi bi-person-bounding-box me-2"></i>พนักงานที่เกิดอุบัติเหตุบ่อย (Top 10)</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3" id="accTopCausesList"></div></div></div></div>
-    <div class="modal fade" id="warnTopEmpModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border border-danger border-opacity-50 logistics-modal"><div class="modal-header logistics-modal-header py-2"><h5 class="modal-title text-danger fs-6 fw-bold"><i class="bi bi-person-lines-fill me-2"></i>พนักงานที่ได้รับใบเตือนสูงสุด (Top 10)</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3" id="warnTopEmployeesList"></div></div></div></div>
-    <div class="modal fade" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content border border-danger border-opacity-50 logistics-modal"><div class="modal-header py-3 logistics-modal-header"><h5 class="modal-title text-danger fs-6 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>ออกใบเตือนพนักงาน</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><form id="warningForm" onsubmit="window.submitWarningForm(event)"><div class="row g-3"><div class="col-md-12"><label class="label-logistics">พนักงานที่กระทำผิด *</label><input type="text" class="form-control input-dark" id="warnEmpInput" list="warnEmpOptions" placeholder="ค้นหาชื่อ หรือ รหัสพนักงาน..." autocomplete="off" required><datalist id="warnEmpOptions"></datalist></div><div class="col-md-6"><label class="label-logistics">วันที่ออกใบเตือน *</label><input type="date" class="form-control input-dark" id="warnIssueDate" required></div><div class="col-md-6"><label class="label-logistics">วันที่กระทำผิด *</label><input type="date" class="form-control input-dark" id="warnIncidentDate" required></div><div class="col-12"><label class="label-logistics">ฐานความผิด (ข้อ 1) *</label><input type="text" class="form-control input-dark" id="warnOffense1" required></div><div class="col-12"><label class="label-logistics">ฐานความผิด (ข้อ 2)</label><input type="text" class="form-control input-dark" id="warnOffense2"></div><div class="col-12"><label class="label-logistics">หมายเหตุ / รายละเอียดเพิ่มเติม</label><textarea class="form-control input-dark" id="warnNotes" rows="2"></textarea></div><div class="col-md-6"><label class="label-logistics">ผู้ออกใบเตือน *</label><select class="form-select input-dark" id="warnIssuedBy" required><option value="นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)">นาย กิตติศักดิ์ อุส่าห์</option><option value="นางสาว จุฑารัตน์ แสงหงษา (HR)">นางสาว จุฑารัตน์ แสงหงษา</option><option value="นาย วชิระ อังธนดิลก (ผู้จัดการ)">นาย วชิระ อังธนดิลก</option><option value="นางสาว นิสา พรหมสูงวงษ์ (ผู้จัดการทั่วไป)">นางสาว นิสา พรหมสูงวงษ์</option></select></div><div class="col-md-6"><label class="label-logistics">เอกสารแนบ (ถ้ามี)</label><input type="text" class="form-control input-dark" id="warnAttachments" placeholder="เช่น รูปถ่ายความเสียหาย"></div><div class="col-md-6"><label class="label-logistics">รูปหลักฐาน 1</label><input type="file" class="form-control input-dark" id="warnPhoto1" accept="image/*"></div><div class="col-md-6"><label class="label-logistics">รูปหลักฐาน 2</label><input type="file" class="form-control input-dark" id="warnPhoto2" accept="image/*"></div></div><div class="mt-4 text-end"><button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button><button type="submit" class="btn btn-danger rounded-pill px-5 fw-bold" id="btnSubmitWarning">สร้างใบเตือน</button></div></form></div></div></div></div>
-    <div class="modal fade" id="warningDetailModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content border border-danger border-opacity-50 logistics-modal"><div class="modal-header py-3 logistics-modal-header"><h5 class="modal-title text-danger fs-6 fw-bold">แก้ไข/ตรวจสอบใบเตือน: <span id="e_warnDocNo"></span></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><input type="hidden" id="e_warnDocNoHidden"><div class="mb-3 p-3 bg-black rounded"><span class="text-muted small">พนักงาน: </span><span id="e_warnEmpName" class="text-white fw-bold"></span></div><div class="row g-3"><div class="col-md-6"><label class="label-logistics">วันที่ออกใบเตือน</label><input type="date" class="form-control input-dark" id="e_warnIssueDate"></div><div class="col-md-6"><label class="label-logistics">วันที่กระทำผิด</label><input type="date" class="form-control input-dark" id="e_warnIncidentDate"></div><div class="col-12"><label class="label-logistics">ฐานความผิด (ข้อ 1)</label><input type="text" class="form-control input-dark" id="e_warnOffense1"></div><div class="col-12"><label class="label-logistics">ฐานความผิด (ข้อ 2)</label><input type="text" class="form-control input-dark" id="e_warnOffense2"></div><div class="col-12"><label class="label-logistics">หมายเหตุ</label><textarea class="form-control input-dark" id="e_warnNotes" rows="2"></textarea></div><div class="col-md-6"><label class="label-logistics">ผู้ออกใบเตือน (<span id="e_warnIssuedByText" class="text-info"></span>)</label><select class="form-select input-dark" id="e_warnIssuedBy"><option value="นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)">นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)</option><option value="นางสาว จุฑารัตน์ แสงหงษา (HR)">นางสาว จุฑารัตน์ แสงหงษา (HR)</option><option value="นาย วชิระ อังธนดิลก (ผู้จัดการ)">นาย วชิระ อังธนดิลก (ผู้จัดการ)</option><option value="นางสาว นิสา พรหมสูงวงษ์ (ผู้จัดการทั่วไป)">นางสาว นิสา พรหมสูงวงษ์ (ผู้จัดการทั่วไป)</option></select></div><div class="col-md-6"><label class="label-logistics">เอกสารแนบ</label><input type="text" class="form-control input-dark" id="e_warnAttachments"></div></div><div class="mt-4 d-flex justify-content-between pt-3 border-top border-secondary"><button type="button" class="btn btn-outline-danger rounded-pill px-4" onclick="window.deleteWarning()"><i class="bi bi-trash"></i> ลบเอกสาร</button><div><button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button><button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.saveWarningResolution()">บันทึกการแก้ไข</button></div></div></div></div></div></div>
 
     <script>
         window.switchAdminTab = function(tab) {
@@ -1152,10 +1061,10 @@
         };
 
         window.loadAdminData = function() {
-            document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> เชื่อมต่อฐานข้อมูลระบบ...</td></tr>';
+            document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
             document.getElementById('adminAccidentTableBody').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลอุบัติเหตุ...</td></tr>';
             document.getElementById('adminWarnTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูลใบเตือน...</td></tr>';
-            document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> ซิงค์ข้อมูลสลิปเงินเดือน...</td></tr>';
+            document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
             
             window.callAPI({ 
                 action: 'getAccidentData', 
@@ -1222,16 +1131,16 @@
             var list = (limit === 'all') ? data : data.slice(0, parseInt(limit));
             
             if (list.length === 0) { 
-                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted">ไม่พบข้อมูลในระบบ</td></tr>'; 
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>'; 
                 document.getElementById('tableFooter').innerText = 'Total: 0'; 
                 return; 
             }
             
             list.forEach(function(emp) {
                 var badgeClass = 'bg-secondary text-white';
-                if (emp.status === 'Active') badgeClass = 'bg-success text-white border border-success'; 
-                else if (emp.status === 'Resigned') badgeClass = 'bg-danger text-white border border-danger'; 
-                else if (emp.status === 'Suspended') badgeClass = 'bg-warning text-dark border border-warning';
+                if (emp.status === 'Active') badgeClass = 'bg-success text-dark'; 
+                else if (emp.status === 'Resigned') badgeClass = 'bg-danger text-white'; 
+                else if (emp.status === 'Suspended') badgeClass = 'bg-warning text-dark';
                 
                 var accCount = window.allAccidentData.filter(function(a) { return String(a.empId).trim() === String(emp.id).trim(); }).length;
                 var accBadge = accCount > 0 ? '<span class="badge bg-warning text-dark rounded-pill shadow-sm">' + accCount + ' ครั้ง</span>' : '<span class="text-muted small">-</span>';
@@ -1241,7 +1150,7 @@
                 
                 var editBtn = ''; 
                 if (window.currentUser.role !== 'Viewer') { 
-                    editBtn = '<button class="btn btn-sm btn-dark border-secondary text-info rounded-circle hover-scale" onclick="event.stopPropagation(); window.openModal(\'edit\', \'' + emp.id + '\')" title="แก้ไขข้อมูล"><i class="bi bi-pencil-fill"></i></button>'; 
+                    editBtn = '<button class="btn btn-sm btn-dark border-secondary text-warning rounded-circle hover-scale" onclick="event.stopPropagation(); window.openModal(\'edit\', \'' + emp.id + '\')" title="แก้ไข"><i class="bi bi-pencil-fill"></i></button>'; 
                 }
                 
                 var docIcon = '<span class="text-muted small opacity-25">-</span>';
@@ -1259,13 +1168,13 @@
                     docConfig.forEach(function(conf) { 
                         if (emp.docs[conf.key] && emp.docs[conf.key].url) { 
                             var bgStyle = visibleCount % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.05)'; 
-                            var iconColor = conf.icon.includes('text-') ? conf.icon : conf.icon + ' text-info opacity-75';
+                            var iconColor = conf.icon.includes('text-') ? conf.icon : conf.icon + ' text-success opacity-75';
                             menuItems += '<li style="background-color: ' + bgStyle + ';"><a class="dropdown-item text-light py-2 d-flex align-items-center gap-2 small" href="' + emp.docs[conf.key].url + '" target="_blank"><i class="bi ' + iconColor + '"></i>' + conf.name + '</a></li>'; 
                             visibleCount++; 
                         } 
                     });
                     if (menuItems !== '') { 
-                        docIcon = '<div class="dropdown"><button class="btn btn-sm btn-link text-decoration-none text-info p-0 hover-scale" type="button" data-bs-toggle="dropdown" onclick="event.stopPropagation()"><i class="bi bi-folder2-open fs-5"></i></button><ul class="dropdown-menu dropdown-menu-dark shadow-lg border border-secondary border-opacity-25 p-0 overflow-hidden" style="min-width: 200px;">' + menuItems + '</ul></div>'; 
+                        docIcon = '<div class="dropdown"><button class="btn btn-sm btn-link text-decoration-none text-success p-0 hover-scale" type="button" data-bs-toggle="dropdown" onclick="event.stopPropagation()"><i class="bi bi-folder2-open fs-5"></i></button><ul class="dropdown-menu dropdown-menu-dark shadow-lg border border-secondary border-opacity-25 p-0 overflow-hidden" style="min-width: 200px;">' + menuItems + '</ul></div>'; 
                     }
                 }
                 
@@ -1356,7 +1265,7 @@
             }); 
             
             if (filtered.length === 0) {
-                html = '<tr><td colspan="8" class="text-center py-5 text-muted">ไม่พบข้อมูลพนักงานในเงื่อนไขที่เลือก</td></tr>';
+                html = '<tr><td colspan="8" class="text-center py-5 text-muted">ไม่พบข้อมูลพนักงาน</td></tr>';
             } else {
                 filtered.forEach(function(r) {
                     var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === r.id; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
@@ -1396,8 +1305,8 @@
                     var badge = slipCountTotal > 0 ? `<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="event.stopPropagation(); window.openPayrollHistory('${r.id}')">${slipCountTotal} เดือน</button>` : `<span class="text-muted small">-</span>`;
                     var posShort = r.position || '-';
                     
-                    var rowStyle = currentMonthSlip ? 'background-color: rgba(0, 229, 255, 0.05); border-left: 3px solid var(--cyber-primary);' : '';
-                    var statusIcon = currentMonthSlip ? '<i class="bi bi-check-circle-fill text-success ms-2" title="ออกสลิปแล้ว"></i>' : '';
+                    var rowStyle = currentMonthSlip ? 'background-color: rgba(0, 230, 118, 0.08); border-left: 3px solid #00E676;' : '';
+                    var statusIcon = currentMonthSlip ? '<i class="bi bi-check-circle-fill text-success ms-2" title="มีข้อมูลตามตัวกรอง"></i>' : '';
                     
                     var netShow = currentMonthSlip ? window.numberWithCommas(empPeriodNet) : '-';
                     var ssoShow = currentMonthSlip ? window.numberWithCommas(empPeriodSSO) : '-';
@@ -1411,7 +1320,7 @@
                         <td class="text-end text-info fw-bold">${ssoShow}</td>
                         <td class="text-center">${badge}</td>
                         <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-outline-info rounded-pill px-3 shadow-sm hover-scale" onclick="event.stopPropagation(); window.openPayrollModal('${r.id}')"><i class="bi bi-gear-fill me-1"></i>จัดการสลิป</button>
+                            <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="event.stopPropagation(); window.openPayrollModal('${r.id}')"><i class="bi bi-plus-circle me-1"></i>ออกสลิป</button>
                         </td>
                     </tr>`;
                 });
@@ -1433,7 +1342,7 @@
                 html = '<tr><td colspan="6" class="text-center py-4 text-muted">ไม่มีประวัติ</td></tr>';
             } else {
                 slips.forEach(function(s) {
-                    var btnEdit = `<button class="btn btn-sm btn-outline-info rounded-circle me-1" onclick="window.editPayroll('${s.empId}', '${s.payMonth}')" title="ดึงข้อมูลมาแก้ไข"><i class="bi bi-pencil"></i></button>`;
+                    var btnEdit = `<button class="btn btn-sm btn-outline-success rounded-circle me-1" onclick="window.editPayroll('${s.empId}', '${s.payMonth}')" title="ดึงข้อมูลมาแก้ไข"><i class="bi bi-pencil"></i></button>`;
                     var btnDel = `<button class="btn btn-sm btn-outline-danger rounded-circle" onclick="window.deletePayslip('${s.empId}', '${s.payMonth}')" title="ลบสลิป"><i class="bi bi-trash"></i></button>`;
                     html += `<tr>
                         <td class="ps-4">${window.formatDate(s.payDate)}</td>
@@ -1456,14 +1365,16 @@
             if (document.getElementById('keepPrevData').checked && empSlips.length > 0) {
                 var lastM = empSlips[0];
                 for (var i=2; i<=10; i++) { 
-                    document.getElementById('pr_inc'+i).value = lastM.incomes[i-1] || 0;
+                    var el = document.getElementById('pr_inc'+i);
+                    if(el) el.value = lastM.incomes[i-1] || 0;
                 }
                 for (var i=3; i<=10; i++) { 
-                    document.getElementById('pr_dec'+i).value = lastM.deducts[i-1] || 0;
+                    var el = document.getElementById('pr_dec'+i);
+                    if(el) el.value = lastM.deducts[i-1] || 0;
                 }
             } else {
-                for (var i=2; i<=10; i++) document.getElementById('pr_inc'+i).value = '';
-                for (var i=3; i<=10; i++) document.getElementById('pr_dec'+i).value = '';
+                for (var i=2; i<=10; i++) { var el = document.getElementById('pr_inc'+i); if(el) el.value = ''; }
+                for (var i=3; i<=10; i++) { var el = document.getElementById('pr_dec'+i); if(el) el.value = ''; }
             }
             window.calcPayrollTotals();
         };
@@ -1482,7 +1393,8 @@
                     var idx = parseInt(fieldId.replace('dec', '')) - 1;
                     val = lastM.deducts[idx] || 0;
                 }
-                document.getElementById('pr_' + fieldId).value = val;
+                var target = document.getElementById('pr_' + fieldId);
+                if(target) target.value = val;
                 window.calcPayrollTotals(); 
             } else {
                 Swal.fire({
@@ -1526,10 +1438,12 @@
                 document.getElementById('pr_payDate').value = monthData.payDate.split('T')[0];
                 document.getElementById('pr_baseSalary').value = monthData.baseSalary || 0;
                 for (var i=2; i<=10; i++) { 
-                    document.getElementById('pr_inc'+i).value = monthData.incomes[i-1] || 0;
+                    var el = document.getElementById('pr_inc'+i);
+                    if(el) el.value = monthData.incomes[i-1] || 0;
                 }
                 for (var i=3; i<=10; i++) { 
-                    document.getElementById('pr_dec'+i).value = monthData.deducts[i-1] || 0;
+                    var el = document.getElementById('pr_dec'+i);
+                    if(el) el.value = monthData.deducts[i-1] || 0;
                 }
                 window.calcPayrollTotals();
                 new bootstrap.Modal(document.getElementById('payrollModal')).show();
@@ -1541,8 +1455,8 @@
                 var defaultBase = empSlips.length > 0 ? empSlips[0].baseSalary : parseFloat(emp.appSalary || emp.reqSalary || 0);
                 document.getElementById('pr_baseSalary').value = defaultBase;
 
-                for (var i=2; i<=10; i++) { document.getElementById('pr_inc'+i).value = ''; }
-                for (var i=3; i<=10; i++) { document.getElementById('pr_dec'+i).value = ''; }
+                for (var i=2; i<=10; i++) { var el = document.getElementById('pr_inc'+i); if(el) el.value = ''; }
+                for (var i=3; i<=10; i++) { var el = document.getElementById('pr_dec'+i); if(el) el.value = ''; }
 
                 window.calcPayrollTotals();
                 new bootstrap.Modal(document.getElementById('payrollModal')).show();
@@ -1563,7 +1477,7 @@
                 text: 'PDF และประวัติเดือนนี้จะถูกลบถาวร', 
                 icon: 'warning', 
                 showCancelButton: true, 
-                confirmButtonColor: '#FF1744', 
+                confirmButtonColor: '#d33', 
                 cancelButtonColor: '#555', 
                 confirmButtonText: 'ลบทิ้ง!', 
                 cancelButtonText: 'ยกเลิก', 
@@ -1636,9 +1550,14 @@
             
             var netSalary = grossIncome - totalDec;
 
-            document.getElementById('pr_totalIncomeShow').innerText = window.numberWithCommas(grossIncome);
-            document.getElementById('pr_totalDeductShow').innerText = window.numberWithCommas(totalDec);
-            document.getElementById('pr_netSalaryShow').innerText = window.numberWithCommas(netSalary);
+            var elIncShow = document.getElementById('pr_totalIncomeShow');
+            if(elIncShow) elIncShow.innerText = window.numberWithCommas(grossIncome);
+            
+            var elDecShow = document.getElementById('pr_totalDeductShow');
+            if(elDecShow) elDecShow.innerText = window.numberWithCommas(totalDec);
+            
+            var elNetShow = document.getElementById('pr_netSalaryShow');
+            if(elNetShow) elNetShow.innerText = window.numberWithCommas(netSalary);
         };
 
         window.submitPayrollForm = function(e) {
@@ -1658,8 +1577,10 @@
             var totalInc = 0;
             var totalDec = 0;
             for (var i=1; i<=10; i++) {
-                var incVal = parseFloat(document.getElementById('pr_inc'+i).value) || 0;
-                var decVal = parseFloat(document.getElementById('pr_dec'+i).value) || 0;
+                var elInc = document.getElementById('pr_inc'+i);
+                var elDec = document.getElementById('pr_dec'+i);
+                var incVal = elInc ? (parseFloat(elInc.value) || 0) : 0;
+                var decVal = elDec ? (parseFloat(elDec.value) || 0) : 0;
                 payload['inc'+i] = incVal;
                 payload['dec'+i] = decVal;
                 totalInc += incVal;
@@ -1682,7 +1603,7 @@
                     Swal.fire({
                         icon: 'success', 
                         title: 'ออกสลิปเงินเดือนสำเร็จ', 
-                        html: `ส่งเข้าโปรไฟล์พนักงานเรียบร้อย<br><a href="${res.url}" target="_blank" class="btn btn-info mt-3 rounded-pill px-4"><i class="bi bi-file-pdf me-1"></i> ดูสลิปที่สร้าง</a>`,
+                        html: `ส่งเข้าโปรไฟล์พนักงานเรียบร้อย<br><a href="${res.url}" target="_blank" class="btn btn-warning mt-3 rounded-pill px-4"><i class="bi bi-file-pdf me-1"></i> ดูสลิปที่สร้าง</a>`,
                         background: '#1a1a1a', color: '#fff'
                     });
                     bootstrap.Modal.getInstance(document.getElementById('payrollModal')).hide();
@@ -1711,16 +1632,16 @@
            var topAccs = Object.keys(accCounts).map(function(k) { return {name:k, count:accCounts[k]}; }).sort(function(a,b) { return b.count - a.count; }).slice(0,10);
            var topAccHtml = '';
            topAccs.forEach(function(c, i) { 
-               topAccHtml += '<div class="list-item-glass static-item"><span class="small text-light">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-warning text-dark rounded-pill">' + c.count + ' ครั้ง</span></div>'; 
+               topAccHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-warning text-dark rounded-pill">' + c.count + ' ครั้ง</span></div>'; 
            });
            document.getElementById('accTopCausesList').innerHTML = topAccHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
            
            var html = '';
            data.forEach(function(r) {
                var isResolved = (r.status === 'ปิดงานเรียบร้อย');
-               var statClass = r.status === 'รอดำเนินการ' || r.status === 'Pending' ? 'bg-warning text-dark border-warning' : (isResolved ? 'bg-success text-white border-success' : 'bg-secondary text-white');
+               var statClass = r.status === 'รอดำเนินการ' || r.status === 'Pending' ? 'bg-warning text-dark' : (isResolved ? 'bg-success text-white' : 'bg-secondary');
                var statText = r.status === 'Pending' ? 'รอดำเนินการ' : r.status;
-               var pdfBtn = r.pdfUrl !== '-' ? '<a href="' + r.pdfUrl + '" target="_blank" onclick="event.stopPropagation()" class="btn btn-sm btn-outline-warning py-0 px-2 me-1 mb-1 shadow-sm"><i class="bi bi-file-pdf"></i> PDF</a>' : '';
+               var pdfBtn = r.pdfUrl !== '-' ? '<a href="' + r.pdfUrl + '" target="_blank" onclick="event.stopPropagation()" class="btn btn-sm btn-outline-danger py-0 px-2 me-1 mb-1 shadow-sm"><i class="bi bi-file-pdf"></i> PDF</a>' : '';
                
                var photoHtml = '';
                if (r.photoUrl !== '-') { 
@@ -1736,7 +1657,7 @@
                if(docsHtml === '') docsHtml = '-';
                
                var trailerText = (r.trailerPlate && r.trailerPlate !== '-') ? '<br><small class="text-info">หาง: ' + r.trailerPlate + '</small>' : '';
-               html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1 border" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><span class="text-danger">' + r.cause + '</span><br><small class="text-muted">' + r.causedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
+               html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><span class="text-danger">' + r.cause + '</span><br><small class="text-muted">' + r.causedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
            });
            document.getElementById('adminAccidentTableBody').innerHTML = html || '<tr><td colspan="7" class="text-center py-4 text-muted">ไม่พบข้อมูลอุบัติเหตุ</td></tr>';
         };
@@ -1755,7 +1676,7 @@
             
             var modalEl = document.getElementById('accidentDetailModal');
             if (!modalEl) {
-                Swal.fire({icon: 'warning', title: 'กรุณาอัปเดตระบบ', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
+                Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
                 return;
             }
 
@@ -1791,7 +1712,7 @@
             };
             if(!payload.docNo) return;
             
-            Swal.fire({title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
+            Swal.fire({title: 'กำลังบันทึกและสร้าง PDF ใหม่...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
             
             window.callAPI({ action: 'updateAccidentResolution', payload: payload }).then(function(res) { 
                 if (res.success) { 
@@ -1813,7 +1734,7 @@
                 text: 'ต้องการลบรายงานอุบัติเหตุเลขที่ ' + docNo + ' ใช่หรือไม่?', 
                 icon: 'warning', 
                 showCancelButton: true, 
-                confirmButtonColor: '#FF1744', 
+                confirmButtonColor: '#d33', 
                 cancelButtonColor: '#555', 
                 confirmButtonText: 'ใช่, ลบทิ้ง!', 
                 cancelButtonText: 'ยกเลิก' 
@@ -1841,7 +1762,7 @@
            
            var topHtml = ''; 
            topWarns.forEach(function(c, i) { 
-               topHtml += '<div class="list-item-glass static-item"><span class="small text-light">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-danger rounded-pill">' + c.count + ' ครั้ง</span></div>'; 
+               topHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-danger rounded-pill">' + c.count + ' ครั้ง</span></div>'; 
            }); 
            document.getElementById('warnTopEmployeesList').innerHTML = topHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
            
@@ -1868,7 +1789,7 @@
             var el = document.getElementById('e_warnDocNo');
             var modalEl = document.getElementById('warningDetailModal');
             if(!el || !modalEl) {
-                Swal.fire({icon: 'warning', title: 'อัปเดตระบบ', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
+                Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
                 return;
             }
 
@@ -1909,7 +1830,7 @@
             };
             if(!payload.docNo) return;
 
-            Swal.fire({title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
+            Swal.fire({title: 'กำลังบันทึกและสร้าง PDF ใหม่...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
 
             window.callAPI({ action: 'updateWarningResolution', payload: payload }).then(function(res) { 
                 if (res.success) { 
@@ -1928,10 +1849,10 @@
 
             Swal.fire({ 
                 title: 'ยืนยันการลบ?', 
-                text: 'ต้องการลบใบเตือนเลขที่ ' + docNo + ' ใช่หรือไม่?', 
+                text: 'ต้องการลบใบเตือนเลขที่ ' + docNo + ' ใช่หรือไม่? (PDF และข้อมูลจะถูกลบออกทั้งหมด)', 
                 icon: 'warning', 
                 showCancelButton: true, 
-                confirmButtonColor: '#FF1744', 
+                confirmButtonColor: '#d33', 
                 cancelButtonColor: '#555', 
                 confirmButtonText: 'ใช่, ลบทิ้ง!', 
                 cancelButtonText: 'ยกเลิก' 
@@ -1956,7 +1877,7 @@
             var modalEl = document.getElementById('warningCreateModal');
             
             if (!form || !modalEl) {
-                Swal.fire({icon: 'warning', title: 'อัปเดตระบบ', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
+                Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'ระบบไม่พบฟอร์มใบเตือน กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
                 return;
             }
 
@@ -2028,7 +1949,7 @@
                 btn.innerHTML = originalText; 
                 btn.disabled = false; 
                 if (res.success) { 
-                    Swal.fire({icon: 'success', title: 'สร้างใบเตือนสำเร็จ', html: 'เลขที่อ้างอิง: <b class="text-danger">' + res.docNo + '</b>'}); 
+                    Swal.fire({icon: 'success', title: 'สร้างใบเตือนสำเร็จ', html: 'ส่งเข้าประวัติพนักงานเรียบร้อย<br>เลขที่อ้างอิง: <b class="text-danger">' + res.docNo + '</b>'}); 
                     bootstrap.Modal.getInstance(document.getElementById('warningCreateModal')).hide(); 
                     window.loadAdminData(); 
                 } else { 
@@ -2064,7 +1985,7 @@
             else { 
                 list.forEach(function(e) { 
                     var day = new Date(e.birthDate).getDate(); 
-                    html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div class="d-flex align-items-center"><div class="bg-dark border border-secondary rounded-circle d-flex align-items-center justify-content-center me-3 text-warning fw-bold" style="width:36px;height:36px;">' + day + '</div><div><div class="item-title text-light">' + e.name + '</div><div class="item-subtitle text-muted small">' + e.position + '</div></div></div><i class="bi bi-chevron-right text-muted small"></i></div>'; 
+                    html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div class="d-flex align-items-center"><div class="bg-dark border border-secondary rounded-circle d-flex align-items-center justify-content-center me-3 text-warning fw-bold" style="width:36px;height:36px;">' + day + '</div><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div></div><i class="bi bi-chevron-right text-muted small"></i></div>'; 
                 }); 
             } 
             document.getElementById('birthdayListBody').innerHTML = html; 
@@ -2085,7 +2006,7 @@
             var sorted = Object.keys(stats).map(function(k) { return {n:k, c:stats[k]}; }).sort(function(a,b) { return b.c - a.c; }); 
             var html = '<div class="row g-2">'; 
             sorted.forEach(function(i) { 
-                html += '<div class="col-sm-6"><div class="list-item-glass clickable-item" onclick="window.openPositionDetail(\'' + i.n + '\')"><span class="text-light">' + i.n + '</span><span class="badge bg-success text-white ms-2">' + i.c + '</span></div></div>'; 
+                html += '<div class="col-sm-6"><div class="list-item-glass clickable-item" onclick="window.openPositionDetail(\'' + i.n + '\')"><span>' + i.n + '</span><span class="badge bg-success text-dark ms-2">' + i.c + '</span></div></div>'; 
             }); 
             document.getElementById('positionStatsList').innerHTML = html + '</div>'; 
             new bootstrap.Modal(document.getElementById('positionStatsModal')).show(); 
@@ -2094,7 +2015,7 @@
         window.openPositionDetail = function(pos) { 
             var list = window.allEmpData.filter(function(d) { return d.status === 'Active' && d.position && d.position.includes(pos); }); 
             var html = ''; 
-            list.forEach(function(e) { html += '<div class="list-item-glass static-item"><div><div class="item-title text-light">' + e.name + '</div><div class="item-subtitle text-info small">' + (e.phone || '-') + '</div></div></div>'; }); 
+            list.forEach(function(e) { html += '<div class="list-item-glass static-item"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + (e.phone || '-') + '</div></div></div>'; }); 
             document.getElementById('positionDetailTitle').innerText = 'ตำแหน่ง: ' + pos; 
             document.getElementById('positionDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
             new bootstrap.Modal(document.getElementById('positionDetailModal')).show(); 
@@ -2109,7 +2030,7 @@
             var html = '', cum = 0; 
             Object.keys(yearMap).sort().forEach(function(y) { 
                 var d = yearMap[y]; cum += (d.j - d.r); 
-                html += '<tr class="static-item border-bottom border-secondary border-opacity-25"><td class="py-3 text-light">' + y + '</td><td class="text-success clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'join\')">+' + d.j + '</td><td class="text-danger clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'resign\')">-' + d.r + '</td><td class="text-white fw-bold">' + cum + '</td></tr>'; 
+                html += '<tr class="static-item"><td class="py-3">' + y + '</td><td class="text-success clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'join\')">+' + d.j + '</td><td class="text-danger clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'resign\')">-' + d.r + '</td><td class="text-white">' + cum + '</td></tr>'; 
             }); 
             document.getElementById('yearStatsBodyModal').innerHTML = html; 
             new bootstrap.Modal(document.getElementById('yearlyStatsModal')).show(); 
@@ -2125,10 +2046,317 @@
                 list = window.allEmpData.filter(function(d) { return d.status === 'Resigned' && d.resignDate && new Date(d.resignDate).getFullYear() == year; }); 
             } 
             var html = ''; 
-            list.forEach(function(e) { html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div><div class="item-title text-light">' + e.name + '</div><div class="item-subtitle text-muted small">' + e.position + '</div></div><span class="badge bg-dark border border-secondary text-light">' + window.formatDate(type === 'join' ? e.startDate : e.resignDate) + '</span></div>'; }); 
+            list.forEach(function(e) { html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div><span class="badge bg-dark border border-secondary text-light">' + window.formatDate(type === 'join' ? e.startDate : e.resignDate) + '</span></div>'; }); 
             document.getElementById('yearDetailTitle').innerText = title; 
             document.getElementById('yearDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
             new bootstrap.Modal(document.getElementById('yearDetailModal')).show(); 
+        };
+
+        window.openModal = function(mode, targetId, preloadedData) { 
+            document.getElementById('empForm').reset(); 
+            document.getElementById('formMode').value = mode; 
+            var modalEl = document.getElementById('empModal'); 
+            modalObj = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl); 
+            var targetData = preloadedData || null; 
+            if (!targetData && mode !== 'create' && targetId) { 
+                targetData = allEmpData.find(x => String(x.id).trim() === String(targetId).trim()); 
+            } 
+            setupModalData(mode, targetData); 
+            modalObj.show(); 
+            window.loadSettings(function() { 
+                if (mode !== 'view' && targetData) { 
+                    window.fillData(targetData, false); 
+                } 
+                var isUser = (currentUser.role === 'User'); 
+                if (isUser || mode === 'view' || currentUser.role === 'Viewer') { 
+                    document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = true); 
+                } 
+            }); 
+        };
+
+        function setupModalData(mode, d) { 
+            var btnSave = document.getElementById('btnSaveModal'); 
+            var viewSection = document.getElementById('viewModeSection'); 
+            var editSection = document.getElementById('editModeSection'); 
+            viewSection.style.display = 'none'; 
+            editSection.style.display = 'none'; 
+            btnSave.style.display = 'none'; 
+            
+            var lock = (id, state) => { 
+                var el = document.getElementById(id); 
+                if(el) { 
+                    el.readOnly = state; 
+                    el.disabled = state; 
+                    if(state) {
+                        el.classList.add('readonly-field'); 
+                    } else {
+                        el.classList.remove('readonly-field'); 
+                    }
+                } 
+            }; 
+            
+            var lockPositions = (state) => { 
+                document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = state); 
+            }; 
+            
+            var allFields = ['empId','role','username','password','fullname','nickname','startDate','phone','birthDate','gender','ssoType','ssoHosp','idExp','licExp','idCardNum','licNum','licType','resignReason','prefix']; 
+            
+            if (mode === 'create') { 
+                document.getElementById('modalTitle').innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>เพิ่มพนักงานใหม่'; 
+                editSection.style.display = 'block'; 
+                btnSave.style.display = 'block'; 
+                allFields.forEach(f => lock(f,false)); 
+                lockPositions(false); 
+                document.getElementById('btnGenId').style.display = 'inline-block'; 
+                window.genId(); 
+                document.getElementById('empStatus').value = 'Active'; 
+                lock('empStatus', false); 
+                window.toggleResignDate(); 
+            } else if (mode === 'view' || currentUser.role === 'Viewer') { 
+                document.getElementById('modalTitle').innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)'; 
+                viewSection.style.display = 'block'; 
+                document.getElementById('btnGenId').style.display = 'none'; 
+                if(d) window.fillData(d, true); 
+            } else { 
+                var isUser = (currentUser.role === 'User'); 
+                document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน'; 
+                editSection.style.display = 'block'; 
+                btnSave.style.display = 'block'; 
+                document.getElementById('btnGenId').style.display = 'none'; 
+                if(d) window.fillData(d, false); 
+                lock('empId', true); 
+                if (isUser) { 
+                    lock('role', true); lock('empStatus', true); lock('resignDate', true); lock('resignReason', true); lock('username', true); 
+                    lock('fullname', true); lock('prefix', true); lock('startDate', true); lock('gender', true); lock('ssoType', true); 
+                    lock('birthDate', false); lock('password', false); lock('phone', false); lock('nickname', false); lock('ssoHosp', false); 
+                    lock('idExp', false); lock('licExp', false); lock('idCardNum', false); lock('licNum', false); lock('licType', false); 
+                    lockPositions(true); 
+                } else { 
+                    lock('role', false); lock('empStatus', false); window.toggleResignDate(); 
+                    lock('username', false); lock('password', false); lock('fullname', false); lock('prefix', false); lock('startDate', false); 
+                    lock('birthDate', false); lock('gender', false); lock('ssoType', false); lock('ssoHosp', false); lock('nickname', false); 
+                    lock('idExp', false); lock('licExp', false); lock('idCardNum', false); lock('licNum', false); lock('licType', false); 
+                    lock('resignReason', false); lockPositions(false); lock('phone', false); 
+                } 
+            } 
+        }
+
+        function safeDate(d) { 
+            if(!d) return ''; 
+            try { 
+                var date = new Date(d); 
+                if(isNaN(date.getTime())) return ''; 
+                return date.toISOString().split('T')[0]; 
+            } catch(e) { return ''; } 
+        }
+
+        window.fillData = function(d, isViewMode) { 
+            if(!d) return; 
+            document.getElementById('empId').value = d.id; 
+            document.getElementById('fullname').value = d.name; 
+            document.getElementById('prefix').value = ""; 
+            document.getElementById('nickname').value = d.nickname || ''; 
+            document.getElementById('phone').value = d.phone; 
+            document.getElementById('username').value = d.username; 
+            document.getElementById('password').value = d.password; 
+            document.getElementById('role').value = d.role; 
+            document.getElementById('gender').value = d.gender || ''; 
+            document.getElementById('empStatus').value = d.status || 'Active'; 
+            document.getElementById('startDate').value = safeDate(d.startDate); 
+            document.getElementById('resignDate').value = safeDate(d.resignDate); 
+            document.getElementById('birthDate').value = safeDate(d.birthDate); 
+            document.getElementById('ssoType').value = d.ssoType || ''; 
+            document.getElementById('ssoHosp').value = d.ssoHosp || ''; 
+            document.getElementById('idExp').value = safeDate(d.idExp); 
+            document.getElementById('licExp').value = safeDate(d.licExp); 
+            document.getElementById('idCardNum').value = d.idCardNum || ''; 
+            document.getElementById('licNum').value = d.licNum || ''; 
+            document.getElementById('licType').value = d.licType || ''; 
+            document.getElementById('resignReason').value = d.resignReason || ''; 
+            
+            var currentPos = (d.position || '').split(',').map(p => p.trim()); 
+            document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => { 
+                cb.checked = currentPos.includes(cb.value); 
+            }); 
+            window.toggleResignDate(); 
+            
+            if (isViewMode) { 
+                document.getElementById('view_fullname').innerText = d.name; 
+                document.getElementById('view_nickname_badge').innerText = d.nickname ? d.nickname : '-'; 
+                document.getElementById('view_empId').innerText = d.id; 
+                var statusClass = d.status === 'Active' ? 'bg-success text-black' : (d.status === 'Resigned' ? 'bg-danger text-white' : 'bg-warning text-dark'); 
+                var statusEl = document.getElementById('view_status_badge'); 
+                statusEl.innerText = d.status; 
+                statusEl.className = 'badge rounded-pill fs-6 px-3 py-2 ' + statusClass; 
+                
+                document.getElementById('view_birthDate').innerText = window.formatDate(d.birthDate); 
+                document.getElementById('view_age').innerText = window.calcAge(d.birthDate); 
+                document.getElementById('view_gender').innerText = d.gender || '-'; 
+                document.getElementById('view_phone').innerText = d.phone || '-'; 
+                document.getElementById('view_username').innerText = d.username; 
+                document.getElementById('view_password').innerText = d.password; 
+                document.getElementById('view_role').innerText = d.role; 
+                document.getElementById('view_startDate').innerText = window.formatDate(d.startDate); 
+                document.getElementById('view_tenure').innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate); 
+                document.getElementById('view_ssoType').innerText = d.ssoType || '-'; 
+                document.getElementById('view_ssoHosp').innerText = d.ssoHosp || '-'; 
+                
+                if(d.status === 'Resigned') { 
+                    document.getElementById('view_resign_section').style.display = 'block'; 
+                    document.getElementById('view_resignDate').innerText = window.formatDate(d.resignDate); 
+                    document.getElementById('view_resignReason').innerText = d.resignReason || '-'; 
+                } else { 
+                    document.getElementById('view_resign_section').style.display = 'none'; 
+                } 
+                
+                document.getElementById('view_idCardNum').innerText = d.idCardNum || '-'; 
+                document.getElementById('view_idExp').innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : ''; 
+                document.getElementById('view_licType').innerText = d.licType || '-'; 
+                document.getElementById('view_licNum').innerText = d.licNum ? 'เลขที่: ' + d.licNum : ''; 
+                document.getElementById('view_licExp').innerText = d.licExp ? 'หมดอายุ: ' + window.formatDate(d.licExp) : ''; 
+                
+                var posContainer = document.getElementById('view_positions_badges'); 
+                posContainer.innerHTML = ''; 
+                if(currentPos.length > 0 && currentPos[0] !== "") { 
+                    currentPos.forEach(p => { 
+                        posContainer.innerHTML += `<span class="badge bg-dark text-light border border-secondary fw-normal py-2 px-3">${p}</span>`; 
+                    }); 
+                } else { 
+                    posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>'; 
+                } 
+            } 
+        };
+
+        window.getSelectedPositions = function() { 
+            var s=[]; 
+            document.querySelectorAll('input[name="posCheckbox"]:checked').forEach(c=>s.push(c.value)); 
+            return s.join(', '); 
+        };
+
+        window.submitEmpForm = async function(e) { 
+            e.preventDefault(); 
+            Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()}); 
+            var form = { 
+                empId: document.getElementById('empId').value, 
+                role: document.getElementById('role').value, 
+                status: document.getElementById('empStatus').value, 
+                resignDate: document.getElementById('resignDate').value, 
+                birthDate: document.getElementById('birthDate').value, 
+                gender: document.getElementById('gender').value, 
+                username: document.getElementById('username').value, 
+                password: document.getElementById('password').value, 
+                prefix: document.getElementById('prefix').value, 
+                fullname: document.getElementById('fullname').value, 
+                nickname: document.getElementById('nickname').value, 
+                ssoType: document.getElementById('ssoType').value, 
+                ssoHosp: document.getElementById('ssoHosp').value, 
+                idExp: document.getElementById('idExp').value, 
+                licExp: document.getElementById('licExp').value, 
+                idCardNum: document.getElementById('idCardNum').value, 
+                licNum: document.getElementById('licNum').value, 
+                licType: document.getElementById('licType').value, 
+                resignReason: document.getElementById('resignReason').value, 
+                position: window.getSelectedPositions(), 
+                startDate: document.getElementById('startDate').value, 
+                phone: document.getElementById('phone').value, 
+                currentUserRole: currentUser.role, 
+                filePhoto: await window.getBase64User(document.getElementById('filePhoto').files[0]), 
+                fileIdCard: await window.getBase64User(document.getElementById('fileIdCard').files[0]), 
+                filePassport: await window.getBase64User(document.getElementById('filePassport').files[0]), 
+                fileHouse: await window.getBase64User(document.getElementById('fileHouse').files[0]), 
+                fileDrive: await window.getBase64User(document.getElementById('fileDrive').files[0]), 
+                fileEdu: await window.getBase64User(document.getElementById('fileEdu').files[0]), 
+                fileCriminal: await window.getBase64User(document.getElementById('fileCriminal').files[0]), 
+                fileHealth: await window.getBase64User(document.getElementById('fileHealth').files[0]), 
+                fileWarn: null, 
+                fileOther1: await window.getBase64User(document.getElementById('fileOther1').files[0]), 
+                fileOther2: await window.getBase64User(document.getElementById('fileOther2').files[0]) 
+            }; 
+            try { 
+                const res = await window.callAPI({ 
+                    action: 'handleEmployeeSave', 
+                    form: form, 
+                    mode: document.getElementById('formMode').value 
+                }); 
+                if(res.success) { 
+                    Swal.fire('สำเร็จ', res.message, 'success'); 
+                    modalObj.hide(); 
+                    if(currentUser.role === 'Admin') window.loadAdminData(); 
+                    else window.loadUserData(); 
+                } else { 
+                    Swal.fire('เกิดข้อผิดพลาด', res.message, 'error'); 
+                } 
+            } catch(err) {} 
+        };
+
+        window.genId = function() { 
+            document.getElementById('empId').value='...'; 
+            try { 
+                window.callAPI({ action: 'getNextEmployeeId' }).then(res => { 
+                    document.getElementById('empId').value = res.empId; 
+                }); 
+            } catch(e) {} 
+        };
+
+        window.getBase64User = function(file) { 
+            return new Promise(function(resolve) { 
+                if (!file) { resolve(null); return; } 
+                var reader = new FileReader(); 
+                reader.onload = function() { 
+                    resolve({base64: reader.result.split(',')[1], type: file.type}); 
+                }; 
+                reader.readAsDataURL(file); 
+            }); 
+        };
+
+        window.calcAge = function(d) { 
+            if(!d) return "-"; 
+            var today = new Date(); 
+            var birthDate = new Date(d); 
+            if(isNaN(birthDate)) return "-"; 
+            var age = today.getFullYear() - birthDate.getFullYear(); 
+            var m = today.getMonth() - birthDate.getMonth(); 
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } 
+            return age + " ปี"; 
+        };
+
+        window.formatDate = function(d) { 
+            if(!d) return '-'; 
+            try { 
+                var date = new Date(d); 
+                if(isNaN(date.getTime())) return '-'; 
+                return date.toLocaleDateString('th-TH-u-ca-gregory', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
+            } catch(e) { return '-'; } 
+        };
+
+        window.calcTenure = function(dateString) { 
+            if(!dateString) return '-'; 
+            var start = new Date(dateString); 
+            var now = new Date(); 
+            start.setHours(0,0,0,0); 
+            now.setHours(0,0,0,0); 
+            if(isNaN(start.getTime())) return "-"; 
+            if (start.getTime() > now.getTime()) { 
+                return '<span class="badge bg-warning text-dark border border-warning shadow-sm" style="font-weight:600;">รอเริ่มงาน</span>'; 
+            } 
+            var years = now.getFullYear() - start.getFullYear(); 
+            var months = now.getMonth() - start.getMonth(); 
+            var days = now.getDate() - start.getDate(); 
+            if (days < 0) { 
+                months--; 
+                var prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); 
+                days += prevMonth.getDate(); 
+            } 
+            if (months < 0) { 
+                years--; 
+                months += 12; 
+            } 
+            var result = []; 
+            if (years > 0) result.push(years + " ปี"); 
+            if (months > 0) result.push(months + " เดือน"); 
+            if (days > 0) result.push(days + " วัน"); 
+            if (result.length === 0) return "เริ่มงานวันนี้"; 
+            return result.join(" "); 
         };
     </script>
 </div>
