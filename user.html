@@ -97,6 +97,9 @@
             transition: all 0.3s;
         }
         .upload-zone:hover { border-color: var(--logistic-primary); background: #111; }
+        
+        /* สไตล์ป้องกัน Layout เพี้ยนใน Modal ฝั่ง User */
+        .logistics-modal .modal-body { text-align: left !important; }
     </style>
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 fade-in-up gap-3">
@@ -208,11 +211,166 @@
     </div>
 </div>
 
+<!-- Modal สำหรับแจ้งอุบัติเหตุ -->
+<div class="modal fade" id="accidentModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content logistics-modal" style="border-color: #ffc107;">
+            <div class="modal-header logistics-modal-header py-3 border-bottom border-warning">
+                <h5 class="modal-title fw-bold text-warning fs-5">
+                    <i class="bi bi-cone-striped me-2"></i>รายงานอุบัติเหตุ
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
+                <form id="accidentForm" onsubmit="window.submitAccident(event)">
+                    <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                        <div class="logistics-section-title text-warning mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                            <i class="bi bi-info-circle me-2"></i>ข้อมูลการเกิดเหตุ
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1 fw-bold">วันที่เกิดเหตุ *</label>
+                                <input type="date" class="form-control bg-dark text-light border-secondary shadow-none" id="accDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1 fw-bold">เวลาเกิดเหตุ *</label>
+                                <select class="form-select bg-dark text-light border-secondary shadow-none" id="accTime" required>
+                                    <option value="">- เลือกเวลาโดยประมาณ -</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="small text-muted mb-1 fw-bold">สถานที่เกิดเหตุ *</label>
+                                <input type="text" class="form-control bg-dark text-light border-secondary shadow-none" id="accLocation" placeholder="ระบุสถานที่ หรือ ลิงก์พิกัด Google Maps" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                        <div class="logistics-section-title text-info mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                            <i class="bi bi-truck me-2"></i>ข้อมูลยานพาหนะ
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="small text-muted mb-1 fw-bold">ประเภทรถ *</label>
+                                <select class="form-select bg-dark text-light border-secondary shadow-none" id="accVehicleType" required>
+                                    <option value="">- เลือก -</option>
+                                    <option value="รถ 4 ล้อ">รถ 4 ล้อ</option>
+                                    <option value="รถ 6 ล้อ">รถ 6 ล้อ</option>
+                                    <option value="รถ 6 ล้อพ่วง">รถ 6 ล้อพ่วง</option>
+                                    <option value="รถ 10 ล้อ">รถ 10 ล้อ</option>
+                                    <option value="รถ 10 ล้อพ่วง">รถ 10 ล้อพ่วง</option>
+                                    <option value="รถ 12 ล้อพ่วง">รถ 12 ล้อพ่วง</option>
+                                    <option value="รถ เทรลเลอร์">รถ เทรลเลอร์</option>
+                                    <option value="รถบัส">รถบัส</option>
+                                    <option value="รถโฟร์คลิฟ">รถโฟร์คลิฟ</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted mb-1 fw-bold">ทะเบียนรถ (หัว) *</label>
+                                <input type="text" class="form-control bg-dark text-light border-secondary shadow-none" id="accTruckPlate" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted mb-1 fw-bold">ทะเบียนหาง (ถ้ามี)</label>
+                                <input type="text" class="form-control bg-dark text-light border-secondary shadow-none" id="accTrailerPlate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                        <div class="logistics-section-title text-danger mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                            <i class="bi bi-exclamation-triangle me-2"></i>สาเหตุและความเสียหาย
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1 fw-bold">สาเหตุ *</label>
+                                <select class="form-select bg-dark text-light border-secondary shadow-none mb-2" id="accCause" onchange="window.toggleAccOther('accCause', 'divCauseOther')" required>
+                                    <option value="">- เลือก -</option>
+                                    <option value="เมาสุรา">เมาสุรา</option>
+                                    <option value="ขับเร็วเกินกว่ากำหนด">ขับเร็วเกินกว่ากำหนด</option>
+                                    <option value="ตัดหน้ากระชั้นชิด">ตัดหน้ากระชั้นชิด</option>
+                                    <option value="ทัศนวิสัยไม่ดี">ทัศนวิสัยไม่ดี</option>
+                                    <option value="หลับใน">หลับใน</option>
+                                    <option value="ฝ่าฝืนสัญญาณไฟจราจร">ฝ่าฝืนสัญญาณไฟจราจร</option>
+                                    <option value="แซงรถในที่คับขัน">แซงรถในที่คับขัน</option>
+                                    <option value="โทรศัพท์ขณะขับขี่">โทรศัพท์ขณะขับขี่</option>
+                                    <option value="น้ำหนักเกิน">น้ำหนักเกิน</option>
+                                    <option value="มีสิ่งกีดขวางที่ไม่คาดคิดบนถนน">มีสิ่งกีดขวางที่ไม่คาดคิดบนถนน</option>
+                                    <option value="ยางรั่ว/ยางแตก/ยางเบียด">ยางรั่ว/ยางแตก/ยางเบียด</option>
+                                    <option value="อื่นๆ ระบุ">อื่นๆ ระบุ</option>
+                                </select>
+                                <div id="divCauseOther" style="display:none;">
+                                    <input type="text" class="form-control bg-dark text-light border-warning shadow-none" id="accCauseOther" placeholder="โปรดระบุสาเหตุอื่นๆ...">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1 fw-bold">เหตุเกิดจาก *</label>
+                                <select class="form-select bg-dark text-light border-secondary shadow-none mb-2" id="accCausedBy" onchange="window.toggleAccOther('accCausedBy', 'divCausedByOther')" required>
+                                    <option value="">- เลือก -</option>
+                                    <option value="เกิดจากบุคคล">เกิดจากบุคคล</option>
+                                    <option value="เกิดจากรถ">เกิดจากรถ</option>
+                                    <option value="เกิดจากทางและเครื่องหมายจราจร">เกิดจากทางและเครื่องหมายจราจร</option>
+                                    <option value="เกิดจากธรรมชาติ">เกิดจากธรรมชาติ</option>
+                                    <option value="อื่นๆ ระบุ">อื่นๆ ระบุ</option>
+                                </select>
+                                <div id="divCausedByOther" style="display:none;">
+                                    <input type="text" class="form-control bg-dark text-light border-warning shadow-none" id="accCausedByOther" placeholder="โปรดระบุเหตุเกิดจาก...">
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <div class="p-3 rounded small" style="background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.1);">
+                                    <div class="text-light mb-1"><span class="text-warning fw-bold">จากบุคคล:</span> คนขับประมาท, ขับเร็ว, เมา, ใช้โทรศัพท์, คนข้ามถนนตัดหน้า</div>
+                                    <div class="text-light mb-1"><span class="text-warning fw-bold">จากรถ:</span> อุปกรณ์บกพร่อง เช่น เบรก, ไฟสัญญาณ, ยาง, ที่ปัดน้ำฝน</div>
+                                    <div class="text-light mb-1"><span class="text-warning fw-bold">จากทางฯ:</span> ทางแยก, ทางโค้ง, ถนนชำรุด, ป้ายสัญญาณชำรุด</div>
+                                    <div class="text-light"><span class="text-warning fw-bold">จากธรรมชาติ:</span> ฝนตกหนัก, หมอกลงจัด ฯลฯ</div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="small text-muted mb-1 fw-bold">ความเสียหาย *</label>
+                                <input type="text" class="form-control bg-dark text-light border-secondary shadow-none" id="accDamage" placeholder="สรุปความเสียหายเบื้องต้น (เช่น กันชนหน้ายุบ, ไฟแตก)" required>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="small text-muted mb-1 fw-bold">รายละเอียดเหตุการณ์ *</label>
+                                <textarea class="form-control bg-dark text-light border-secondary shadow-none" id="accDetail" rows="3" placeholder="อธิบายลำดับเหตุการณ์ที่เกิดขึ้น..." required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="logistics-card p-3 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                        <label class="small text-white mb-2 fw-bold d-block">
+                            <i class="bi bi-camera me-2 text-info"></i>รูปถ่ายหน้างาน / หลักฐาน (ใส่ได้สูงสุด 2 รูป)
+                        </label>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <small class="text-muted d-block mb-1">รูปที่ 1</small>
+                                <input type="file" class="form-control bg-dark text-light border-secondary shadow-none" id="accPhoto1" accept="image/*" capture="environment">
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted d-block mb-1">รูปที่ 2 (ถ้ามี)</small>
+                                <input type="file" class="form-control bg-dark text-light border-secondary shadow-none" id="accPhoto2" accept="image/*" capture="environment">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-danger rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitAccident">ส่งรายงานอุบัติเหตุ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal สำหรับซ่อมบำรุงและลานตู้ -->
 <div class="modal fade" id="yardModal" tabindex="-1" style="z-index: 1060;">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content bg-dark text-light border border-info border-opacity-50">
-            <div class="modal-header border-secondary border-opacity-50 pb-3">
+            <div class="modal-header border-secondary border-opacity-50 pb-3 text-start">
                 <h5 class="modal-title text-info fw-bold">
                     <i class="bi bi-geo-alt-fill me-2"></i>ลานรับ-คืนตู้
                 </h5>
@@ -250,7 +408,7 @@
 <div class="modal fade" id="userRepairModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content logistics-modal" style="border-color: #0d6efd;">
-            <div class="modal-header logistics-modal-header py-3 border-bottom border-primary">
+            <div class="modal-header logistics-modal-header py-3 border-bottom border-primary text-start">
                 <h5 class="modal-title fw-bold fs-5 text-primary">
                     <i class="bi bi-wrench me-2"></i>ใบแจ้งซ่อมบำรุงรถ / ปัญหาการใช้งาน
                 </h5>
@@ -427,7 +585,6 @@
                     <span class="text-info fw-bold text-truncate text-end" style="max-width: 140px;" title="${ssoText}">${ssoText}</span>
                 </div>
                 
-                <!-- เพิ่มอายุงานที่นี่ -->
                 <div class="info-box d-flex justify-content-between align-items-center">
                     <span class="small text-muted"><i class="bi bi-calendar-check me-2"></i>อายุงาน</span>
                     <div class="text-end">
@@ -571,13 +728,13 @@
             
             var inputId = 'fileInput_' + index; 
             var spinnerId = 'spinner_' + index;
-            var iconClass = t.icon.includes('text-') ? t.icon : t.icon + ' text-muted';
+            var iconClass = t.icon.includes('text-') ? t.icon : t.icon + ' text-warning';
 
             html += `
             <div class="col-md-6">
                 <div class="upload-zone position-relative">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center"><i class="bi ${iconClass} fs-5 me-2 text-warning"></i><span class="text-light fw-bold small">${t.name}</span></div>
+                        <div class="d-flex align-items-center"><i class="bi ${iconClass} fs-5 me-2"></i><span class="text-light fw-bold small">${t.name}</span></div>
                         ${viewBtn}
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -851,5 +1008,424 @@
                 color: '#fff'
             }); 
         } 
+    };
+
+    // --- โค้ด LoadSettings จะถูกเรียกใช้โดย OpenModal ---
+    window.loadSettings = async function(cb) { 
+        try {
+          const res = await window.callAPI({ action: 'getSettingsData' });
+          allPositionsList = res.positions || []; 
+          allHospitals = res.hospitals || []; 
+          allLicenseTypes = res.licenseTypes || [];
+
+          var c = document.getElementById('positionCheckboxList'); 
+          if(c) {
+             c.innerHTML=''; 
+             allPositionsList.forEach(p => { 
+                 c.innerHTML += `<div class="form-check border-bottom border-secondary border-opacity-25 py-2 ps-4">
+                    <input class="form-check-input bg-dark border-secondary shadow-none cursor-pointer" type="checkbox" name="posCheckbox" value="${p}" id="cb_${p}">
+                    <label class="form-check-label w-100 cursor-pointer text-truncate text-light fw-normal" for="cb_${p}" title="${p}">${p}</label>
+                 </div>`; 
+             }); 
+          }
+          
+          var hSelect = document.getElementById('ssoHosp'); 
+          if(hSelect) {
+             hSelect.innerHTML = '<option value="">- เลือกโรงพยาบาล -</option>'; 
+             allHospitals.forEach(h => { hSelect.innerHTML += `<option value="${h}">${h}</option>`; }); 
+          }
+
+          var lSelect = document.getElementById('licType');
+          if(lSelect) {
+             lSelect.innerHTML = '<option value="">- ประเภทใบขับขี่ -</option>';
+             allLicenseTypes.forEach(t => { lSelect.innerHTML += `<option value="${t}">${t}</option>`; });
+          }
+
+          if(cb) cb();
+        } catch(e) {}
+    };
+
+    window.openModal = function(mode, targetId, preloadedData) {
+        document.getElementById('empForm').reset();
+        document.getElementById('formMode').value = mode;
+        var modalEl = document.getElementById('empModal');
+        modalObj = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        var targetData = preloadedData || null;
+        
+        if (!targetData && mode !== 'create' && targetId) {
+            targetData = allEmpData.find(x => String(x.id).trim() === String(targetId).trim());
+        }
+        
+        setupModalData(mode, targetData);
+        modalObj.show();
+        
+        window.loadSettings(function() {
+            if (mode !== 'view' && targetData) {
+                window.fillData(targetData, false);
+            }
+            var isUser = (currentUser.role === 'User');
+            if (isUser || mode === 'view' || currentUser.role === 'Viewer') {
+                document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = true);
+            }
+        });
+    };
+
+    function setupModalData(mode, d) {
+        var btnSave = document.getElementById('btnSaveModal');
+        var viewSection = document.getElementById('viewModeSection');
+        var editSection = document.getElementById('editModeSection');
+        
+        viewSection.style.display = 'none';
+        editSection.style.display = 'none';
+        btnSave.style.display = 'none';
+
+        var lock = (id, state) => {
+            var el = document.getElementById(id);
+            if(el) {
+                el.readOnly = state;
+                el.disabled = state;
+                if(state) {
+                    el.classList.add('readonly-field');
+                } else {
+                    el.classList.remove('readonly-field');
+                }
+            }
+        };
+
+        var lockPositions = (state) => {
+            document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = state);
+        };
+
+        var allFields = ['empId','role','username','password','fullname','nickname','startDate','phone','birthDate','gender','ssoType','ssoHosp','idExp','licExp','idCardNum','licNum','licType','resignReason','prefix'];
+
+        if (mode === 'create') {
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>เพิ่มพนักงานใหม่';
+            editSection.style.display = 'block';
+            btnSave.style.display = 'block';
+            allFields.forEach(f => lock(f,false));
+            lockPositions(false);
+            document.getElementById('btnGenId').style.display = 'inline-block';
+            window.genId();
+            document.getElementById('empStatus').value = 'Active';
+            lock('empStatus', false);
+            window.toggleResignDate();
+        } else if (mode === 'view' || currentUser.role === 'Viewer') {
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)';
+            viewSection.style.display = 'block';
+            document.getElementById('btnGenId').style.display = 'none';
+            if(d) window.fillData(d, true);
+        } else {
+            var isUser = (currentUser.role === 'User');
+            document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน';
+            editSection.style.display = 'block';
+            btnSave.style.display = 'block';
+            document.getElementById('btnGenId').style.display = 'none';
+            if(d) window.fillData(d, false);
+            
+            lock('empId', true);
+            
+            if (isUser) {
+                lock('role', true);
+                lock('empStatus', true);
+                lock('resignDate', true);
+                lock('resignReason', true);
+                lock('username', true);
+                lock('fullname', true);
+                lock('prefix', true);
+                lock('startDate', true);
+                lock('gender', true);
+                lock('ssoType', true);
+                lock('birthDate', false);
+                lock('password', false);
+                lock('phone', false);
+                lock('nickname', false);
+                lock('ssoHosp', false);
+                lock('idExp', false);
+                lock('licExp', false);
+                lock('idCardNum', false);
+                lock('licNum', false);
+                lock('licType', false);
+                lockPositions(true);
+            } else {
+                lock('role', false);
+                lock('empStatus', false);
+                window.toggleResignDate();
+                lock('username', false);
+                lock('password', false);
+                lock('fullname', false);
+                lock('prefix', false);
+                lock('startDate', false);
+                lock('birthDate', false);
+                lock('gender', false);
+                lock('ssoType', false);
+                lock('ssoHosp', false);
+                lock('nickname', false);
+                lock('idExp', false);
+                lock('licExp', false);
+                lock('idCardNum', false);
+                lock('licNum', false);
+                lock('licType', false);
+                lock('resignReason', false);
+                lockPositions(false);
+                lock('phone', false);
+            }
+        }
+    }
+
+    function safeDate(d) {
+        if(!d) return '';
+        try {
+            var date = new Date(d);
+            if(isNaN(date.getTime())) return '';
+            return date.toISOString().split('T')[0];
+        } catch(e) {
+            return '';
+        }
+    }
+
+    window.fillData = function(d, isViewMode) {
+        if(!d) return;
+        document.getElementById('empId').value = d.id;
+        document.getElementById('fullname').value = d.name;
+        document.getElementById('prefix').value = "";
+        document.getElementById('nickname').value = d.nickname || '';
+        document.getElementById('phone').value = d.phone;
+        document.getElementById('username').value = d.username;
+        document.getElementById('password').value = d.password;
+        document.getElementById('role').value = d.role;
+        document.getElementById('gender').value = d.gender || '';
+        document.getElementById('empStatus').value = d.status || 'Active';
+        document.getElementById('startDate').value = safeDate(d.startDate);
+        document.getElementById('resignDate').value = safeDate(d.resignDate);
+        document.getElementById('birthDate').value = safeDate(d.birthDate);
+        document.getElementById('ssoType').value = d.ssoType || '';
+        document.getElementById('ssoHosp').value = d.ssoHosp || '';
+        document.getElementById('idExp').value = safeDate(d.idExp);
+        document.getElementById('licExp').value = safeDate(d.licExp);
+        document.getElementById('idCardNum').value = d.idCardNum || '';
+        document.getElementById('licNum').value = d.licNum || '';
+        document.getElementById('licType').value = d.licType || '';
+        document.getElementById('resignReason').value = d.resignReason || '';
+        
+        var currentPos = (d.position || '').split(',').map(p => p.trim());
+        document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => {
+            cb.checked = currentPos.includes(cb.value);
+        });
+        window.toggleResignDate();
+        
+        if (isViewMode) {
+            document.getElementById('view_fullname').innerText = d.name;
+            document.getElementById('view_nickname_badge').innerText = d.nickname ? d.nickname : '-';
+            document.getElementById('view_empId').innerText = d.id;
+            
+            var statusClass = d.status === 'Active' ? 'bg-success text-black' : (d.status === 'Resigned' ? 'bg-danger text-white' : 'bg-warning text-dark');
+            var statusEl = document.getElementById('view_status_badge');
+            statusEl.innerText = d.status;
+            statusEl.className = 'badge rounded-pill fs-5 px-4 py-2 ' + statusClass;
+            
+            document.getElementById('view_birthDate').innerText = window.formatDate(d.birthDate);
+            document.getElementById('view_age').innerText = window.calcAge(d.birthDate);
+            document.getElementById('view_gender').innerText = d.gender || '-';
+            document.getElementById('view_phone').innerText = d.phone || '-';
+            document.getElementById('view_username').innerText = d.username;
+            document.getElementById('view_password').innerText = d.password;
+            document.getElementById('view_role').innerText = d.role;
+            document.getElementById('view_startDate').innerText = window.formatDate(d.startDate);
+            document.getElementById('view_tenure').innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate);
+            document.getElementById('view_ssoType').innerText = d.ssoType || '-';
+            document.getElementById('view_ssoHosp').innerText = d.ssoHosp || '-';
+            
+            if(d.status === 'Resigned') {
+                document.getElementById('view_resign_section').style.display = 'block';
+                document.getElementById('view_resignDate').innerText = window.formatDate(d.resignDate);
+                document.getElementById('view_resignReason').innerText = d.resignReason || '-';
+            } else {
+                document.getElementById('view_resign_section').style.display = 'none';
+            }
+            
+            document.getElementById('view_idCardNum').innerText = d.idCardNum || '-';
+            document.getElementById('view_idExp').innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : '';
+            document.getElementById('view_licType').innerText = d.licType || '-';
+            document.getElementById('view_licNum').innerText = d.licNum ? 'เลขที่: ' + d.licNum : '';
+            document.getElementById('view_licExp').innerText = d.licExp ? 'หมดอายุ: ' + window.formatDate(d.licExp) : '';
+            
+            var posContainer = document.getElementById('view_positions_badges');
+            posContainer.innerHTML = '';
+            if(currentPos.length > 0 && currentPos[0] !== "") {
+                currentPos.forEach(p => {
+                    posContainer.innerHTML += `<span class="badge bg-dark text-light border border-secondary fw-normal py-2 px-3">${p}</span>`;
+                });
+            } else {
+                posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>';
+            }
+        }
+    };
+
+    window.getSelectedPositions = function() {
+        var s = [];
+        document.querySelectorAll('input[name="posCheckbox"]:checked').forEach(c => s.push(c.value));
+        return s.join(', ');
+    };
+
+    window.submitEmpForm = async function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'กำลังบันทึกข้อมูล...',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+        
+        var form = {
+            empId: document.getElementById('empId').value,
+            role: document.getElementById('role').value,
+            status: document.getElementById('empStatus').value,
+            resignDate: document.getElementById('resignDate').value,
+            birthDate: document.getElementById('birthDate').value,
+            gender: document.getElementById('gender').value,
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+            prefix: document.getElementById('prefix').value,
+            fullname: document.getElementById('fullname').value,
+            nickname: document.getElementById('nickname').value,
+            ssoType: document.getElementById('ssoType').value,
+            ssoHosp: document.getElementById('ssoHosp').value,
+            idExp: document.getElementById('idExp').value,
+            licExp: document.getElementById('licExp').value,
+            idCardNum: document.getElementById('idCardNum').value,
+            licNum: document.getElementById('licNum').value,
+            licType: document.getElementById('licType').value,
+            resignReason: document.getElementById('resignReason').value,
+            position: window.getSelectedPositions(),
+            startDate: document.getElementById('startDate').value,
+            phone: document.getElementById('phone').value,
+            currentUserRole: currentUser.role,
+            filePhoto: await window.getBase64User(document.getElementById('filePhoto').files[0]),
+            fileIdCard: await window.getBase64User(document.getElementById('fileIdCard').files[0]),
+            filePassport: await window.getBase64User(document.getElementById('filePassport').files[0]),
+            fileHouse: await window.getBase64User(document.getElementById('fileHouse').files[0]),
+            fileDrive: await window.getBase64User(document.getElementById('fileDrive').files[0]),
+            fileEdu: await window.getBase64User(document.getElementById('fileEdu').files[0]),
+            fileCriminal: await window.getBase64User(document.getElementById('fileCriminal').files[0]),
+            fileHealth: await window.getBase64User(document.getElementById('fileHealth').files[0]),
+            fileWarn: null,
+            fileOther1: await window.getBase64User(document.getElementById('fileOther1').files[0]),
+            fileOther2: await window.getBase64User(document.getElementById('fileOther2').files[0])
+        };
+        
+        try {
+            const res = await window.callAPI({
+                action: 'handleEmployeeSave',
+                form: form,
+                mode: document.getElementById('formMode').value
+            });
+            
+            if(res.success) {
+                Swal.fire('สำเร็จ', res.message, 'success');
+                modalObj.hide();
+                if(currentUser.role === 'Admin') {
+                    window.loadAdminData();
+                } else {
+                    window.loadUserData();
+                }
+            } else {
+                Swal.fire('เกิดข้อผิดพลาด', res.message, 'error');
+            }
+        } catch(err) {
+            console.error(err);
+        }
+    };
+
+    window.genId = function() {
+        document.getElementById('empId').value = '...';
+        try {
+            window.callAPI({ action: 'getNextEmployeeId' }).then(res => {
+                document.getElementById('empId').value = res.empId;
+            });
+        } catch(e) {
+            console.error(e);
+        }
+    };
+
+    window.getBase64User = function(file) {
+        return new Promise(function(resolve) {
+            if (!file) {
+                resolve(null);
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function() {
+                resolve({
+                    base64: reader.result.split(',')[1],
+                    type: file.type
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    window.calcAge = function(d) {
+        if(!d) return "-";
+        var today = new Date();
+        var birthDate = new Date(d);
+        if(isNaN(birthDate)) return "-";
+        
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age + " ปี";
+    };
+
+    window.formatDate = function(d) {
+        if(!d) return '-';
+        try {
+            var date = new Date(d);
+            if(isNaN(date.getTime())) return '-';
+            return date.toLocaleDateString('th-TH-u-ca-gregory', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        } catch(e) {
+            return '-';
+        }
+    };
+
+    window.calcTenure = function(dateString) {
+        if(!dateString) return '-';
+        var start = new Date(dateString);
+        var now = new Date();
+        start.setHours(0,0,0,0);
+        now.setHours(0,0,0,0);
+        
+        if(isNaN(start.getTime())) return "-";
+        
+        if (start.getTime() > now.getTime()) {
+            return '<span class="badge bg-warning text-dark border border-warning shadow-sm" style="font-weight:600;">รอเริ่มงาน</span>';
+        }
+        
+        var years = now.getFullYear() - start.getFullYear();
+        var months = now.getMonth() - start.getMonth();
+        var days = now.getDate() - start.getDate();
+        
+        if (days < 0) {
+            months--;
+            var prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+            days += prevMonth.getDate();
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+        
+        var result = [];
+        if (years > 0) result.push(years + " ปี");
+        if (months > 0) result.push(months + " เดือน");
+        if (days > 0) result.push(days + " วัน");
+        
+        if (result.length === 0) return "เริ่มงานวันนี้";
+        
+        return result.join(" ");
     };
 </script>
