@@ -20,7 +20,6 @@
         }
         
         .driver-card-header {
-            /* เปลี่ยนพื้นหลังให้ดูเท่แบบขนส่ง */
             background: repeating-linear-gradient(45deg, #111, #111 10px, #181818 10px, #181818 20px);
             border-bottom: 1px solid var(--logistic-border);
             border-radius: 12px 12px 0 0;
@@ -219,7 +218,7 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body p-4 text-start">
                 <div class="row g-2 mb-4 p-3 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
                     <div class="col-md-6">
                         <label class="small text-muted mb-1">ค้นหาลาน หรือ ที่อยู่</label>
@@ -250,35 +249,39 @@
 
 <div class="modal fade" id="userRepairModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content" style="background: rgba(20,20,20,0.98); backdrop-filter: blur(20px); border: 1px solid rgba(13, 110, 253, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
-            <div class="modal-header border-bottom border-primary border-opacity-25 pb-3">
-                <h5 class="modal-title fw-bold text-primary">
+        <div class="modal-content logistics-modal" style="border-color: #0d6efd;">
+            <div class="modal-header logistics-modal-header py-3 border-bottom border-primary">
+                <h5 class="modal-title fw-bold fs-5 text-primary">
                     <i class="bi bi-wrench me-2"></i>ใบแจ้งซ่อมบำรุงรถ / ปัญหาการใช้งาน
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
                 <form id="userRepairForm" onsubmit="window.submitUserRepair(event)">
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label class="small text-muted mb-1">วันที่แจ้งซ่อม *</label>
-                            <input type="date" class="form-control bg-dark text-light border-secondary" id="repDate" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="small text-muted mb-1">ทะเบียนรถ *</label>
-                            <select class="form-select bg-dark text-light border-secondary" id="repPlate" required>
-                                <option value="">กำลังโหลดทะเบียน...</option>
-                            </select>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="small text-muted mb-1">เลขไมล์ปัจจุบัน (ถ้ามี)</label>
-                            <input type="number" class="form-control bg-dark text-light border-secondary" id="repMile" placeholder="เช่น 125000">
+                    
+                    <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1 fw-bold">วันที่แจ้งซ่อม *</label>
+                                <input type="date" class="form-control bg-dark text-light border-secondary shadow-none" id="repDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1 fw-bold">ทะเบียนรถ *</label>
+                                <select class="form-select bg-dark text-light border-secondary shadow-none" id="repPlate" required>
+                                    <option value="">กำลังโหลดทะเบียน...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="small text-muted mb-1 fw-bold">เลขไมล์ปัจจุบัน (ถ้ามี)</label>
+                                <input type="number" class="form-control bg-dark text-light border-secondary shadow-none" id="repMile" placeholder="เช่น 125000">
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-3 p-3 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <label class="small text-light fw-bold m-0">
-                                <i class="bi bi-list-check me-2"></i>รายการซ่อมบำรุง
+
+                    <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+                            <label class="small text-light fw-bold m-0 fs-6">
+                                <i class="bi bi-list-check me-2 text-primary"></i>รายการซ่อมบำรุง
                             </label>
                             <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="window.addUserRepairRow()">
                                 <i class="bi bi-plus"></i> เพิ่มรายการ
@@ -286,7 +289,7 @@
                         </div>
                         <div id="userRepairItemsContainer">
                             <div class="input-group input-group-sm mb-2 user-repair-row">
-                                <select class="form-select bg-dark text-light border-secondary rep-select" style="max-width: 45%;" onchange="window.toggleUserCustomInput(this)" required>
+                                <select class="form-select bg-dark text-light border-secondary rep-select shadow-none" style="max-width: 45%;" onchange="window.toggleUserCustomInput(this)" required>
                                     <option value="" disabled selected>เลือกรายการ...</option>
                                     <option value="ถ่ายน้ำมันเครื่อง">ถ่ายน้ำมันเครื่อง</option>
                                     <option value="เปลี่ยนกรองน้ำมันเครื่อง">เปลี่ยนกรองน้ำมันเครื่อง</option>
@@ -300,17 +303,19 @@
                                     <option value="เปลี่ยนยาง">เปลี่ยนยาง</option>
                                     <option value="other">อื่นๆ (ระบุเอง)</option>
                                 </select>
-                                <input type="text" class="form-control bg-dark text-light border-warning rep-custom d-none" placeholder="ระบุอาการ/รายการ">
-                                <button type="button" class="btn btn-outline-danger btn-remove-rep" onclick="window.removeUserRepairRow(this)">
+                                <input type="text" class="form-control bg-dark text-light border-warning rep-custom d-none shadow-none" placeholder="ระบุอาการ/รายการ">
+                                <button type="button" class="btn btn-outline-danger btn-remove-rep shadow-none" onclick="window.removeUserRepairRow(this)">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">หมายเหตุ / อาการเพิ่มเติม</label>
-                        <textarea class="form-control bg-dark text-light border-secondary" id="repNote" rows="2" placeholder="อธิบายอาการเบื้องต้น หรือ ตำแหน่งเพิ่มเติม..."></textarea>
+
+                    <div class="logistics-card p-3 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                        <label class="small text-muted mb-2 fw-bold">หมายเหตุ / อาการเพิ่มเติม</label>
+                        <textarea class="form-control bg-dark text-light border-secondary shadow-none" id="repNote" rows="2" placeholder="อธิบายอาการเบื้องต้น หรือ ตำแหน่งเพิ่มเติม..."></textarea>
                     </div>
+
                     <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
                         <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
                         <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitRep">
@@ -422,6 +427,15 @@
                     <span class="text-info fw-bold text-truncate text-end" style="max-width: 140px;" title="${ssoText}">${ssoText}</span>
                 </div>
                 
+                <!-- เพิ่มอายุงานที่นี่ -->
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-calendar-check me-2"></i>อายุงาน</span>
+                    <div class="text-end">
+                        <div class="text-warning fw-bold" style="font-size: 0.9rem;">${window.calcTenure(d.startDate)}</div>
+                        <div class="text-muted" style="font-size: 0.7rem;">(เริ่ม ${window.formatDate(d.startDate)})</div>
+                    </div>
+                </div>
+                
                 <button class="btn btn-outline-warning w-100 rounded-pill mb-4 mt-3 fw-bold shadow-sm" onclick="window.openUserEditModal('${d.id}')">
                     <i class="bi bi-pencil-square me-2"></i>อัปเดตข้อมูลส่วนตัว
                 </button>
@@ -429,23 +443,23 @@
                 <h6 class="text-warning small fw-bold mb-3 px-2 border-bottom border-secondary border-opacity-50 pb-2"><i class="bi bi-lightning-charge me-1"></i> เมนูด่วน (Quick Actions)</h6>
                 <div class="row g-2">
                     <div class="col-6">
-                        <a href="${finalLeaveUrl}" target="_blank" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 text-decoration-none shadow-sm">
-                            <i class="bi bi-calendar2-week fs-4 text-white"></i><span class="small fw-bold">ลางาน</span>
+                        <a href="${finalLeaveUrl}" target="_blank" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 text-decoration-none shadow-sm">
+                            <i class="bi bi-calendar2-week fs-5 text-white"></i><span class="small fw-bold" style="font-size: 0.8rem;">ลางาน</span>
                         </a>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openAccidentModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 shadow-sm">
-                            <i class="bi bi-cone-striped fs-4 text-danger"></i><span class="small fw-bold">อุบัติเหตุ</span>
+                        <button onclick="window.openAccidentModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-cone-striped fs-5 text-danger"></i><span class="small fw-bold" style="font-size: 0.8rem;">อุบัติเหตุ</span>
                         </button>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openUserRepairModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 shadow-sm">
-                            <i class="bi bi-wrench-adjustable fs-4 text-primary"></i><span class="small fw-bold">แจ้งซ่อม</span>
+                        <button onclick="window.openUserRepairModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-wrench-adjustable fs-5 text-primary"></i><span class="small fw-bold" style="font-size: 0.8rem;">แจ้งซ่อม</span>
                         </button>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openYardModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 shadow-sm">
-                            <i class="bi bi-geo-alt fs-4 text-info"></i><span class="small fw-bold">ลานตู้</span>
+                        <button onclick="window.openYardModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-geo-alt fs-5 text-info"></i><span class="small fw-bold" style="font-size: 0.8rem;">ลานตู้</span>
                         </button>
                     </div>
                 </div>
@@ -557,13 +571,13 @@
             
             var inputId = 'fileInput_' + index; 
             var spinnerId = 'spinner_' + index;
-            var iconClass = t.icon.includes('text-') ? t.icon : t.icon + ' text-warning';
+            var iconClass = t.icon.includes('text-') ? t.icon : t.icon + ' text-muted';
 
             html += `
             <div class="col-md-6">
                 <div class="upload-zone position-relative">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center"><i class="bi ${iconClass} fs-5 me-2"></i><span class="text-light fw-bold small">${t.name}</span></div>
+                        <div class="d-flex align-items-center"><i class="bi ${iconClass} fs-5 me-2 text-warning"></i><span class="text-light fw-bold small">${t.name}</span></div>
                         ${viewBtn}
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
