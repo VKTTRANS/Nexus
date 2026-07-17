@@ -29,7 +29,7 @@
                               <i class="bi bi-folder2-open me-1"></i> เอกสารแนบ<span class="badge bg-dark border border-secondary ms-1" id="docCountBadge">0/10</span>
                           </button>
                       </li>
-                      <!-- 🟢 แท็บใหม่: สลิปเงินเดือน -->
+                      <!-- เพิ่มแท็บ สลิปเงินเดือน -->
                       <li class="nav-item" role="presentation">
                           <button class="nav-link rounded-pill small py-2 text-success" id="tab-btn-payslips" data-bs-toggle="tab" data-bs-target="#tab-content-payslips" type="button" role="tab">
                               <i class="bi bi-cash-stack me-1"></i> สลิปเงินเดือน<span class="badge bg-success ms-1 text-dark" id="payslipCountBadge">0</span>
@@ -56,7 +56,7 @@
                           <div id="userDocList" class="row g-3"></div>
                       </div>
                       
-                      <!-- 🟢 เนื้อหาของแท็บ สลิปเงินเดือน -->
+                      <!-- เนื้อหาแท็บ สลิปเงินเดือน -->
                       <div class="tab-pane fade" id="tab-content-payslips" role="tabpanel">
                           <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-success border-opacity-25">
                               <h6 class="fw-bold text-success mb-0"><i class="bi bi-wallet2 me-2"></i>ประวัติสลิปเงินเดือน</h6>
@@ -198,7 +198,6 @@
 </div>
 
 <script>
-  // ตัวแปรสำหรับเก็บประวัติสลิปเงินเดือนของพนักงาน
   var globalUserPayslips = [];
 
   window.loadUserData = function() { 
@@ -218,7 +217,6 @@
           window.renderUserProfile(d); 
           window.renderUserDocs(d); 
           
-          // 🟢 โหลดข้อมูลประวัติใบเตือน
           window.globalUserWarnings = []; 
           if (d.docs.WARNING && d.docs.WARNING.length > 0) { 
               window.globalUserWarnings = d.docs.WARNING.sort(function(a,b) { return new Date(b.date) - new Date(a.date); }); 
@@ -226,7 +224,6 @@
           document.getElementById('warnCountBadge').innerText = window.globalUserWarnings.length; 
           window.renderUserWarningsList(); 
           
-          // 🟢 โหลดข้อมูลอุบัติเหตุ
           window.callAPI({ action: 'getAccidentData', role: 'User', empId: window.currentUser.empId }).then(function(accData) { 
               window.globalUserAccidents = accData || []; 
               document.getElementById('accCountBadge').innerText = window.globalUserAccidents.length; 
@@ -703,5 +700,13 @@
           btn.disabled = false; 
           Swal.fire({icon: 'error', title: 'ผิดพลาด', text: 'ไม่สามารถส่งข้อมูลได้: ' + err.message, background: '#1e1e1e', color: '#fff'}); 
       } 
+  };
+
+  // Helper ฟอร์แมตตัวเลขให้หน้า User
+  window.numberWithCommas = function(x) {
+      if(!x && x !== 0) return "0";
+      var parts = x.toString().split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return parts.length > 1 ? parts.join(".") : parts[0];
   };
 </script>
