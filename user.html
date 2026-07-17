@@ -1,6 +1,7 @@
 <div id="view-user" class="view-section container p-3 p-md-4">
 
     <style>
+        /* --- Theme โลจิสติกส์ สำหรับฟอร์มพนักงาน --- */
         .logistics-modal { border: 1px solid #ffc107; background: #121212 !important; }
         .logistics-modal-header { background: linear-gradient(90deg, #1a1a1a 0%, #2c2c2c 100%); border-bottom: 2px solid #ffc107; }
         .logistics-section-title { font-size: 0.9rem; font-weight: 700; color: #ffc107; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; }
@@ -241,6 +242,7 @@
     </div>
 </div>
 
+<!-- Modal สำหรับแก้ไข/จัดการพนักงานในมุมมอง User (ออกแบบใหม่ตามสไตล์ขนส่ง) -->
 <div class="modal fade" id="empModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content logistics-modal">
@@ -1574,3 +1576,5 @@
         return result.join(" ");
     };
 </script>
+
+
