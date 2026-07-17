@@ -461,7 +461,7 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
                                     <div class="row g-2">
-                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% (ไร้ Checkbox) -->
+                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-text lbl-fit"><span>ภาษีหัก ณ ที่จ่าย (1%)</span></span>
@@ -1183,8 +1183,6 @@
             window.renderTable(window.currentDisplayData); 
         };
 
-        // --- ฟังก์ชันสำหรับการจัดการเงินเดือน (Payroll) ที่ปรับปรุงใหม่ ---
-
         window.filterPayrollTable = function() {
             if (!window.allEmpData) return;
             var val = document.getElementById('searchPayrollInput').value.toLowerCase(); 
@@ -1256,10 +1254,10 @@
             
             if (document.getElementById('keepPrevData').checked && empSlips.length > 0) {
                 var lastM = empSlips[0];
-                for (var i=2; i<=10; i++) { 
+                for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
                     document.getElementById('pr_inc'+i).value = lastM.incomes[i-1] || 0;
                 }
-                for (var i=3; i<=10; i++) { 
+                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1, pr_dec2
                     document.getElementById('pr_dec'+i).value = lastM.deducts[i-1] || 0;
                 }
             } else {
@@ -1269,7 +1267,6 @@
             window.calcPayrollTotals();
         };
 
-        // ฟังก์ชันสำหรับดึงประวัติมาทีละข้อตามปุ่มกด
         window.pullPrevField = function(fieldId) {
             var empId = document.getElementById('pr_empId').value;
             var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
@@ -1285,7 +1282,7 @@
                     val = lastM.deducts[idx] || 0;
                 }
                 document.getElementById('pr_' + fieldId).value = val;
-                window.calcPayrollTotals(); // สั่งคำนวณใหม่เมื่อดึงมาแล้ว
+                window.calcPayrollTotals(); 
             } else {
                 Swal.fire({
                     toast: true, position: 'top-end', icon: 'info', 
@@ -1398,14 +1395,19 @@
                 var el = document.getElementById('pr_inc'+i);
                 if(el) totalManualInc += parseFloat(el.value) || 0;
             }
-            // ยอดฐานคำนวณประกันสังคมและภาษี (ก่อนนำประกันสังคมมาบวกเพิ่มเป็นรายได้)
+            // ยอดฐานรายได้ทั้งหมดก่อนบวกประกันสังคม
             var baseGross = baseSal + totalManualInc;
 
-            // 2. คำนวณประกันสังคมแบบ Auto Real-time (เช็คจากมาตรา 33)
+            // 2. คำนวณประกันสังคม (จากฐาน: เงินเดือน + ค่าเที่ยว + ค่ายกชน + ค่าดูแลลูกพ่วง/หาง)
+            var inc2 = parseFloat(document.getElementById('pr_inc2').value) || 0;
+            var inc3 = parseFloat(document.getElementById('pr_inc3').value) || 0;
+            var inc4 = parseFloat(document.getElementById('pr_inc4').value) || 0;
+            var ssoIncomeBase = baseSal + inc2 + inc3 + inc4;
+            
             var ssoAmt = 0;
             if (emp && emp.ssoType && emp.ssoType.indexOf("33") !== -1) {
-                // อัปเดตเพดานเป็น 17,500 ตามกฎหมายใหม่ (Max 875 บาท)
-                var ssoBase = baseGross > 17500 ? 17500 : baseGross; 
+                // อัปเดตเพดานเป็น 17,500 ตามกฎหมายใหม่
+                var ssoBase = ssoIncomeBase > 17500 ? 17500 : ssoIncomeBase; 
                 ssoAmt = Math.round(ssoBase * 0.05);
             }
             
