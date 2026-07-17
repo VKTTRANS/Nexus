@@ -461,7 +461,7 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
                                     <div class="row g-2">
-                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% -->
+                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% (ไร้ Checkbox) -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-text lbl-fit"><span>ภาษีหัก ณ ที่จ่าย (1%)</span></span>
@@ -1256,10 +1256,10 @@
             
             if (document.getElementById('keepPrevData').checked && empSlips.length > 0) {
                 var lastM = empSlips[0];
-                for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
+                for (var i=2; i<=10; i++) { 
                     document.getElementById('pr_inc'+i).value = lastM.incomes[i-1] || 0;
                 }
-                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1, pr_dec2
+                for (var i=3; i<=10; i++) { 
                     document.getElementById('pr_dec'+i).value = lastM.deducts[i-1] || 0;
                 }
             } else {
@@ -1330,7 +1330,7 @@
                 for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
                     document.getElementById('pr_inc'+i).value = monthData.incomes[i-1] || 0;
                 }
-                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1, pr_dec2
+                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1(ภาษี), pr_dec2(ประกันสังคม)
                     document.getElementById('pr_dec'+i).value = monthData.deducts[i-1] || 0;
                 }
                 window.calcPayrollTotals();
@@ -1401,10 +1401,11 @@
             // ยอดฐานคำนวณประกันสังคมและภาษี (ก่อนนำประกันสังคมมาบวกเพิ่มเป็นรายได้)
             var baseGross = baseSal + totalManualInc;
 
-            // 2. คำนวณประกันสังคม (จากฐาน baseGross) แบบ Auto Real-time (เช็คจากมาตรา 33)
+            // 2. คำนวณประกันสังคมแบบ Auto Real-time (เช็คจากมาตรา 33)
             var ssoAmt = 0;
             if (emp && emp.ssoType && emp.ssoType.indexOf("33") !== -1) {
-                var ssoBase = baseGross > 15000 ? 15000 : baseGross; // ฐานสูงสุด 15,000
+                // อัปเดตเพดานเป็น 17,500 ตามกฎหมายใหม่ (Max 875 บาท)
+                var ssoBase = baseGross > 17500 ? 17500 : baseGross; 
                 ssoAmt = Math.round(ssoBase * 0.05);
             }
             
@@ -1422,7 +1423,7 @@
             var ssoEmployerShow = document.getElementById('sso_employer_show');
             if(ssoEmployerShow) ssoEmployerShow.innerText = window.numberWithCommas(ssoAmt);
 
-            // 3. รวมรายได้ทั้งหมด (รวมประกันสังคมที่ออกให้แล้ว)
+            // 3. รวมรายได้ทั้งหมดจริง (รวมประกันสังคมออกให้แล้ว)
             var grossIncome = baseGross + ssoAmt;
 
             // 4. คำนวณภาษี 1% อัตโนมัติ (ถ้าระบุตำแหน่ง รถร่วม) แบบ Real-time
