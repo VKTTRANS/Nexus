@@ -387,12 +387,14 @@
                             <th>ชื่อ-นามสกุล</th>
                             <th>ตำแหน่ง</th>
                             <th class="text-end">ฐานเงินเดือน</th>
+                            <th class="text-end text-success">ยอดรับสุทธิ</th>
+                            <th class="text-end text-info">ประกันสังคม</th>
                             <th class="text-center">ประวัติสลิป</th>
                             <th class="text-end pe-4">จัดการเงินเดือน</th>
                         </tr>
                     </thead>
                     <tbody id="adminPayrollTableBody">
-                        <tr><td colspan="6" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
+                        <tr><td colspan="8" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1114,7 +1116,7 @@
             document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
             document.getElementById('adminAccidentTableBody').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลอุบัติเหตุ...</td></tr>';
             document.getElementById('adminWarnTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูลใบเตือน...</td></tr>';
-            document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
+            document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
             
             window.callAPI({ 
                 action: 'getAccidentData', 
@@ -1290,6 +1292,11 @@
 
             var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; });
             
+            var html = '';
+            var totalNet = 0;
+            var totalSSO = 0;
+            var slipCount = 0;
+
             var filtered = activeEmps.filter(function(d) { 
                 var matchName = (d.name + d.id).toLowerCase().includes(val); 
                 var matchPos = (posVal === 'all' || (d.position && d.position.includes(posVal)));
@@ -1309,35 +1316,37 @@
                 return matchName && matchPos && matchStatus;
             }); 
             
-            var html = '';
-            var totalNet = 0;
-            var totalSSO = 0;
-            var slipCount = 0;
-
             if (filtered.length === 0) {
-                html = '<tr><td colspan="6" class="text-center py-5 text-muted">ไม่พบข้อมูลพนักงาน</td></tr>';
+                html = '<tr><td colspan="8" class="text-center py-5 text-muted">ไม่พบข้อมูลพนักงาน</td></tr>';
             } else {
                 filtered.forEach(function(r) {
                     var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === r.id; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
                     
-                    var matchingSlips = empSlips;
+                    var matchingSlips = [];
                     var currentMonthSlip = null;
+                    var empPeriodNet = 0;
+                    var empPeriodSSO = 0;
 
                     if (monthVal !== 'all') {
                         currentMonthSlip = empSlips.find(function(p) { return p.payMonth === filterPeriod; });
                         if (currentMonthSlip) {
                             slipCount++;
-                            totalNet += parseFloat(currentMonthSlip.netSalary) || 0;
-                            var ssoEmp = parseFloat(currentMonthSlip.deducts[1]) || 0; 
-                            totalSSO += (ssoEmp * 2); 
+                            empPeriodNet = parseFloat(currentMonthSlip.netSalary) || 0;
+                            empPeriodSSO = parseFloat(currentMonthSlip.deducts[1]) || 0; 
+                            totalNet += empPeriodNet;
+                            totalSSO += (empPeriodSSO * 2); 
                         }
                     } else {
                         matchingSlips = empSlips.filter(function(p) { return p.payMonth && p.payMonth.startsWith(yearVal); });
                         slipCount += matchingSlips.length;
                         matchingSlips.forEach(function(slip) {
-                            totalNet += parseFloat(slip.netSalary) || 0;
-                            var ssoEmp = parseFloat(slip.deducts[1]) || 0; 
-                            totalSSO += (ssoEmp * 2);
+                            var sNet = parseFloat(slip.netSalary) || 0;
+                            var sSso = parseFloat(slip.deducts[1]) || 0;
+                            empPeriodNet += sNet;
+                            empPeriodSSO += sSso;
+                            
+                            totalNet += sNet;
+                            totalSSO += (sSso * 2);
                         });
                         if(matchingSlips.length > 0) currentMonthSlip = matchingSlips[0]; 
                     }
@@ -1345,20 +1354,25 @@
                     var slipCountTotal = empSlips.length;
                     var baseSal = slipCountTotal > 0 ? empSlips[0].baseSalary : parseFloat(r.appSalary || r.reqSalary || '0');
                     
-                    var badge = slipCountTotal > 0 ? `<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="window.openPayrollHistory('${r.id}')">${slipCountTotal} เดือน</button>` : `<span class="text-muted small">-</span>`;
+                    var badge = slipCountTotal > 0 ? `<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="event.stopPropagation(); window.openPayrollHistory('${r.id}')">${slipCountTotal} เดือน</button>` : `<span class="text-muted small">-</span>`;
                     var posShort = r.position || '-';
                     
                     var rowStyle = currentMonthSlip ? 'background-color: rgba(0, 230, 118, 0.08); border-left: 3px solid #00E676;' : '';
                     var statusIcon = currentMonthSlip ? '<i class="bi bi-check-circle-fill text-success ms-2" title="มีข้อมูลตามตัวกรอง"></i>' : '';
                     
-                    html += `<tr style="${rowStyle}">
+                    var netShow = currentMonthSlip ? window.numberWithCommas(empPeriodNet) : '-';
+                    var ssoShow = currentMonthSlip ? window.numberWithCommas(empPeriodSSO) : '-';
+
+                    html += `<tr style="cursor:pointer; ${rowStyle}" onclick="if(!event.target.closest('button') && !event.target.closest('a')) window.openPayrollHistory('${r.id}')">
                         <td class="ps-4 text-warning font-monospace fw-bold">${r.id}</td>
                         <td><b class="text-light">${r.name}</b>${statusIcon}</td>
                         <td><div style="white-space: normal; word-break: break-word; min-width: 150px;">${posShort}</div></td>
-                        <td class="text-end text-success fw-bold">${window.numberWithCommas(baseSal)}</td>
+                        <td class="text-end text-light fw-bold">${window.numberWithCommas(baseSal)}</td>
+                        <td class="text-end text-success fw-bold">${netShow}</td>
+                        <td class="text-end text-info fw-bold">${ssoShow}</td>
                         <td class="text-center">${badge}</td>
                         <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.openPayrollModal('${r.id}')"><i class="bi bi-plus-circle me-1"></i>ออกสลิป</button>
+                            <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="event.stopPropagation(); window.openPayrollModal('${r.id}')"><i class="bi bi-plus-circle me-1"></i>ออกสลิป</button>
                         </td>
                     </tr>`;
                 });
