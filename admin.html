@@ -302,19 +302,59 @@
 
     <!-- Section: เงินเดือน (Payroll) -->
     <div id="section-admin-payroll" class="d-none">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
-            <div class="d-flex gap-2">
-                <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-25 px-2 py-1" style="width: 250px;">
+        
+        <!-- การ์ดสรุปยอดเงินเดือน (ตามเดือนที่เลือกกรอง) -->
+        <div class="row g-2 mb-3 stagger-2">
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #00E676;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">รวมเงินเดือนสุทธิ (เดือนที่เลือก)</div>
+                        <h3 class="fw-bold text-success mb-0" id="statPayrollNet">0.00</h3>
+                        <div class="small text-muted mt-1" style="font-size:0.65rem;">เฉพาะรายชื่อที่กรองและออกสลิปแล้ว</div>
+                    </div>
+                    <div class="stat-icon text-success bg-success bg-opacity-10"><i class="bi bi-cash"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #0dcaf0;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">รวมประกันสังคม (นำส่ง)</div>
+                        <h3 class="fw-bold text-info mb-0" id="statPayrollSSO">0.00</h3>
+                        <div class="small text-muted mt-1" style="font-size:0.65rem;">(หักจากลูกจ้าง + บริษัทสมทบแล้ว)</div>
+                    </div>
+                    <div class="stat-icon text-info bg-info bg-opacity-10"><i class="bi bi-shield-plus"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #ffc107;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">จำนวนสลิปที่ออกแล้ว</div>
+                        <h3 class="fw-bold text-warning mb-0"><span id="statPayrollCount">0</span> <span class="fs-6 fw-normal text-muted">ใบ</span></h3>
+                        <div class="small text-muted mt-1" style="font-size:0.65rem;">ประจำเดือนที่เลือกกรอง</div>
+                    </div>
+                    <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-file-earmark-check"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 p-2 rounded-3 border border-secondary border-opacity-25 bg-black bg-opacity-25 stagger-3">
+            <div class="d-flex gap-2 flex-wrap">
+                <!-- ตัวกรองเดือน/ปี -->
+                <input type="month" id="filterPayrollMonth" class="form-control form-control-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 150px; cursor: pointer;" onchange="window.filterPayrollTable()" title="เลือกเดือนและปี">
+                
+                <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-50 px-2 py-1" style="width: 220px;">
                     <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchPayrollInput" onkeyup="window.filterPayrollTable()" placeholder="ค้นหาพนักงาน...">
                 </div>
-                <select id="filterPayrollPosition" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none" style="width:180px;" onchange="window.filterPayrollTable()">
+                
+                <select id="filterPayrollPosition" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width:160px; cursor: pointer;" onchange="window.filterPayrollTable()">
                     <option value="all">🌐 ทุกตำแหน่ง</option>
                 </select>
             </div>
             <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.loadAdminData()"><i class="bi bi-arrow-clockwise me-1"></i>รีเฟรช</button>
         </div>
-        <div class="glass-container-table stagger-3">
+        
+        <div class="glass-container-table stagger-4">
             <div class="table-responsive">
                 <table class="table table-hover table-custom mb-0 align-middle">
                     <thead>
@@ -1187,6 +1227,14 @@
             if (!window.allEmpData) return;
             var val = document.getElementById('searchPayrollInput').value.toLowerCase(); 
             var posVal = document.getElementById('filterPayrollPosition').value;
+            var monthVal = document.getElementById('filterPayrollMonth').value; 
+            
+            if (!monthVal) {
+                var d = new Date();
+                monthVal = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2);
+                document.getElementById('filterPayrollMonth').value = monthVal;
+            }
+
             var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; });
             
             var filtered = activeEmps.filter(function(d) { 
@@ -1196,31 +1244,52 @@
             }); 
             
             var html = '';
+            var totalNet = 0;
+            var totalSSO = 0;
+            var slipCount = 0;
+
             if (filtered.length === 0) {
                 html = '<tr><td colspan="6" class="text-center py-5 text-muted">ไม่พบข้อมูลพนักงาน</td></tr>';
             } else {
                 filtered.forEach(function(r) {
                     var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === r.id; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
-                    var slipCount = empSlips.length;
                     
-                    var baseSal = slipCount > 0 ? empSlips[0].baseSalary : parseFloat(r.appSalary || r.reqSalary || '0');
+                    var currentMonthSlip = empSlips.find(function(p) { return p.payMonth === monthVal; });
                     
-                    var badge = slipCount > 0 ? `<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="window.openPayrollHistory('${r.id}')">${slipCount} เดือน</button>` : `<span class="text-muted small">-</span>`;
+                    if (currentMonthSlip) {
+                        slipCount++;
+                        totalNet += parseFloat(currentMonthSlip.netSalary) || 0;
+                        var ssoEmp = parseFloat(currentMonthSlip.deducts[1]) || 0; 
+                        totalSSO += (ssoEmp * 2); 
+                    }
+
+                    var slipCountTotal = empSlips.length;
+                    var baseSal = slipCountTotal > 0 ? empSlips[0].baseSalary : parseFloat(r.appSalary || r.reqSalary || '0');
+                    
+                    var badge = slipCountTotal > 0 ? `<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="window.openPayrollHistory('${r.id}')">${slipCountTotal} เดือน</button>` : `<span class="text-muted small">-</span>`;
                     var posShort = r.position || '-';
                     
-                    html += `<tr>
+                    var rowClass = currentMonthSlip ? 'bg-success bg-opacity-10' : '';
+                    var statusIcon = currentMonthSlip ? '<i class="bi bi-check-circle-fill text-success ms-2" title="ออกสลิปเดือนนี้แล้ว"></i>' : '';
+                    
+                    html += `<tr class="${rowClass}">
                         <td class="ps-4 text-warning font-monospace fw-bold">${r.id}</td>
-                        <td><b class="text-light">${r.name}</b></td>
+                        <td><b class="text-light">${r.name}</b>${statusIcon}</td>
                         <td><div class="text-truncate" style="max-width:150px;" title="${posShort}">${posShort}</div></td>
                         <td class="text-end text-success fw-bold">${window.numberWithCommas(baseSal)}</td>
                         <td class="text-center">${badge}</td>
                         <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.openPayrollModal('${r.id}')"><i class="bi bi-plus-circle me-1"></i>ออกสลิปใหม่</button>
+                            <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.openPayrollModal('${r.id}')"><i class="bi bi-plus-circle me-1"></i>ออกสลิป</button>
                         </td>
                     </tr>`;
                 });
             }
+            
             document.getElementById('adminPayrollTableBody').innerHTML = html;
+            
+            document.getElementById('statPayrollNet').innerText = window.numberWithCommas(totalNet);
+            document.getElementById('statPayrollSSO').innerText = window.numberWithCommas(totalSSO);
+            document.getElementById('statPayrollCount').innerText = slipCount;
         };
 
         window.openPayrollHistory = function(empId) {
@@ -1254,10 +1323,10 @@
             
             if (document.getElementById('keepPrevData').checked && empSlips.length > 0) {
                 var lastM = empSlips[0];
-                for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
+                for (var i=2; i<=10; i++) { 
                     document.getElementById('pr_inc'+i).value = lastM.incomes[i-1] || 0;
                 }
-                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1, pr_dec2
+                for (var i=3; i<=10; i++) { 
                     document.getElementById('pr_dec'+i).value = lastM.deducts[i-1] || 0;
                 }
             } else {
@@ -1324,10 +1393,10 @@
                 document.getElementById('keepPrevDataContainer').style.display = 'none';
                 document.getElementById('pr_payDate').value = monthData.payDate.split('T')[0];
                 document.getElementById('pr_baseSalary').value = monthData.baseSalary || 0;
-                for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
+                for (var i=2; i<=10; i++) { 
                     document.getElementById('pr_inc'+i).value = monthData.incomes[i-1] || 0;
                 }
-                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1(ภาษี), pr_dec2(ประกันสังคม)
+                for (var i=3; i<=10; i++) { 
                     document.getElementById('pr_dec'+i).value = monthData.deducts[i-1] || 0;
                 }
                 window.calcPayrollTotals();
@@ -1389,16 +1458,13 @@
             var emp = window.allEmpData.find(function(e) { return String(e.id).trim() === String(empId).trim(); });
             var baseSal = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
             
-            // 1. รวมรายได้อื่นๆ ที่กรอกเองทั้งหมด (inc2 - inc10)
             var totalManualInc = 0;
             for (var i = 2; i <= 10; i++) {
                 var el = document.getElementById('pr_inc'+i);
                 if(el) totalManualInc += parseFloat(el.value) || 0;
             }
-            // ยอดฐานรายได้ทั้งหมดก่อนบวกประกันสังคม
             var baseGross = baseSal + totalManualInc;
 
-            // 2. คำนวณประกันสังคม (จากฐาน: เงินเดือน + ค่าเที่ยว + ค่ายกชน + ค่าดูแลลูกพ่วง/หาง)
             var inc2 = parseFloat(document.getElementById('pr_inc2').value) || 0;
             var inc3 = parseFloat(document.getElementById('pr_inc3').value) || 0;
             var inc4 = parseFloat(document.getElementById('pr_inc4').value) || 0;
@@ -1406,29 +1472,23 @@
             
             var ssoAmt = 0;
             if (emp && emp.ssoType && emp.ssoType.indexOf("33") !== -1) {
-                // อัปเดตเพดานเป็น 17,500 ตามกฎหมายใหม่
                 var ssoBase = ssoIncomeBase > 17500 ? 17500 : ssoIncomeBase; 
                 ssoAmt = Math.round(ssoBase * 0.05);
             }
             
-            // แสดงยอดประกันสังคมในช่องรายได้ "ประกันสังคม (ออกให้)" อัตโนมัติ
             var prInc1 = document.getElementById('pr_inc1');
             if(prInc1) prInc1.value = ssoAmt;
             
-            // แสดงยอดในช่องรายการหักอัตโนมัติ
             var prDec2 = document.getElementById('pr_dec2');
             if(prDec2) prDec2.value = ssoAmt; 
 
-            // อัปเดตแสดงผลสรุปประกันสังคมด้านล่างสุด
             var ssoEmpShow = document.getElementById('sso_emp_show');
             if(ssoEmpShow) ssoEmpShow.innerText = window.numberWithCommas(ssoAmt);
             var ssoEmployerShow = document.getElementById('sso_employer_show');
             if(ssoEmployerShow) ssoEmployerShow.innerText = window.numberWithCommas(ssoAmt);
 
-            // 3. รวมรายได้ทั้งหมดจริง (รวมประกันสังคมออกให้แล้ว)
             var grossIncome = baseGross + ssoAmt;
 
-            // 4. คำนวณภาษี 1% อัตโนมัติ (ถ้าระบุตำแหน่ง รถร่วม) แบบ Real-time
             var taxAmt = 0;
             if (emp && emp.position && (emp.position.indexOf("รถร่วม") !== -1 || emp.position.indexOf("รถร่วมบริการ") !== -1)) {
                 taxAmt = Math.round(grossIncome * 0.01);
@@ -1436,17 +1496,14 @@
             var prDec1 = document.getElementById('pr_dec1');
             if(prDec1) prDec1.value = taxAmt;
 
-            // 5. รวมรายการหักทั้งหมด
             var totalDec = 0;
             for (var i = 1; i <= 10; i++) {
                 var el = document.getElementById('pr_dec'+i);
                 if(el) totalDec += parseFloat(el.value) || 0;
             }
             
-            // 6. รายได้สุทธิ
             var netSalary = grossIncome - totalDec;
 
-            // อัปเดตแสดงผล UI รวม
             document.getElementById('pr_totalIncomeShow').innerText = window.numberWithCommas(grossIncome);
             document.getElementById('pr_totalDeductShow').innerText = window.numberWithCommas(totalDec);
             document.getElementById('pr_netSalaryShow').innerText = window.numberWithCommas(netSalary);
