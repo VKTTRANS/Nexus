@@ -381,8 +381,14 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-success"><i class="bi bi-plus-circle"></i> รายได้ (Income)</div>
                                     <div class="row g-2">
-                                        <!-- ซ่อนช่องประกันสังคมที่กรอกเอง -->
-                                        <div class="col-12 d-none"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ประกันสังคม (ออกให้)</span><input type="number" id="pr_inc1" class="form-control payroll-input" step="0.01" value="0"></div></div>
+                                        <!-- โชว์ช่องประกันสังคมออกให้ ให้อ่านอย่างเดียว คำนวณออโต้ตาม Checkbox ประกันสังคมด้านล่าง -->
+                                        <div class="col-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text lbl-fit"><span>ประกันสังคม (ออกให้)</span></span>
+                                                <input type="number" id="pr_inc1" class="form-control payroll-input text-success" readonly step="0.01">
+                                                <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
+                                            </div>
+                                        </div>
                                         
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
@@ -455,7 +461,7 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
                                     <div class="row g-2">
-                                        <!-- เพิ่ม Checkbox สำหรับบังคับคำนวณ -->
+                                        <!-- Checkbox สำหรับบังคับคำนวณ -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-text lbl-fit">
@@ -1396,32 +1402,31 @@
         window.calcPayrollTotals = function() {
             var baseSal = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
             
-            // 1. รวมรายได้ทั้งหมด (ไม่รวม pr_inc1 ที่ซ่อนอยู่)
+            // 1. รวมรายได้อื่นๆ ที่กรอกเอง (inc2 - inc10)
             var totalManualInc = 0;
             for (var i = 2; i <= 10; i++) {
                 var el = document.getElementById('pr_inc'+i);
                 if(el) totalManualInc += parseFloat(el.value) || 0;
             }
-            var grossIncome = baseSal + totalManualInc;
+            // ฐานรายได้ที่ยังไม่รวมประกันสังคมที่บริษัทออกให้
+            var baseGross = baseSal + totalManualInc;
 
-            // 2. ภาษี 1% (Real-time ตามสถานะ Checkbox)
-            var forceTaxEl = document.getElementById('forceTax');
-            var forceTax = forceTaxEl ? forceTaxEl.checked : false;
-            var taxAmt = forceTax ? Math.round(grossIncome * 0.01) : 0;
-            document.getElementById('pr_dec1').value = taxAmt;
-
-            // 3. ประกันสังคม จากรายได้รวม (Real-time ตามสถานะ Checkbox)
+            // 2. คำนวณประกันสังคม (จากฐานรายได้ก่อนบวกประกันสังคม)
             var forceSSOEl = document.getElementById('forceSSO');
             var forceSSO = forceSSOEl ? forceSSOEl.checked : false;
             var ssoAmt = 0;
             if (forceSSO) {
-                var ssoBase = grossIncome > 15000 ? 15000 : grossIncome; // ฐานสูงสุด 15,000 ตามกฎหมาย
+                var ssoBase = baseGross > 15000 ? 15000 : baseGross; // ฐานสูงสุด 15,000 ตามกฎหมาย
                 ssoAmt = Math.round(ssoBase * 0.05);
             }
-            document.getElementById('pr_dec2').value = ssoAmt; 
             
+            // นำยอดประกันสังคมใส่กลับเข้าไปเป็นรายได้ (ประกันสังคมออกให้)
             var prInc1 = document.getElementById('pr_inc1');
-            if(prInc1) prInc1.value = 0; // เคลียร์ช่อง pr_inc1 ป้องกันการส่งข้อมูลผิดพลาด
+            if(prInc1) prInc1.value = ssoAmt;
+            
+            // นำยอดเดียวกันใส่ลงเป็นรายการหัก
+            var prDec2 = document.getElementById('pr_dec2');
+            if(prDec2) prDec2.value = ssoAmt; 
 
             // อัปเดตการแสดงผลสรุปประกันสังคมด้านล่างสุด
             var ssoEmpShow = document.getElementById('sso_emp_show');
@@ -1429,16 +1434,27 @@
             var ssoEmployerShow = document.getElementById('sso_employer_show');
             if(ssoEmployerShow) ssoEmployerShow.innerText = window.numberWithCommas(ssoAmt);
 
-            // 4. รวมรายการหัก
+            // 3. รวมรายได้ทั้งหมดจริง (รวมประกันสังคมออกให้แล้ว)
+            var grossIncome = baseGross + ssoAmt;
+
+            // 4. ภาษี 1% (คิดจากรายได้รวม) Real-time ตามสถานะ Checkbox
+            var forceTaxEl = document.getElementById('forceTax');
+            var forceTax = forceTaxEl ? forceTaxEl.checked : false;
+            var taxAmt = forceTax ? Math.round(grossIncome * 0.01) : 0;
+            var prDec1 = document.getElementById('pr_dec1');
+            if(prDec1) prDec1.value = taxAmt;
+
+            // 5. รวมรายการหักทั้งหมด
             var totalDec = 0;
             for (var i = 1; i <= 10; i++) {
                 var el = document.getElementById('pr_dec'+i);
                 if(el) totalDec += parseFloat(el.value) || 0;
             }
             
-            // 5. รายได้สุทธิ
+            // 6. รายได้สุทธิ
             var netSalary = grossIncome - totalDec;
 
+            // อัปเดตแสดงผล
             document.getElementById('pr_totalIncomeShow').innerText = window.numberWithCommas(grossIncome);
             document.getElementById('pr_totalDeductShow').innerText = window.numberWithCommas(totalDec);
             document.getElementById('pr_netSalaryShow').innerText = window.numberWithCommas(netSalary);
