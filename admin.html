@@ -370,7 +370,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="label-logistics text-success">เงินเดือน ค่าจ้าง (บาท) *</label>
-                                    <input type="number" class="form-control bg-dark text-success fw-bold border-success fs-5 text-end" id="pr_baseSalary" oninput="window.calcDeductions(); window.calcPayrollTotals();" required step="0.01">
+                                    <input type="number" class="form-control bg-dark text-success fw-bold border-success fs-5 text-end" id="pr_baseSalary" oninput="window.calcPayrollTotals();" required step="0.01">
                                 </div>
                             </div>
                         </div>
@@ -381,7 +381,9 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-success"><i class="bi bi-plus-circle"></i> รายได้ (Income)</div>
                                     <div class="row g-2">
-                                        <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ประกันสังคม (ออกให้)</span><input type="number" id="pr_inc1" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                        <!-- ซ่อนช่องประกันสังคมที่กรอกเอง -->
+                                        <div class="col-12 d-none"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ประกันสังคม (ออกให้)</span><input type="number" id="pr_inc1" class="form-control payroll-input" step="0.01" value="0"></div></div>
+                                        
                                         <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ค่าเที่ยว</span><input type="number" id="pr_inc2" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
                                         <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ค่ายกชน</span><input type="number" id="pr_inc3" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
                                         <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ค่าดูแลลูกพ่วง/หาง</span><input type="number" id="pr_inc4" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
@@ -399,8 +401,10 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
                                     <div class="row g-2">
-                                        <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ภาษีหัก ณ ที่จ่าย (1%)</span><input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                        <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ประกันสังคม</span><input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว -->
+                                        <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ภาษีหัก ณ ที่จ่าย (1%)</span><input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec" readonly step="0.01"></div></div>
+                                        <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ประกันสังคม</span><input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec" readonly step="0.01"></div></div>
+                                        
                                         <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">เงินประกัน</span><input type="number" id="pr_dec3" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
                                         <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">เงินเบิกล่วงหน้า</span><input type="number" id="pr_dec4" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
                                         <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text lbl-fit">ค่าไฟ</span><input type="number" id="pr_dec5" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
@@ -428,6 +432,16 @@
                                     <small class="text-warning d-block fw-bold mb-1">รายได้สุทธิ (Net)</small>
                                     <h2 class="text-warning fw-bold mb-0" id="pr_netSalaryShow" style="text-shadow: 0 0 10px rgba(255,193,7,0.3);">0.00</h2>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- เพิ่มส่วนสรุปประกันสังคมด้านล่าง -->
+                        <div class="mt-3 p-3 logistics-card border-secondary text-center" style="background: rgba(0, 230, 118, 0.05); padding: 15px !important;">
+                            <div class="fw-bold text-success mb-2"><i class="bi bi-shield-check me-1"></i> สรุปข้อมูลประกันสังคมนำส่ง</div>
+                            <div class="d-flex justify-content-center gap-4 flex-wrap">
+                                <div><small class="text-muted">ส่วนของลูกจ้าง (หักจากเงินเดือน):</small> <span id="sso_emp_show" class="fw-bold text-danger ms-1 fs-6">0.00</span> <small class="text-muted">บาท</small></div>
+                                <div class="vr bg-secondary opacity-50 d-none d-sm-block"></div>
+                                <div><small class="text-muted">ส่วนของนายจ้าง (บริษัทสมทบ):</small> <span id="sso_employer_show" class="fw-bold text-success ms-1 fs-6">0.00</span> <small class="text-muted">บาท</small></div>
                             </div>
                         </div>
 
@@ -854,7 +868,6 @@
     <div class="modal fade" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content border border-danger border-opacity-50 logistics-modal"><div class="modal-header py-3 logistics-modal-header"><h5 class="modal-title text-danger fs-6 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>ออกใบเตือนพนักงาน</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><form id="warningForm" onsubmit="window.submitWarningForm(event)"><div class="row g-3"><div class="col-md-12"><label class="label-logistics">พนักงานที่กระทำผิด *</label><input type="text" class="form-control input-dark" id="warnEmpInput" list="warnEmpOptions" placeholder="ค้นหาชื่อ หรือ รหัสพนักงาน..." autocomplete="off" required><datalist id="warnEmpOptions"></datalist></div><div class="col-md-6"><label class="label-logistics">วันที่ออกใบเตือน *</label><input type="date" class="form-control input-dark" id="warnIssueDate" required></div><div class="col-md-6"><label class="label-logistics">วันที่กระทำผิด *</label><input type="date" class="form-control input-dark" id="warnIncidentDate" required></div><div class="col-12"><label class="label-logistics">ฐานความผิด (ข้อ 1) *</label><input type="text" class="form-control input-dark" id="warnOffense1" required></div><div class="col-12"><label class="label-logistics">ฐานความผิด (ข้อ 2)</label><input type="text" class="form-control input-dark" id="warnOffense2"></div><div class="col-12"><label class="label-logistics">หมายเหตุ / รายละเอียดเพิ่มเติม</label><textarea class="form-control input-dark" id="warnNotes" rows="2"></textarea></div><div class="col-md-6"><label class="label-logistics">ผู้ออกใบเตือน *</label><select class="form-select input-dark" id="warnIssuedBy" required><option value="นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)">นาย กิตติศักดิ์ อุส่าห์</option><option value="นางสาว จุฑารัตน์ แสงหงษา (HR)">นางสาว จุฑารัตน์ แสงหงษา</option><option value="นาย วชิระ อังธนดิลก (ผู้จัดการ)">นาย วชิระ อังธนดิลก</option><option value="นางสาว นิสา พรหมสูงวงษ์ (ผู้จัดการทั่วไป)">นางสาว นิสา พรหมสูงวงษ์</option></select></div><div class="col-md-6"><label class="label-logistics">เอกสารแนบ (ถ้ามี)</label><input type="text" class="form-control input-dark" id="warnAttachments" placeholder="เช่น รูปถ่ายความเสียหาย"></div><div class="col-md-6"><label class="label-logistics">รูปหลักฐาน 1</label><input type="file" class="form-control input-dark" id="warnPhoto1" accept="image/*"></div><div class="col-md-6"><label class="label-logistics">รูปหลักฐาน 2</label><input type="file" class="form-control input-dark" id="warnPhoto2" accept="image/*"></div></div><div class="mt-4 text-end"><button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button><button type="submit" class="btn btn-danger rounded-pill px-5 fw-bold" id="btnSubmitWarning">สร้างใบเตือน</button></div></form></div></div></div></div>
     <div class="modal fade" id="warningDetailModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content border border-danger border-opacity-50 logistics-modal"><div class="modal-header py-3 logistics-modal-header"><h5 class="modal-title text-danger fs-6 fw-bold">แก้ไข/ตรวจสอบใบเตือน: <span id="e_warnDocNo"></span></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><input type="hidden" id="e_warnDocNoHidden"><div class="mb-3 p-3 bg-black rounded"><span class="text-muted small">พนักงาน: </span><span id="e_warnEmpName" class="text-white fw-bold"></span></div><div class="row g-3"><div class="col-md-6"><label class="label-logistics">วันที่ออกใบเตือน</label><input type="date" class="form-control input-dark" id="e_warnIssueDate"></div><div class="col-md-6"><label class="label-logistics">วันที่กระทำผิด</label><input type="date" class="form-control input-dark" id="e_warnIncidentDate"></div><div class="col-12"><label class="label-logistics">ฐานความผิด (ข้อ 1)</label><input type="text" class="form-control input-dark" id="e_warnOffense1"></div><div class="col-12"><label class="label-logistics">ฐานความผิด (ข้อ 2)</label><input type="text" class="form-control input-dark" id="e_warnOffense2"></div><div class="col-12"><label class="label-logistics">หมายเหตุ</label><textarea class="form-control input-dark" id="e_warnNotes" rows="2"></textarea></div><div class="col-md-6"><label class="label-logistics">ผู้ออกใบเตือน (<span id="e_warnIssuedByText" class="text-info"></span>)</label><select class="form-select input-dark" id="e_warnIssuedBy"><option value="นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)">นาย กิตติศักดิ์ อุส่าห์ (Safety Mgr)</option><option value="นางสาว จุฑารัตน์ แสงหงษา (HR)">นางสาว จุฑารัตน์ แสงหงษา (HR)</option><option value="นาย วชิระ อังธนดิลก (ผู้จัดการ)">นาย วชิระ อังธนดิลก (ผู้จัดการ)</option><option value="นางสาว นิสา พรหมสูงวงษ์ (ผู้จัดการทั่วไป)">นางสาว นิสา พรหมสูงวงษ์ (ผู้จัดการทั่วไป)</option></select></div><div class="col-md-6"><label class="label-logistics">เอกสารแนบ</label><input type="text" class="form-control input-dark" id="e_warnAttachments"></div></div><div class="mt-4 d-flex justify-content-between pt-3 border-top border-secondary"><button type="button" class="btn btn-outline-danger rounded-pill px-4" onclick="window.deleteWarning()"><i class="bi bi-trash"></i> ลบเอกสาร</button><div><button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button><button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.saveWarningResolution()">บันทึกการแก้ไข</button></div></div></div></div></div></div>
 
-    <!-- ฟังก์ชันทั้งหมดเกี่ยวกับการจัดการตาราง โหลดข้อมูล อัปโหลดไฟล์ ฯลฯ ยังคงทำงานได้อย่างครบถ้วน -->
     <script>
         window.switchAdminTab = function(tab) {
             document.getElementById('btnTabEmp').classList.remove('active');
@@ -1050,7 +1063,7 @@
             window.renderTable(window.currentDisplayData); 
         };
 
-        // --- ฟังก์ชันสำหรับการจัดการเงินเดือน (Payroll) ---
+        // --- ฟังก์ชันสำหรับการจัดการเงินเดือน (Payroll) ที่ปรับปรุงใหม่ ---
 
         window.filterPayrollTable = function() {
             if (!window.allEmpData) return;
@@ -1117,47 +1130,21 @@
             new bootstrap.Modal(document.getElementById('payrollHistoryModal')).show();
         };
 
-        window.calcSSO = function() {
-            var empId = document.getElementById('pr_empId').value;
-            var emp = window.allEmpData.find(function(e) { return e.id === empId; });
-            
-            if (emp && emp.ssoType && emp.ssoType.includes("33")) {
-                var baseSal = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
-                var ssoBase = baseSal > 17500 ? 17500 : baseSal;
-                var ssoAmt = Math.round(ssoBase * 0.05); 
-                document.getElementById('pr_inc1').value = ssoAmt; 
-                document.getElementById('pr_dec2').value = ssoAmt; 
-            } else {
-                document.getElementById('pr_inc1').value = '';
-                document.getElementById('pr_dec2').value = '';
-            }
-            
-            var isContractor = emp && emp.position && emp.position.includes("รถร่วม");
-            if (isContractor) {
-                var baseSalForTax = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
-                var taxAmt = Math.round(baseSalForTax * 0.01);
-                document.getElementById('pr_dec1').value = taxAmt;
-            } else {
-                document.getElementById('pr_dec1').value = '';
-            }
-        };
-
         window.toggleKeepData = function() {
             var empId = document.getElementById('pr_empId').value;
             var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
             
             if (document.getElementById('keepPrevData').checked && empSlips.length > 0) {
                 var lastM = empSlips[0];
-                for (var i=1; i<=10; i++) {
+                for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
                     document.getElementById('pr_inc'+i).value = lastM.incomes[i-1] || 0;
+                }
+                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1(ภาษี), pr_dec2(ประกันสังคม)
                     document.getElementById('pr_dec'+i).value = lastM.deducts[i-1] || 0;
                 }
             } else {
-                for (var i=1; i<=10; i++) {
-                    document.getElementById('pr_inc'+i).value = '';
-                    document.getElementById('pr_dec'+i).value = '';
-                }
-                window.calcSSO();
+                for (var i=2; i<=10; i++) document.getElementById('pr_inc'+i).value = '';
+                for (var i=3; i<=10; i++) document.getElementById('pr_dec'+i).value = '';
             }
             window.calcPayrollTotals();
         };
@@ -1195,8 +1182,10 @@
                 document.getElementById('keepPrevDataContainer').style.display = 'none';
                 document.getElementById('pr_payDate').value = monthData.payDate.split('T')[0];
                 document.getElementById('pr_baseSalary').value = monthData.baseSalary || 0;
-                for (var i=1; i<=10; i++) {
+                for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
                     document.getElementById('pr_inc'+i).value = monthData.incomes[i-1] || 0;
+                }
+                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1(ภาษี), pr_dec2(ประกันสังคม)
                     document.getElementById('pr_dec'+i).value = monthData.deducts[i-1] || 0;
                 }
                 window.calcPayrollTotals();
@@ -1209,12 +1198,9 @@
                 var defaultBase = empSlips.length > 0 ? empSlips[0].baseSalary : parseFloat(emp.appSalary || emp.reqSalary || 0);
                 document.getElementById('pr_baseSalary').value = defaultBase;
 
-                for (var i=1; i<=10; i++) {
-                    document.getElementById('pr_inc'+i).value = '';
-                    document.getElementById('pr_dec'+i).value = '';
-                }
+                for (var i=2; i<=10; i++) { document.getElementById('pr_inc'+i).value = ''; }
+                for (var i=3; i<=10; i++) { document.getElementById('pr_dec'+i).value = ''; }
 
-                window.calcSSO(); 
                 window.calcPayrollTotals();
                 new bootstrap.Modal(document.getElementById('payrollModal')).show();
             }
@@ -1257,19 +1243,48 @@
         };
 
         window.calcPayrollTotals = function() {
+            var empId = document.getElementById('pr_empId').value;
+            var emp = window.allEmpData.find(function(e) { return e.id === empId; });
             var baseSal = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
-            var totalInc = 0;
-            var totalDec = 0;
             
-            for (var i=1; i<=10; i++) {
-                totalInc += parseFloat(document.getElementById('pr_inc'+i).value) || 0;
+            // 1. รวมรายได้ทั้งหมด (ไม่รวม pr_inc1)
+            var totalManualInc = 0;
+            for (var i = 2; i <= 10; i++) {
+                totalManualInc += parseFloat(document.getElementById('pr_inc'+i).value) || 0;
+            }
+            var grossIncome = baseSal + totalManualInc;
+
+            // 2. คำนวณประกันสังคม จากรายได้รวม
+            var ssoAmt = 0;
+            if (emp && emp.ssoType && emp.ssoType.includes("33")) {
+                var ssoBase = grossIncome > 17500 ? 17500 : grossIncome;
+                ssoAmt = Math.round(ssoBase * 0.05);
+            }
+            document.getElementById('pr_dec2').value = ssoAmt; // อัปเดตในช่องหัก
+            document.getElementById('pr_inc1').value = 0; // เคลียร์ช่อง pr_inc1 ป้องกันการส่งข้อมูลผิดพลาด
+
+            // 3. คำนวณภาษีหัก ณ ที่จ่าย (เฉพาะรถร่วมบริการ) จากรายได้รวม
+            var taxAmt = 0;
+            var isContractor = emp && emp.position && emp.position.includes("รถร่วมบริการ");
+            if (isContractor) {
+                taxAmt = Math.round(grossIncome * 0.01);
+            }
+            document.getElementById('pr_dec1').value = taxAmt;
+
+            // อัปเดตการแสดงผลสรุปประกันสังคมด้านล่างสุด
+            document.getElementById('sso_emp_show').innerText = window.numberWithCommas(ssoAmt);
+            document.getElementById('sso_employer_show').innerText = window.numberWithCommas(ssoAmt);
+
+            // 4. รวมรายการหัก
+            var totalDec = 0;
+            for (var i = 1; i <= 10; i++) {
                 totalDec += parseFloat(document.getElementById('pr_dec'+i).value) || 0;
             }
             
-            var netSalary = (baseSal + totalInc) - totalDec;
-            var totalIncomeCombine = baseSal + totalInc;
+            // 5. รายได้สุทธิ
+            var netSalary = grossIncome - totalDec;
 
-            document.getElementById('pr_totalIncomeShow').innerText = window.numberWithCommas(totalIncomeCombine);
+            document.getElementById('pr_totalIncomeShow').innerText = window.numberWithCommas(grossIncome);
             document.getElementById('pr_totalDeductShow').innerText = window.numberWithCommas(totalDec);
             document.getElementById('pr_netSalaryShow').innerText = window.numberWithCommas(netSalary);
         };
