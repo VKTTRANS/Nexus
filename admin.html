@@ -110,7 +110,7 @@
         .payroll-input { background: #0a0a0a !important; color: #fff !important; border-color: #333 !important; text-align: right; }
         .payroll-input:focus { border-color: #00E676 !important; box-shadow: none !important; }
         .payroll-dec { color: #ff4d4d !important; }
-        .lbl-fit { font-size: 0.8rem; width: 150px; text-align: left; padding: 0.375rem 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; background-color: #1a1a1a; border-color: #333; color: #aaa;}
+        .lbl-fit { font-size: 0.8rem; width: 175px; text-align: left; padding: 0.375rem 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: space-between; background-color: #1a1a1a; border-color: #333; color: #aaa;}
         
         /* สไตล์สำหรับ checkbox ตำแหน่ง */
         .pos-checkbox-wrapper { background: #0a0a0a; border: 1px solid #333; border-radius: 6px; padding: 10px; max-height: 150px; overflow-y: auto;}
@@ -386,63 +386,63 @@
                                         
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่าเที่ยว</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่าเที่ยว</span></span>
                                                 <input type="number" id="pr_inc2" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc2')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่ายกชน</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่ายกชน</span></span>
                                                 <input type="number" id="pr_inc3" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc3')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่าดูแลลูกพ่วง/หาง</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่าดูแลลูกพ่วง/หาง</span></span>
                                                 <input type="number" id="pr_inc4" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc4')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">เบี้ยขยัน</span>
+                                                <span class="input-group-text lbl-fit"><span>เบี้ยขยัน</span></span>
                                                 <input type="number" id="pr_inc5" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc5')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">เบี้ยพิเศษ</span>
+                                                <span class="input-group-text lbl-fit"><span>เบี้ยพิเศษ</span></span>
                                                 <input type="number" id="pr_inc6" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc6')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">เงินเบี้ยเลี้ยง</span>
+                                                <span class="input-group-text lbl-fit"><span>เงินเบี้ยเลี้ยง</span></span>
                                                 <input type="number" id="pr_inc7" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc7')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่าล่วงเวลา</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่าล่วงเวลา</span></span>
                                                 <input type="number" id="pr_inc8" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc8')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">รายได้อื่นๆ</span>
+                                                <span class="input-group-text lbl-fit"><span>รายได้อื่นๆ</span></span>
                                                 <input type="number" id="pr_inc9" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc9')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12 d-none">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">อื่นๆ</span>
+                                                <span class="input-group-text lbl-fit"><span>อื่นๆ</span></span>
                                                 <input type="number" id="pr_inc10" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('inc10')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
@@ -455,17 +455,23 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
                                     <div class="row g-2">
-                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ -->
+                                        <!-- เพิ่ม Checkbox สำหรับบังคับคำนวณ -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ภาษีหัก ณ ที่จ่าย (1%)</span>
+                                                <span class="input-group-text lbl-fit">
+                                                    <span>ภาษี (1%)</span>
+                                                    <input class="form-check-input m-0 border-secondary" type="checkbox" id="forceTax" onchange="window.calcPayrollTotals()" title="บังคับคำนวณภาษี 1%">
+                                                </span>
                                                 <input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ประกันสังคม</span>
+                                                <span class="input-group-text lbl-fit">
+                                                    <span>ประกันสังคม</span>
+                                                    <input class="form-check-input m-0 border-secondary" type="checkbox" id="forceSSO" onchange="window.calcPayrollTotals()" title="บังคับคำนวณประกันสังคม">
+                                                </span>
                                                 <input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
                                             </div>
@@ -473,56 +479,56 @@
                                         
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">เงินประกัน</span>
+                                                <span class="input-group-text lbl-fit"><span>เงินประกัน</span></span>
                                                 <input type="number" id="pr_dec3" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec3')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">เงินเบิกล่วงหน้า</span>
+                                                <span class="input-group-text lbl-fit"><span>เงินเบิกล่วงหน้า</span></span>
                                                 <input type="number" id="pr_dec4" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec4')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่าไฟ</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่าไฟ</span></span>
                                                 <input type="number" id="pr_dec5" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec5')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่าผ่อนโทรศัพท์</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่าผ่อนโทรศัพท์</span></span>
                                                 <input type="number" id="pr_dec6" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec6')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">เงินกู้ยืม</span>
+                                                <span class="input-group-text lbl-fit"><span>เงินกู้ยืม</span></span>
                                                 <input type="number" id="pr_dec7" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec7')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่าเสียหายรถ</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่าเสียหายรถ</span></span>
                                                 <input type="number" id="pr_dec8" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec8')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่างวดรถส่วนตัว</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่างวดรถส่วนตัว</span></span>
                                                 <input type="number" id="pr_dec9" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec9')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">ค่าค้างตู้</span>
+                                                <span class="input-group-text lbl-fit"><span>ค่าค้างตู้</span></span>
                                                 <input type="number" id="pr_dec10" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary text-warning border-secondary px-2" onclick="window.pullPrevField('dec10')" title="ดึงข้อมูลเดือนที่แล้ว"><i class="bi bi-clock-history"></i></button>
                                             </div>
@@ -598,7 +604,7 @@
         </div>
     </div>
 
-    <!-- Modal สำหรับแก้ไข/จัดการพนักงานในมุมมอง Admin (ออกแบบใหม่ตามสไตล์ขนส่ง) -->
+    <!-- Modal สำหรับแก้ไข/จัดการพนักงานในมุมมอง Admin -->
     <div class="modal fade" id="empModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content logistics-modal">
@@ -1292,7 +1298,7 @@
             if (isEdit === undefined) isEdit = false;
             if (monthData === undefined) monthData = null;
             
-            var emp = window.allEmpData.find(function(e){ return e.id === empId; });
+            var emp = window.allEmpData.find(function(e){ return String(e.id).trim() === String(empId).trim(); });
             if (!emp) return;
             
             document.getElementById('payrollForm').reset();
@@ -1314,6 +1320,12 @@
             document.getElementById('pr_prefix').value = prefix;
             document.getElementById('pr_firstName').value = fname;
             document.getElementById('pr_lastName').value = lname;
+
+            // ตรวจสอบเงื่อนไขเพื่อติ๊ก Checkbox คำนวณภาษีและประกันสังคมให้อัตโนมัติ
+            var forceTaxEl = document.getElementById('forceTax');
+            var forceSSOEl = document.getElementById('forceSSO');
+            if(forceTaxEl) forceTaxEl.checked = (emp.position && emp.position.indexOf("รถร่วม") !== -1);
+            if(forceSSOEl) forceSSOEl.checked = (emp.ssoType && emp.ssoType.indexOf("33") !== -1);
             
             var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
 
@@ -1382,11 +1394,9 @@
         };
 
         window.calcPayrollTotals = function() {
-            var empId = document.getElementById('pr_empId').value;
-            var emp = window.allEmpData.find(function(e) { return e.id === empId; });
             var baseSal = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
             
-            // 1. รวมรายได้ทั้งหมด (ไม่รวม pr_inc1)
+            // 1. รวมรายได้ทั้งหมด (ไม่รวม pr_inc1 ที่ซ่อนอยู่)
             var totalManualInc = 0;
             for (var i = 2; i <= 10; i++) {
                 var el = document.getElementById('pr_inc'+i);
@@ -1394,27 +1404,30 @@
             }
             var grossIncome = baseSal + totalManualInc;
 
-            // 2. คำนวณประกันสังคม จากรายได้รวม (Real-time)
+            // 2. ภาษี 1% (Real-time ตามสถานะ Checkbox)
+            var forceTaxEl = document.getElementById('forceTax');
+            var forceTax = forceTaxEl ? forceTaxEl.checked : false;
+            var taxAmt = forceTax ? Math.round(grossIncome * 0.01) : 0;
+            document.getElementById('pr_dec1').value = taxAmt;
+
+            // 3. ประกันสังคม จากรายได้รวม (Real-time ตามสถานะ Checkbox)
+            var forceSSOEl = document.getElementById('forceSSO');
+            var forceSSO = forceSSOEl ? forceSSOEl.checked : false;
             var ssoAmt = 0;
-            if (emp && emp.ssoType && emp.ssoType.includes("33")) {
-                var ssoBase = grossIncome > 17500 ? 17500 : grossIncome;
+            if (forceSSO) {
+                var ssoBase = grossIncome > 15000 ? 15000 : grossIncome; // ฐานสูงสุด 15,000 ตามกฎหมาย
                 ssoAmt = Math.round(ssoBase * 0.05);
             }
-            document.getElementById('pr_dec2').value = ssoAmt; // อัปเดตในช่องหัก
+            document.getElementById('pr_dec2').value = ssoAmt; 
+            
             var prInc1 = document.getElementById('pr_inc1');
             if(prInc1) prInc1.value = 0; // เคลียร์ช่อง pr_inc1 ป้องกันการส่งข้อมูลผิดพลาด
 
-            // 3. คำนวณภาษีหัก ณ ที่จ่าย (เฉพาะรถร่วมบริการ) จากรายได้รวม (Real-time)
-            var taxAmt = 0;
-            var isContractor = emp && emp.position && emp.position.includes("รถร่วมบริการ");
-            if (isContractor) {
-                taxAmt = Math.round(grossIncome * 0.01);
-            }
-            document.getElementById('pr_dec1').value = taxAmt;
-
             // อัปเดตการแสดงผลสรุปประกันสังคมด้านล่างสุด
-            document.getElementById('sso_emp_show').innerText = window.numberWithCommas(ssoAmt);
-            document.getElementById('sso_employer_show').innerText = window.numberWithCommas(ssoAmt);
+            var ssoEmpShow = document.getElementById('sso_emp_show');
+            if(ssoEmpShow) ssoEmpShow.innerText = window.numberWithCommas(ssoAmt);
+            var ssoEmployerShow = document.getElementById('sso_employer_show');
+            if(ssoEmployerShow) ssoEmployerShow.innerText = window.numberWithCommas(ssoAmt);
 
             // 4. รวมรายการหัก
             var totalDec = 0;
