@@ -1,291 +1,291 @@
 <div class="modal fade" id="accidentModal" tabindex="-1" data-bs-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content" style="background: rgba(20,20,20,0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,50,50,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
-            
-            <div class="modal-header border-bottom border-danger border-opacity-25 pb-3">
-                <h5 class="modal-title fw-bold text-danger">
-                    <i class="bi bi-cone-striped me-2"></i>รายงานอุบัติเหตุ
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            
-            <div class="modal-body p-4">
-                <form id="accidentForm" onsubmit="window.submitAccident(event)">
-                    
-                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2">
-                        <i class="bi bi-info-circle me-2"></i>ข้อมูลการเกิดเหตุ
-                    </h6>
-                    
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="small text-muted mb-1">วันที่เกิดเหตุ *</label>
-                            <input type="date" class="form-control bg-dark text-light border-secondary" id="accDate" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="small text-muted mb-1">เวลาเกิดเหตุ *</label>
-                            <select class="form-select bg-dark text-light border-secondary" id="accTime" required>
-                                <option value="">- เลือกเวลาโดยประมาณ -</option>
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            <label class="small text-muted mb-1">สถานที่เกิดเหตุ *</label>
-                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accLocation" placeholder="ระบุสถานที่ หรือ ลิงก์พิกัด Google Maps" required>
-                        </div>
-                    </div>
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content" style="background: rgba(20,20,20,0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255,50,50,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+            
+            <div class="modal-header border-bottom border-danger border-opacity-25 pb-3">
+                <h5 class="modal-title fw-bold text-danger">
+                    <i class="bi bi-cone-striped me-2"></i>รายงานอุบัติเหตุ
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body p-4">
+                <form id="accidentForm" onsubmit="window.submitAccident(event)">
+                    
+                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+                        <i class="bi bi-info-circle me-2"></i>ข้อมูลการเกิดเหตุ
+                    </h6>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">วันที่เกิดเหตุ *</label>
+                            <input type="date" class="form-control bg-dark text-light border-secondary" id="accDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">เวลาเกิดเหตุ *</label>
+                            <select class="form-select bg-dark text-light border-secondary" id="accTime" required>
+                                <option value="">- เลือกเวลาโดยประมาณ -</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">สถานที่เกิดเหตุ *</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accLocation" placeholder="ระบุสถานที่ หรือ ลิงก์พิกัด Google Maps" required>
+                        </div>
+                    </div>
 
-                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2">
-                        <i class="bi bi-truck me-2"></i>ข้อมูลยานพาหนะ
-                    </h6>
-                    
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <label class="small text-muted mb-1">ประเภทรถ *</label>
-                            <select class="form-select bg-dark text-light border-secondary" id="accVehicleType" required>
-                                <option value="">- เลือก -</option>
-                                <option value="รถ 4 ล้อ">รถ 4 ล้อ</option>
-                                <option value="รถ 6 ล้อ">รถ 6 ล้อ</option>
-                                <option value="รถ 6 ล้อพ่วง">รถ 6 ล้อพ่วง</option>
-                                <option value="รถ 10 ล้อ">รถ 10 ล้อ</option>
-                                <option value="รถ 10 ล้อพ่วง">รถ 10 ล้อพ่วง</option>
-                                <option value="รถ 12 ล้อพ่วง">รถ 12 ล้อพ่วง</option>
-                                <option value="รถ เทรลเลอร์">รถ เทรลเลอร์</option>
-                                <option value="รถบัส">รถบัส</option>
-                                <option value="รถโฟร์คลิฟ">รถโฟร์คลิฟ</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="small text-muted mb-1">ทะเบียนรถ (หัว) *</label>
-                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accTruckPlate" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="small text-muted mb-1">ทะเบียนหาง (ถ้ามี)</label>
-                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accTrailerPlate">
-                        </div>
-                    </div>
+                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+                        <i class="bi bi-truck me-2"></i>ข้อมูลยานพาหนะ
+                    </h6>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="small text-muted mb-1">ประเภทรถ *</label>
+                            <select class="form-select bg-dark text-light border-secondary" id="accVehicleType" required>
+                                <option value="">- เลือก -</option>
+                                <option value="รถ 4 ล้อ">รถ 4 ล้อ</option>
+                                <option value="รถ 6 ล้อ">รถ 6 ล้อ</option>
+                                <option value="รถ 6 ล้อพ่วง">รถ 6 ล้อพ่วง</option>
+                                <option value="รถ 10 ล้อ">รถ 10 ล้อ</option>
+                                <option value="รถ 10 ล้อพ่วง">รถ 10 ล้อพ่วง</option>
+                                <option value="รถ 12 ล้อพ่วง">รถ 12 ล้อพ่วง</option>
+                                <option value="รถ เทรลเลอร์">รถ เทรลเลอร์</option>
+                                <option value="รถบัส">รถบัส</option>
+                                <option value="รถโฟร์คลิฟ">รถโฟร์คลิฟ</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="small text-muted mb-1">ทะเบียนรถ (หัว) *</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accTruckPlate" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="small text-muted mb-1">ทะเบียนหาง (ถ้ามี)</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accTrailerPlate">
+                        </div>
+                    </div>
 
-                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2">
-                        <i class="bi bi-exclamation-triangle me-2"></i>สาเหตุและความเสียหาย
-                    </h6>
+                    <h6 class="text-warning mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+                        <i class="bi bi-exclamation-triangle me-2"></i>สาเหตุและความเสียหาย
+                    </h6>
 
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="small text-muted mb-1">สาเหตุ *</label>
-                            <select class="form-select bg-dark text-light border-secondary mb-2" id="accCause" onchange="window.toggleAccOther('accCause', 'divCauseOther')" required>
-                                <option value="">- เลือก -</option>
-                                <option value="เมาสุรา">เมาสุรา</option>
-                                <option value="ขับเร็วเกินกว่ากำหนด">ขับเร็วเกินกว่ากำหนด</option>
-                                <option value="ตัดหน้ากระชั้นชิด">ตัดหน้ากระชั้นชิด</option>
-                                <option value="ทัศนวิสัยไม่ดี">ทัศนวิสัยไม่ดี</option>
-                                <option value="หลับใน">หลับใน</option>
-                                <option value="ฝ่าฝืนสัญญาณไฟจราจร">ฝ่าฝืนสัญญาณไฟจราจร</option>
-                                <option value="แซงรถในที่คับขัน">แซงรถในที่คับขัน</option>
-                                <option value="โทรศัพท์ขณะขับขี่">โทรศัพท์ขณะขับขี่</option>
-                                <option value="น้ำหนักเกิน">น้ำหนักเกิน</option>
-                                <option value="มีสิ่งกีดขวางที่ไม่คาดคิดบนถนน">มีสิ่งกีดขวางที่ไม่คาดคิดบนถนน</option>
-                                <option value="ยางรั่ว/ยางแตก/ยางเบียด">ยางรั่ว/ยางแตก/ยางเบียด</option>
-                                <option value="อื่นๆ ระบุ">อื่นๆ ระบุ</option>
-                            </select>
-                            <div id="divCauseOther" style="display:none;">
-                                <input type="text" class="form-control bg-dark text-light border-warning" id="accCauseOther" placeholder="โปรดระบุสาเหตุอื่นๆ...">
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label class="small text-muted mb-1">เหตุเกิดจาก *</label>
-                            <select class="form-select bg-dark text-light border-secondary mb-2" id="accCausedBy" onchange="window.toggleAccOther('accCausedBy', 'divCausedByOther')" required>
-                                <option value="">- เลือก -</option>
-                                <option value="เกิดจากบุคคล">เกิดจากบุคคล</option>
-                                <option value="เกิดจากรถ">เกิดจากรถ</option>
-                                <option value="เกิดจากทางและเครื่องหมายจราจร">เกิดจากทางและเครื่องหมายจราจร</option>
-                                <option value="เกิดจากธรรมชาติ">เกิดจากธรรมชาติ</option>
-                                <option value="อื่นๆ ระบุ">อื่นๆ ระบุ</option>
-                            </select>
-                            <div id="divCausedByOther" style="display:none;">
-                                <input type="text" class="form-control bg-dark text-light border-warning" id="accCausedByOther" placeholder="โปรดระบุเหตุเกิดจาก...">
-                            </div>
-                        </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">สาเหตุ *</label>
+                            <select class="form-select bg-dark text-light border-secondary mb-2" id="accCause" onchange="window.toggleAccOther('accCause', 'divCauseOther')" required>
+                                <option value="">- เลือก -</option>
+                                <option value="เมาสุรา">เมาสุรา</option>
+                                <option value="ขับเร็วเกินกว่ากำหนด">ขับเร็วเกินกว่ากำหนด</option>
+                                <option value="ตัดหน้ากระชั้นชิด">ตัดหน้ากระชั้นชิด</option>
+                                <option value="ทัศนวิสัยไม่ดี">ทัศนวิสัยไม่ดี</option>
+                                <option value="หลับใน">หลับใน</option>
+                                <option value="ฝ่าฝืนสัญญาณไฟจราจร">ฝ่าฝืนสัญญาณไฟจราจร</option>
+                                <option value="แซงรถในที่คับขัน">แซงรถในที่คับขัน</option>
+                                <option value="โทรศัพท์ขณะขับขี่">โทรศัพท์ขณะขับขี่</option>
+                                <option value="น้ำหนักเกิน">น้ำหนักเกิน</option>
+                                <option value="มีสิ่งกีดขวางที่ไม่คาดคิดบนถนน">มีสิ่งกีดขวางที่ไม่คาดคิดบนถนน</option>
+                                <option value="ยางรั่ว/ยางแตก/ยางเบียด">ยางรั่ว/ยางแตก/ยางเบียด</option>
+                                <option value="อื่นๆ ระบุ">อื่นๆ ระบุ</option>
+                            </select>
+                            <div id="divCauseOther" style="display:none;">
+                                <input type="text" class="form-control bg-dark text-light border-warning" id="accCauseOther" placeholder="โปรดระบุสาเหตุอื่นๆ...">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">เหตุเกิดจาก *</label>
+                            <select class="form-select bg-dark text-light border-secondary mb-2" id="accCausedBy" onchange="window.toggleAccOther('accCausedBy', 'divCausedByOther')" required>
+                                <option value="">- เลือก -</option>
+                                <option value="เกิดจากบุคคล">เกิดจากบุคคล</option>
+                                <option value="เกิดจากรถ">เกิดจากรถ</option>
+                                <option value="เกิดจากทางและเครื่องหมายจราจร">เกิดจากทางและเครื่องหมายจราจร</option>
+                                <option value="เกิดจากธรรมชาติ">เกิดจากธรรมชาติ</option>
+                                <option value="อื่นๆ ระบุ">อื่นๆ ระบุ</option>
+                            </select>
+                            <div id="divCausedByOther" style="display:none;">
+                                <input type="text" class="form-control bg-dark text-light border-warning" id="accCausedByOther" placeholder="โปรดระบุเหตุเกิดจาก...">
+                            </div>
+                        </div>
 
-                        <div class="col-12 mt-1">
-                            <div class="p-3 rounded small" style="background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.1);">
-                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากบุคคล:</span> คนขับประมาท, ขับเร็ว, เมา, ใช้โทรศัพท์, คนข้ามถนนตัดหน้า</div>
-                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากรถ:</span> อุปกรณ์บกพร่อง เช่น เบรก, ไฟสัญญาณ, ยาง, ที่ปัดน้ำฝน</div>
-                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากทางฯ:</span> ทางแยก, ทางโค้ง, ถนนชำรุด, ป้ายสัญญาณชำรุด</div>
-                                <div class="text-light"><span class="text-warning fw-bold">จากธรรมชาติ:</span> ฝนตกหนัก, หมอกลงจัด ฯลฯ</div>
-                            </div>
-                        </div>
+                        <div class="col-12 mt-1">
+                            <div class="p-3 rounded small" style="background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.1);">
+                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากบุคคล:</span> คนขับประมาท, ขับเร็ว, เมา, ใช้โทรศัพท์, คนข้ามถนนตัดหน้า</div>
+                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากรถ:</span> อุปกรณ์บกพร่อง เช่น เบรก, ไฟสัญญาณ, ยาง, ที่ปัดน้ำฝน</div>
+                                <div class="text-light mb-1"><span class="text-warning fw-bold">จากทางฯ:</span> ทางแยก, ทางโค้ง, ถนนชำรุด, ป้ายสัญญาณชำรุด</div>
+                                <div class="text-light"><span class="text-warning fw-bold">จากธรรมชาติ:</span> ฝนตกหนัก, หมอกลงจัด ฯลฯ</div>
+                            </div>
+                        </div>
 
-                        <div class="col-12">
-                            <label class="small text-muted mb-1">ความเสียหาย *</label>
-                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accDamage" placeholder="สรุปความเสียหายเบื้องต้น (เช่น กันชนหน้ายุบ, ไฟแตก)" required>
-                        </div>
-                        
-                        <div class="col-12">
-                            <label class="small text-muted mb-1">รายละเอียดเหตุการณ์ *</label>
-                            <textarea class="form-control bg-dark text-light border-secondary" id="accDetail" rows="3" placeholder="อธิบายลำดับเหตุการณ์ที่เกิดขึ้น..." required></textarea>
-                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">ความเสียหาย *</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="accDamage" placeholder="สรุปความเสียหายเบื้องต้น (เช่น กันชนหน้ายุบ, ไฟแตก)" required>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">รายละเอียดเหตุการณ์ *</label>
+                            <textarea class="form-control bg-dark text-light border-secondary" id="accDetail" rows="3" placeholder="อธิบายลำดับเหตุการณ์ที่เกิดขึ้น..." required></textarea>
+                        </div>
 
-                        <div class="col-12 mt-4">
-                            <div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(0,0,0,0.3);">
-                                <label class="small text-light mb-1 fw-bold">
-                                    <i class="bi bi-camera me-2 text-info"></i>รูปถ่ายหน้างาน / หลักฐาน (ใส่ได้สูงสุด 2 รูป)
-                                </label>
-                                <div class="row g-2 mt-1">
-                                    <div class="col-md-6">
-                                        <small class="text-muted d-block">รูปที่ 1</small>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary" id="accPhoto1" accept="image/*" capture="environment">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="text-muted d-block">รูปที่ 2 (ถ้ามี)</small>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary" id="accPhoto2" accept="image/*" capture="environment">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
-                        <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="submit" class="btn btn-danger rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitAccident">ส่งรายงานอุบัติเหตุ</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                        <div class="col-12 mt-4">
+                            <div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(0,0,0,0.3);">
+                                <label class="small text-light mb-1 fw-bold">
+                                    <i class="bi bi-camera me-2 text-info"></i>รูปถ่ายหน้างาน / หลักฐาน (ใส่ได้สูงสุด 2 รูป)
+                                </label>
+                                <div class="row g-2 mt-1">
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">รูปที่ 1</small>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary" id="accPhoto1" accept="image/*" capture="environment">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">รูปที่ 2 (ถ้ามี)</small>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary" id="accPhoto2" accept="image/*" capture="environment">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-danger rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitAccident">ส่งรายงานอุบัติเหตุ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
 // สร้างตัวเลือกเวลาอัตโนมัติ
 (function() {
-    var timeSelect = document.getElementById('accTime');
-    if(timeSelect) {
-        timeSelect.innerHTML = '<option value="">- เลือกเวลาโดยประมาณ -</option>';
-        for (var h = 0; h < 24; h++) {
-            var hr = (h < 10 ? "0" : "") + h;
-            timeSelect.innerHTML += `<option value="${hr}:00">${hr}:00 น.</option>`;
-            timeSelect.innerHTML += `<option value="${hr}:30">${hr}:30 น.</option>`;
-        }
-    }
+    var timeSelect = document.getElementById('accTime');
+    if(timeSelect) {
+        timeSelect.innerHTML = '<option value="">- เลือกเวลาโดยประมาณ -</option>';
+        for (var h = 0; h < 24; h++) {
+            var hr = (h < 10 ? "0" : "") + h;
+            timeSelect.innerHTML += `<option value="${hr}:00">${hr}:00 น.</option>`;
+            timeSelect.innerHTML += `<option value="${hr}:30">${hr}:30 น.</option>`;
+        }
+    }
 })();
 
-window.toggleAccOther = function(selectId, divId) { 
-    var val = document.getElementById(selectId).value; 
-    var div = document.getElementById(divId); 
-    var input = div.querySelector('input'); 
-    
-    if (val === "อื่นๆ ระบุ") { 
-        div.style.display = "block"; 
-        input.required = true; 
-    } else { 
-        div.style.display = "none"; 
-        input.required = false; 
-        input.value = ""; 
-    } 
+window.toggleAccOther = function(selectId, divId) { 
+    var val = document.getElementById(selectId).value; 
+    var div = document.getElementById(divId); 
+    var input = div.querySelector('input'); 
+    
+    if (val === "อื่นๆ ระบุ") { 
+        div.style.display = "block"; 
+        input.required = true; 
+    } else { 
+        div.style.display = "none"; 
+        input.required = false; 
+        input.value = ""; 
+    } 
 };
 
-window.openAccidentModal = function() { 
-    document.getElementById('accidentForm').reset(); 
-    document.getElementById('divCauseOther').style.display = "none"; 
-    document.getElementById('divCausedByOther').style.display = "none"; 
-    new bootstrap.Modal(document.getElementById('accidentModal')).show(); 
+window.openAccidentModal = function() { 
+    document.getElementById('accidentForm').reset(); 
+    document.getElementById('divCauseOther').style.display = "none"; 
+    document.getElementById('divCausedByOther').style.display = "none"; 
+    new bootstrap.Modal(document.getElementById('accidentModal')).show(); 
 };
 
-window.getBase64Accident = function(file) { 
-    return new Promise(function(resolve) { 
-        var reader = new FileReader(); 
-        reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); }; 
-        reader.readAsDataURL(file); 
-    }); 
+window.getBase64Accident = function(file) { 
+    return new Promise(function(resolve) { 
+        var reader = new FileReader(); 
+        reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); }; 
+        reader.readAsDataURL(file); 
+    }); 
 };
 
 window.submitAccident = async function(e) {
-    e.preventDefault();
-    
-    var btn = document.getElementById('btnSubmitAccident'); 
-    var originalText = btn.innerText; 
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังประมวลผล...'; 
-    btn.disabled = true;
+    e.preventDefault();
+    
+    var btn = document.getElementById('btnSubmitAccident'); 
+    var originalText = btn.innerText; 
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังประมวลผล...'; 
+    btn.disabled = true;
 
-    var fileInput1 = document.getElementById('accPhoto1'); 
-    var photo1B64 = null, photo1Type = null; 
-    if (fileInput1.files.length > 0) { 
-        var fileData1 = await window.getBase64Accident(fileInput1.files[0]); 
-        photo1B64 = fileData1.base64; 
-        photo1Type = fileData1.type; 
-    }
+    var fileInput1 = document.getElementById('accPhoto1'); 
+    var photo1B64 = null, photo1Type = null; 
+    if (fileInput1.files.length > 0) { 
+        var fileData1 = await window.getBase64Accident(fileInput1.files[0]); 
+        photo1B64 = fileData1.base64; 
+        photo1Type = fileData1.type; 
+    }
 
-    var fileInput2 = document.getElementById('accPhoto2'); 
-    var photo2B64 = null, photo2Type = null; 
-    if (fileInput2.files.length > 0) { 
-        var fileData2 = await window.getBase64Accident(fileInput2.files[0]); 
-        photo2B64 = fileData2.base64; 
-        photo2Type = fileData2.type; 
-    }
+    var fileInput2 = document.getElementById('accPhoto2'); 
+    var photo2B64 = null, photo2Type = null; 
+    if (fileInput2.files.length > 0) { 
+        var fileData2 = await window.getBase64Accident(fileInput2.files[0]); 
+        photo2B64 = fileData2.base64; 
+        photo2Type = fileData2.type; 
+    }
 
-    var empData = window.currentUserData || window.currentUser || {}; 
-    var tenureText = typeof window.calcTenure === 'function' ? window.calcTenure(empData.startDate || new Date()) : '-';
+    var empData = window.currentUserData || window.currentUser || {}; 
+    var tenureText = typeof window.calcTenure === 'function' ? window.calcTenure(empData.startDate || new Date()) : '-';
 
-    var payload = { 
-        form: { 
-            empId: empData.id || empData.empId, 
-            empName: empData.name, 
-            idCard: empData.idCardNum || '-', 
-            phone: empData.phone || '-', 
-            gender: empData.gender || '-', 
-            tenure: tenureText.replace(/(<([^>]+)>)/gi, ""), 
-            
-            accDate: document.getElementById('accDate').value, 
-            accTime: document.getElementById('accTime').value, 
-            location: document.getElementById('accLocation').value, 
-            vehicleType: document.getElementById('accVehicleType').value, 
-            truckPlate: document.getElementById('accTruckPlate').value, 
-            trailerPlate: document.getElementById('accTrailerPlate').value || '-', 
-            cause: document.getElementById('accCause').value, 
-            causeOther: document.getElementById('accCauseOther').value, 
-            causedBy: document.getElementById('accCausedBy').value, 
-            causedByOther: document.getElementById('accCausedByOther').value, 
-            damage: document.getElementById('accDamage').value, 
-            detail: document.getElementById('accDetail').value, 
-            
-            filePhotoBase64: photo1B64, 
-            filePhotoType: photo1Type, 
-            filePhoto2Base64: photo2B64, 
-            filePhoto2Type: photo2Type 
-        } 
-    };
+    var payload = { 
+        form: { 
+            empId: empData.id || empData.empId, 
+            empName: empData.name, 
+            idCard: empData.idCardNum || '-', 
+            phone: empData.phone || '-', 
+            gender: empData.gender || '-', 
+            tenure: tenureText.replace(/(<([^>]+)>)/gi, ""), 
+            
+            accDate: document.getElementById('accDate').value, 
+            accTime: document.getElementById('accTime').value, 
+            location: document.getElementById('accLocation').value, 
+            vehicleType: document.getElementById('accVehicleType').value, 
+            truckPlate: document.getElementById('accTruckPlate').value, 
+            trailerPlate: document.getElementById('accTrailerPlate').value || '-', 
+            cause: document.getElementById('accCause').value, 
+            causeOther: document.getElementById('accCauseOther').value, 
+            causedBy: document.getElementById('accCausedBy').value, 
+            causedByOther: document.getElementById('accCausedByOther').value, 
+            damage: document.getElementById('accDamage').value, 
+            detail: document.getElementById('accDetail').value, 
+            
+            filePhotoBase64: photo1B64, 
+            filePhotoType: photo1Type, 
+            filePhoto2Base64: photo2B64, 
+            filePhoto2Type: photo2Type 
+        } 
+    };
 
-    try {
-      const res = await window.callAPI({ action: 'submitAccidentReport', ...payload }); 
-      btn.innerHTML = originalText; 
-      btn.disabled = false;
-      
-      if(res.success) { 
-          Swal.fire({ 
-              icon: 'success', 
-              title: 'ส่งรายงานสำเร็จ', 
-              html: 'บันทึกข้อมูลเรียบร้อยแล้ว<br>เลขที่อ้างอิง: <b class="text-success">' + res.docNo + '</b>', 
-              background: '#1e1e1e', 
-              color: '#fff' 
-          }).then(() => { 
-              if (typeof window.currentUser !== 'undefined' && window.currentUser.role === 'Admin') { 
-                  if (typeof window.loadAdminData === 'function') window.loadAdminData(); 
-              } else if (typeof window.currentUser !== 'undefined' && window.currentUser.role === 'User') { 
-                  var accList = document.getElementById('userAccidentListTab'); 
-                  if (accList) accList.innerHTML = '<div class="text-center text-muted py-3 small opacity-50"><div class="spinner-border spinner-border-sm text-warning"></div> กำลังโหลด...</div>'; 
-                  window.callAPI({ action: 'getAccidentData', role: 'User', empId: window.currentUser.empId }).then(function(data) { 
-                      window.globalUserAccidents = data || []; 
-                      var accBadge = document.getElementById('accCountBadge'); 
-                      if (accBadge) accBadge.innerText = window.globalUserAccidents.length; 
-                      if (typeof window.renderUserAccidentsList === 'function') window.renderUserAccidentsList(); 
-                  }); 
-              } 
-          }); 
-          bootstrap.Modal.getInstance(document.getElementById('accidentModal')).hide();
-      } else { 
-          Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message, background: '#1e1e1e', color: '#fff'}); 
-      } 
-    } catch(err) { 
-        btn.innerHTML = originalText; 
-        btn.disabled = false; 
-    }
+    try {
+      const res = await window.callAPI({ action: 'submitAccidentReport', ...payload }); 
+      btn.innerHTML = originalText; 
+      btn.disabled = false;
+      
+      if(res.success) { 
+          Swal.fire({ 
+              icon: 'success', 
+              title: 'ส่งรายงานสำเร็จ', 
+              html: 'บันทึกข้อมูลเรียบร้อยแล้ว<br>เลขที่อ้างอิง: <b class="text-success">' + res.docNo + '</b>', 
+              background: '#1e1e1e', 
+              color: '#fff' 
+          }).then(() => { 
+              if (typeof window.currentUser !== 'undefined' && window.currentUser.role === 'Admin') { 
+                  if (typeof window.loadAdminData === 'function') window.loadAdminData(); 
+              } else if (typeof window.currentUser !== 'undefined' && window.currentUser.role === 'User') { 
+                  var accList = document.getElementById('userAccidentListTab'); 
+                  if (accList) accList.innerHTML = '<div class="text-center text-muted py-3 small opacity-50"><div class="spinner-border spinner-border-sm text-warning"></div> กำลังโหลด...</div>'; 
+                  window.callAPI({ action: 'getAccidentData', role: 'User', empId: window.currentUser.empId }).then(function(data) { 
+                      window.globalUserAccidents = data || []; 
+                      var accBadge = document.getElementById('accCountBadge'); 
+                      if (accBadge) accBadge.innerText = window.globalUserAccidents.length; 
+                      if (typeof window.renderUserAccidentsList === 'function') window.renderUserAccidentsList(); 
+                  }); 
+              } 
+          }); 
+          bootstrap.Modal.getInstance(document.getElementById('accidentModal')).hide();
+      } else { 
+          Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message, background: '#1e1e1e', color: '#fff'}); 
+      }
+    } catch(err) { 
+        btn.innerHTML = originalText; 
+        btn.disabled = false; 
+    }
 };
 </script>
