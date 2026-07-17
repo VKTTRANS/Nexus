@@ -2,22 +2,70 @@
   <div class="d-flex justify-content-center align-items-center vh-100 position-relative overflow-hidden">
     
     <style>
-      @keyframes floatBlob1 { 0% { transform: translate(0, 0) scale(1) rotate(0deg); } 33% { transform: translate(30px, -50px) scale(1.2) rotate(10deg); } 66% { transform: translate(-20px, 20px) scale(0.9) rotate(-10deg); } 100% { transform: translate(0, 0) scale(1) rotate(0deg); } }
-      @keyframes floatBlob2 { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-40px, 40px) scale(1.1); } 100% { transform: translate(0, 0) scale(1); } }
-      @keyframes floatBlob3 { 0% { transform: translate(0, 0) scale(0.8); } 50% { transform: translate(40px, 20px) scale(1.2); } 100% { transform: translate(0, 0) scale(0.8); } }
+      @keyframes floatBlob1 { 
+        0% { transform: translate(0, 0) scale(1) rotate(0deg); } 
+        33% { transform: translate(30px, -50px) scale(1.2) rotate(10deg); } 
+        66% { transform: translate(-20px, 20px) scale(0.9) rotate(-10deg); } 
+        100% { transform: translate(0, 0) scale(1) rotate(0deg); } 
+      }
+      @keyframes floatBlob2 { 
+        0% { transform: translate(0, 0) scale(1); } 
+        50% { transform: translate(-40px, 40px) scale(1.1); } 
+        100% { transform: translate(0, 0) scale(1); } 
+      }
+      @keyframes floatBlob3 { 
+        0% { transform: translate(0, 0) scale(0.8); } 
+        50% { transform: translate(40px, 20px) scale(1.2); } 
+        100% { transform: translate(0, 0) scale(0.8); } 
+      }
 
-      .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: 1; }
-      .blob-1 { width: 400px; height: 400px; background: rgba(0, 229, 255, 0.15); top: -100px; left: -100px; animation: floatBlob1 12s infinite ease-in-out; }
-      .blob-2 { width: 350px; height: 350px; background: rgba(0, 119, 255, 0.12); bottom: -50px; right: -50px; animation: floatBlob2 10s infinite ease-in-out reverse; }
-      .blob-3 { width: 250px; height: 250px; background: rgba(0, 229, 255, 0.1); top: 40%; left: 30%; animation: floatBlob3 15s infinite ease-in-out; }
+      .blob { 
+        position: absolute; 
+        border-radius: 50%; 
+        filter: blur(80px); 
+        opacity: 0.5; 
+        z-index: 1; 
+      }
+      .blob-1 { 
+        width: 400px; height: 400px; background: rgba(0, 229, 255, 0.15); 
+        top: -100px; left: -100px; animation: floatBlob1 12s infinite ease-in-out; 
+      }
+      .blob-2 { 
+        width: 350px; height: 350px; background: rgba(0, 119, 255, 0.12); 
+        bottom: -50px; right: -50px; animation: floatBlob2 10s infinite ease-in-out reverse; 
+      }
+      .blob-3 { 
+        width: 250px; height: 250px; background: rgba(0, 229, 255, 0.1); 
+        top: 40%; left: 30%; animation: floatBlob3 15s infinite ease-in-out; 
+      }
 
-      .bg-grid { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(0, 229, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.05) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.4; z-index: 0; animation: panGrid 20s linear infinite; }
-      @keyframes panGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+      .bg-grid {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        background-image: linear-gradient(rgba(0, 229, 255, 0.05) 1px, transparent 1px), 
+                          linear-gradient(90deg, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+        background-size: 40px 40px; opacity: 0.4; z-index: 0; animation: panGrid 20s linear infinite;
+      }
+      
+      @keyframes panGrid { 
+        0% { background-position: 0 0; } 
+        100% { background-position: 40px 40px; } 
+      }
 
-      .glass-shape { position: absolute; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(0, 229, 255, 0.1); backdrop-filter: blur(8px); z-index: 2; bottom: -150px; animation: floatUpShape linear infinite; }
+      .glass-shape {
+        position: absolute; background: rgba(255, 255, 255, 0.02); 
+        border: 1px solid rgba(0, 229, 255, 0.1);
+        backdrop-filter: blur(8px); z-index: 2; bottom: -150px; 
+        animation: floatUpShape linear infinite;
+      }
       .shape-circle { border-radius: 50%; }
       .shape-square { border-radius: 20px; transform: rotate(45deg); }
-      @keyframes floatUpShape { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
+
+      @keyframes floatUpShape { 
+        0% { transform: translateY(0) rotate(0deg); opacity: 0; } 
+        10% { opacity: 1; } 
+        90% { opacity: 1; } 
+        100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } 
+      }
 
       .shape-1 { width: 80px; height: 80px; left: 10%; animation-duration: 15s; animation-delay: 2s; }
       .shape-2 { width: 120px; height: 120px; left: 75%; animation-duration: 25s; animation-delay: 0s; }
@@ -26,19 +74,53 @@
       .shape-5 { width: 60px; height: 60px; left: 25%; animation-duration: 22s; animation-delay: 1s; }
       .shape-6 { width: 150px; height: 150px; left: 55%; animation-duration: 30s; animation-delay: 4s; }
 
-      @keyframes cardSlideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes cardSlideUp { 
+        from { opacity: 0; transform: translateY(50px); } 
+        to { opacity: 1; transform: translateY(0); } 
+      }
       .login-card-animated { animation: cardSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-      @keyframes iconPulse { 0% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.3); } 50% { box-shadow: 0 0 35px rgba(0, 229, 255, 0.7); } 100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.3); } }
+      @keyframes iconPulse { 
+        0% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.3); } 
+        50% { box-shadow: 0 0 35px rgba(0, 229, 255, 0.7); } 
+        100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.3); } 
+      }
       .icon-glow-animated { animation: iconPulse 3s infinite ease-in-out; }
 
-      .login-input { background: rgba(5,10,15,0.6) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #ffffff !important; transition: all 0.3s ease; }
-      .login-input:focus { background: rgba(0, 0, 0, 0.8) !important; border-color: #00E5FF !important; box-shadow: 0 0 15px rgba(0, 229, 255, 0.25) !important; transform: translateY(-2px); }
-      .form-floating label { color: #8a9bb0 !important; font-weight: 500; }
-      .form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label { color: #00E5FF !important; background: transparent; }
+      .login-input { 
+          background: rgba(5,10,15,0.6) !important; 
+          border: 1px solid rgba(255,255,255,0.1) !important; 
+          color: #ffffff !important; 
+          transition: all 0.3s ease; 
+      }
+      
+      .login-input:focus { 
+          background: rgba(0, 0, 0, 0.8) !important; 
+          border-color: #00E5FF !important; 
+          box-shadow: 0 0 15px rgba(0, 229, 255, 0.25) !important; 
+          transform: translateY(-2px); 
+      }
+      
+      .form-floating label { 
+          color: #8a9bb0 !important; 
+          font-weight: 500; 
+      }
+      
+      .form-floating > .form-control:focus ~ label,
+      .form-floating > .form-control:not(:placeholder-shown) ~ label {
+          color: #00E5FF !important; 
+          background: transparent;
+      }
 
-      .btn-login-animated { background: linear-gradient(135deg, #00E5FF, #0077FF); border: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-      .btn-login-animated:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0, 229, 255, 0.4) !important; }
+      .btn-login-animated { 
+          background: linear-gradient(135deg, #00E5FF, #0077FF); 
+          border: none; 
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+      }
+      .btn-login-animated:hover { 
+          transform: translateY(-3px); 
+          box-shadow: 0 10px 25px rgba(0, 229, 255, 0.4) !important; 
+      }
       .btn-login-animated i { transition: transform 0.3s ease; }
       .btn-login-animated:hover i { transform: translateX(5px); }
     </style>
@@ -55,7 +137,8 @@
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
 
-    <div class="card p-5 border-0 shadow-lg text-center position-relative login-card-animated" style="width: 400px; background: rgba(11, 16, 26, 0.85); backdrop-filter: blur(25px); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); z-index: 10;">
+    <div class="card p-5 border-0 shadow-lg text-center position-relative login-card-animated" 
+         style="width: 400px; background: rgba(11, 16, 26, 0.85); backdrop-filter: blur(25px); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); z-index: 10;">
       
       <div class="mb-4">
         <div class="d-inline-flex align-items-center justify-content-center mb-3 rounded-circle position-relative icon-glow-animated" style="width: 85px; height: 85px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(0,229,255,0.5);">
