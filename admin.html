@@ -381,11 +381,11 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-success"><i class="bi bi-plus-circle"></i> รายได้ (Income)</div>
                                     <div class="row g-2">
-                                        <!-- โชว์ช่องประกันสังคมออกให้ ให้อ่านอย่างเดียว คำนวณออโต้ตาม Checkbox ประกันสังคมด้านล่าง -->
+                                        <!-- โชว์ช่องประกันสังคมออกให้ ให้อ่านอย่างเดียว คำนวณออโต้ -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-text lbl-fit"><span>ประกันสังคม (ออกให้)</span></span>
-                                                <input type="number" id="pr_inc1" class="form-control payroll-input text-success" readonly step="0.01">
+                                                <input type="number" id="pr_inc1" class="form-control payroll-input text-warning" readonly step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
                                             </div>
                                         </div>
@@ -461,23 +461,17 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
                                     <div class="row g-2">
-                                        <!-- Checkbox สำหรับบังคับคำนวณ -->
+                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">
-                                                    <span>ภาษี (1%)</span>
-                                                    <input class="form-check-input m-0 border-secondary" type="checkbox" id="forceTax" onchange="window.calcPayrollTotals()" title="บังคับคำนวณภาษี 1%">
-                                                </span>
+                                                <span class="input-group-text lbl-fit"><span>ภาษีหัก ณ ที่จ่าย (1%)</span></span>
                                                 <input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text lbl-fit">
-                                                    <span>ประกันสังคม</span>
-                                                    <input class="form-check-input m-0 border-secondary" type="checkbox" id="forceSSO" onchange="window.calcPayrollTotals()" title="บังคับคำนวณประกันสังคม">
-                                                </span>
+                                                <span class="input-group-text lbl-fit"><span>ประกันสังคม</span></span>
                                                 <input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec text-danger" readonly step="0.01">
                                                 <button tabindex="-1" type="button" class="btn btn-outline-secondary border-secondary px-2" disabled><i class="bi bi-calculator"></i></button>
                                             </div>
@@ -1265,7 +1259,7 @@
                 for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
                     document.getElementById('pr_inc'+i).value = lastM.incomes[i-1] || 0;
                 }
-                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1(ภาษี), pr_dec2(ประกันสังคม)
+                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1, pr_dec2
                     document.getElementById('pr_dec'+i).value = lastM.deducts[i-1] || 0;
                 }
             } else {
@@ -1326,12 +1320,6 @@
             document.getElementById('pr_prefix').value = prefix;
             document.getElementById('pr_firstName').value = fname;
             document.getElementById('pr_lastName').value = lname;
-
-            // ตรวจสอบเงื่อนไขเพื่อติ๊ก Checkbox คำนวณภาษีและประกันสังคมให้อัตโนมัติ
-            var forceTaxEl = document.getElementById('forceTax');
-            var forceSSOEl = document.getElementById('forceSSO');
-            if(forceTaxEl) forceTaxEl.checked = (emp.position && emp.position.indexOf("รถร่วม") !== -1);
-            if(forceSSOEl) forceSSOEl.checked = (emp.ssoType && emp.ssoType.indexOf("33") !== -1);
             
             var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
 
@@ -1342,7 +1330,7 @@
                 for (var i=2; i<=10; i++) { // เริ่มที่ 2 ข้าม pr_inc1
                     document.getElementById('pr_inc'+i).value = monthData.incomes[i-1] || 0;
                 }
-                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1(ภาษี), pr_dec2(ประกันสังคม)
+                for (var i=3; i<=10; i++) { // เริ่มที่ 3 ข้าม pr_dec1, pr_dec2
                     document.getElementById('pr_dec'+i).value = monthData.deducts[i-1] || 0;
                 }
                 window.calcPayrollTotals();
@@ -1400,47 +1388,48 @@
         };
 
         window.calcPayrollTotals = function() {
+            var empId = document.getElementById('pr_empId').value;
+            var emp = window.allEmpData.find(function(e) { return String(e.id).trim() === String(empId).trim(); });
             var baseSal = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
             
-            // 1. รวมรายได้อื่นๆ ที่กรอกเอง (inc2 - inc10)
+            // 1. รวมรายได้อื่นๆ ที่กรอกเองทั้งหมด (inc2 - inc10)
             var totalManualInc = 0;
             for (var i = 2; i <= 10; i++) {
                 var el = document.getElementById('pr_inc'+i);
                 if(el) totalManualInc += parseFloat(el.value) || 0;
             }
-            // ฐานรายได้ที่ยังไม่รวมประกันสังคมที่บริษัทออกให้
+            // ยอดฐานคำนวณประกันสังคมและภาษี (ก่อนนำประกันสังคมมาบวกเพิ่มเป็นรายได้)
             var baseGross = baseSal + totalManualInc;
 
-            // 2. คำนวณประกันสังคม (จากฐานรายได้ก่อนบวกประกันสังคม)
-            var forceSSOEl = document.getElementById('forceSSO');
-            var forceSSO = forceSSOEl ? forceSSOEl.checked : false;
+            // 2. คำนวณประกันสังคม (จากฐาน baseGross) แบบ Auto Real-time (เช็คจากมาตรา 33)
             var ssoAmt = 0;
-            if (forceSSO) {
-                var ssoBase = baseGross > 15000 ? 15000 : baseGross; // ฐานสูงสุด 15,000 ตามกฎหมาย
+            if (emp && emp.ssoType && emp.ssoType.indexOf("33") !== -1) {
+                var ssoBase = baseGross > 15000 ? 15000 : baseGross; // ฐานสูงสุด 15,000
                 ssoAmt = Math.round(ssoBase * 0.05);
             }
             
-            // นำยอดประกันสังคมใส่กลับเข้าไปเป็นรายได้ (ประกันสังคมออกให้)
+            // แสดงยอดประกันสังคมในช่องรายได้ "ประกันสังคม (ออกให้)" อัตโนมัติ
             var prInc1 = document.getElementById('pr_inc1');
             if(prInc1) prInc1.value = ssoAmt;
             
-            // นำยอดเดียวกันใส่ลงเป็นรายการหัก
+            // แสดงยอดในช่องรายการหักอัตโนมัติ
             var prDec2 = document.getElementById('pr_dec2');
             if(prDec2) prDec2.value = ssoAmt; 
 
-            // อัปเดตการแสดงผลสรุปประกันสังคมด้านล่างสุด
+            // อัปเดตแสดงผลสรุปประกันสังคมด้านล่างสุด
             var ssoEmpShow = document.getElementById('sso_emp_show');
             if(ssoEmpShow) ssoEmpShow.innerText = window.numberWithCommas(ssoAmt);
             var ssoEmployerShow = document.getElementById('sso_employer_show');
             if(ssoEmployerShow) ssoEmployerShow.innerText = window.numberWithCommas(ssoAmt);
 
-            // 3. รวมรายได้ทั้งหมดจริง (รวมประกันสังคมออกให้แล้ว)
+            // 3. รวมรายได้ทั้งหมด (รวมประกันสังคมที่ออกให้แล้ว)
             var grossIncome = baseGross + ssoAmt;
 
-            // 4. ภาษี 1% (คิดจากรายได้รวม) Real-time ตามสถานะ Checkbox
-            var forceTaxEl = document.getElementById('forceTax');
-            var forceTax = forceTaxEl ? forceTaxEl.checked : false;
-            var taxAmt = forceTax ? Math.round(grossIncome * 0.01) : 0;
+            // 4. คำนวณภาษี 1% อัตโนมัติ (ถ้าระบุตำแหน่ง รถร่วม) แบบ Real-time
+            var taxAmt = 0;
+            if (emp && emp.position && (emp.position.indexOf("รถร่วม") !== -1 || emp.position.indexOf("รถร่วมบริการ") !== -1)) {
+                taxAmt = Math.round(grossIncome * 0.01);
+            }
             var prDec1 = document.getElementById('pr_dec1');
             if(prDec1) prDec1.value = taxAmt;
 
@@ -1454,7 +1443,7 @@
             // 6. รายได้สุทธิ
             var netSalary = grossIncome - totalDec;
 
-            // อัปเดตแสดงผล
+            // อัปเดตแสดงผล UI รวม
             document.getElementById('pr_totalIncomeShow').innerText = window.numberWithCommas(grossIncome);
             document.getElementById('pr_totalDeductShow').innerText = window.numberWithCommas(totalDec);
             document.getElementById('pr_netSalaryShow').innerText = window.numberWithCommas(netSalary);
