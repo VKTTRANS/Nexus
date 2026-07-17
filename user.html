@@ -29,7 +29,7 @@
                               <i class="bi bi-folder2-open me-1"></i> เอกสารแนบ<span class="badge bg-dark border border-secondary ms-1" id="docCountBadge">0/10</span>
                           </button>
                       </li>
-                      <!-- เพิ่มแท็บ สลิปเงินเดือน -->
+                      <!-- 🟢 แท็บใหม่: สลิปเงินเดือน 🟢 -->
                       <li class="nav-item" role="presentation">
                           <button class="nav-link rounded-pill small py-2 text-success" id="tab-btn-payslips" data-bs-toggle="tab" data-bs-target="#tab-content-payslips" type="button" role="tab">
                               <i class="bi bi-cash-stack me-1"></i> สลิปเงินเดือน<span class="badge bg-success ms-1 text-dark" id="payslipCountBadge">0</span>
@@ -56,7 +56,7 @@
                           <div id="userDocList" class="row g-3"></div>
                       </div>
                       
-                      <!-- เนื้อหาแท็บ สลิปเงินเดือน -->
+                      <!-- 🟢 เนื้อหาของแท็บ สลิปเงินเดือน 🟢 -->
                       <div class="tab-pane fade" id="tab-content-payslips" role="tabpanel">
                           <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-success border-opacity-25">
                               <h6 class="fw-bold text-success mb-0"><i class="bi bi-wallet2 me-2"></i>ประวัติสลิปเงินเดือน</h6>
@@ -230,7 +230,7 @@
               window.renderUserAccidentsList(); 
           }); 
 
-          // 🟢 โหลดข้อมูลประวัติสลิปเงินเดือน (Payroll)
+          // 🟢 โหลดข้อมูลประวัติสลิปเงินเดือน (Payroll) 🟢
           window.callAPI({ action: 'getUserPayslips', empId: window.currentUser.empId }).then(function(payslipData) {
               window.globalUserPayslips = payslipData || [];
               document.getElementById('payslipCountBadge').innerText = window.globalUserPayslips.length;
