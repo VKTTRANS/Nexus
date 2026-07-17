@@ -282,7 +282,7 @@ window.submitAccident = async function(e) {
           bootstrap.Modal.getInstance(document.getElementById('accidentModal')).hide();
       } else { 
           Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message, background: '#1e1e1e', color: '#fff'}); 
-      }
+      } 
     } catch(err) { 
         btn.innerHTML = originalText; 
         btn.disabled = false; 
