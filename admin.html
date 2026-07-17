@@ -360,13 +360,19 @@
                     <option value="12">ธันวาคม</option>
                 </select>
                 
-                <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-50 px-2 py-1" style="width: 220px;">
+                <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-50 px-2 py-1" style="width: 180px;">
                     <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchPayrollInput" onkeyup="window.filterPayrollTable()" placeholder="ค้นหาพนักงาน...">
                 </div>
                 
-                <select id="filterPayrollPosition" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width:160px; cursor: pointer;" onchange="window.filterPayrollTable()">
+                <select id="filterPayrollPosition" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width:140px; cursor: pointer;" onchange="window.filterPayrollTable()">
                     <option value="all">🌐 ทุกตำแหน่ง</option>
+                </select>
+
+                <select id="filterSlipStatus" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width:140px; cursor: pointer;" onchange="window.filterPayrollTable()">
+                    <option value="all">⚖️ ทุกสถานะ</option>
+                    <option value="issued">✅ ออกสลิปแล้ว</option>
+                    <option value="pending">⏳ ยังไม่ออก</option>
                 </select>
             </div>
             <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.loadAdminData()"><i class="bi bi-arrow-clockwise me-1"></i>รีเฟรช</button>
@@ -1048,6 +1054,7 @@
 
     <script>
         window.switchAdminTab = function(tab) {
+            // ซ่อน Section ทั้งหมด
             document.getElementById('btnTabEmp').classList.remove('active');
             document.getElementById('btnTabAcc').classList.remove('active');
             document.getElementById('btnTabWarn').classList.remove('active');
@@ -1058,15 +1065,26 @@
             document.getElementById('section-admin-warn').classList.add('d-none');
             document.getElementById('section-admin-payroll').classList.add('d-none');
             
+            // รีเซ็ตค่า Input ค้นหาทุกครั้งที่เปลี่ยนแท็บ
+            var searchEmp = document.getElementById('searchInput'); if(searchEmp) searchEmp.value = '';
+            var searchAcc = document.getElementById('searchAccidentInput'); if(searchAcc) searchAcc.value = '';
+            var searchWarn = document.getElementById('searchWarnInput'); if(searchWarn) searchWarn.value = '';
+            var searchPay = document.getElementById('searchPayrollInput'); if(searchPay) searchPay.value = '';
+            var filterPos = document.getElementById('filterPayrollPosition'); if(filterPos) filterPos.value = 'all';
+            var filterStatus = document.getElementById('filterSlipStatus'); if(filterStatus) filterStatus.value = 'all';
+
             if (tab === 'emp') { 
                 document.getElementById('btnTabEmp').classList.add('active'); 
                 document.getElementById('section-admin-emp').classList.remove('d-none'); 
+                if(window.allEmpData) window.filterTable();
             } else if (tab === 'acc') { 
                 document.getElementById('btnTabAcc').classList.add('active'); 
                 document.getElementById('section-admin-acc').classList.remove('d-none'); 
+                if(window.allAccidentData) window.filterAccidentTable();
             } else if (tab === 'warn') { 
                 document.getElementById('btnTabWarn').classList.add('active'); 
                 document.getElementById('section-admin-warn').classList.remove('d-none'); 
+                if(window.allWarningData) window.filterWarnTable();
             } else if (tab === 'payroll') {
                 document.getElementById('btnTabPayroll').classList.add('active'); 
                 document.getElementById('section-admin-payroll').classList.remove('d-none');
@@ -1088,7 +1106,7 @@
                     monthSelect.value = currentMonth;
                 }
 
-                window.filterPayrollTable(); 
+                if(window.allEmpData) window.filterPayrollTable(); 
             }
         };
 
@@ -1267,13 +1285,28 @@
             var yearVal = document.getElementById('filterPayrollYear').value;
             var monthVal = document.getElementById('filterPayrollMonthSelect').value;
             var filterPeriod = monthVal === 'all' ? yearVal : yearVal + "-" + monthVal;
+            
+            var statusVal = document.getElementById('filterSlipStatus') ? document.getElementById('filterSlipStatus').value : 'all';
 
             var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; });
             
             var filtered = activeEmps.filter(function(d) { 
                 var matchName = (d.name + d.id).toLowerCase().includes(val); 
                 var matchPos = (posVal === 'all' || (d.position && d.position.includes(posVal)));
-                return matchName && matchPos;
+                
+                var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === d.id; }) : [];
+                var hasSlip = false;
+                if (monthVal !== 'all') {
+                    hasSlip = empSlips.some(function(p) { return p.payMonth === filterPeriod; });
+                } else {
+                    hasSlip = empSlips.some(function(p) { return p.payMonth && p.payMonth.startsWith(yearVal); });
+                }
+
+                var matchStatus = true;
+                if (statusVal === 'issued') matchStatus = hasSlip;
+                if (statusVal === 'pending') matchStatus = !hasSlip;
+
+                return matchName && matchPos && matchStatus;
             }); 
             
             var html = '';
