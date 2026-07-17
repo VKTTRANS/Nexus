@@ -339,8 +339,26 @@
 
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 p-2 rounded-3 border border-secondary border-opacity-25 bg-black bg-opacity-25 stagger-3">
             <div class="d-flex gap-2 flex-wrap">
-                <!-- ตัวกรองเดือน/ปี -->
-                <input type="month" id="filterPayrollMonth" class="form-control form-control-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 150px; cursor: pointer;" onchange="window.filterPayrollTable()" title="เลือกเดือนและปี">
+                <!-- ตัวกรอง ปี -->
+                <select id="filterPayrollYear" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 100px; cursor: pointer;" onchange="window.filterPayrollTable()">
+                    <!-- JS จะเติมปีให้ตอนโหลด -->
+                </select>
+                <!-- ตัวกรอง เดือน -->
+                <select id="filterPayrollMonthSelect" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 130px; cursor: pointer;" onchange="window.filterPayrollTable()">
+                    <option value="all">ทุกเดือน</option>
+                    <option value="01">มกราคม</option>
+                    <option value="02">กุมภาพันธ์</option>
+                    <option value="03">มีนาคม</option>
+                    <option value="04">เมษายน</option>
+                    <option value="05">พฤษภาคม</option>
+                    <option value="06">มิถุนายน</option>
+                    <option value="07">กรกฎาคม</option>
+                    <option value="08">สิงหาคม</option>
+                    <option value="09">กันยายน</option>
+                    <option value="10">ตุลาคม</option>
+                    <option value="11">พฤศจิกายน</option>
+                    <option value="12">ธันวาคม</option>
+                </select>
                 
                 <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-50 px-2 py-1" style="width: 220px;">
                     <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
@@ -501,7 +519,7 @@
                                 <div class="logistics-card h-100 mb-0">
                                     <div class="logistics-section-title text-danger"><i class="bi bi-dash-circle"></i> รายการหัก (Deduction)</div>
                                     <div class="row g-2">
-                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% -->
+                                        <!-- ล็อกช่องภาษีและประกันสังคมให้อ่านอย่างเดียว คำนวณออโต้ 100% (ไร้ Checkbox) -->
                                         <div class="col-12">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-text lbl-fit"><span>ภาษีหัก ณ ที่จ่าย (1%)</span></span>
@@ -1052,6 +1070,24 @@
             } else if (tab === 'payroll') {
                 document.getElementById('btnTabPayroll').classList.add('active'); 
                 document.getElementById('section-admin-payroll').classList.remove('d-none');
+                
+                var yearSelect = document.getElementById('filterPayrollYear');
+                if (yearSelect && yearSelect.options.length === 0) {
+                    var currentYear = new Date().getFullYear();
+                    for (var y = currentYear - 2; y <= currentYear + 2; y++) {
+                        var option = document.createElement('option');
+                        option.value = y;
+                        option.text = y;
+                        if (y === currentYear) option.selected = true;
+                        yearSelect.appendChild(option);
+                    }
+                }
+                var monthSelect = document.getElementById('filterPayrollMonthSelect');
+                if (monthSelect && monthSelect.selectedIndex === 0) { 
+                    var currentMonth = ("0" + (new Date().getMonth() + 1)).slice(-2);
+                    monthSelect.value = currentMonth;
+                }
+
                 window.filterPayrollTable(); 
             }
         };
@@ -1227,13 +1263,10 @@
             if (!window.allEmpData) return;
             var val = document.getElementById('searchPayrollInput').value.toLowerCase(); 
             var posVal = document.getElementById('filterPayrollPosition').value;
-            var monthVal = document.getElementById('filterPayrollMonth').value; 
             
-            if (!monthVal) {
-                var d = new Date();
-                monthVal = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2);
-                document.getElementById('filterPayrollMonth').value = monthVal;
-            }
+            var yearVal = document.getElementById('filterPayrollYear').value;
+            var monthVal = document.getElementById('filterPayrollMonthSelect').value;
+            var filterPeriod = monthVal === 'all' ? yearVal : yearVal + "-" + monthVal;
 
             var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; });
             
@@ -1254,13 +1287,26 @@
                 filtered.forEach(function(r) {
                     var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === r.id; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
                     
-                    var currentMonthSlip = empSlips.find(function(p) { return p.payMonth === monthVal; });
-                    
-                    if (currentMonthSlip) {
-                        slipCount++;
-                        totalNet += parseFloat(currentMonthSlip.netSalary) || 0;
-                        var ssoEmp = parseFloat(currentMonthSlip.deducts[1]) || 0; 
-                        totalSSO += (ssoEmp * 2); 
+                    var matchingSlips = empSlips;
+                    var currentMonthSlip = null;
+
+                    if (monthVal !== 'all') {
+                        currentMonthSlip = empSlips.find(function(p) { return p.payMonth === filterPeriod; });
+                        if (currentMonthSlip) {
+                            slipCount++;
+                            totalNet += parseFloat(currentMonthSlip.netSalary) || 0;
+                            var ssoEmp = parseFloat(currentMonthSlip.deducts[1]) || 0; 
+                            totalSSO += (ssoEmp * 2); 
+                        }
+                    } else {
+                        matchingSlips = empSlips.filter(function(p) { return p.payMonth && p.payMonth.startsWith(yearVal); });
+                        slipCount += matchingSlips.length;
+                        matchingSlips.forEach(function(slip) {
+                            totalNet += parseFloat(slip.netSalary) || 0;
+                            var ssoEmp = parseFloat(slip.deducts[1]) || 0; 
+                            totalSSO += (ssoEmp * 2);
+                        });
+                        if(matchingSlips.length > 0) currentMonthSlip = matchingSlips[0]; 
                     }
 
                     var slipCountTotal = empSlips.length;
@@ -1269,13 +1315,13 @@
                     var badge = slipCountTotal > 0 ? `<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="window.openPayrollHistory('${r.id}')">${slipCountTotal} เดือน</button>` : `<span class="text-muted small">-</span>`;
                     var posShort = r.position || '-';
                     
-                    var rowClass = currentMonthSlip ? 'bg-success bg-opacity-10' : '';
-                    var statusIcon = currentMonthSlip ? '<i class="bi bi-check-circle-fill text-success ms-2" title="ออกสลิปเดือนนี้แล้ว"></i>' : '';
+                    var rowStyle = currentMonthSlip ? 'background-color: rgba(0, 230, 118, 0.08); border-left: 3px solid #00E676;' : '';
+                    var statusIcon = currentMonthSlip ? '<i class="bi bi-check-circle-fill text-success ms-2" title="มีข้อมูลตามตัวกรอง"></i>' : '';
                     
-                    html += `<tr class="${rowClass}">
+                    html += `<tr style="${rowStyle}">
                         <td class="ps-4 text-warning font-monospace fw-bold">${r.id}</td>
                         <td><b class="text-light">${r.name}</b>${statusIcon}</td>
-                        <td><div class="text-truncate" style="max-width:150px;" title="${posShort}">${posShort}</div></td>
+                        <td><div style="white-space: normal; word-break: break-word; min-width: 150px;">${posShort}</div></td>
                         <td class="text-end text-success fw-bold">${window.numberWithCommas(baseSal)}</td>
                         <td class="text-center">${badge}</td>
                         <td class="text-end pe-4">
