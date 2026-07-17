@@ -20,7 +20,8 @@
         }
         
         .driver-card-header {
-            background: linear-gradient(180deg, #1f1f1f 0%, var(--logistic-card) 100%);
+            /* เปลี่ยนพื้นหลังให้ดูเท่แบบขนส่ง */
+            background: repeating-linear-gradient(45deg, #111, #111 10px, #181818 10px, #181818 20px);
             border-bottom: 1px solid var(--logistic-border);
             border-radius: 12px 12px 0 0;
             padding-bottom: 20px;
@@ -31,7 +32,7 @@
             border: 1px solid #222;
             border-left: 3px solid var(--logistic-primary);
             border-radius: 8px;
-            padding: 12px 15px;
+            padding: 10px 15px;
             margin-bottom: 10px;
         }
 
@@ -47,6 +48,7 @@
             border-color: var(--logistic-primary);
             color: var(--logistic-primary);
             transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.1);
         }
 
         .main-content-card {
@@ -207,7 +209,7 @@
     </div>
 </div>
 
-<!-- Modal สำหรับซ่อมบำรุงและลานตู้ (ใช้โค้ดเดิมด้านล่างนี้ได้เลย) -->
+<!-- Modal สำหรับซ่อมบำรุงและลานตู้ -->
 <div class="modal fade" id="yardModal" tabindex="-1" style="z-index: 1060;">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content bg-dark text-light border border-info border-opacity-50">
@@ -394,7 +396,7 @@
         var ssoText = (d.ssoHosp && d.ssoHosp !== '-') ? d.ssoHosp : (d.ssoType || 'ไม่มีข้อมูล');
         
         var html = `
-        <div class="driver-card text-center overflow-hidden">
+        <div class="driver-card text-center overflow-hidden mb-4">
             <div class="driver-card-header position-relative">
                 <div class="mt-4 mb-3 position-relative d-inline-block">
                     <img src="${photoUrl}" class="rounded-circle object-fit-cover shadow-lg" style="width: 130px; height: 130px; border: 4px solid var(--logistic-primary); background: #222;">
@@ -402,48 +404,48 @@
                 <h4 class="fw-bold mb-1 text-white">${d.name}</h4>
                 <div class="text-warning small fw-bold mb-2">${nicknameText}</div>
                 <span class="badge bg-dark border border-secondary text-light fw-normal px-3 py-2 rounded-pill mt-1">
-                    <i class="bi bi-person-badge me-1"></i> ${d.position}
+                    <i class="bi bi-briefcase text-warning me-1"></i> ${d.position}
                 </span>
             </div>
             
-            <div class="p-3 text-start">
-                <div class="info-box">
-                    <small class="text-muted d-block mb-1" style="font-size: 0.75rem;">รหัสประจำตัวพนักงาน</small>
-                    <div class="text-white font-monospace fw-bold fs-6">${d.id}</div>
+            <div class="p-3 text-start bg-black bg-opacity-25">
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-person-vcard me-2"></i>รหัสพนักงาน</span>
+                    <span class="text-white font-monospace fw-bold fs-6">${d.id}</span>
                 </div>
-                <div class="info-box">
-                    <small class="text-muted d-block mb-1" style="font-size: 0.75rem;">เบอร์โทรศัพท์ติดต่อ</small>
-                    <div class="text-white fw-bold fs-6">${phoneText}</div>
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-telephone me-2"></i>เบอร์โทรศัพท์</span>
+                    <span class="text-white fw-bold fs-6">${phoneText}</span>
                 </div>
-                <div class="info-box">
-                    <small class="text-muted d-block mb-1" style="font-size: 0.75rem;">โรงพยาบาลประกันสังคม</small>
-                    <div class="text-info fw-bold text-truncate" title="${ssoText}">${ssoText}</div>
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-hospital me-2"></i>ประกันสังคม</span>
+                    <span class="text-info fw-bold text-truncate text-end" style="max-width: 140px;" title="${ssoText}">${ssoText}</span>
                 </div>
                 
-                <button class="btn btn-outline-warning w-100 rounded-pill mb-4 mt-2" onclick="window.openUserEditModal('${d.id}')">
-                    <i class="bi bi-pencil-square me-2"></i>อัปเดตข้อมูล
+                <button class="btn btn-outline-warning w-100 rounded-pill mb-4 mt-3 fw-bold shadow-sm" onclick="window.openUserEditModal('${d.id}')">
+                    <i class="bi bi-pencil-square me-2"></i>อัปเดตข้อมูลส่วนตัว
                 </button>
 
-                <h6 class="text-muted small fw-bold mb-3 px-2 border-bottom border-secondary pb-2">ระบบจัดการ (Quick Actions)</h6>
+                <h6 class="text-warning small fw-bold mb-3 px-2 border-bottom border-secondary border-opacity-50 pb-2"><i class="bi bi-lightning-charge me-1"></i> เมนูด่วน (Quick Actions)</h6>
                 <div class="row g-2">
                     <div class="col-6">
-                        <a href="${finalLeaveUrl}" target="_blank" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 text-decoration-none">
-                            <i class="bi bi-calendar2-week fs-3 text-white"></i><span class="small fw-bold">ลางาน</span>
+                        <a href="${finalLeaveUrl}" target="_blank" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 text-decoration-none shadow-sm">
+                            <i class="bi bi-calendar2-week fs-4 text-white"></i><span class="small fw-bold">ลางาน</span>
                         </a>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openAccidentModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2">
-                            <i class="bi bi-cone-striped fs-3 text-danger"></i><span class="small fw-bold">อุบัติเหตุ</span>
+                        <button onclick="window.openAccidentModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-cone-striped fs-4 text-danger"></i><span class="small fw-bold">อุบัติเหตุ</span>
                         </button>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openUserRepairModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2">
-                            <i class="bi bi-wrench-adjustable fs-3 text-primary"></i><span class="small fw-bold">แจ้งซ่อม</span>
+                        <button onclick="window.openUserRepairModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-wrench-adjustable fs-4 text-primary"></i><span class="small fw-bold">แจ้งซ่อม</span>
                         </button>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openYardModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2">
-                            <i class="bi bi-geo-alt fs-3 text-info"></i><span class="small fw-bold">ลานตู้</span>
+                        <button onclick="window.openYardModal()" class="btn quick-action-btn w-100 py-3 d-flex flex-column align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-geo-alt fs-4 text-info"></i><span class="small fw-bold">ลานตู้</span>
                         </button>
                     </div>
                 </div>
@@ -555,13 +557,13 @@
             
             var inputId = 'fileInput_' + index; 
             var spinnerId = 'spinner_' + index;
-            var iconClass = t.icon.includes('text-') ? t.icon : t.icon + ' text-muted';
+            var iconClass = t.icon.includes('text-') ? t.icon : t.icon + ' text-warning';
 
             html += `
             <div class="col-md-6">
                 <div class="upload-zone position-relative">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center"><i class="bi ${iconClass} fs-5 me-2 text-warning"></i><span class="text-light fw-bold small">${t.name}</span></div>
+                        <div class="d-flex align-items-center"><i class="bi ${iconClass} fs-5 me-2"></i><span class="text-light fw-bold small">${t.name}</span></div>
                         ${viewBtn}
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -816,12 +818,24 @@
             const data = await response.json(); 
             btn.innerHTML = originalText; btn.disabled = false; 
             if (data.status === 'success') { 
-                Swal.fire({icon: 'success', title: 'แจ้งซ่อมสำเร็จ!', text: 'ข้อมูลถูกส่งเข้าคิวช่าง (สถานะ: รอซ่อม) เรียบร้อยแล้ว', background: '#1e1e1e', color: '#fff'}); 
+                Swal.fire({
+                    icon: 'success', 
+                    title: 'แจ้งซ่อมสำเร็จ!', 
+                    text: 'ข้อมูลถูกส่งเข้าคิวช่าง (สถานะ: รอซ่อม) เรียบร้อยแล้ว', 
+                    background: '#1e1e1e', 
+                    color: '#fff'
+                }); 
                 bootstrap.Modal.getInstance(document.getElementById('userRepairModal')).hide(); 
             } else { throw new Error(data.message); } 
         } catch(err) { 
             btn.innerHTML = originalText; btn.disabled = false; 
-            Swal.fire({icon: 'error', title: 'ผิดพลาด', text: 'ไม่สามารถส่งข้อมูลได้: ' + err.message, background: '#1e1e1e', color: '#fff'}); 
+            Swal.fire({
+                icon: 'error', 
+                title: 'ผิดพลาด', 
+                text: 'ไม่สามารถส่งข้อมูลได้: ' + err.message, 
+                background: '#1e1e1e', 
+                color: '#fff'
+            }); 
         } 
     };
 </script>
