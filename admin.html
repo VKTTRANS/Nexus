@@ -96,9 +96,10 @@
     .dropdown-menu-dark { background-color: #202020; border-color: rgba(255,255,255,0.1); font-size: 0.85rem; }
     .dropdown-item:hover { background-color: rgba(0, 230, 118, 0.2); color: #fff; }
     
-    .payroll-input { background: rgba(0,0,0,0.5) !important; color: #00E676 !important; font-weight: bold; border-color: rgba(255,255,255,0.2) !important; }
+    .payroll-input { background: rgba(0,0,0,0.5) !important; color: #00E676 !important; font-weight: bold; border-color: rgba(255,255,255,0.2) !important; text-align: right; }
     .payroll-input:focus { border-color: #00E676 !important; box-shadow: none !important; }
     .payroll-dec { color: #ff4d4d !important; }
+    .lbl-fit { font-size: 0.75rem; width: 140px; text-align: left; padding: 0.375rem 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; }
   </style>
 
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 stagger-1">
@@ -126,35 +127,35 @@
   <div id="section-admin-emp">
       <div class="row g-2 mb-3 stagger-2">
         <div class="col-md-4">
-          <div class="stat-card h-100 d-flex justify-content-between align-items-center">
-            <div>
-              <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">พนักงาน (Active)</div>
-              <h3 class="fw-bold text-white mb-0" id="statTotal">0</h3>
-            </div>
-            <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="stat-card h-100 d-flex justify-content-between align-items-center">
-             <div>
-                <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:4px;">สัดส่วนเพศ</div>
-                <div class="d-flex align-items-baseline gap-3">
-                   <div><span class="fs-5 fw-bold text-white" id="statMale">0</span> <span class="text-secondary small">ชาย</span></div>
-                   <div class="vr bg-secondary opacity-50" style="height: 15px;"></div>
-                   <div><span class="fs-5 fw-bold text-white" id="statFemale">0</span> <span class="text-secondary small">หญิง</span></div>
+            <div class="stat-card h-100 d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">พนักงาน (Active)</div>
+                    <h3 class="fw-bold text-white mb-0" id="statTotal">0</h3>
                 </div>
-             </div>
-             <div class="stat-icon text-info bg-info bg-opacity-10"><i class="bi bi-gender-ambiguous"></i></div>
-          </div>
+                <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+            </div>
         </div>
         <div class="col-md-4">
-          <div class="stat-card clickable h-100 d-flex justify-content-between align-items-center" onclick="window.openBirthdayModal()">
-             <div>
-               <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">วันเกิดเดือนนี้ <i class="bi bi-search text-success ms-1" style="font-size:0.6rem;"></i></div>
-               <h3 class="fw-bold text-white mb-0" id="statBirth">0</h3>
-             </div>
-             <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-cake2-fill"></i></div>
-          </div>
+            <div class="stat-card h-100 d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:4px;">สัดส่วนเพศ</div>
+                    <div class="d-flex align-items-baseline gap-3">
+                        <div><span class="fs-5 fw-bold text-white" id="statMale">0</span> <span class="text-secondary small">ชาย</span></div>
+                        <div class="vr bg-secondary opacity-50" style="height: 15px;"></div>
+                        <div><span class="fs-5 fw-bold text-white" id="statFemale">0</span> <span class="text-secondary small">หญิง</span></div>
+                    </div>
+                </div>
+                <div class="stat-icon text-info bg-info bg-opacity-10"><i class="bi bi-gender-ambiguous"></i></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card clickable h-100 d-flex justify-content-between align-items-center" onclick="window.openBirthdayModal()">
+                <div>
+                    <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">วันเกิดเดือนนี้ <i class="bi bi-search text-success ms-1" style="font-size:0.6rem;"></i></div>
+                    <h3 class="fw-bold text-white mb-0" id="statBirth">0</h3>
+                </div>
+                <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-cake2-fill"></i></div>
+            </div>
         </div>
       </div>
 
@@ -280,12 +281,16 @@
       </div>
   </div>
 
-  <!-- โซนใหม่: ระบบจัดการเงินเดือน (Payroll) -->
   <div id="section-admin-payroll" class="d-none">
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
-          <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-25 px-2 py-1" style="max-width: 400px;">
-              <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
-              <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchPayrollInput" onkeyup="window.filterPayrollTable()" placeholder="ค้นหาพนักงานเพื่อออกสลิปเงินเดือน...">
+          <div class="d-flex gap-2">
+              <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-25 px-2 py-1" style="width: 250px;">
+                  <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchPayrollInput" onkeyup="window.filterPayrollTable()" placeholder="ค้นหาพนักงาน...">
+              </div>
+              <select id="filterPayrollPosition" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none" style="width:180px;" onchange="window.filterPayrollTable()">
+                  <option value="all">🌐 ทุกตำแหน่ง</option>
+              </select>
           </div>
           <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.loadAdminData()"><i class="bi bi-arrow-clockwise me-1"></i>รีเฟรช</button>
       </div>
@@ -297,15 +302,135 @@
                   <th class="ps-4">ID</th>
                   <th>ชื่อ-นามสกุล</th>
                   <th>ตำแหน่ง</th>
-                  <th class="text-center">ฐานเงินเดือน</th>
+                  <th class="text-end">ฐานเงินเดือน</th>
+                  <th class="text-center">ประวัติสลิป</th>
                   <th class="text-end pe-4">จัดการเงินเดือน</th>
               </tr>
             </thead>
             <tbody id="adminPayrollTableBody">
-                <tr><td colspan="5" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
+                <tr><td colspan="6" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
             </tbody>
           </table>
         </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
+      <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content border border-warning border-opacity-50" style="background: #1a1a1a;">
+              <div class="modal-header border-bottom border-warning border-opacity-25 py-3">
+                  <h5 class="modal-title text-warning fw-bold"><i class="bi bi-cash-stack me-2"></i>จัดทำสลิปเงินเดือน</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-4">
+                  <form id="payrollForm" onsubmit="window.submitPayrollForm(event)">
+                      <input type="hidden" id="pr_empId">
+                      <input type="hidden" id="pr_prefix">
+                      <input type="hidden" id="pr_firstName">
+                      <input type="hidden" id="pr_lastName">
+                      <input type="hidden" id="pr_position">
+                      <input type="hidden" id="pr_email">
+                      
+                      <div class="row g-3 mb-4 bg-black bg-opacity-25 p-3 rounded border border-secondary border-opacity-25">
+                          <div class="col-md-4">
+                              <label class="small text-muted mb-1">พนักงาน</label>
+                              <div class="text-white fw-bold fs-5 text-truncate" id="pr_empName">...</div>
+                          </div>
+                          <div class="col-md-4">
+                              <label class="small text-muted mb-1">วันที่จ่ายเงิน *</label>
+                              <input type="date" class="form-control bg-dark text-light border-secondary" id="pr_payDate" required>
+                          </div>
+                          <div class="col-md-4">
+                              <label class="small text-success fw-bold mb-1">เงินเดือน ค่าจ้าง (บาท) *</label>
+                              <input type="number" class="form-control bg-dark text-success fw-bold border-success" id="pr_baseSalary" oninput="window.calcPayrollTotals()" required step="0.01">
+                          </div>
+                      </div>
+
+                      <div class="row g-4">
+                          <div class="col-md-6">
+                              <h6 class="text-success border-bottom border-success border-opacity-25 pb-2 mb-3"><i class="bi bi-plus-circle me-1"></i>รายได้ (Income)</h6>
+                              <div class="row g-2">
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ประกันสังคม (ออกให้)</span><input type="number" id="pr_inc1" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่าเที่ยว</span><input type="number" id="pr_inc2" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่ายกชน</span><input type="number" id="pr_inc3" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่าดูแลลูกพ่วง/หาง</span><input type="number" id="pr_inc4" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">เบี้ยขยัน</span><input type="number" id="pr_inc5" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">เบี้ยพิเศษ</span><input type="number" id="pr_inc6" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">เงินเบี้ยเลี้ยง</span><input type="number" id="pr_inc7" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่าล่วงเวลา</span><input type="number" id="pr_inc8" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">รายได้อื่นๆ</span><input type="number" id="pr_inc9" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12 d-none"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">อื่นๆ</span><input type="number" id="pr_inc10" class="form-control payroll-input" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <h6 class="text-danger border-bottom border-danger border-opacity-25 pb-2 mb-3"><i class="bi bi-dash-circle me-1"></i>รายการหัก (Deduction)</h6>
+                              <div class="row g-2">
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ภาษีหัก ณ ที่จ่าย</span><input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ประกันสังคม</span><input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">เงินประกัน</span><input type="number" id="pr_dec3" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">เงินเบิกล่วงหน้า</span><input type="number" id="pr_dec4" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่าไฟ</span><input type="number" id="pr_dec5" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่าผ่อนโทรศัพท์</span><input type="number" id="pr_dec6" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">เงินกู้ยืม</span><input type="number" id="pr_dec7" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่าเสียหายรถ</span><input type="number" id="pr_dec8" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่างวดรถส่วนตัว</span><input type="number" id="pr_dec9" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary lbl-fit">ค่าค้างตู้</span><input type="number" id="pr_dec10" class="form-control payroll-input payroll-dec" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="mt-4 p-3 bg-dark border border-warning rounded">
+                          <div class="row text-center">
+                              <div class="col-md-4">
+                                  <small class="text-success d-block">รวมรายได้ (บาท)</small>
+                                  <h4 class="text-white fw-bold mb-0" id="pr_totalIncomeShow">0.00</h4>
+                              </div>
+                              <div class="col-md-4 border-start border-end border-secondary">
+                                  <small class="text-danger d-block">รวมรายการหัก (บาท)</small>
+                                  <h4 class="text-white fw-bold mb-0" id="pr_totalDeductShow">0.00</h4>
+                              </div>
+                              <div class="col-md-4">
+                                  <small class="text-warning d-block">รายได้สุทธิ (Net)</small>
+                                  <h3 class="text-warning fw-bold mb-0" id="pr_netSalaryShow">0.00</h3>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="mt-4 text-end">
+                          <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                          <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold" id="btnSubmitPayroll">บันทึกและออกสลิปเงินเดือน</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="payrollHistoryModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content border border-warning border-opacity-50" style="background: #1a1a1a;">
+              <div class="modal-header border-bottom border-warning border-opacity-25 py-3">
+                  <h5 class="modal-title text-warning fw-bold"><i class="bi bi-clock-history me-2"></i>ประวัติสลิปเงินเดือน</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-0">
+                  <div class="table-responsive">
+                      <table class="table table-dark table-striped table-hover mb-0 align-middle">
+                          <thead>
+                              <tr>
+                                  <th class="ps-4">เดือนที่จ่าย</th>
+                                  <th class="text-end">รวมรับ</th>
+                                  <th class="text-end">รวมหัก</th>
+                                  <th class="text-end text-warning">สุทธิ</th>
+                                  <th class="text-center">PDF</th>
+                                  <th class="text-center pe-4">จัดการ</th>
+                              </tr>
+                          </thead>
+                          <tbody id="payrollHistoryBody"></tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
       </div>
   </div>
 
@@ -355,7 +480,12 @@
               <div class="modal-body p-0">
                   <table class="table table-dark table-striped mb-0 text-center small bg-transparent">
                       <thead>
-                          <tr><th>ปี</th><th class="text-success">เข้าใหม่</th><th class="text-danger">ลาออก</th><th>คงเหลือสะสม</th></tr>
+                          <tr>
+                              <th>ปี</th>
+                              <th class="text-success">เข้าใหม่</th>
+                              <th class="text-danger">ลาออก</th>
+                              <th>คงเหลือสะสม</th>
+                          </tr>
                       </thead>
                       <tbody id="yearStatsBodyModal"></tbody>
                   </table>
@@ -400,7 +530,6 @@
       </div>
   </div>
 
-  <!-- โค้ด Modal สร้างใบเตือน -->
   <div class="modal fade" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static">
       <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content border border-danger border-opacity-50" style="background: #1a1a1a;">
@@ -468,7 +597,6 @@
       </div>
   </div>
 
-  <!-- โค้ด Modal แก้ไขรายละเอียดใบเตือน -->
   <div class="modal fade" id="warningDetailModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content border border-danger border-opacity-50" style="background: #1a1a1a;">
@@ -528,7 +656,6 @@
       </div>
   </div>
 
-  <!-- โค้ด Modal แก้ไขรายละเอียดอุบัติเหตุ -->
   <div class="modal fade" id="accidentDetailModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content border border-warning border-opacity-50" style="background: #1a1a1a;">
@@ -586,93 +713,349 @@
       </div>
   </div>
 
-  <!-- Modal สำหรับสร้างสลิปเงินเดือน (Payroll) -->
-  <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal fade" id="empModal" tabindex="-1" data-bs-backdrop="static">
       <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-          <div class="modal-content border border-warning border-opacity-50" style="background: #1a1a1a;">
-              <div class="modal-header border-bottom border-warning border-opacity-25 py-3">
-                  <h5 class="modal-title text-warning fw-bold"><i class="bi bi-cash-stack me-2"></i>จัดทำสลิปเงินเดือน</h5>
+          <div class="modal-content">
+              <div class="modal-header py-3 border-secondary border-opacity-25">
+                  <h5 class="modal-title fw-bold fs-5 text-success" id="modalTitle">
+                      <i class="bi bi-person-vcard me-2"></i>จัดการข้อมูล
+                  </h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body p-4">
-                  <form id="payrollForm" onsubmit="window.submitPayrollForm(event)">
-                      <input type="hidden" id="pr_empId">
-                      <input type="hidden" id="pr_prefix">
-                      <input type="hidden" id="pr_firstName">
-                      <input type="hidden" id="pr_lastName">
-                      <input type="hidden" id="pr_position">
-                      <input type="hidden" id="pr_email">
-                      
-                      <div class="row g-3 mb-4 bg-black bg-opacity-25 p-3 rounded border border-secondary border-opacity-25">
-                          <div class="col-md-4">
-                              <label class="small text-muted mb-1">พนักงาน</label>
-                              <div class="text-white fw-bold fs-5" id="pr_empName">...</div>
-                          </div>
-                          <div class="col-md-4">
-                              <label class="small text-muted mb-1">วันที่จ่ายเงิน *</label>
-                              <input type="date" class="form-control bg-dark text-light border-secondary" id="pr_payDate" required>
-                          </div>
-                          <div class="col-md-4">
-                              <label class="small text-success fw-bold mb-1">ฐานเงินเดือน (บาท) *</label>
-                              <input type="number" class="form-control bg-dark text-success fw-bold border-success" id="pr_baseSalary" oninput="window.calcPayrollTotals()" required step="0.01">
+                  <form id="empForm" onsubmit="window.submitEmpForm(event)">
+                      <input type="hidden" id="formMode">
+                      <div class="card border-0 mb-4 bg-transparent shadow-none">
+                          <div class="card-body p-0">
+                              <ul class="nav nav-pills nav-fill gap-2" id="myTab" role="tablist">
+                                  <li class="nav-item">
+                                      <button type="button" class="nav-link active rounded-pill small" data-bs-toggle="tab" data-bs-target="#tabInfo">1. ข้อมูลทั่วไป</button>
+                                  </li>
+                                  <li class="nav-item">
+                                      <button type="button" class="nav-link rounded-pill small" data-bs-toggle="tab" data-bs-target="#tabDocs">2. เอกสารแนบ</button>
+                                  </li>
+                              </ul>
                           </div>
                       </div>
-
-                      <div class="row g-4">
-                          <!-- ฝั่งรายได้ -->
-                          <div class="col-md-6">
-                              <h6 class="text-success border-bottom border-success border-opacity-25 pb-2 mb-3"><i class="bi bi-plus-circle me-1"></i>รายได้อื่นๆ</h6>
-                              <div class="row g-2">
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 1</span><input type="number" id="pr_inc1" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 2</span><input type="number" id="pr_inc2" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 3</span><input type="number" id="pr_inc3" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 4</span><input type="number" id="pr_inc4" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 5</span><input type="number" id="pr_inc5" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 6</span><input type="number" id="pr_inc6" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 7</span><input type="number" id="pr_inc7" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 8</span><input type="number" id="pr_inc8" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 9</span><input type="number" id="pr_inc9" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายได้ 10</span><input type="number" id="pr_inc10" class="form-control payroll-input text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                      <div class="tab-content">
+                          <div class="tab-pane fade show active" id="tabInfo">
+                              <div id="viewModeSection" style="display:none;">
+                                  <div class="row g-3">
+                                      <div class="col-12">
+                                          <div class="card border-0 position-relative overflow-hidden bg-black bg-opacity-25">
+                                              <div style="position:absolute; top:0; left:0; width:5px; height:100%; background:var(--accent-color);"></div>
+                                              <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3 ps-4">
+                                                  <div>
+                                                      <h3 class="fw-bold text-white mb-0" id="view_fullname">...</h3>
+                                                      <div class="text-muted small mt-2 d-flex align-items-center gap-2">
+                                                          <span id="view_nickname_badge" class="badge bg-dark border border-secondary text-light fw-normal">...</span>
+                                                          <span class="text-secondary">|</span>
+                                                          <span id="view_empId" class="font-monospace fw-bold text-success fs-5">...</span>
+                                                      </div>
+                                                  </div>
+                                                  <div class="text-end">
+                                                      <span id="view_status_badge" class="badge rounded-pill fs-6 px-3 py-2">...</span>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                          <div class="card h-100 border-secondary border-opacity-25 bg-transparent">
+                                              <div class="card-header text-success border-secondary border-opacity-25">
+                                                  <i class="bi bi-person-lines-fill me-2"></i>ข้อมูลส่วนตัว
+                                              </div>
+                                              <div class="card-body">
+                                                  <ul class="list-group list-group-flush small bg-transparent">
+                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
+                                                          <span class="text-muted">วันเกิด:</span> <span class="fw-bold text-light" id="view_birthDate">-</span>
+                                                      </li>
+                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
+                                                          <span class="text-muted">อายุ:</span> <span class="fw-bold text-light" id="view_age">-</span>
+                                                      </li>
+                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
+                                                          <span class="text-muted">เพศ:</span> <span class="fw-bold text-light" id="view_gender">-</span>
+                                                      </li>
+                                                      <li class="list-group-item bg-transparent d-flex justify-content-between px-0 border-secondary border-opacity-25">
+                                                          <span class="text-muted">เบอร์โทร:</span> <span class="fw-bold text-light" id="view_phone">-</span>
+                                                      </li>
+                                                  </ul>
+                                                  <div class="mt-3 pt-3 border-top border-secondary border-opacity-25">
+                                                      <div class="mb-2">
+                                                          <small class="text-muted d-block mb-1">Username:</small>
+                                                          <span class="badge bg-dark text-light border border-secondary font-monospace fw-normal" id="view_username">-</span>
+                                                      </div>
+                                                      <div class="mb-2">
+                                                          <small class="text-muted d-block mb-1">Password:</small>
+                                                          <span class="badge bg-dark text-light border border-secondary font-monospace fw-normal" id="view_password">-</span>
+                                                      </div>
+                                                      <div class="mb-0">
+                                                          <small class="text-muted d-block mb-1">Role:</small>
+                                                          <span class="fw-bold text-success" id="view_role">-</span>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                          <div class="card h-100 border-secondary border-opacity-25 bg-transparent">
+                                              <div class="card-header text-info border-secondary border-opacity-25">
+                                                  <i class="bi bi-briefcase-fill me-2"></i>การทำงาน
+                                              </div>
+                                              <div class="card-body">
+                                                  <div class="mb-3">
+                                                      <small class="text-muted d-block">วันเริ่มงาน:</small>
+                                                      <span class="fw-bold text-light fs-5" id="view_startDate">-</span>
+                                                      <div class="small text-success mt-1" id="view_tenure">-</div>
+                                                  </div>
+                                                  <div class="mb-3">
+                                                      <small class="text-muted d-block">สิทธิ์ประกันสังคม:</small>
+                                                      <span class="fw-bold text-info" id="view_ssoType">-</span>
+                                                  </div>
+                                                  <div class="mb-3">
+                                                      <small class="text-muted d-block">โรงพยาบาล:</small>
+                                                      <span class="text-light text-break" id="view_ssoHosp">-</span>
+                                                  </div>
+                                                  <div class="p-3 bg-danger bg-opacity-10 rounded border border-danger mt-3" id="view_resign_section" style="display:none;">
+                                                      <small class="text-danger fw-bold d-block">ข้อมูลการลาออก:</small>
+                                                      <div class="small text-light">วันที่: <span id="view_resignDate">-</span></div>
+                                                      <div class="small text-light">เหตุผล: <span id="view_resignReason">-</span></div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                          <div class="card mb-3 border-secondary border-opacity-25 bg-transparent">
+                                              <div class="card-header text-warning border-secondary border-opacity-25">
+                                                  <i class="bi bi-card-heading me-2"></i>ข้อมูลเอกสาร
+                                              </div>
+                                              <div class="card-body small">
+                                                  <div class="mb-2">
+                                                      <span class="text-muted d-block">บัตรประชาชน:</span>
+                                                      <span class="fw-bold text-light" id="view_idCardNum">-</span>
+                                                      <div class="text-danger" style="font-size:0.75rem;" id="view_idExp">-</div>
+                                                  </div>
+                                                  <hr class="my-2 border-secondary opacity-25">
+                                                  <div class="mb-2">
+                                                      <span class="text-muted d-block">ใบขับขี่:</span>
+                                                      <span class="fw-bold text-light" id="view_licType">-</span>
+                                                      <div class="text-light font-monospace" id="view_licNum">-</div>
+                                                      <div class="text-danger" style="font-size:0.75rem;" id="view_licExp">-</div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="card border-secondary border-opacity-25 bg-transparent">
+                                              <div class="card-header text-white border-secondary border-opacity-25">
+                                                  <i class="bi bi-diagram-3-fill me-2"></i>ตำแหน่งงาน
+                                              </div>
+                                              <div class="card-body">
+                                                  <div id="view_positions_badges" class="d-flex flex-wrap gap-2"></div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div id="editModeSection" style="display:none;">
+                                  <div class="card border-secondary border-opacity-25 bg-transparent">
+                                      <div class="card-body">
+                                          <div class="row g-3">
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-muted mb-0">รหัสพนักงาน</label>
+                                                  <div class="input-group input-group-sm">
+                                                      <input type="text" class="form-control fw-bold" id="empId" required>
+                                                      <button type="button" class="btn btn-outline-secondary" id="btnGenId" onclick="window.genId()">
+                                                          <i class="bi bi-arrow-clockwise"></i>
+                                                      </button>
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-muted mb-0">Role</label>
+                                                  <select class="form-select form-select-sm" id="role">
+                                                      <option>User</option>
+                                                      <option>Admin</option>
+                                                      <option>Viewer</option>
+                                                  </select>
+                                              </div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-muted mb-0">Username</label>
+                                                  <input type="text" class="form-control form-control-sm" id="username" required>
+                                              </div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-muted mb-0">Password</label>
+                                                  <input type="text" class="form-control form-control-sm" id="password" required>
+                                              </div>
+                                              <div class="col-12"><hr class="my-1 border-secondary opacity-25"></div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-danger fw-bold mb-0">สถานะ</label>
+                                                  <select class="form-select form-select-sm border-danger" id="empStatus" onchange="window.toggleResignDate()">
+                                                      <option value="Active">Active (ปกติ)</option>
+                                                      <option value="Suspended">Suspended (พักงาน)</option>
+                                                      <option value="Resigned">Resigned (ลาออก)</option>
+                                                  </select>
+                                              </div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-danger fw-bold mb-0">วันที่ลาออก</label>
+                                                  <input type="date" class="form-control form-control-sm border-danger" id="resignDate" disabled>
+                                              </div>
+                                              <div class="col-md-6" id="divResignReason" style="display:none;">
+                                                  <label class="form-label small text-danger fw-bold mb-0">เหตุผลที่ลาออก</label>
+                                                  <input type="text" class="form-control form-control-sm border-danger" id="resignReason" placeholder="ระบุสาเหตุ...">
+                                              </div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-info fw-bold mb-0">สิทธิ์ประกันสังคม</label>
+                                                  <select class="form-select form-select-sm text-info" id="ssoType">
+                                                      <option value="">- เลือก -</option>
+                                                      <option value="มาตรา 33">มาตรา 33</option>
+                                                      <option value="มาตรา 39">มาตรา 40</option>
+                                                      <option value="ไม่เข้าประกันสังคม">ไม่เข้าประกันสังคม</option>
+                                                  </select>
+                                              </div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-info fw-bold mb-0">โรงพยาบาล</label>
+                                                  <select class="form-select form-select-sm" id="ssoHosp">
+                                                      <option value="">Loading...</option>
+                                                  </select>
+                                              </div>
+                                              <div class="col-md-2">
+                                                  <label class="form-label small text-muted mb-0">คำนำหน้า</label>
+                                                  <select class="form-select form-select-sm" id="prefix">
+                                                      <option value="">-ระบุ-</option>
+                                                      <option value="นาย">นาย</option>
+                                                      <option value="นาง">นาง</option>
+                                                      <option value="นางสาว">นางสาว</option>
+                                                  </select>
+                                              </div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-muted mb-0">ชื่อ-นามสกุล (จริง)</label>
+                                                  <input type="text" class="form-control form-control-sm fw-bold" id="fullname" required>
+                                              </div>
+                                              <div class="col-md-3">
+                                                  <label class="form-label small text-success fw-bold mb-0">ชื่อเล่น (แก้ไขได้)</label>
+                                                  <input type="text" class="form-control form-control-sm" id="nickname">
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label class="form-label small text-muted mb-0">เพศ</label>
+                                                  <select class="form-select form-select-sm" id="gender">
+                                                      <option value="">- ระบุ -</option>
+                                                      <option value="ชาย">ชาย</option>
+                                                      <option value="หญิง">หญิง</option>
+                                                      <option value="อื่นๆ">อื่นๆ</option>
+                                                  </select>
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label class="form-label small text-muted mb-0">วันเดือนปีเกิด</label>
+                                                  <input type="date" class="form-control form-control-sm" id="birthDate">
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label class="form-label small text-muted mb-0">วันเริ่มงาน</label>
+                                                  <input type="date" class="form-control form-control-sm" id="startDate" required>
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label class="form-label small text-success fw-bold mb-0">เบอร์โทรศัพท์ (แก้ไขได้)</label>
+                                                  <input type="text" class="form-control form-control-sm" id="phone">
+                                              </div>
+                                              <div class="col-md-12 mt-2">
+                                                  <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
+                                                      <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
+                                                          <i class="bi bi-person-vcard me-2 text-info fs-5"></i>ข้อมูลบัตรประชาชน
+                                                      </label>
+                                                      <div class="row g-2">
+                                                          <div class="col-md-8">
+                                                              <input type="text" class="form-control form-control-sm" id="idCardNum" placeholder="เลขบัตรประชาชน 13 หลัก">
+                                                          </div>
+                                                          <div class="col-md-4">
+                                                              <input type="date" class="form-control form-control-sm" id="idExp" title="วันหมดอายุบัตรประชาชน">
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-12 mt-1">
+                                                  <div class="border border-secondary border-opacity-25 rounded p-3 bg-black bg-opacity-25">
+                                                      <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
+                                                          <i class="bi bi-car-front me-2 text-info fs-5"></i>ข้อมูลใบขับขี่
+                                                      </label>
+                                                      <div class="row g-2">
+                                                          <div class="col-md-4">
+                                                              <select class="form-select form-select-sm" id="licType">
+                                                                  <option value="">- ประเภท -</option>
+                                                              </select>
+                                                          </div>
+                                                          <div class="col-md-4">
+                                                              <input type="text" class="form-control form-control-sm" id="licNum" placeholder="เลขที่ใบขับขี่">
+                                                          </div>
+                                                          <div class="col-md-4">
+                                                              <input type="date" class="form-control form-control-sm" id="licExp" title="วันหมดอายุใบขับขี่">
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-12 mt-3">
+                                                  <label class="form-label text-white mb-2 fw-bold border-bottom border-secondary border-opacity-50 pb-2 d-block fs-6">
+                                                      <i class="bi bi-diagram-3-fill me-2 text-info fs-5"></i>ตำแหน่ง (เลือกได้หลายข้อ)
+                                                  </label>
+                                                  <div id="positionCheckboxList" class="checkbox-list small">
+                                                      <small class="text-muted">Loading...</small>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
                               </div>
                           </div>
-                          <!-- ฝั่งรายการหัก -->
-                          <div class="col-md-6">
-                              <h6 class="text-danger border-bottom border-danger border-opacity-25 pb-2 mb-3"><i class="bi bi-dash-circle me-1"></i>รายการหัก</h6>
-                              <div class="row g-2">
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 1</span><input type="number" id="pr_dec1" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 2</span><input type="number" id="pr_dec2" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 3</span><input type="number" id="pr_dec3" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 4</span><input type="number" id="pr_dec4" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 5</span><input type="number" id="pr_dec5" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 6</span><input type="number" id="pr_dec6" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 7</span><input type="number" id="pr_dec7" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 8</span><input type="number" id="pr_dec8" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 9</span><input type="number" id="pr_dec9" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
-                                  <div class="col-12"><div class="input-group input-group-sm"><span class="input-group-text bg-dark text-muted border-secondary" style="width: 100px;">รายการหัก 10</span><input type="number" id="pr_dec10" class="form-control payroll-input payroll-dec text-end" oninput="window.calcPayrollTotals()" step="0.01"></div></div>
+                          <div class="tab-pane fade" id="tabDocs">
+                              <div class="card border-secondary border-opacity-25 bg-transparent">
+                                  <div class="card-body">
+                                      <div class="alert alert-dark border border-secondary border-opacity-50 small text-info p-2 mb-3 bg-black bg-opacity-50">
+                                          <i class="bi bi-info-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการเปลี่ยน
+                                      </div>
+                                      <div class="row g-3">
+                                          <div class="col-md-3">
+                                              <label class="small fw-bold mb-0">รูปถ่ายหน้าตรง</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="filePhoto">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small fw-bold mb-0">สำเนาบัตรประชาชน</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileIdCard">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small fw-bold mb-0 text-info">หนังสือเดินทาง (Passport)</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="filePassport">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small fw-bold mb-0">สำเนาทะเบียนบ้าน</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileHouse">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small fw-bold mb-0">ใบอนุญาตขับขี่</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileDrive">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small fw-bold mb-0 text-info">ประวัติอาชญากรรม</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileCriminal">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small fw-bold mb-0 text-info">ใบตรวจสุขภาพ</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileHealth">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small mb-0 text-muted">วุฒิการศึกษา</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileEdu">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small mb-0 text-muted">เอกสารอื่นๆ 1</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileOther1">
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label class="small mb-0 text-muted">เอกสารอื่นๆ 2</label>
+                                              <input type="file" class="form-control form-control-sm border-secondary border-opacity-50" id="fileOther2">
+                                          </div>
+                                      </div>
+                                  </div>
                               </div>
                           </div>
                       </div>
-
-                      <div class="mt-4 p-3 bg-dark border border-warning rounded">
-                          <div class="row text-center">
-                              <div class="col-md-4">
-                                  <small class="text-success d-block">รวมรายได้ (บาท)</small>
-                                  <h4 class="text-white fw-bold mb-0" id="pr_totalIncomeShow">0.00</h4>
-                              </div>
-                              <div class="col-md-4 border-start border-end border-secondary">
-                                  <small class="text-danger d-block">รวมรายการหัก (บาท)</small>
-                                  <h4 class="text-white fw-bold mb-0" id="pr_totalDeductShow">0.00</h4>
-                              </div>
-                              <div class="col-md-4">
-                                  <small class="text-warning d-block">รายได้สุทธิ (Net)</small>
-                                  <h3 class="text-warning fw-bold mb-0" id="pr_netSalaryShow">0.00</h3>
-                              </div>
-                          </div>
-                      </div>
-
-                      <div class="mt-4 text-end">
-                          <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
-                          <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold" id="btnSubmitPayroll">สร้างและส่งสลิปเงินเดือน</button>
+                      <div class="modal-footer border-secondary border-opacity-25 pb-0 pe-0 mt-3 pt-3">
+                          <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">ปิด</button>
+                          <button type="submit" class="btn btn-success btn-sm px-4 shadow-sm rounded-pill" id="btnSaveModal">บันทึกข้อมูล</button>
                       </div>
                   </form>
               </div>
@@ -704,7 +1087,7 @@
         } else if (tab === 'payroll') {
             document.getElementById('btnTabPayroll').classList.add('active'); 
             document.getElementById('section-admin-payroll').classList.remove('d-none');
-            window.filterPayrollTable(); // Render table when tab is clicked
+            window.filterPayrollTable(); 
         }
     };
 
@@ -712,7 +1095,7 @@
       document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
       document.getElementById('adminAccidentTableBody').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลอุบัติเหตุ...</td></tr>';
       document.getElementById('adminWarnTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูลใบเตือน...</td></tr>';
-      document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="5" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
+      document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
       
       window.callAPI({ action: 'getAccidentData', role: 'Admin', empId: '' }).then(function(accData) {
           window.allAccidentData = accData || []; 
@@ -727,16 +1110,31 @@
                   window.allEmpData = data; 
                   window.currentDisplayData = data;
                   
-                  if(window.currentUser.role !== 'Viewer') { 
+                  if (window.currentUser.role !== 'Viewer') { 
                       var els = document.querySelectorAll('.admin-only'); 
                       for(var i=0; i<els.length; i++) els[i].style.display = 'inline-block'; 
                   }
                   
                   window.renderStats(data); 
                   window.filterTable(); 
-                  window.filterPayrollTable();
                   window.renderAccidentTable(window.currentAccidentDisplayData); 
                   window.renderWarningTable(window.currentWarningDisplayData);
+                  
+                  window.callAPI({ action: 'getUserPayslips', empId: 'ALL' }).then(function(prData) {
+                      window.allPayrollData = prData || [];
+                      var posSet = new Set();
+                      data.forEach(function(e) { 
+                          if(e.status === 'Active' && e.position) { 
+                              e.position.split(',').forEach(function(p) { posSet.add(p.trim()); }); 
+                          }
+                      });
+                      var posSelect = document.getElementById('filterPayrollPosition');
+                      posSelect.innerHTML = '<option value="all">🌐 ทุกตำแหน่ง</option>';
+                      Array.from(posSet).sort().forEach(function(p) { 
+                          posSelect.innerHTML += '<option value="' + p + '">' + p + '</option>'; 
+                      });
+                      window.filterPayrollTable();
+                  });
               });
           });
       });
@@ -748,7 +1146,7 @@
        var limit = document.getElementById('rowsPerPage').value;
        var list = (limit === 'all') ? data : data.slice(0, parseInt(limit));
        
-       if(list.length === 0) { 
+       if (list.length === 0) { 
            tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>'; 
            document.getElementById('tableFooter').innerText = 'Total: 0'; 
            return; 
@@ -756,17 +1154,18 @@
        
        list.forEach(function(emp) {
           var badgeClass = 'bg-secondary text-white';
-          if(emp.status === 'Active') badgeClass = 'bg-success text-dark'; 
-          else if(emp.status === 'Resigned') badgeClass = 'bg-danger text-white'; 
-          else if(emp.status === 'Suspended') badgeClass = 'bg-warning text-dark';
+          if (emp.status === 'Active') badgeClass = 'bg-success text-dark'; 
+          else if (emp.status === 'Resigned') badgeClass = 'bg-danger text-white'; 
+          else if (emp.status === 'Suspended') badgeClass = 'bg-warning text-dark';
           
           var accCount = window.allAccidentData.filter(function(a) { return String(a.empId).trim() === String(emp.id).trim(); }).length;
           var accBadge = accCount > 0 ? '<span class="badge bg-warning text-dark rounded-pill shadow-sm">' + accCount + ' ครั้ง</span>' : '<span class="text-muted small">-</span>';
+          
           var warnCount = window.allWarningData.filter(function(w) { return String(w.empId).trim() === String(emp.id).trim(); }).length;
           var warnBadge = warnCount > 0 ? '<span class="badge bg-danger rounded-pill shadow-sm">' + warnCount + ' ครั้ง</span>' : '<span class="text-muted small">-</span>';
           
           var editBtn = ''; 
-          if(window.currentUser.role !== 'Viewer') { 
+          if (window.currentUser.role !== 'Viewer') { 
               editBtn = '<button class="btn btn-sm btn-dark border-secondary text-warning rounded-circle hover-scale" onclick="event.stopPropagation(); window.openModal(\'edit\', \'' + emp.id + '\')" title="แก้ไข"><i class="bi bi-pencil-fill"></i></button>'; 
           }
           
@@ -797,39 +1196,83 @@
           
           var tr = document.createElement('tr');
           tr.onclick = function(e) { 
-              if(!e.target.closest('button') && !e.target.closest('a') && !e.target.closest('select')) { 
+              if (!e.target.closest('button') && !e.target.closest('a') && !e.target.closest('select')) { 
                   window.openModal('view', emp.id, emp); 
               } 
           };
-          tr.innerHTML = '<td class="ps-4"><span class="font-monospace text-success fw-bold">' + emp.id + '</span></td><td><div class="fw-bold text-white">' + emp.name + '</div><div class="small text-secondary" style="font-size:0.75rem;">' + (emp.nickname || '-') + '</div></td><td><span class="badge bg-dark border border-secondary fw-normal text-secondary px-2">' + (emp.position || '-') + '</span></td><td class="text-center small text-secondary">' + window.calcTenure(emp.startDate) + '</td><td class="text-center"><span class="badge rounded-pill ' + badgeClass + ' px-3 shadow-sm">' + emp.status + '</span></td><td class="text-center">' + accBadge + '</td><td class="text-center">' + warnBadge + '</td><td class="text-center">' + docIcon + '</td><td class="text-end pe-4">' + editBtn + '</td>';
+          tr.innerHTML = '<td class="ps-4"><span class="font-monospace text-success fw-bold">' + emp.id + '</span></td>' +
+                         '<td><div class="fw-bold text-white">' + emp.name + '</div><div class="small text-secondary" style="font-size:0.75rem;">' + (emp.nickname || '-') + '</div></td>' +
+                         '<td><span class="badge bg-dark border border-secondary fw-normal text-secondary px-2">' + (emp.position || '-') + '</span></td>' +
+                         '<td class="text-center small text-secondary">' + window.calcTenure(emp.startDate) + '</td>' +
+                         '<td class="text-center"><span class="badge rounded-pill ' + badgeClass + ' px-3 shadow-sm">' + emp.status + '</span></td>' +
+                         '<td class="text-center">' + accBadge + '</td>' +
+                         '<td class="text-center">' + warnBadge + '</td>' +
+                         '<td class="text-center">' + docIcon + '</td>' +
+                         '<td class="text-end pe-4">' + editBtn + '</td>';
           tbody.appendChild(tr);
        });
        document.getElementById('tableFooter').innerText = 'แสดง ' + list.length + ' จาก ' + data.length + ' รายการ';
     };
 
-    // --- ส่วนของ Payroll ---
+    window.filterTable = function() { 
+        var val = document.getElementById('searchInput').value.toLowerCase(); 
+        var showResigned = document.getElementById('showResignedCheck').checked; 
+        var filtered = window.allEmpData.filter(function(d) { 
+            var matchSearch = (d.name + d.id + d.position + (d.nickname||'')).toLowerCase().includes(val); 
+            var matchStatus = showResigned ? true : (d.status === 'Active'); 
+            return matchSearch && matchStatus; 
+        }); 
+        window.currentDisplayData = filtered; 
+        window.renderTable(filtered); 
+    };
+
+    window.sortData = function(key) { 
+        if (window.currentSort.key === key) window.currentSort.order = window.currentSort.order === 'asc' ? 'desc' : 'asc'; 
+        else { window.currentSort.key = key; window.currentSort.order = 'asc'; } 
+        
+        window.currentDisplayData.sort(function(a, b) { 
+            if (key === 'startDate') { 
+                var dateA = a.startDate ? new Date(a.startDate).getTime() : 0; 
+                var dateB = b.startDate ? new Date(b.startDate).getTime() : 0; 
+                return window.currentSort.order === 'asc' ? dateA - dateB : dateB - dateA; 
+            } 
+            var valA = (a[key] || '').toString(); 
+            var valB = (b[key] || '').toString(); 
+            return window.currentSort.order === 'asc' ? valA.localeCompare(valB, 'th', { numeric: true }) : valB.localeCompare(valA, 'th', { numeric: true }); 
+        }); 
+        window.renderTable(window.currentDisplayData); 
+    };
+
     window.filterPayrollTable = function() {
         if (!window.allEmpData) return;
         var val = document.getElementById('searchPayrollInput').value.toLowerCase(); 
-        var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; }); // แสดงเฉพาะที่ยังทำงานอยู่
+        var posVal = document.getElementById('filterPayrollPosition').value;
+        var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; });
         
         var filtered = activeEmps.filter(function(d) { 
-            return (d.name + d.id).toLowerCase().includes(val); 
+            var matchName = (d.name + d.id).toLowerCase().includes(val); 
+            var matchPos = (posVal === 'all' || (d.position && d.position.includes(posVal)));
+            return matchName && matchPos;
         }); 
         
         var html = '';
-        if(filtered.length === 0) {
-            html = '<tr><td colspan="5" class="text-center py-5 text-muted">ไม่พบข้อมูลพนักงาน</td></tr>';
+        if (filtered.length === 0) {
+            html = '<tr><td colspan="6" class="text-center py-5 text-muted">ไม่พบข้อมูลพนักงาน</td></tr>';
         } else {
             filtered.forEach(function(r) {
                 var baseSal = r.appSalary || r.reqSalary || '0';
+                var slipCount = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === r.id; }).length : 0;
+                var badge = slipCount > 0 ? `<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="window.openPayrollHistory('${r.id}')">${slipCount} เดือน</button>` : `<span class="text-muted small">-</span>`;
+                var posShort = r.position || '-';
+                
                 html += `<tr>
                     <td class="ps-4 text-warning font-monospace fw-bold">${r.id}</td>
                     <td><b class="text-light">${r.name}</b></td>
-                    <td>${r.position || '-'}</td>
-                    <td class="text-center text-success fw-bold">${window.numberWithCommas(baseSal)}</td>
+                    <td><div class="text-truncate" style="max-width:150px;" title="${posShort}">${posShort}</div></td>
+                    <td class="text-end text-success fw-bold">${window.numberWithCommas(baseSal)}</td>
+                    <td class="text-center">${badge}</td>
                     <td class="text-end pe-4">
-                        <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.openPayrollModal('${r.id}')"><i class="bi bi-cash-stack me-1"></i>ออกสลิปเงินเดือน</button>
+                        <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.openPayrollModal('${r.id}')"><i class="bi bi-plus-circle me-1"></i>ออกสลิปใหม่</button>
                     </td>
                 </tr>`;
             });
@@ -837,43 +1280,122 @@
         document.getElementById('adminPayrollTableBody').innerHTML = html;
     };
 
-    window.openPayrollModal = function(empId) {
+    window.openPayrollHistory = function(empId) {
+        var emp = window.allEmpData.find(function(e) { return e.id === empId; });
+        var slips = window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); });
+        
+        var html = '';
+        if (slips.length === 0) {
+            html = '<tr><td colspan="6" class="text-center py-4 text-muted">ไม่มีประวัติ</td></tr>';
+        } else {
+            slips.forEach(function(s) {
+                var btnEdit = `<button class="btn btn-sm btn-outline-success rounded-circle me-1" onclick="window.editPayroll('${s.empId}', '${s.payMonth}')" title="ดึงข้อมูลมาแก้ไข"><i class="bi bi-pencil"></i></button>`;
+                var btnDel = `<button class="btn btn-sm btn-outline-danger rounded-circle" onclick="window.deletePayslip('${s.empId}', '${s.payMonth}')" title="ลบสลิป"><i class="bi bi-trash"></i></button>`;
+                html += `<tr>
+                    <td class="ps-4">${window.formatDate(s.payDate)}</td>
+                    <td class="text-end">${window.numberWithCommas(s.totalIncome)}</td>
+                    <td class="text-end text-danger">${window.numberWithCommas(s.totalDeduct)}</td>
+                    <td class="text-end text-warning fw-bold">${window.numberWithCommas(s.netSalary)}</td>
+                    <td class="text-center"><a href="${s.pdfUrl}" target="_blank" class="btn btn-sm btn-secondary py-0 px-2 rounded-pill"><i class="bi bi-eye"></i></a></td>
+                    <td class="text-center pe-4">${btnEdit}${btnDel}</td>
+                </tr>`;
+            });
+        }
+        document.getElementById('payrollHistoryBody').innerHTML = html;
+        new bootstrap.Modal(document.getElementById('payrollHistoryModal')).show();
+    };
+
+    window.openPayrollModal = function(empId, isEdit, monthData) {
+        if (isEdit === undefined) isEdit = false;
+        if (monthData === undefined) monthData = null;
+        
         var emp = window.allEmpData.find(function(e){ return e.id === empId; });
-        if(!emp) return;
+        if (!emp) return;
         
         document.getElementById('payrollForm').reset();
         
         document.getElementById('pr_empId').value = emp.id;
         document.getElementById('pr_empName').innerText = emp.name + " (" + emp.id + ")";
         document.getElementById('pr_position').value = emp.position || '';
-        document.getElementById('pr_email').value = emp.username + "@vktnexus.com"; // หรือดึงอีเมลจริงถ้ามี
+        document.getElementById('pr_email').value = emp.username + "@vktnexus.com"; 
         
-        var sal = parseFloat(emp.appSalary || emp.reqSalary || 0);
-        document.getElementById('pr_baseSalary').value = sal;
-        
-        // แยกคำนำหน้า ชื่อ นามสกุล
         var parts = emp.name.split(' ');
-        var prefix = "";
-        var fname = "";
-        var lname = "";
+        var prefix = ""; var fname = ""; var lname = "";
         
         if (parts[0] === 'นาย' || parts[0] === 'นาง' || parts[0] === 'นางสาว') {
-            prefix = parts[0];
-            fname = parts[1] || '';
-            lname = parts.slice(2).join(' ') || '';
+            prefix = parts[0]; fname = parts[1] || ''; lname = parts.slice(2).join(' ') || '';
         } else {
-            fname = parts[0] || '';
-            lname = parts.slice(1).join(' ') || '';
+            fname = parts[0] || ''; lname = parts.slice(1).join(' ') || '';
         }
         
         document.getElementById('pr_prefix').value = prefix;
         document.getElementById('pr_firstName').value = fname;
         document.getElementById('pr_lastName').value = lname;
         
-        document.getElementById('pr_payDate').valueAsDate = new Date();
-        window.calcPayrollTotals();
-        
-        new bootstrap.Modal(document.getElementById('payrollModal')).show();
+        if (isEdit && monthData) {
+            document.getElementById('pr_payDate').value = monthData.payDate.split('T')[0];
+            document.getElementById('pr_baseSalary').value = monthData.baseSalary || 0;
+            for(var i=1; i<=10; i++) {
+                document.getElementById('pr_inc'+i).value = monthData.incomes[i-1] || 0;
+                document.getElementById('pr_dec'+i).value = monthData.deducts[i-1] || 0;
+            }
+            window.calcPayrollTotals();
+            new bootstrap.Modal(document.getElementById('payrollModal')).show();
+        } else {
+            document.getElementById('pr_payDate').valueAsDate = new Date();
+            Swal.fire({title:'กำลังดึงข้อมูลตั้งต้น...', allowOutsideClick:false, didOpen:function(){Swal.showLoading()}});
+            
+            window.callAPI({action: 'getEmployeeLastPayroll', empId: empId}).then(function(res) {
+                Swal.close();
+                if (res.found) {
+                    document.getElementById('pr_baseSalary').value = res.baseSalary || 0;
+                    for (var i=1; i<=10; i++) {
+                        document.getElementById('pr_inc'+i).value = res.incomes[i-1] || 0;
+                        document.getElementById('pr_dec'+i).value = res.deducts[i-1] || 0;
+                    }
+                } else {
+                    document.getElementById('pr_baseSalary').value = parseFloat(emp.appSalary || emp.reqSalary || 0);
+                }
+                window.calcPayrollTotals();
+                new bootstrap.Modal(document.getElementById('payrollModal')).show();
+            });
+        }
+    };
+
+    window.editPayroll = function(empId, payMonth) {
+        var monthData = window.allPayrollData.find(function(p) { return p.empId === empId && p.payMonth === payMonth; });
+        if (monthData) {
+            bootstrap.Modal.getInstance(document.getElementById('payrollHistoryModal')).hide();
+            window.openPayrollModal(empId, true, monthData);
+        }
+    };
+
+    window.deletePayslip = function(empId, payMonth) {
+        Swal.fire({ 
+            title: 'ยืนยันการลบสลิป?', 
+            text: 'PDF และประวัติเดือนนี้จะถูกลบถาวร', 
+            icon: 'warning', 
+            showCancelButton: true, 
+            confirmButtonColor: '#d33', 
+            cancelButtonColor: '#555', 
+            confirmButtonText: 'ลบทิ้ง!', 
+            cancelButtonText: 'ยกเลิก', 
+            background: '#1a1a1a', 
+            color: '#fff' 
+        }).then(function(result) {
+            if (result.isConfirmed) { 
+                Swal.fire({title: 'กำลังลบ...', allowOutsideClick: false, background: '#1a1a1a', color: '#fff', didOpen: function() { Swal.showLoading(); }}); 
+                window.callAPI({ action: 'deletePayslipRecord', empId: empId, payMonth: payMonth }).then(function(res) { 
+                    if(res.success) { 
+                        Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message, background: '#1a1a1a', color: '#fff'}); 
+                        bootstrap.Modal.getInstance(document.getElementById('payrollHistoryModal')).hide(); 
+                        window.loadAdminData(); 
+                    } else { 
+                        Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message, background: '#1a1a1a', color: '#fff'}); 
+                    } 
+                }); 
+            }
+        });
     };
 
     window.calcPayrollTotals = function() {
@@ -881,7 +1403,7 @@
         var totalInc = 0;
         var totalDec = 0;
         
-        for(var i=1; i<=10; i++) {
+        for (var i=1; i<=10; i++) {
             totalInc += parseFloat(document.getElementById('pr_inc'+i).value) || 0;
             totalDec += parseFloat(document.getElementById('pr_dec'+i).value) || 0;
         }
@@ -910,7 +1432,7 @@
 
         var totalInc = 0;
         var totalDec = 0;
-        for(var i=1; i<=10; i++) {
+        for (var i=1; i<=10; i++) {
             var incVal = parseFloat(document.getElementById('pr_inc'+i).value) || 0;
             var decVal = parseFloat(document.getElementById('pr_dec'+i).value) || 0;
             payload['inc'+i] = incVal;
@@ -918,6 +1440,7 @@
             totalInc += incVal;
             totalDec += decVal;
         }
+        
         payload.totalIncome = payload.baseSalary + totalInc;
         payload.totalDeduct = totalDec;
         payload.netSalary = payload.totalIncome - payload.totalDeduct;
@@ -930,32 +1453,32 @@
         window.callAPI({ action: 'generatePayslipNexus', payload: payload }).then(function(res) {
             btn.innerHTML = originalText;
             btn.disabled = false;
-            if(res.success) {
+            if (res.success) {
                 Swal.fire({
                     icon: 'success', 
                     title: 'ออกสลิปเงินเดือนสำเร็จ', 
-                    html: `ส่งเข้าโปรไฟล์พนักงานเรียบร้อย<br><a href="${res.url}" target="_blank" class="btn btn-warning mt-3 rounded-pill px-4"><i class="bi bi-file-pdf me-1"></i> ดูสลิปที่สร้าง</a>`
+                    html: `ส่งเข้าโปรไฟล์พนักงานเรียบร้อย<br><a href="${res.url}" target="_blank" class="btn btn-warning mt-3 rounded-pill px-4"><i class="bi bi-file-pdf me-1"></i> ดูสลิปที่สร้าง</a>`,
+                    background: '#1a1a1a', color: '#fff'
                 });
                 bootstrap.Modal.getInstance(document.getElementById('payrollModal')).hide();
-                window.loadAdminData(); // รีโหลดข้อมูลเพื่ออัปเดตไฟล์ในประวัติ
+                window.loadAdminData(); 
             } else {
-                Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
+                Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message, background: '#1a1a1a', color: '#fff'});
             }
         }).catch(function(err) {
             btn.innerHTML = originalText;
             btn.disabled = false;
-            Swal.fire({icon: 'error', title: 'การเชื่อมต่อล้มเหลว', text: err.toString()});
+            Swal.fire({icon: 'error', title: 'การเชื่อมต่อล้มเหลว', text: err.toString(), background: '#1a1a1a', color: '#fff'});
         });
     };
 
     window.numberWithCommas = function(x) {
-        if(!x && x !== 0) return "0";
+        if (!x && x !== 0) return "0";
         var parts = x.toString().split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return parts.length > 1 ? parts.join(".") : parts[0];
     };
 
-    // ส่วนของ Accident, Warning คงเดิม
     window.renderAccidentTable = function(data) {
        document.getElementById('accTotalCount').innerText = window.allAccidentData.length;
        var accCounts = {}; 
@@ -1003,10 +1526,10 @@
 
     window.openAccidentDetailByDocNo = function(docNo) {
         var data = window.allAccidentData.find(function(a) { return a.docNo === docNo; }); 
-        if(!data) return;
+        if (!data) return;
         
         var modalEl = document.getElementById('accidentDetailModal');
-        if(!modalEl) {
+        if (!modalEl) {
             Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
             return;
         }
@@ -1073,7 +1596,7 @@
             if (result.isConfirmed) { 
                 Swal.fire({title: 'กำลังลบ...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }}); 
                 window.callAPI({ action: 'deleteAccidentRecord', docNo: docNo }).then(function(res) { 
-                    if(res.success) { 
+                    if (res.success) { 
                         Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message}); 
                         bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal')).hide(); 
                         window.loadAdminData(); 
@@ -1140,7 +1663,7 @@
 
         var select = document.getElementById('e_warnIssuedBy'); 
         for(var i=0; i<select.options.length; i++) { 
-            if(select.options[i].value.includes(issuedByShort)) { 
+            if (select.options[i].value.includes(issuedByShort)) { 
                 select.selectedIndex = i; 
                 break; 
             } 
@@ -1208,7 +1731,7 @@
         var modalEl = document.getElementById('warningCreateModal');
         
         if (!form || !modalEl) {
-            Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'ระบบไม่พบฟอร์มใบเตือน กรุณากดล้างแคชโดยกด Ctrl + Shift + R (บนคอม) หรือลบประวัติการท่องเว็บ (บนมือถือ)'});
+            Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'ระบบไม่พบฟอร์มใบเตือน กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
             return;
         }
 
@@ -1252,7 +1775,7 @@
         var parts = inputValue.split(':'); 
         var empIdValue = parts[0].trim(); 
         var empNameText = parts[1] ? parts[1].trim() : ''; 
-        if(empNameText) empNameText = empNameText.split('(')[0].trim();
+        if (empNameText) empNameText = empNameText.split('(')[0].trim();
 
         var file1 = document.getElementById('warnPhoto1').files[0]; 
         var file2 = document.getElementById('warnPhoto2').files[0]; 
@@ -1279,7 +1802,7 @@
         window.callAPI({ action: 'submitWarningReport', form: payload }).then(function(res) { 
             btn.innerHTML = originalText; 
             btn.disabled = false; 
-            if(res.success) { 
+            if (res.success) { 
                 Swal.fire({icon: 'success', title: 'สร้างใบเตือนสำเร็จ', html: 'ส่งเข้าประวัติพนักงานเรียบร้อย<br>เลขที่อ้างอิง: <b class="text-danger">' + res.docNo + '</b>'}); 
                 bootstrap.Modal.getInstance(document.getElementById('warningCreateModal')).hide(); 
                 window.loadAdminData(); 
@@ -1300,48 +1823,19 @@
         
         var thisMonth = new Date().getMonth() + 1; 
         var bdays = active.filter(function(d) { 
-            if(!d.birthDate) return false; 
+            if (!d.birthDate) return false; 
             try { return (new Date(d.birthDate).getMonth() + 1) === thisMonth; } catch(e){ return false; } 
         }); 
         document.getElementById('statBirth').innerText = bdays.length; 
     };
 
-    window.filterTable = function() { 
-        var val = document.getElementById('searchInput').value.toLowerCase(); 
-        var showResigned = document.getElementById('showResignedCheck').checked; 
-        var filtered = window.allEmpData.filter(function(d) { 
-            var matchSearch = (d.name + d.id + d.position + (d.nickname||'')).toLowerCase().includes(val); 
-            var matchStatus = showResigned ? true : (d.status === 'Active'); 
-            return matchSearch && matchStatus; 
-        }); 
-        window.currentDisplayData = filtered; 
-        window.renderTable(filtered); 
-    };
-
-    window.sortData = function(key) { 
-        if (window.currentSort.key === key) window.currentSort.order = window.currentSort.order === 'asc' ? 'desc' : 'asc'; 
-        else { window.currentSort.key = key; window.currentSort.order = 'asc'; } 
-        
-        window.currentDisplayData.sort(function(a, b) { 
-            if (key === 'startDate') { 
-                var dateA = a.startDate ? new Date(a.startDate).getTime() : 0; 
-                var dateB = b.startDate ? new Date(b.startDate).getTime() : 0; 
-                return window.currentSort.order === 'asc' ? dateA - dateB : dateB - dateA; 
-            } 
-            var valA = (a[key] || '').toString(); 
-            var valB = (b[key] || '').toString(); 
-            return window.currentSort.order === 'asc' ? valA.localeCompare(valB, 'th', { numeric: true }) : valB.localeCompare(valA, 'th', { numeric: true }); 
-        }); 
-        window.renderTable(window.currentDisplayData); 
-    };
-    
     window.openBirthdayModal = function() { 
         var thisMonth = new Date().getMonth() + 1; 
         var list = window.allEmpData.filter(function(d) { return d.status === 'Active' && d.birthDate && (new Date(d.birthDate).getMonth() + 1) === thisMonth; }); 
         list.sort(function(a,b) { return new Date(a.birthDate).getDate() - new Date(b.birthDate).getDate(); }); 
         
         var html = ''; 
-        if(list.length === 0) html = '<div class="text-center text-muted py-4">เดือนนี้ไม่มีวันเกิดพนักงาน</div>'; 
+        if (list.length === 0) html = '<div class="text-center text-muted py-4">เดือนนี้ไม่มีวันเกิดพนักงาน</div>'; 
         else { 
             list.forEach(function(e) { 
                 var day = new Date(e.birthDate).getDate(); 
@@ -1355,7 +1849,7 @@
     window.openPositionStatsModal = function() { 
         var stats = {}; 
         window.allEmpData.filter(function(d) { return d.status === 'Active'; }).forEach(function(row) { 
-            if(row.position) { 
+            if (row.position) { 
                 if (row.position.includes("รถร่วมบริการ")) { 
                     var k = "รถร่วมบริการ"; stats[k] = (stats[k] || 0) + 1; 
                 } else { 
@@ -1384,8 +1878,8 @@
     window.openYearlyStatsModal = function() { 
         var yearMap = {}; 
         window.allEmpData.forEach(function(d) { 
-            if(d.startDate && !isNaN(new Date(d.startDate))) { var y = new Date(d.startDate).getFullYear(); if(!yearMap[y]) yearMap[y]={j:0,r:0}; yearMap[y].j++; } 
-            if(d.status === 'Resigned' && d.resignDate && !isNaN(new Date(d.resignDate))) { var y2 = new Date(d.resignDate).getFullYear(); if(!yearMap[y2]) yearMap[y2]={j:0,r:0}; yearMap[y2].r++; } 
+            if (d.startDate && !isNaN(new Date(d.startDate))) { var y = new Date(d.startDate).getFullYear(); if(!yearMap[y]) yearMap[y]={j:0,r:0}; yearMap[y].j++; } 
+            if (d.status === 'Resigned' && d.resignDate && !isNaN(new Date(d.resignDate))) { var y2 = new Date(d.resignDate).getFullYear(); if(!yearMap[y2]) yearMap[y2]={j:0,r:0}; yearMap[y2].r++; } 
         }); 
         var html = '', cum = 0; 
         Object.keys(yearMap).sort().forEach(function(y) { 
@@ -1410,6 +1904,301 @@
         document.getElementById('yearDetailTitle').innerText = title; 
         document.getElementById('yearDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
         new bootstrap.Modal(document.getElementById('yearDetailModal')).show(); 
+    };
+
+    window.openModal = function(mode, targetId, preloadedData) { 
+        document.getElementById('empForm').reset(); 
+        document.getElementById('formMode').value = mode; 
+        var modalEl = document.getElementById('empModal'); 
+        modalObj = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl); 
+        var targetData = preloadedData || null; 
+        if (!targetData && mode !== 'create' && targetId) { 
+            targetData = allEmpData.find(x => String(x.id).trim() === String(targetId).trim()); 
+        } 
+        setupModalData(mode, targetData); 
+        modalObj.show(); 
+        window.loadSettings(function() { 
+            if (mode !== 'view' && targetData) { 
+                window.fillData(targetData, false); 
+            } 
+            var isUser = (currentUser.role === 'User'); 
+            if (isUser || mode === 'view' || currentUser.role === 'Viewer') { 
+                document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = true); 
+            } 
+        }); 
+    };
+
+    function setupModalData(mode, d) { 
+        var btnSave = document.getElementById('btnSaveModal'); 
+        var viewSection = document.getElementById('viewModeSection'); 
+        var editSection = document.getElementById('editModeSection'); 
+        viewSection.style.display = 'none'; 
+        editSection.style.display = 'none'; 
+        btnSave.style.display = 'none'; 
+        
+        var lock = (id, state) => { 
+            var el = document.getElementById(id); 
+            if (el) { 
+                el.readOnly = state; 
+                el.disabled = state; 
+                if (state) el.classList.add('readonly-field'); 
+                else el.classList.remove('readonly-field'); 
+            } 
+        }; 
+        var lockPositions = (state) => { 
+            document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = state); 
+        }; 
+        
+        var allFields = ['empId','role','username','password','fullname','nickname','startDate','phone','birthDate','gender','ssoType','ssoHosp','idExp','licExp','idCardNum','licNum','licType','resignReason','prefix']; 
+        
+        if (mode === 'create') { 
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>เพิ่มพนักงานใหม่'; 
+            editSection.style.display = 'block'; 
+            btnSave.style.display = 'block'; 
+            allFields.forEach(f => lock(f, false)); 
+            lockPositions(false); 
+            document.getElementById('btnGenId').style.display = 'inline-block'; 
+            window.genId(); 
+            document.getElementById('empStatus').value = 'Active'; 
+            lock('empStatus', false); 
+            window.toggleResignDate(); 
+        } else if (mode === 'view' || currentUser.role === 'Viewer') { 
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)'; 
+            viewSection.style.display = 'block'; 
+            document.getElementById('btnGenId').style.display = 'none'; 
+            if (d) window.fillData(d, true); 
+        } else { 
+            var isUser = (currentUser.role === 'User'); 
+            document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน'; 
+            editSection.style.display = 'block'; 
+            btnSave.style.display = 'block'; 
+            document.getElementById('btnGenId').style.display = 'none'; 
+            if (d) window.fillData(d, false); 
+            lock('empId', true); 
+            if (isUser) { 
+                lock('role', true); lock('empStatus', true); lock('resignDate', true); lock('resignReason', true); lock('username', true); lock('fullname', true); lock('prefix', true); lock('startDate', true); lock('gender', true); lock('ssoType', true); 
+                lock('birthDate', false); lock('password', false); lock('phone', false); lock('nickname', false); lock('ssoHosp', false); lock('idExp', false); lock('licExp', false); lock('idCardNum', false); lock('licNum', false); lock('licType', false); 
+                lockPositions(true); 
+            } else { 
+                lock('role', false); lock('empStatus', false); window.toggleResignDate(); 
+                lock('username', false); lock('password', false); lock('fullname', false); lock('prefix', false); lock('startDate', false); lock('birthDate', false); lock('gender', false); lock('ssoType', false); lock('ssoHosp', false); lock('nickname', false); lock('idExp', false); lock('licExp', false); lock('idCardNum', false); lock('licNum', false); lock('licType', false); lock('resignReason', false); 
+                lockPositions(false); lock('phone', false); 
+            } 
+        } 
+    }
+
+    function safeDate(d) { 
+        if (!d) return ''; 
+        try { 
+            var date = new Date(d); 
+            if (isNaN(date.getTime())) return ''; 
+            return date.toISOString().split('T')[0]; 
+        } catch(e) { return ''; } 
+    }
+
+    window.fillData = function(d, isViewMode) { 
+        if (!d) return; 
+        document.getElementById('empId').value = d.id; 
+        document.getElementById('fullname').value = d.name; 
+        document.getElementById('prefix').value = ""; 
+        document.getElementById('nickname').value = d.nickname || ''; 
+        document.getElementById('phone').value = d.phone; 
+        document.getElementById('username').value = d.username; 
+        document.getElementById('password').value = d.password; 
+        document.getElementById('role').value = d.role; 
+        document.getElementById('gender').value = d.gender || ''; 
+        document.getElementById('empStatus').value = d.status || 'Active'; 
+        document.getElementById('startDate').value = safeDate(d.startDate); 
+        document.getElementById('resignDate').value = safeDate(d.resignDate); 
+        document.getElementById('birthDate').value = safeDate(d.birthDate); 
+        document.getElementById('ssoType').value = d.ssoType || ''; 
+        document.getElementById('ssoHosp').value = d.ssoHosp || ''; 
+        document.getElementById('idExp').value = safeDate(d.idExp); 
+        document.getElementById('licExp').value = safeDate(d.licExp); 
+        document.getElementById('idCardNum').value = d.idCardNum || ''; 
+        document.getElementById('licNum').value = d.licNum || ''; 
+        document.getElementById('licType').value = d.licType || ''; 
+        document.getElementById('resignReason').value = d.resignReason || ''; 
+        
+        var currentPos = (d.position || '').split(',').map(p => p.trim()); 
+        document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => { cb.checked = currentPos.includes(cb.value); }); 
+        window.toggleResignDate(); 
+        
+        if (isViewMode) { 
+            document.getElementById('view_fullname').innerText = d.name; 
+            document.getElementById('view_nickname_badge').innerText = d.nickname ? d.nickname : '-'; 
+            document.getElementById('view_empId').innerText = d.id; 
+            
+            var statusClass = d.status === 'Active' ? 'bg-success text-black' : (d.status === 'Resigned' ? 'bg-danger text-white' : 'bg-warning text-dark'); 
+            var statusEl = document.getElementById('view_status_badge'); 
+            statusEl.innerText = d.status; 
+            statusEl.className = 'badge rounded-pill fs-6 px-3 py-2 ' + statusClass; 
+            
+            document.getElementById('view_birthDate').innerText = window.formatDate(d.birthDate); 
+            document.getElementById('view_age').innerText = window.calcAge(d.birthDate); 
+            document.getElementById('view_gender').innerText = d.gender || '-'; 
+            document.getElementById('view_phone').innerText = d.phone || '-'; 
+            document.getElementById('view_username').innerText = d.username; 
+            document.getElementById('view_password').innerText = d.password; 
+            document.getElementById('view_role').innerText = d.role; 
+            document.getElementById('view_startDate').innerText = window.formatDate(d.startDate); 
+            document.getElementById('view_tenure').innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate); 
+            document.getElementById('view_ssoType').innerText = d.ssoType || '-'; 
+            document.getElementById('view_ssoHosp').innerText = d.ssoHosp || '-'; 
+            
+            if (d.status === 'Resigned') { 
+                document.getElementById('view_resign_section').style.display = 'block'; 
+                document.getElementById('view_resignDate').innerText = window.formatDate(d.resignDate); 
+                document.getElementById('view_resignReason').innerText = d.resignReason || '-'; 
+            } else { 
+                document.getElementById('view_resign_section').style.display = 'none'; 
+            } 
+            
+            document.getElementById('view_idCardNum').innerText = d.idCardNum || '-'; 
+            document.getElementById('view_idExp').innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : ''; 
+            document.getElementById('view_licType').innerText = d.licType || '-'; 
+            document.getElementById('view_licNum').innerText = d.licNum ? 'เลขที่: ' + d.licNum : ''; 
+            document.getElementById('view_licExp').innerText = d.licExp ? 'หมดอายุ: ' + window.formatDate(d.licExp) : ''; 
+            
+            var posContainer = document.getElementById('view_positions_badges'); 
+            posContainer.innerHTML = ''; 
+            if (currentPos.length > 0 && currentPos[0] !== "") { 
+                currentPos.forEach(p => { posContainer.innerHTML += `<span class="badge bg-dark text-light border border-secondary fw-normal py-2 px-3">${p}</span>`; }); 
+            } else { 
+                posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>'; 
+            } 
+        } 
+    };
+
+    window.getSelectedPositions = function() { 
+        var s = []; 
+        document.querySelectorAll('input[name="posCheckbox"]:checked').forEach(c => s.push(c.value)); 
+        return s.join(', '); 
+    };
+
+    window.submitEmpForm = async function(e) { 
+        e.preventDefault(); 
+        Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:() => Swal.showLoading()}); 
+        var form = { 
+            empId: document.getElementById('empId').value, 
+            role: document.getElementById('role').value, 
+            status: document.getElementById('empStatus').value, 
+            resignDate: document.getElementById('resignDate').value, 
+            birthDate: document.getElementById('birthDate').value, 
+            gender: document.getElementById('gender').value, 
+            username: document.getElementById('username').value, 
+            password: document.getElementById('password').value, 
+            prefix: document.getElementById('prefix').value, 
+            fullname: document.getElementById('fullname').value, 
+            nickname: document.getElementById('nickname').value, 
+            ssoType: document.getElementById('ssoType').value, 
+            ssoHosp: document.getElementById('ssoHosp').value, 
+            idExp: document.getElementById('idExp').value, 
+            licExp: document.getElementById('licExp').value, 
+            idCardNum: document.getElementById('idCardNum').value, 
+            licNum: document.getElementById('licNum').value, 
+            licType: document.getElementById('licType').value, 
+            resignReason: document.getElementById('resignReason').value, 
+            position: window.getSelectedPositions(), 
+            startDate: document.getElementById('startDate').value, 
+            phone: document.getElementById('phone').value, 
+            currentUserRole: currentUser.role, 
+            filePhoto: await window.getBase64User(document.getElementById('filePhoto').files[0]), 
+            fileIdCard: await window.getBase64User(document.getElementById('fileIdCard').files[0]), 
+            filePassport: await window.getBase64User(document.getElementById('filePassport').files[0]), 
+            fileHouse: await window.getBase64User(document.getElementById('fileHouse').files[0]), 
+            fileDrive: await window.getBase64User(document.getElementById('fileDrive').files[0]), 
+            fileEdu: await window.getBase64User(document.getElementById('fileEdu').files[0]), 
+            fileCriminal: await window.getBase64User(document.getElementById('fileCriminal').files[0]), 
+            fileHealth: await window.getBase64User(document.getElementById('fileHealth').files[0]), 
+            fileWarn: null, 
+            fileOther1: await window.getBase64User(document.getElementById('fileOther1').files[0]), 
+            fileOther2: await window.getBase64User(document.getElementById('fileOther2').files[0]) 
+        }; 
+        try { 
+            const res = await window.callAPI({ action: 'handleEmployeeSave', form: form, mode: document.getElementById('formMode').value }); 
+            if (res.success) { 
+                Swal.fire('สำเร็จ', res.message, 'success'); 
+                modalObj.hide(); 
+                if (currentUser.role === 'Admin') window.loadAdminData(); 
+                else window.loadUserData(); 
+            } else { 
+                Swal.fire('เกิดข้อผิดพลาด', res.message, 'error'); 
+            } 
+        } catch(err) {} 
+    };
+
+    window.genId = function() { 
+        document.getElementById('empId').value='...'; 
+        try { 
+            window.callAPI({ action: 'getNextEmployeeId' }).then(res => { 
+                document.getElementById('empId').value = res.empId; 
+            }); 
+        } catch(e) {} 
+    };
+
+    window.getBase64User = function(file) { 
+        return new Promise(function(resolve) { 
+            if (!file) { resolve(null); return; } 
+            var reader = new FileReader(); 
+            reader.onload = function() { resolve({base64: reader.result.split(',')[1], type: file.type}); }; 
+            reader.readAsDataURL(file); 
+        }); 
+    };
+
+    window.calcAge = function(d) { 
+        if (!d) return "-"; 
+        var today = new Date(); 
+        var birthDate = new Date(d); 
+        if (isNaN(birthDate)) return "-"; 
+        var age = today.getFullYear() - birthDate.getFullYear(); 
+        var m = today.getMonth() - birthDate.getMonth(); 
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } 
+        return age + " ปี"; 
+    };
+
+    window.formatDate = function(d) { 
+        if (!d) return '-'; 
+        try { 
+            var date = new Date(d); 
+            if (isNaN(date.getTime())) return '-'; 
+            return date.toLocaleDateString('th-TH-u-ca-gregory', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
+        } catch(e) { return '-'; } 
+    };
+
+    window.calcTenure = function(dateString) { 
+        if (!dateString) return '-'; 
+        var start = new Date(dateString); 
+        var now = new Date(); 
+        start.setHours(0,0,0,0); 
+        now.setHours(0,0,0,0); 
+        
+        if (isNaN(start.getTime())) return "-"; 
+        if (start.getTime() > now.getTime()) { 
+            return '<span class="badge bg-warning text-dark border border-warning shadow-sm" style="font-weight:600;">รอเริ่มงาน</span>'; 
+        } 
+        
+        var years = now.getFullYear() - start.getFullYear(); 
+        var months = now.getMonth() - start.getMonth(); 
+        var days = now.getDate() - start.getDate(); 
+        
+        if (days < 0) { 
+            months--; 
+            var prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); 
+            days += prevMonth.getDate(); 
+        } 
+        if (months < 0) { 
+            years--; 
+            months += 12; 
+        } 
+        
+        var result = []; 
+        if (years > 0) result.push(years + " ปี"); 
+        if (months > 0) result.push(months + " เดือน"); 
+        if (days > 0) result.push(days + " วัน"); 
+        
+        if (result.length === 0) return "เริ่มงานวันนี้"; 
+        return result.join(" "); 
     };
   </script>
 </div>
