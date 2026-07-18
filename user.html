@@ -855,7 +855,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center gap-3 w-100">
-                    <button type="button" class="btn btn-outline-danger rounded-pill px-4 fw-bold w-50" onclick="window.logout()">
+                    <button type="button" class="btn btn-outline-danger rounded-pill px-4 fw-bold w-50" onclick="window.declineRules()">
                         <i class="bi bi-x-circle me-1"></i> ไม่ยอมรับ (ออกจากระบบ)
                     </button>
                     <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold w-50" id="btnAcceptRules" disabled onclick="window.acceptCompanyRules()">
@@ -977,6 +977,32 @@
             title: 'ขอบคุณที่รับทราบข้อตกลงครับ', showConfirmButton: false, timer: 2000, 
             background: '#1e1e1e', color: '#fff'
         });
+    };
+
+    // เมื่อกดไม่ยอมรับกฎระเบียบ
+    window.declineRules = function() {
+        // 1. ซ่อน Modal T&C
+        var rulesModalEl = document.getElementById('rulesModal');
+        var modal = bootstrap.Modal.getInstance(rulesModalEl);
+        if (modal) { modal.hide(); }
+
+        // 2. เคลียร์พื้นหลังสีดำของ Modal ออกให้หมด
+        var backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(b => b.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+
+        // 3. หน่วงเวลา 0.3 วินาทีให้ Modal ปิดสนิท แล้วค่อยสั่ง Logout
+        setTimeout(function() {
+            if (typeof window.logout === 'function') {
+                window.logout();
+            } else {
+                // เผื่อหาฟังก์ชัน logout ไม่เจอ ให้ล้าง Session และรีเฟรชหน้าต่างใหม่เลย
+                localStorage.removeItem('hr_user_session');
+                location.reload();
+            }
+        }, 300);
     };
 
     window.renderUserProfile = function(d) {
