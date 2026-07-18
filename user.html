@@ -102,7 +102,7 @@
         
         .logistics-modal .modal-body { text-align: left !important; }
 
-        /* Style ซ่อนลูกศรขึ้นลงใน input number */
+        /* ซ่อนลูกศรขึ้นลงใน input type number ของช่องคะแนน */
         .eval-score-input::-webkit-outer-spin-button,
         .eval-score-input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -122,12 +122,14 @@
                 ยินดีต้อนรับ, <span id="userNameHeader" class="fw-bold text-warning">...</span>
             </div>
         </div>
-        <div class="d-flex align-items-center gap-2">
+        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+            <!-- ปุ่มประเมินจะมาโผล่ตรงนี้ถ้ามีสิทธิ์ -->
             <div id="evalTopMenuContainer" style="display: none;">
                 <button onclick="window.openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
                     <i class="bi bi-star-fill me-1"></i> ประเมินคนขับ <span id="evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>
                 </button>
             </div>
+            
             <button class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-bold shadow-sm" onclick="window.logout()">
                 <i class="bi bi-power me-1"></i> ออกจากระบบ
             </button>
@@ -447,7 +449,6 @@
             </div>
             <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
                 <form id="userRepairForm" onsubmit="window.submitUserRepair(event)">
-                    
                     <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
                         <div class="row g-3">
                             <div class="col-md-6">
@@ -920,6 +921,10 @@
                             <option value="all">ทั้งหมด</option>
                         </select>
                     </div>
+                    <!-- ปุ่มสำหรับติ๊ก N/A แบบรวดเดียวเฉพาะคนที่แสดงอยู่ -->
+                    <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3" onclick="window.setAllVisibleToNA()">
+                        <i class="bi bi-check2-all"></i> เซ็ต 'ไม่ได้ประสานงาน' (เฉพาะที่แสดง)
+                    </button>
                 </div>
                 <div id="evalDriverList" class="d-flex flex-column gap-2">
                     <div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังโหลดรายชื่อ...</div>
@@ -1031,6 +1036,7 @@
                 evaluatorId: window.currentUserData.id 
             }
         }).then(function(res) {
+            window.evaluatedDriverIds = res.evaluatedDriverIds || [];
             var badge = document.getElementById('evalStatusBadge');
             if (res.evaluated) {
                 badge.className = "badge bg-success ms-1";
@@ -1221,38 +1227,50 @@
                 filterSelect.innerHTML += `<option value="${p}">${p}</option>`;
             });
 
-            // สร้าง HTML ครั้งเดียว แล้วเก็บไว้
-            var html = '';
-            window.globalEvalDrivers.forEach(function(drv, index) {
-                html += `
-                <div class="eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
-                    <div class="row align-items-center g-2">
-                        <div class="col-md-5">
-                            <div class="fw-bold text-light">${index+1}. ${drv.name} <span class="text-muted small">(${drv.id})</span></div>
-                            <div class="text-secondary" style="font-size: 0.7rem;">${drv.position}</div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-dark text-warning border-warning">คะแนน (0-10)</span>
-                                <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" 
-                                    data-id="${drv.id}" data-name="${drv.name}" placeholder="0-10"
-                                    oninput="if(this.value > 10) this.value = 10; else if(this.value < 0 && this.value !== '') this.value = 0;">
+            // รอโหลดสถานะเพื่อให้รู้ว่าใครเคยโดนประเมินไปแล้วในเดือนนี้
+            window.callAPI({ 
+                action: 'checkEvaluationStatus', 
+                payload: { monthYear: (y + "-" + m), evaluatorId: window.currentUserData.id }
+            }).then(function(res) {
+                window.evaluatedDriverIds = res.evaluatedDriverIds || [];
+                
+                var html = '';
+                window.globalEvalDrivers.forEach(function(drv, index) {
+                    var isEvaluated = window.evaluatedDriverIds.includes(drv.id);
+                    var lockHtml = isEvaluated ? 'disabled' : '';
+                    var lockScore = isEvaluated ? 'value="" disabled placeholder="ประเมินแล้ว"' : 'placeholder="0-10"';
+                    var statusBadge = isEvaluated ? '<span class="badge bg-success ms-2 px-2 py-1">ประเมินแล้ว</span>' : '';
+
+                    html += `
+                    <div class="eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
+                        <div class="row align-items-center g-2">
+                            <div class="col-md-5">
+                                <div class="fw-bold text-light">${index+1}. ${drv.name} <span class="text-muted small">(${drv.id})</span> ${statusBadge}</div>
+                                <div class="text-secondary" style="font-size: 0.7rem;">${drv.position}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-dark text-warning border-warning">คะแนน</span>
+                                    <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" 
+                                        data-id="${drv.id}" data-name="${drv.name}" ${lockScore}
+                                        oninput="if(this.value > 10) this.value = 10; else if(this.value < 0 && this.value !== '') this.value = 0;">
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
+                                <div class="form-check form-switch d-inline-block mb-0">
+                                    <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="na_${drv.id}" onchange="window.toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;" ${lockHtml}>
+                                    <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="na_${drv.id}">ไม่ได้ประสานงาน</label>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2 eval-comment-container">
+                                <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary eval-comment-input shadow-none" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)..." ${lockHtml}>
                             </div>
                         </div>
-                        <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
-                            <div class="form-check form-switch d-inline-block mb-0">
-                                <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="na_${drv.id}" onchange="window.toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;">
-                                <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="na_${drv.id}">ไม่ได้ประสานงาน</label>
-                            </div>
-                        </div>
-                        <div class="col-12 mt-2 eval-comment-container">
-                            <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary eval-comment-input shadow-none" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)...">
-                        </div>
-                    </div>
-                </div>`;
+                    </div>`;
+                });
+                document.getElementById('evalDriverList').innerHTML = html;
+                window.filterEvalDrivers(); 
             });
-            document.getElementById('evalDriverList').innerHTML = html;
-            window.filterEvalDrivers(); // กรองให้แสดงตาม Dropdown
         });
     };
 
@@ -1268,6 +1286,36 @@
                 row.style.display = 'none';
             }
         });
+    };
+
+    window.setAllVisibleToNA = function() {
+        var rows = document.querySelectorAll('.eval-driver-row');
+        var count = 0;
+        rows.forEach(function(row) {
+            if (row.style.display !== 'none') {
+                var naCheck = row.querySelector('.eval-na-check');
+                var scoreInput = row.querySelector('.eval-score-input');
+                // เฉพาะคนที่ยังไม่ได้ถูกประเมิน (ไม่ติด disabled) และคะแนนยังว่าง
+                if (!naCheck.disabled && !naCheck.checked && scoreInput.value === "") {
+                    naCheck.checked = true;
+                    window.toggleEvalNA(naCheck, scoreInput.getAttribute('data-id'));
+                    count++;
+                }
+            }
+        });
+        if(count > 0) {
+            Swal.fire({
+                toast: true, position: 'top-end', icon: 'success', 
+                title: 'ตั้งค่า "ไม่ได้ประสานงาน" ' + count + ' รายการ', 
+                showConfirmButton: false, timer: 1500, background: '#1e1e1e', color: '#fff'
+            });
+        } else {
+            Swal.fire({
+                toast: true, position: 'top-end', icon: 'info', 
+                title: 'ไม่มีรายการที่สามารถตั้งค่าได้', 
+                showConfirmButton: false, timer: 1500, background: '#1e1e1e', color: '#fff'
+            });
+        }
     };
 
     window.toggleEvalNA = function(cb, id) {
@@ -1301,10 +1349,14 @@
 
         var rows = document.querySelectorAll('.eval-driver-row');
         var evals = [];
-        var emptyCount = 0;
+        var allValid = true;
 
         rows.forEach(function(row) {
             var scoreInput = row.querySelector('.eval-score-input');
+            
+            // ข้ามคนที่ประเมินไปแล้ว (ถูกล็อก placeholder ไว้ว่าประเมินแล้ว)
+            if(scoreInput.placeholder === "ประเมินแล้ว") return;
+
             var id = scoreInput.getAttribute('data-id');
             var name = scoreInput.getAttribute('data-name');
             var naCheck = row.querySelector('.eval-na-check');
@@ -1313,50 +1365,45 @@
             if (naCheck.checked) {
                 evals.push({ driverId: id, driverName: name, score: '-', status: 'ไม่ได้ประสานงาน', comment: comment });
             } else if (scoreInput.value !== "") {
-                evals.push({ driverId: id, driverName: name, score: parseInt(scoreInput.value), status: 'ประเมินแล้ว', comment: comment });
-            } else {
-                emptyCount++;
-                evals.push({ driverId: id, driverName: name, score: '-', status: 'ไม่ได้ประสานงาน', comment: comment });
+                var score = parseInt(scoreInput.value);
+                if (isNaN(score) || score < 0 || score > 10) {
+                    allValid = false;
+                } else {
+                    evals.push({ driverId: id, driverName: name, score: score, status: 'ประเมินแล้ว', comment: comment });
+                }
             }
+            // ถ้าว่างเปล่าทั้งหมด (ไม่กรอก ไม่ติ๊ก) = ข้ามไป ไม่เอาไปบันทึก
         });
 
-        var doSave = function() {
-            Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()});
-            window.callAPI({
-                action: 'submitEvaluations',
-                payload: {
-                    monthYear: monthYear,
-                    evaluatorId: window.currentUserData.id,
-                    evaluatorName: window.currentUserData.name,
-                    evaluations: evals
-                }
-            }).then(function(res) {
-                if(res.success) {
-                    Swal.fire('สำเร็จ', res.message, 'success');
-                    bootstrap.Modal.getInstance(document.getElementById('evaluationModal')).hide();
-                    window.checkCurrentMonthEvalStatus(); 
-                } else {
-                    Swal.fire('ผิดพลาด', res.message, 'error');
-                }
-            });
-        };
-
-        if (emptyCount > 0) {
-            Swal.fire({
-                title: 'มีพนักงาน ' + emptyCount + ' คนที่ไม่ได้ระบุคะแนน',
-                text: "ระบบจะกำหนดให้เป็น 'ไม่ได้ประสานงาน' โดยอัตโนมัติ ยืนยันการบันทึกหรือไม่?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#198754',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'ยืนยันบันทึก',
-                cancelButtonText: 'กลับไปแก้ไข'
-            }).then((result) => {
-                if(result.isConfirmed) { doSave(); }
-            });
-        } else {
-            doSave();
+        if (evals.length === 0) {
+            Swal.fire({icon:'warning', title:'แจ้งเตือน', text:'ไม่มีข้อมูลใหม่ให้บันทึก (กรุณากรอกคะแนนหรือติ๊ก "ไม่ได้ประสานงาน")'});
+            return;
         }
+
+        if (!allValid) {
+            Swal.fire({icon:'error', title:'ข้อมูลไม่ถูกต้อง', text:'กรุณากรอกคะแนนให้อยู่ในช่วง 0-10'});
+            return;
+        }
+
+        Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()});
+        
+        window.callAPI({
+            action: 'submitEvaluations',
+            payload: {
+                monthYear: monthYear,
+                evaluatorId: window.currentUserData.id,
+                evaluatorName: window.currentUserData.name,
+                evaluations: evals
+            }
+        }).then(function(res) {
+            if(res.success) {
+                Swal.fire('สำเร็จ', res.message, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('evaluationModal')).hide();
+                window.checkCurrentMonthEvalStatus(); 
+            } else {
+                Swal.fire('ผิดพลาด', res.message, 'error');
+            }
+        });
     };
 
     window.renderUserEvalsList = function() {
