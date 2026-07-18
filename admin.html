@@ -72,6 +72,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             cursor: pointer; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;
             padding: 12px 15px;
+            white-space: nowrap;
         }
 
         .table-custom td {
@@ -122,7 +123,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 stagger-1">
         <div class="d-flex align-items-center gap-3 mb-2 mb-md-0">
             <h5 class="fw-bold text-white mb-0 d-flex align-items-center">
-                <div class="bg-warning text-black rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px; height:28px; font-size:1rem;"><i class="bi bi-shield-check"></i></div>
+                <div class="bg-success text-black rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px; height:28px; font-size:1rem;"><i class="bi bi-shield-check"></i></div>
                 Admin Console
             </h5>
             
@@ -136,7 +137,7 @@
         
         <div class="d-flex gap-2">
             <button class="btn btn-sm btn-dark border-secondary text-light rounded-pill px-3 admin-only hover-scale" onclick="if(typeof window.openRecruitModal === 'function') window.openRecruitModal();" style="display:none;"><i class="bi bi-file-earmark-person me-1"></i>ใบสมัคร</button>
-            <button class="btn btn-sm btn-warning rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="window.openModal('create')" style="display:none;"><i class="bi bi-person-plus-fill me-1"></i>เพิ่มพนักงานใหม่</button>
+            <button class="btn btn-sm btn-success rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="window.openModal('create')" style="display:none;"><i class="bi bi-person-plus-fill me-1"></i>เพิ่มพนักงานใหม่</button>
             <button class="btn btn-sm btn-outline-danger rounded-pill px-2 hover-scale" onclick="window.logout()" title="ออกจากระบบ"><i class="bi bi-power"></i></button>
         </div>
     </div>
@@ -169,7 +170,7 @@
             <div class="col-md-4">
                 <div class="stat-card clickable h-100 d-flex justify-content-between align-items-center" onclick="window.openBirthdayModal()">
                     <div>
-                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">วันเกิดเดือนนี้ <i class="bi bi-search text-warning ms-1" style="font-size:0.6rem;"></i></div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">วันเกิดเดือนนี้ <i class="bi bi-search text-success ms-1" style="font-size:0.6rem;"></i></div>
                         <h3 class="fw-bold text-white mb-0" id="statBirth">0</h3>
                     </div>
                     <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-cake2-fill"></i></div>
@@ -208,6 +209,7 @@
                             <th onclick="window.sortData('position')">ตำแหน่ง <i class="bi bi-arrow-down-up small ms-1 opacity-25"></i></th>
                             <th class="text-center" onclick="window.sortData('startDate')">อายุงาน <i class="bi bi-arrow-down-up small ms-1 opacity-25"></i></th>
                             <th class="text-center" onclick="window.sortData('status')">สถานะ <i class="bi bi-arrow-down-up small ms-1 opacity-25"></i></th>
+                            <th class="text-center">รับกฎระเบียบ</th>
                             <th class="text-center">อุบัติเหตุ</th>
                             <th class="text-center">ใบเตือน</th>
                             <th class="text-center">เอกสาร</th>
@@ -215,7 +217,7 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <tr><td colspan="9" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
+                        <tr><td colspan="10" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -484,7 +486,7 @@
                                                             <small class="text-muted">Role</small>
                                                             <span class="fw-bold text-success" id="view_role">-</span>
                                                         </div>
-                                                        <!-- จุดที่เพิ่มสถานะการยอมรับกฎระเบียบ -->
+                                                        <!-- จุดที่เพิ่มสถานะการยอมรับกฎระเบียบในโปรไฟล์ -->
                                                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2 border-top border-secondary border-opacity-25">
                                                             <small class="text-muted">การยอมรับกฎระเบียบ</small>
                                                             <span id="view_rule_status">-</span>
@@ -1042,7 +1044,7 @@
         </div>
     </div>
 
-    <!-- โค้ด Modal ย่อย ซ่อนไว้เพื่อความกระชับ -->
+    <!-- โค้ด Modal ย่อย (Birthday, Position, Yearly, Accident, Warning) ซ่อนไว้เพราะยาวเกินไป -->
     <div class="modal fade" id="payrollHistoryModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content logistics-modal border-warning border-opacity-50"><div class="modal-header py-3 logistics-modal-header text-start"><h5 class="modal-title text-warning fw-bold"><i class="bi bi-clock-history me-2"></i>ประวัติสลิปเงินเดือน</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-0 text-start"><div class="table-responsive"><table class="table table-dark table-striped table-hover mb-0 align-middle"><thead><tr><th class="ps-4">เดือนที่จ่าย</th><th class="text-end">รวมรับ</th><th class="text-end">รวมหัก</th><th class="text-end text-warning">สุทธิ</th><th class="text-center">PDF</th><th class="text-center pe-4">จัดการ</th></tr></thead><tbody id="payrollHistoryBody"></tbody></table></div></div></div></div></div>
     <div class="modal fade" id="birthdayModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border border-secondary" style="background: #1a1a1a;"><div class="modal-header border-bottom border-secondary border-opacity-25 py-2 text-start"><h5 class="modal-title text-warning fs-6 fw-bold"><i class="bi bi-cake2 me-2"></i>พนักงานที่เกิดเดือนนี้</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3 text-start" id="birthdayListBody" style="max-height: 400px; overflow-y: auto;"></div></div></div></div>
     <div class="modal fade" id="positionStatsModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-xl"><div class="modal-content border border-secondary" style="background: #1a1a1a;"><div class="modal-header border-bottom border-secondary border-opacity-25 py-2 text-start"><h5 class="modal-title text-success fs-6 fw-bold"><i class="bi bi-pie-chart me-2"></i>สรุปตำแหน่ง</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-3 text-start" id="positionStatsList"></div></div></div></div>
@@ -1065,6 +1067,7 @@
               var c = document.getElementById('positionCheckboxList'); 
               if(c) {
                  c.innerHTML=''; 
+                 // ปรับ Checkbox ให้ตัวอักษรสีขาวสว่าง มองเห็นได้ชัดเจน
                  allPositionsList.forEach(p => { 
                      c.innerHTML += `<div class="form-check border-bottom border-secondary border-opacity-25 py-2 ps-4">
                         <input class="form-check-input bg-dark border-secondary shadow-none cursor-pointer" type="checkbox" name="posCheckbox" value="${p}" id="cb_${p}">
@@ -1147,7 +1150,7 @@
         };
 
         window.loadAdminData = function() {
-            document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
+            document.getElementById('tableBody').innerHTML = '<tr><td colspan="10" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
             document.getElementById('adminAccidentTableBody').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลอุบัติเหตุ...</td></tr>';
             document.getElementById('adminWarnTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูลใบเตือน...</td></tr>';
             document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
@@ -1217,7 +1220,7 @@
             var list = (limit === 'all') ? data : data.slice(0, parseInt(limit));
             
             if (list.length === 0) { 
-                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>'; 
+                tbody.innerHTML = '<tr><td colspan="10" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>'; 
                 document.getElementById('tableFooter').innerText = 'Total: 0'; 
                 return; 
             }
@@ -1264,6 +1267,11 @@
                     }
                 }
                 
+                // จุดที่เพิ่มสัญลักษณ์การยอมรับกฎลงในตารางหลัก
+                var ruleBadge = emp.rulesAccepted 
+                    ? '<span class="text-success" title="ยอมรับแล้ว"><i class="bi bi-check-circle-fill fs-5"></i></span>' 
+                    : '<span class="text-danger" title="ยังไม่ยอมรับ"><i class="bi bi-x-circle-fill fs-5"></i></span>';
+
                 var tr = document.createElement('tr');
                 tr.onclick = function(e) { 
                     if (!e.target.closest('button') && !e.target.closest('a') && !e.target.closest('select')) { 
@@ -1275,6 +1283,7 @@
                                '<td><span class="badge bg-dark border border-secondary fw-normal text-secondary px-2">' + (emp.position || '-') + '</span></td>' +
                                '<td class="text-center small text-secondary">' + window.calcTenure(emp.startDate) + '</td>' +
                                '<td class="text-center"><span class="badge rounded-pill ' + badgeClass + ' px-3 shadow-sm">' + emp.status + '</span></td>' +
+                               '<td class="text-center">' + ruleBadge + '</td>' +
                                '<td class="text-center">' + accBadge + '</td>' +
                                '<td class="text-center">' + warnBadge + '</td>' +
                                '<td class="text-center">' + docIcon + '</td>' +
@@ -2253,6 +2262,69 @@
                 cb.checked = currentPos.includes(cb.value); 
             }); 
             window.toggleResignDate(); 
+            
+            if (isViewMode) { 
+                document.getElementById('view_fullname').innerText = d.name; 
+                document.getElementById('view_nickname_badge').innerText = d.nickname ? d.nickname : '-'; 
+                document.getElementById('view_empId').innerText = d.id; 
+                var statusClass = d.status === 'Active' ? 'bg-success text-black' : (d.status === 'Resigned' ? 'bg-danger text-white' : 'bg-warning text-dark'); 
+                var statusEl = document.getElementById('view_status_badge'); 
+                statusEl.innerText = d.status; 
+                statusEl.className = 'badge rounded-pill fs-6 px-3 py-2 ' + statusClass; 
+                
+                document.getElementById('view_birthDate').innerText = window.formatDate(d.birthDate); 
+                document.getElementById('view_age').innerText = window.calcAge(d.birthDate); 
+                document.getElementById('view_gender').innerText = d.gender || '-'; 
+                document.getElementById('view_phone').innerText = d.phone || '-'; 
+                document.getElementById('view_username').innerText = d.username; 
+                document.getElementById('view_password').innerText = d.password; 
+                document.getElementById('view_role').innerText = d.role; 
+                document.getElementById('view_startDate').innerText = window.formatDate(d.startDate); 
+                document.getElementById('view_tenure').innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate); 
+                document.getElementById('view_ssoType').innerText = d.ssoType || '-'; 
+                document.getElementById('view_ssoHosp').innerText = d.ssoHosp || '-'; 
+                
+                // จุดที่เพิ่มสัญลักษณ์การยอมรับกฎลงในโปรไฟล์
+                var ruleStatusHtml = d.rulesAccepted ? '<span class="badge bg-success text-dark"><i class="bi bi-check-circle-fill me-1"></i>ยอมรับแล้ว</span>' : '<span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i>ยังไม่ยอมรับ</span>';
+                
+                // สร้าง div สำหรับใส่ rule status ในช่องข้อมูลส่วนตัว
+                var ruleDiv = document.getElementById('view_rule_status');
+                if (!ruleDiv) {
+                    var personalInfoContainer = document.querySelector('#view_ssoHosp').closest('.p-3').parentNode.querySelector('.mt-4.pt-3');
+                    if(personalInfoContainer) {
+                         var newRuleDiv = document.createElement('div');
+                         newRuleDiv.className = 'd-flex justify-content-between align-items-center pt-2 mt-2 border-top border-secondary border-opacity-25';
+                         newRuleDiv.innerHTML = '<small class="text-muted">การยอมรับกฎระเบียบ</small><span id="view_rule_status">' + ruleStatusHtml + '</span>';
+                         personalInfoContainer.appendChild(newRuleDiv);
+                    }
+                } else {
+                    ruleDiv.innerHTML = ruleStatusHtml;
+                }
+
+                if(d.status === 'Resigned') { 
+                    document.getElementById('view_resign_section').style.display = 'block'; 
+                    document.getElementById('view_resignDate').innerText = window.formatDate(d.resignDate); 
+                    document.getElementById('view_resignReason').innerText = d.resignReason || '-'; 
+                } else { 
+                    document.getElementById('view_resign_section').style.display = 'none'; 
+                } 
+                
+                document.getElementById('view_idCardNum').innerText = d.idCardNum || '-'; 
+                document.getElementById('view_idExp').innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : ''; 
+                document.getElementById('view_licType').innerText = d.licType || '-'; 
+                document.getElementById('view_licNum').innerText = d.licNum ? 'เลขที่: ' + d.licNum : ''; 
+                document.getElementById('view_licExp').innerText = d.licExp ? 'หมดอายุ: ' + window.formatDate(d.licExp) : ''; 
+                
+                var posContainer = document.getElementById('view_positions_badges'); 
+                posContainer.innerHTML = ''; 
+                if(currentPos.length > 0 && currentPos[0] !== "") { 
+                    currentPos.forEach(p => { 
+                        posContainer.innerHTML += `<span class="badge bg-dark text-light border border-secondary fw-normal py-2 px-3">${p}</span>`; 
+                    }); 
+                } else { 
+                    posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>'; 
+                } 
+            } 
         };
 
         window.getSelectedPositions = function() { 
@@ -2385,32 +2457,6 @@
             if (days > 0) result.push(days + " วัน"); 
             if (result.length === 0) return "เริ่มงานวันนี้"; 
             return result.join(" "); 
-        };
-        
-        // เมื่อกดไม่ยอมรับกฎระเบียบ
-        window.declineRules = function() {
-            // 1. ซ่อน Modal T&C
-            var rulesModalEl = document.getElementById('rulesModal');
-            var modal = bootstrap.Modal.getInstance(rulesModalEl);
-            if (modal) { modal.hide(); }
-
-            // 2. เคลียร์พื้นหลังสีดำของ Modal ออกให้หมด
-            var backdrops = document.querySelectorAll('.modal-backdrop');
-            backdrops.forEach(b => b.remove());
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-
-            // 3. หน่วงเวลา 0.3 วินาทีให้ Modal ปิดสนิท แล้วค่อยสั่ง Logout
-            setTimeout(function() {
-                if (typeof window.logout === 'function') {
-                    window.logout();
-                } else {
-         
-                    localStorage.removeItem('hr_user_session');
-                    location.reload();
-                }
-            }, 300);
         };
     </script>
 </div>
