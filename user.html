@@ -102,7 +102,6 @@
         
         .logistics-modal .modal-body { text-align: left !important; }
 
-        /* ซ่อนลูกศรขึ้นลงใน input type number ของช่องคะแนน */
         .eval-score-input::-webkit-outer-spin-button,
         .eval-score-input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -123,10 +122,10 @@
             </div>
         </div>
         <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
-            <!-- ปุ่มประเมินจะมาโผล่ตรงนี้ถ้ามีสิทธิ์ -->
+            <!-- ปุ่มประเมิน -->
             <div id="evalTopMenuContainer" style="display: none;">
-                <button onclick="window.openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
-                    <i class="bi bi-star-fill me-1"></i> ประเมินคนขับ <span id="evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>
+                <button id="btnOpenEvalModal" onclick="window.openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
+                    <i class="bi bi-star-fill me-1"></i> ประเมินการทำงาน <span id="evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>
                 </button>
             </div>
             
@@ -142,14 +141,12 @@
     </div>
 
     <div id="userProfileContent" class="row g-4" style="display:none; animation: fadeIn 0.5s ease-out;">
-        <!-- Left Sidebar: Profile & Quick Actions -->
         <div class="col-lg-4">
             <div id="stickyProfileWrapper" style="position: sticky; top: 20px;">
                 <div id="userProfileCard"></div>
             </div>
         </div>
         
-        <!-- Right Content: Tabs -->
         <div class="col-lg-8">
             <div class="main-content-card p-3 p-md-4 shadow-lg">
                 <ul class="nav nav-pills nav-fill custom-nav-pills mb-4 gap-2" id="userTabs" role="tablist">
@@ -177,7 +174,6 @@
                             <span class="badge bg-info text-dark ms-1 rounded-pill" id="accCountBadge">0</span>
                         </button>
                     </li>
-                    <!-- แท็บผลประเมิน (ให้พนักงานดู) -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link py-2 text-success" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
                             <i class="bi bi-star-fill me-1"></i> ผลประเมิน
@@ -229,7 +225,6 @@
                         </div>
                     </div>
 
-                    <!-- พื้นที่แสดงผลประเมิน -->
                     <div class="tab-pane fade" id="tab-content-evals" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
                             <h6 class="fw-bold text-success mb-0"><i class="bi bi-star-half me-2"></i>ผลการประเมินการทำงานประจำเดือน</h6>
@@ -803,136 +798,25 @@
     </div>
 </div>
 
-<!-- Modal กฎระเบียบ (สร้างเองแบบไม่พึ่ง Bootstrap เพื่อแก้ปัญหาจอดำ) -->
-<div id="rulesOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999;">
-    <div class="d-flex justify-content-center align-items-center w-100 h-100 p-2 p-md-4">
-        <div class="d-flex flex-column rounded-4 w-100" style="background: #111; border: 1px solid #ffc107; box-shadow: 0 0 30px rgba(255, 193, 7, 0.2); max-width: 800px; max-height: 95vh;">
-            
-            <!-- ส่วนหัว (Header) ยึดติดด้านบน -->
-            <div class="px-4 py-3 border-bottom border-warning flex-shrink-0">
-                <h5 class="fw-bold text-warning m-0 fs-5"><i class="bi bi-file-earmark-text-fill me-2"></i>กฎระเบียบและข้อบังคับห้างฯ</h5>
-            </div>
-            
-            <!-- ส่วนเนื้อหา (Body) เลื่อนได้ -->
-            <div class="px-4 py-3 text-light overflow-auto" style="font-size: 0.95rem; line-height: 1.6; flex-grow: 1;">
-                <div class="alert alert-warning border-warning bg-warning bg-opacity-10 text-warning mb-4">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>กรุณาอ่านและทำความเข้าใจ</strong> เพื่อสิทธิประโยชน์และการปฏิบัติงานที่ถูกต้องของตัวท่านเอง
-                </div>
-
-                <h6 class="text-success fw-bold">1. การเข้างาน</h6>
-                <ul class="list-unstyled ps-3 mb-4">
-                    <li class="mb-2"><b>1.1</b> พนักงานประจำสำนักงานใหญ่ ให้เข้างาน จันทร์-ศุกร์, เสาร์เว้นเสาร์ เวลา 09.00-18.00 น.</li>
-                    <li class="mb-2"><b>1.2</b> พนักงานประจำขนส่ง เวลาทำงานให้อ้างอิงจากขนส่งของหน่วยงานนั้นๆ หากมีการทำงานล่วงเวลา ให้พนักงานแจ้งต่อผู้บริหารเพื่อพิจารณาอนุมัติล่วงหน้าอย่างน้อย 1 วัน</li>
-                    <li class="mb-2"><b>1.3</b> ทางห้างฯ เป็นผู้กำหนดหยุดประจำสัปดาห์และประจำปี (สัปดาห์ละ 1-2 วัน / ประจำปีไม่น้อยกว่า 13 วันต่อปี)</li>
-                    <li class="mb-2"><b>1.4</b> รอบการจ่ายเงินเดือน ตัดรอบทุกสิ้นเดือน จ่ายเงินทุกวันที่ 10 ของเดือนถัดไป</li>
-                    <li class="mb-2"><b>1.5</b> เงินเบิกล่วงหน้า ไม่เกิน 3,000 บาท/สัปดาห์ (รวมทั้งเดือนไม่เกินเงินเดือน) แจ้งวันจันทร์จ่ายวันพุธ</li>
-                    <li class="mb-2"><b>1.6-1.7</b> การมาสาย ขาดงาน หรือออกก่อนเวลา ต้องได้รับการรับรองจากผู้บริหาร หากไม่มีถือเป็นการขาดงานโดยไม่แจ้งล่วงหน้า (มีผลต่อการประเมิน)</li>
-                </ul>
-
-                <h6 class="text-success fw-bold">2. การทำงานล่วงเวลาและการเปลี่ยนแปลงวันหยุด</h6>
-                <ul class="list-unstyled ps-3 mb-4">
-                    <li class="mb-2"><b>2.1-2.6</b> การทำโอทีต้องได้รับอนุมัติล่วงหน้า 1 วัน (ทำได้ไม่เกิน 4 ชม./วัน ในวันปกติ และเหมาไม่เกิน 8 ชม./วัน ในวันหยุด)</li>
-                    <li class="mb-2"><b>2.7</b> หากติดภารกิจทำโอทีไม่ได้ ต้องแจ้งล่วงหน้า 3 วัน หาคนทำแทน มิฉะนั้นอาจได้รับใบเตือน</li>
-                    <li class="mb-2"><b>2.8-2.9</b> เปลี่ยนแปลงวันหยุดต้องแจ้งล่วงหน้า 3 วันทำการ</li>
-                </ul>
-
-                <h6 class="text-success fw-bold">3. การลางานและการขาดงาน</h6>
-                <ul class="list-unstyled ps-3 mb-4">
-                    <li class="mb-1"><b>3.1 ลาป่วย (SL):</b> ลาได้ตามจริงไม่เกิน 30 วัน (ต้องมีใบรับรองแพทย์)</li>
-                    <li class="mb-1"><b>3.2 ลากิจแบบจ่ายเงิน (BL1):</b> ลาได้ 3 วัน (เฉพาะกิจธุระเครือญาติสายตรง) แจ้งล่วงหน้า 1 วัน</li>
-                    <li class="mb-1"><b>3.3 ลากิจแบบไม่จ่ายเงิน (BL2):</b> ลาได้ แจ้งล่วงหน้า 1 วัน แต่ไม่ได้รับเงิน</li>
-                    <li class="mb-1"><b>3.4 ลาพักร้อน (VL):</b> ลาได้ 8 วัน (เมื่อทำงานครบ 1 ปี) แจ้งล่วงหน้า 3 วัน</li>
-                    <li class="mb-1"><b>3.5-3.8:</b> ลาคลอด (90 วัน ได้ค่าจ้าง 45 วัน), ลาทำหมัน, ลารับราชการทหาร (ไม่เกิน 60 วัน), ลาบวช (ไม่ได้รับค่าจ้าง)</li>
-                    <li class="mb-1 text-danger"><b>3.9</b> ขาดงานแล้วไม่แจ้งเป็นลายลักษณ์อักษรภายใน 7 วัน จะได้รับใบเตือน (ครบ 3 ใบ พิจารณาพ้นสภาพ)</li>
-                </ul>
-
-                <h6 class="text-success fw-bold">4. - 5. การเดินทางและสวัสดิการอื่นๆ</h6>
-                <ul class="list-unstyled ps-3 mb-4">
-                    <li class="mb-2">ค่าโรงแรม, ค่าเบี้ยเลี้ยงกันดาร, ค่าน้ำมัน, เบี้ยขยัน ต้องได้รับการอนุมัติจากผู้บริหาร</li>
-                    <li class="mb-2">ห้างฯ จ่ายประกันสังคมส่วนลูกจ้างแทนพนักงานประจำทุกคน</li>
-                    <li class="mb-2">ชุดฟอร์มพนักงานขับรถ ได้ 2-3 ชุด/ปี (หากลาออกก่อน 1 ปี หักเงินเดือนเต็มจำนวน)</li>
-                </ul>
-
-                <h6 class="text-success fw-bold">6. ความประพฤติและระเบียบวินัย</h6>
-                <ul class="list-unstyled ps-3 mb-4">
-                    <li class="mb-1">- ต้องปฏิบัติงานด้วยความซื่อสัตย์ ขยัน และเคารพกฎความปลอดภัย</li>
-                    <li class="mb-1">- ห้ามทะเลาะวิวาท, ห้ามนำยาเสพติด/อาวุธเข้าที่ทำงาน, ห้ามดื่มแอลกอฮอล์ในเวลางาน</li>
-                    <li class="mb-1">- ห้ามเปิดเผยความลับบริษัท, ห้ามทำธุรกิจแข่งกับห้างฯ, ห้ามเปิดเผยเงินเดือน</li>
-                    <li class="mb-1">- พนักงานที่ไปอบรมต้องถ่ายทอดความรู้ (มีสัญญา 1 ปี หากออกก่อนโดนเรียกค่าชดเชย)</li>
-                </ul>
-
-                <h6 class="text-success fw-bold">7. - 8. การลาออกและการพ้นสภาพ</h6>
-                <ul class="list-unstyled ps-3 mb-4">
-                    <li class="mb-2">ต้องแจ้งล่วงหน้าอย่างน้อย 1 เดือน และส่งมอบงานเป็นลายลักษณ์อักษร</li>
-                    <li class="mb-2 text-danger">พนักงานขับรถ: หากมีความเสียหายต่อสินค้าหรือรถ ห้างฯ ขอสงวนสิทธิ์หักค่าเสียหายจากเงินเดือนงวดสุดท้าย</li>
-                    <li class="mb-2 text-danger">ขาดงานติดต่อกัน 3 วันโดยไม่แจ้ง / ทำผิดซ้ำซากขั้นร้ายแรง = พ้นสภาพทันทีโดยไม่มีค่าชดเชย</li>
-                </ul>
-
-                <h6 class="text-success fw-bold">10. แจ้งกรณีพนักงานเข้าใหม่</h6>
-                <div class="p-3 bg-dark border border-secondary rounded">
-                    <div>10.1 ชุดพนักงานถ้าอยู่ไม่ถึง 1 ปี = ปรับชุดละ 1,000 บาท</div>
-                    <div>10.2 บัตรท่าเรือถ้าอยู่ไม่ถึง 6 เดือน = ปรับ 200 บาท</div>
-                    <div>10.3 อบรม SCG ถ้าอยู่ไม่ถึง 6 เดือน = ปรับ 2,000 บาท</div>
-                    <div>10.4 หนังสือเตือน, ใบเตือน = ปรับ 500 บาท/ใบ</div>
-                    <div class="mt-2 text-warning">10.5 หักเงินสะสมเข้ากองกลางเดือนละ 500 บาท (หากไม่ประสงค์หัก จะไม่สามารถเบิกเงินล่วงหน้ารายสัปดาห์ได้)</div>
-                </div>
-            </div>
-
-            <!-- ส่วนปุ่ม (Footer) ยึดติดด้านล่าง -->
-            <div class="px-4 py-3 border-top border-secondary border-opacity-50 flex-shrink-0">
-                <div class="form-check mb-3 d-flex justify-content-center align-items-center">
-                    <input class="form-check-input bg-dark border-warning mt-0 me-2" type="checkbox" id="acceptRulesCheck" style="cursor: pointer; width: 1.5em; height: 1.5em;" onchange="window.toggleAcceptRulesBtn(this)">
-                    <label class="form-check-label text-warning fw-bold cursor-pointer" for="acceptRulesCheck" style="cursor: pointer; font-size: 1rem;">
-                        ข้าพเจ้าได้อ่าน รับทราบ และยอมรับกฎระเบียบ
-                    </label>
-                </div>
-
-                <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-                    <button type="button" class="btn btn-outline-danger rounded-pill px-5 py-2 fw-bold" onclick="window.declineRules()">
-                        <i class="bi bi-x-circle me-1"></i> ไม่ยอมรับ (ออกจากระบบ)
-                    </button>
-                    <button type="button" class="btn btn-secondary rounded-pill px-5 py-2 fw-bold" id="btnAcceptRules" disabled onclick="window.acceptCompanyRules()">
-                        <i class="bi bi-check-circle-fill me-1"></i> ยืนยันการยอมรับ
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal ประเมินพนักงานขับรถ -->
-<div class="modal fade" id="evaluationModal" tabindex="-1" data-bs-backdrop="static">
+<div class="modal fade" id="evalDetailModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content logistics-modal" style="border-color: #198754;">
-            <div class="modal-header logistics-modal-header py-3 border-bottom border-success">
-                <h5 class="modal-title fw-bold text-success fs-5">
-                    <i class="bi bi-star-fill me-2"></i>ประเมินพนักงานขับรถประจำเดือน
-                </h5>
+        <div class="modal-content logistics-modal border-success border-opacity-50">
+            <div class="modal-header py-3 logistics-modal-header text-start">
+                <h5 class="modal-title text-success fw-bold"><i class="bi bi-list-stars me-2"></i>รายละเอียดผู้ประเมิน</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
-                <div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
-                    <div class="d-flex align-items-center gap-2">
-                        <label class="text-light fw-bold mb-0 text-nowrap">ประจำเดือน:</label>
-                        <input type="month" id="evalMonth" class="form-control bg-dark text-white border-success form-control-sm shadow-none" required onchange="window.checkCurrentMonthEvalStatus()">
+            <div class="modal-body p-4 text-start">
+                <div class="mb-3 d-flex justify-content-between align-items-center pb-3 border-bottom border-secondary border-opacity-25">
+                    <div>
+                        <h5 class="text-white mb-1" id="detailEvalName">...</h5>
+                        <div class="text-muted small">ประจำเดือน: <span class="text-warning" id="detailEvalMonth"></span></div>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <label class="text-light fw-bold mb-0 text-nowrap">ประเภทรถ:</label>
-                        <select id="evalPositionFilter" class="form-select bg-dark text-white border-success form-control-sm shadow-none" onchange="window.filterEvalDrivers()">
-                            <option value="all">ทั้งหมด</option>
-                        </select>
+                    <div class="text-end">
+                        <h3 class="text-success fw-bold mb-0" id="detailEvalAvg">0.00</h3>
+                        <div class="small text-muted">คะแนนเฉลี่ย</div>
                     </div>
-                    <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3" onclick="window.setAllVisibleToNA()">
-                        <i class="bi bi-check2-all"></i> เซ็ต 'ไม่ได้ประสานงาน' (เฉพาะที่แสดง)
-                    </button>
                 </div>
-                <div id="evalDriverList" class="d-flex flex-column gap-2">
-                    <div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังโหลดรายชื่อ...</div>
-                </div>
-            </div>
-            <div class="modal-footer border-top border-secondary">
-                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
-                <button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.saveEvaluations()">บันทึกการประเมิน</button>
+                <div id="evalDetailList" class="d-flex flex-column gap-2"></div>
             </div>
         </div>
     </div>
@@ -1002,10 +886,16 @@
             window.renderUserProfile(d); 
             window.renderUserDocs(d); 
 
-            var evaluatorRoles = ["เจ้าหน้าที่ธุรการบัญชี", "เจ้าหน้าที่ธุรการขนส่ง", "เจ้าหน้าที่ประสานงาน", "เจ้าหน้าที่ความปลอดภัย"];
-            var isEvaluator = d.position && evaluatorRoles.some(function(role) { return d.position.indexOf(role) > -1; });
-            if (isEvaluator) {
+            // ตรวจสอบว่าเป็นใคร ให้แสดงปุ่มและข้อความให้ถูกต้อง
+            var pos = d.position || "";
+            var isDriver = pos.indexOf('พนักงานขับรถ') > -1 && pos.indexOf('รถร่วม') === -1;
+            var isOffice = pos.indexOf('ประสานงาน') > -1 || pos.indexOf('ธุรการ') > -1 || pos.indexOf('ความปลอดภัย') > -1;
+            
+            if (isDriver || isOffice) {
                 document.getElementById('evalTopMenuContainer').style.display = 'block';
+                var evalBtnText = isDriver ? '<i class="bi bi-star-fill me-1"></i> ประเมินเจ้าหน้าที่ออฟฟิศ ' : '<i class="bi bi-star-fill me-1"></i> ประเมินพนักงานขับรถ ';
+                document.getElementById('btnOpenEvalModal').innerHTML = evalBtnText + '<span id="evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>';
+                
                 window.checkCurrentMonthEvalStatus(); 
             }
             
@@ -1220,7 +1110,8 @@
         new bootstrap.Modal(document.getElementById('evaluationModal')).show();
         document.getElementById('evalDriverList').innerHTML = '<div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังโหลดรายชื่อ...</div>';
 
-        window.callAPI({ action: 'getDriversToEvaluate' }).then(function(drivers) {
+        // ปรับเป็น getEmployeesToEvaluate ให้ดึงแบบ Cross-Role
+        window.callAPI({ action: 'getEmployeesToEvaluate', position: window.currentUserData.position }).then(function(drivers) {
             window.globalEvalDrivers = drivers || [];
             
             var posSet = new Set();
@@ -1228,7 +1119,7 @@
                 var posList = drv.position.split(',');
                 posList.forEach(function(p) {
                     var cleanP = p.trim();
-                    if(cleanP && cleanP !== "พนักงานขับรถ" && !cleanP.includes("รถร่วมบริการ")) {
+                    if(cleanP && !cleanP.includes("รถร่วมบริการ")) {
                         posSet.add(cleanP);
                     }
                 });
@@ -1246,39 +1137,43 @@
                 window.evaluatedDriverIds = res.evaluatedDriverIds || [];
                 
                 var html = '';
-                window.globalEvalDrivers.forEach(function(drv, index) {
-                    var isEvaluated = window.evaluatedDriverIds.includes(drv.id);
-                    var lockHtml = isEvaluated ? 'disabled' : '';
-                    var lockScore = isEvaluated ? 'value="" disabled placeholder="ประเมินแล้ว"' : 'placeholder="0-10"';
-                    var statusBadge = isEvaluated ? '<span class="badge bg-success ms-2 px-2 py-1">ประเมินแล้ว</span>' : '';
+                if(window.globalEvalDrivers.length === 0) {
+                     html = '<div class="text-center text-muted py-5">ไม่พบรายชื่อเป้าหมายสำหรับการประเมิน</div>';
+                } else {
+                    window.globalEvalDrivers.forEach(function(drv, index) {
+                        var isEvaluated = window.evaluatedDriverIds.includes(drv.id);
+                        var lockHtml = isEvaluated ? 'disabled' : '';
+                        var lockScore = isEvaluated ? 'value="" disabled placeholder="ประเมินแล้ว"' : 'placeholder="0-10"';
+                        var statusBadge = isEvaluated ? '<span class="badge bg-success ms-2 px-2 py-1">ประเมินแล้ว</span>' : '';
 
-                    html += `
-                    <div class="eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
-                        <div class="row align-items-center g-2">
-                            <div class="col-md-5">
-                                <div class="fw-bold text-light">${index+1}. ${drv.name} <span class="text-muted small">(${drv.id})</span> ${statusBadge}</div>
-                                <div class="text-secondary" style="font-size: 0.7rem;">${drv.position}</div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text bg-dark text-warning border-warning">คะแนน</span>
-                                    <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" 
-                                        data-id="${drv.id}" data-name="${drv.name}" ${lockScore}
-                                        oninput="if(this.value > 10) this.value = 10; else if(this.value < 0 && this.value !== '') this.value = 0;">
+                        html += `
+                        <div class="eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
+                            <div class="row align-items-center g-2">
+                                <div class="col-md-5">
+                                    <div class="fw-bold text-light">${index+1}. ${drv.name} <span class="text-muted small">(${drv.id})</span> ${statusBadge}</div>
+                                    <div class="text-secondary" style="font-size: 0.7rem;">${drv.position}</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-dark text-warning border-warning">คะแนน</span>
+                                        <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" 
+                                            data-id="${drv.id}" data-name="${drv.name}" ${lockScore}
+                                            oninput="if(this.value > 10) this.value = 10; else if(this.value < 0 && this.value !== '') this.value = 0;">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
+                                    <div class="form-check form-switch d-inline-block mb-0">
+                                        <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="na_${drv.id}" onchange="window.toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;" ${lockHtml}>
+                                        <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="na_${drv.id}">ไม่ได้ประสานงาน</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-2 eval-comment-container">
+                                    <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary eval-comment-input shadow-none" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)..." ${lockHtml}>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
-                                <div class="form-check form-switch d-inline-block mb-0">
-                                    <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="na_${drv.id}" onchange="window.toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;" ${lockHtml}>
-                                    <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="na_${drv.id}">ไม่ได้ประสานงาน</label>
-                                </div>
-                            </div>
-                            <div class="col-12 mt-2 eval-comment-container">
-                                <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary eval-comment-input shadow-none" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)..." ${lockHtml}>
-                            </div>
-                        </div>
-                    </div>`;
-                });
+                        </div>`;
+                    });
+                }
                 document.getElementById('evalDriverList').innerHTML = html;
                 window.filterEvalDrivers(); 
             });
@@ -1306,7 +1201,6 @@
             if (row.style.display !== 'none') {
                 var naCheck = row.querySelector('.eval-na-check');
                 var scoreInput = row.querySelector('.eval-score-input');
-                // เฉพาะคนที่ยังไม่ได้ถูกประเมิน (ไม่ติด disabled) และคะแนนยังว่าง
                 if (!naCheck.disabled && !naCheck.checked && scoreInput.value === "") {
                     naCheck.checked = true;
                     window.toggleEvalNA(naCheck, scoreInput.getAttribute('data-id'));
@@ -1365,7 +1259,6 @@
         rows.forEach(function(row) {
             var scoreInput = row.querySelector('.eval-score-input');
             
-            // ข้ามคนที่ประเมินไปแล้ว (ถูกล็อก placeholder ไว้ว่าประเมินแล้ว)
             if(scoreInput.placeholder === "ประเมินแล้ว") return;
 
             var id = scoreInput.getAttribute('data-id');
