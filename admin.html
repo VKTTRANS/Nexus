@@ -118,6 +118,7 @@
         .payroll-dec { color: #ff4d4d !important; }
         .lbl-fit { font-size: 0.8rem; width: 175px; text-align: left; padding: 0.375rem 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: space-between; background-color: #1a1a1a; border-color: #333; color: #aaa;}
         
+        /* สไตล์สำหรับ checkbox ตำแหน่ง */
         .pos-checkbox-wrapper { background: #000; border: 1px solid #333; border-radius: 6px; padding: 10px; max-height: 180px; overflow-y: auto;}
     </style>
 
@@ -371,6 +372,7 @@
 
     <!-- Section: เงินเดือน (Payroll) -->
     <div id="section-admin-payroll" class="d-none">
+        
         <div class="row g-2 mb-3 stagger-2">
             <div class="col-md-4">
                 <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #00E676;">
@@ -406,11 +408,7 @@
 
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 p-2 rounded-3 border border-secondary border-opacity-25 bg-black bg-opacity-25 stagger-3">
             <div class="d-flex gap-2 flex-wrap">
-                <!-- ตัวกรอง ปี -->
-                <select id="filterPayrollYear" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 100px; cursor: pointer;" onchange="window.filterPayrollTable()">
-                    <!-- JS จะเติมปีให้ตอนโหลด -->
-                </select>
-                <!-- ตัวกรอง เดือน -->
+                <select id="filterPayrollYear" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 100px; cursor: pointer;" onchange="window.filterPayrollTable()"></select>
                 <select id="filterPayrollMonthSelect" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 130px; cursor: pointer;" onchange="window.filterPayrollTable()">
                     <option value="all">ทุกเดือน</option>
                     <option value="01">มกราคม</option>
@@ -550,7 +548,6 @@
                                                             <small class="text-muted">Role</small>
                                                             <span class="fw-bold text-success" id="view_role">-</span>
                                                         </div>
-                                                        <!-- จุดที่เพิ่มสถานะการยอมรับกฎระเบียบ -->
                                                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2 border-top border-secondary border-opacity-25">
                                                             <small class="text-muted">การยอมรับกฎระเบียบ</small>
                                                             <span id="view_rule_status">-</span>
