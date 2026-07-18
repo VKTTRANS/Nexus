@@ -1,7 +1,7 @@
 <div id="view-user" class="view-section container p-3 p-md-4">
 
     <style>
-        
+        /* --- Logistics Theme สำหรับ User --- */
         :root {
             --logistic-bg: #0a0a0a;
             --logistic-card: #151515;
@@ -137,7 +137,7 @@
 
     <div id="userLoading" class="text-center py-5">
         <div class="spinner-border text-warning" role="status"></div>
-        <div class="mt-3 text-muted">กำลังโหลดข้อมูลคนขับ...</div>
+        <div class="mt-3 text-muted">กำลังโหลดข้อมูลพนักงาน...</div>
     </div>
 
     <div id="userProfileContent" class="row g-4" style="display:none; animation: fadeIn 0.5s ease-out;">
@@ -174,7 +174,6 @@
                             <span class="badge bg-info text-dark ms-1 rounded-pill" id="u_accCountBadge">0</span>
                         </button>
                     </li>
-                    <!-- แท็บผลประเมิน (ให้พนักงานดูว่าตัวเองได้กี่คะแนน) -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link py-2 text-success" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
                             <i class="bi bi-star-fill me-1"></i> ผลประเมิน
@@ -226,7 +225,6 @@
                         </div>
                     </div>
 
-                    <!-- พื้นที่แสดงผลประเมิน -->
                     <div class="tab-pane fade" id="tab-content-evals" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
                             <h6 class="fw-bold text-success mb-0"><i class="bi bi-star-half me-2"></i>ผลการประเมินการทำงานประจำเดือน</h6>
@@ -235,6 +233,99 @@
                             <div class="text-center text-muted py-4 small"><div class="spinner-border spinner-border-sm text-success mb-2"></div><br>กำลังโหลด...</div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal กฎระเบียบ (ใส่คืนมาให้แล้วครับ ไม่จอดำแน่นอน) -->
+<div id="rulesOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999;">
+    <div class="d-flex justify-content-center align-items-center w-100 h-100 p-2 p-md-4">
+        <div class="d-flex flex-column rounded-4 w-100" style="background: #111; border: 1px solid #ffc107; box-shadow: 0 0 30px rgba(255, 193, 7, 0.2); max-width: 800px; max-height: 95vh;">
+            <div class="px-4 py-3 border-bottom border-warning flex-shrink-0">
+                <h5 class="fw-bold text-warning m-0 fs-5"><i class="bi bi-file-earmark-text-fill me-2"></i>กฎระเบียบและข้อบังคับห้างฯ</h5>
+            </div>
+            
+            <div class="px-4 py-3 text-light overflow-auto" style="font-size: 0.95rem; line-height: 1.6; flex-grow: 1;">
+                <div class="alert alert-warning border-warning bg-warning bg-opacity-10 text-warning mb-4">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>กรุณาอ่านและทำความเข้าใจ</strong> เพื่อสิทธิประโยชน์และการปฏิบัติงานที่ถูกต้องของตัวท่านเอง
+                </div>
+
+                <h6 class="text-success fw-bold">1. การเข้างาน</h6>
+                <ul class="list-unstyled ps-3 mb-4">
+                    <li class="mb-2"><b>1.1</b> พนักงานประจำสำนักงานใหญ่ ให้เข้างาน จันทร์-ศุกร์, เสาร์เว้นเสาร์ เวลา 09.00-18.00 น.</li>
+                    <li class="mb-2"><b>1.2</b> พนักงานประจำขนส่ง เวลาทำงานให้อ้างอิงจากขนส่งของหน่วยงานนั้นๆ หากมีการทำงานล่วงเวลา ให้พนักงานแจ้งต่อผู้บริหารเพื่อพิจารณาอนุมัติล่วงหน้าอย่างน้อย 1 วัน</li>
+                    <li class="mb-2"><b>1.3</b> ทางห้างฯ เป็นผู้กำหนดหยุดประจำสัปดาห์และประจำปี (สัปดาห์ละ 1-2 วัน / ประจำปีไม่น้อยกว่า 13 วันต่อปี)</li>
+                    <li class="mb-2"><b>1.4</b> รอบการจ่ายเงินเดือน ตัดรอบทุกสิ้นเดือน จ่ายเงินทุกวันที่ 10 ของเดือนถัดไป</li>
+                    <li class="mb-2"><b>1.5</b> เงินเบิกล่วงหน้า ไม่เกิน 3,000 บาท/สัปดาห์ (รวมทั้งเดือนไม่เกินเงินเดือน) แจ้งวันจันทร์จ่ายวันพุธ</li>
+                    <li class="mb-2"><b>1.6-1.7</b> การมาสาย ขาดงาน หรือออกก่อนเวลา ต้องได้รับการรับรองจากผู้บริหาร หากไม่มีถือเป็นการขาดงานโดยไม่แจ้งล่วงหน้า (มีผลต่อการประเมิน)</li>
+                </ul>
+
+                <h6 class="text-success fw-bold">2. การทำงานล่วงเวลาและการเปลี่ยนแปลงวันหยุด</h6>
+                <ul class="list-unstyled ps-3 mb-4">
+                    <li class="mb-2"><b>2.1-2.6</b> การทำโอทีต้องได้รับอนุมัติล่วงหน้า 1 วัน (ทำได้ไม่เกิน 4 ชม./วัน ในวันปกติ และเหมาไม่เกิน 8 ชม./วัน ในวันหยุด)</li>
+                    <li class="mb-2"><b>2.7</b> หากติดภารกิจทำโอทีไม่ได้ ต้องแจ้งล่วงหน้า 3 วัน หาคนทำแทน มิฉะนั้นอาจได้รับใบเตือน</li>
+                    <li class="mb-2"><b>2.8-2.9</b> เปลี่ยนแปลงวันหยุดต้องแจ้งล่วงหน้า 3 วันทำการ</li>
+                </ul>
+
+                <h6 class="text-success fw-bold">3. การลางานและการขาดงาน</h6>
+                <ul class="list-unstyled ps-3 mb-4">
+                    <li class="mb-1"><b>3.1 ลาป่วย (SL):</b> ลาได้ตามจริงไม่เกิน 30 วัน (ต้องมีใบรับรองแพทย์)</li>
+                    <li class="mb-1"><b>3.2 ลากิจแบบจ่ายเงิน (BL1):</b> ลาได้ 3 วัน (เฉพาะกิจธุระเครือญาติสายตรง) แจ้งล่วงหน้า 1 วัน</li>
+                    <li class="mb-1"><b>3.3 ลากิจแบบไม่จ่ายเงิน (BL2):</b> ลาได้ แจ้งล่วงหน้า 1 วัน แต่ไม่ได้รับเงิน</li>
+                    <li class="mb-1"><b>3.4 ลาพักร้อน (VL):</b> ลาได้ 8 วัน (เมื่อทำงานครบ 1 ปี) แจ้งล่วงหน้า 3 วัน</li>
+                    <li class="mb-1"><b>3.5-3.8:</b> ลาคลอด (90 วัน ได้ค่าจ้าง 45 วัน), ลาทำหมัน, ลารับราชการทหาร (ไม่เกิน 60 วัน), ลาบวช (ไม่ได้รับค่าจ้าง)</li>
+                    <li class="mb-1 text-danger"><b>3.9</b> ขาดงานแล้วไม่แจ้งเป็นลายลักษณ์อักษรภายใน 7 วัน จะได้รับใบเตือน (ครบ 3 ใบ พิจารณาพ้นสภาพ)</li>
+                </ul>
+
+                <h6 class="text-success fw-bold">4. - 5. การเดินทางและสวัสดิการอื่นๆ</h6>
+                <ul class="list-unstyled ps-3 mb-4">
+                    <li class="mb-2">ค่าโรงแรม, ค่าเบี้ยเลี้ยงกันดาร, ค่าน้ำมัน, เบี้ยขยัน ต้องได้รับการอนุมัติจากผู้บริหาร</li>
+                    <li class="mb-2">ห้างฯ จ่ายประกันสังคมส่วนลูกจ้างแทนพนักงานประจำทุกคน</li>
+                    <li class="mb-2">ชุดฟอร์มพนักงานขับรถ ได้ 2-3 ชุด/ปี (หากลาออกก่อน 1 ปี หักเงินเดือนเต็มจำนวน)</li>
+                </ul>
+
+                <h6 class="text-success fw-bold">6. ความประพฤติและระเบียบวินัย</h6>
+                <ul class="list-unstyled ps-3 mb-4">
+                    <li class="mb-1">- ต้องปฏิบัติงานด้วยความซื่อสัตย์ ขยัน และเคารพกฎความปลอดภัย</li>
+                    <li class="mb-1">- ห้ามทะเลาะวิวาท, ห้ามนำยาเสพติด/อาวุธเข้าที่ทำงาน, ห้ามดื่มแอลกอฮอล์ในเวลางาน</li>
+                    <li class="mb-1">- ห้ามเปิดเผยความลับบริษัท, ห้ามทำธุรกิจแข่งกับห้างฯ, ห้ามเปิดเผยเงินเดือน</li>
+                    <li class="mb-1">- พนักงานที่ไปอบรมต้องถ่ายทอดความรู้ (มีสัญญา 1 ปี หากออกก่อนโดนเรียกค่าชดเชย)</li>
+                </ul>
+
+                <h6 class="text-success fw-bold">7. - 8. การลาออกและการพ้นสภาพ</h6>
+                <ul class="list-unstyled ps-3 mb-4">
+                    <li class="mb-2">ต้องแจ้งล่วงหน้าอย่างน้อย 1 เดือน และส่งมอบงานเป็นลายลักษณ์อักษร</li>
+                    <li class="mb-2 text-danger">พนักงานขับรถ: หากมีความเสียหายต่อสินค้าหรือรถ ห้างฯ ขอสงวนสิทธิ์หักค่าเสียหายจากเงินเดือนงวดสุดท้าย</li>
+                    <li class="mb-2 text-danger">ขาดงานติดต่อกัน 3 วันโดยไม่แจ้ง / ทำผิดซ้ำซากขั้นร้ายแรง = พ้นสภาพทันทีโดยไม่มีค่าชดเชย</li>
+                </ul>
+
+                <h6 class="text-success fw-bold">10. แจ้งกรณีพนักงานเข้าใหม่</h6>
+                <div class="p-3 bg-dark border border-secondary rounded">
+                    <div>10.1 ชุดพนักงานถ้าอยู่ไม่ถึง 1 ปี = ปรับชุดละ 1,000 บาท</div>
+                    <div>10.2 บัตรท่าเรือถ้าอยู่ไม่ถึง 6 เดือน = ปรับ 200 บาท</div>
+                    <div>10.3 อบรม SCG ถ้าอยู่ไม่ถึง 6 เดือน = ปรับ 2,000 บาท</div>
+                    <div>10.4 หนังสือเตือน, ใบเตือน = ปรับ 500 บาท/ใบ</div>
+                    <div class="mt-2 text-warning">10.5 หักเงินสะสมเข้ากองกลางเดือนละ 500 บาท (หากไม่ประสงค์หัก จะไม่สามารถเบิกเงินล่วงหน้ารายสัปดาห์ได้)</div>
+                </div>
+            </div>
+
+            <div class="px-4 py-3 border-top border-secondary border-opacity-50 flex-shrink-0">
+                <div class="form-check mb-3 d-flex justify-content-center align-items-center">
+                    <input class="form-check-input bg-dark border-warning mt-0 me-2" type="checkbox" id="acceptRulesCheck" style="cursor: pointer; width: 1.5em; height: 1.5em;" onchange="window.u_toggleAcceptRulesBtn(this)">
+                    <label class="form-check-label text-warning fw-bold cursor-pointer" for="acceptRulesCheck" style="cursor: pointer; font-size: 1rem;">
+                        ข้าพเจ้าได้อ่าน รับทราบ และยอมรับกฎระเบียบ
+                    </label>
+                </div>
+
+                <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                    <button type="button" class="btn btn-outline-danger rounded-pill px-5 py-2 fw-bold" onclick="window.u_declineRules()">
+                        <i class="bi bi-x-circle me-1"></i> ไม่ยอมรับ (ออกจากระบบ)
+                    </button>
+                    <button type="button" class="btn btn-secondary rounded-pill px-5 py-2 fw-bold" id="btnAcceptRules" disabled onclick="window.u_acceptCompanyRules()">
+                        <i class="bi bi-check-circle-fill me-1"></i> ยืนยันการยอมรับ
+                    </button>
                 </div>
             </div>
         </div>
@@ -436,6 +527,7 @@
     </div>
 </div>
 
+<!-- Modal สำหรับแจ้งซ่อม -->
 <div class="modal fade" id="u_userRepairModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content logistics-modal" style="border-color: #0d6efd;">
@@ -1580,9 +1672,9 @@
         if(yList) yList.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-info"></div><p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p></div>'; 
         
         window.callAPI({ action: 'getYardData' }).then(function(list) { 
-            window.globalYardData = list; 
+            window.globalYardData = list || []; 
             var zones = []; 
-            list.forEach(function(y) { 
+            window.globalYardData.forEach(function(y) { 
                 if(y.zone && y.zone !== "ไม่ระบุโซน" && y.zone !== "") { 
                     if(zones.indexOf(y.zone) === -1) zones.push(y.zone); 
                 } 
@@ -1594,7 +1686,7 @@
                     select.innerHTML += '<option value="' + z + '" class="text-dark">' + z + '</option>'; 
                 }); 
             }
-            window.u_renderYards(list); 
+            window.u_renderYards(window.globalYardData); 
         }); 
     };
 
