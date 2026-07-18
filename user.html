@@ -124,7 +124,7 @@
         <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
             <!-- ปุ่มประเมิน -->
             <div id="u_evalTopMenuContainer" style="display: none;">
-                <button id="btnOpenEvalModal" onclick="window.openUserEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
+                <button id="btnOpenEvalModal" onclick="window.u_openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
                     <i class="bi bi-star-fill me-1"></i> ประเมินการทำงาน <span id="u_evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>
                 </button>
             </div>
@@ -203,7 +203,7 @@
                     <div class="tab-pane fade" id="tab-content-warns" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
                             <h6 class="fw-bold text-danger mb-0"><i class="bi bi-exclamation-triangle me-2"></i>ประวัติการกระทำผิด/ใบเตือน</h6>
-                            <select class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;" id="u_warnLimit" onchange="window.renderUserWarningsList()">
+                            <select class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;" id="u_warnLimit" onchange="window.u_renderWarningsList()">
                                 <option value="10" selected>10 แถว</option>
                                 <option value="20">20 แถว</option>
                                 <option value="all">ทั้งหมด</option>
@@ -215,7 +215,7 @@
                     <div class="tab-pane fade" id="tab-content-accs" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
                             <h6 class="fw-bold text-info mb-0"><i class="bi bi-cone-striped me-2"></i>ประวัติการแจ้งอุบัติเหตุ</h6>
-                            <select class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;" id="u_accLimit" onchange="window.renderUserAccidentsList()">
+                            <select class="form-select form-select-sm bg-dark text-white border-secondary" style="width: auto;" id="u_accLimit" onchange="window.u_renderAccidentsList()">
                                 <option value="10" selected>10 แถว</option>
                                 <option value="20">20 แถว</option>
                                 <option value="all">ทั้งหมด</option>
@@ -253,7 +253,7 @@
             </div>
             
             <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
-                <form id="u_accidentForm" onsubmit="window.submitUserAccident(event)">
+                <form id="u_accidentForm" onsubmit="window.u_submitAccident(event)">
                     <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
                         <div class="logistics-section-title text-warning mb-3 fw-bold" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
                             <i class="bi bi-info-circle me-2"></i>ข้อมูลการเกิดเหตุ
@@ -315,7 +315,7 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="small text-muted mb-1 fw-bold">สาเหตุ *</label>
-                                <select class="form-select bg-dark text-light border-secondary shadow-none mb-2" id="u_accCause" onchange="window.toggleUserAccOther('u_accCause', 'u_divCauseOther')" required>
+                                <select class="form-select bg-dark text-light border-secondary shadow-none mb-2" id="u_accCause" onchange="window.u_toggleAccOther('u_accCause', 'u_divCauseOther')" required>
                                     <option value="">- เลือก -</option>
                                     <option value="เมาสุรา">เมาสุรา</option>
                                     <option value="ขับเร็วเกินกว่ากำหนด">ขับเร็วเกินกว่ากำหนด</option>
@@ -337,7 +337,7 @@
                             
                             <div class="col-md-6">
                                 <label class="small text-muted mb-1 fw-bold">เหตุเกิดจาก *</label>
-                                <select class="form-select bg-dark text-light border-secondary shadow-none mb-2" id="u_accCausedBy" onchange="window.toggleUserAccOther('u_accCausedBy', 'u_divCausedByOther')" required>
+                                <select class="form-select bg-dark text-light border-secondary shadow-none mb-2" id="u_accCausedBy" onchange="window.u_toggleAccOther('u_accCausedBy', 'u_divCausedByOther')" required>
                                     <option value="">- เลือก -</option>
                                     <option value="เกิดจากบุคคล">เกิดจากบุคคล</option>
                                     <option value="เกิดจากรถ">เกิดจากรถ</option>
@@ -415,12 +415,12 @@
                             <span class="input-group-text bg-transparent border-secondary text-info">
                                 <i class="bi bi-search"></i>
                             </span>
-                            <input type="text" id="u_yardSearchInput" class="form-control bg-transparent text-light border-secondary shadow-none" placeholder="พิมพ์ชื่อลาน..." onkeyup="window.filterUserYards()">
+                            <input type="text" id="u_yardSearchInput" class="form-control bg-transparent text-light border-secondary shadow-none" placeholder="พิมพ์ชื่อลาน..." onkeyup="window.u_filterYards()">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="small text-muted mb-1">แยกตามโซน</label>
-                        <select id="u_yardZoneSelect" class="form-select bg-transparent text-light border-secondary shadow-none" onchange="window.filterUserYards()">
+                        <select id="u_yardZoneSelect" class="form-select bg-transparent text-light border-secondary shadow-none" onchange="window.u_filterYards()">
                             <option value="all" class="text-dark">🌐 แสดงทุกโซน</option>
                         </select>
                     </div>
@@ -436,7 +436,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="userRepairModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
+<div class="modal fade" id="u_userRepairModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content logistics-modal" style="border-color: #0d6efd;">
             <div class="modal-header logistics-modal-header py-3 border-bottom border-primary text-start">
@@ -446,22 +446,22 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
-                <form id="userRepairForm" onsubmit="window.submitUserRepair(event)">
+                <form id="u_userRepairForm" onsubmit="window.u_submitRepair(event)">
                     <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="small text-muted mb-1 fw-bold">วันที่แจ้งซ่อม *</label>
-                                <input type="date" class="form-control bg-dark text-light border-secondary shadow-none" id="repDate" required>
+                                <input type="date" class="form-control bg-dark text-light border-secondary shadow-none" id="u_repDate" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="small text-muted mb-1 fw-bold">ทะเบียนรถ *</label>
-                                <select class="form-select bg-dark text-light border-secondary shadow-none" id="repPlate" required>
+                                <select class="form-select bg-dark text-light border-secondary shadow-none" id="u_repPlate" required>
                                     <option value="">กำลังโหลดทะเบียน...</option>
                                 </select>
                             </div>
                             <div class="col-md-12">
                                 <label class="small text-muted mb-1 fw-bold">เลขไมล์ปัจจุบัน (ถ้ามี)</label>
-                                <input type="number" class="form-control bg-dark text-light border-secondary shadow-none" id="repMile" placeholder="เช่น 125000">
+                                <input type="number" class="form-control bg-dark text-light border-secondary shadow-none" id="u_repMile" placeholder="เช่น 125000">
                             </div>
                         </div>
                     </div>
@@ -471,13 +471,13 @@
                             <label class="small text-light fw-bold m-0 fs-6">
                                 <i class="bi bi-list-check me-2 text-primary"></i>รายการซ่อมบำรุง
                             </label>
-                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="window.addUserRepairRow()">
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="window.u_addRepairRow()">
                                 <i class="bi bi-plus"></i> เพิ่มรายการ
                             </button>
                         </div>
-                        <div id="userRepairItemsContainer">
-                            <div class="input-group input-group-sm mb-2 user-repair-row">
-                                <select class="form-select bg-dark text-light border-secondary rep-select shadow-none" style="max-width: 45%;" onchange="window.toggleUserCustomInput(this)" required>
+                        <div id="u_userRepairItemsContainer">
+                            <div class="input-group input-group-sm mb-2 u-repair-row">
+                                <select class="form-select bg-dark text-light border-secondary rep-select shadow-none" style="max-width: 45%;" onchange="window.u_toggleCustomInput(this)" required>
                                     <option value="" disabled selected>เลือกรายการ...</option>
                                     <option value="ถ่ายน้ำมันเครื่อง">ถ่ายน้ำมันเครื่อง</option>
                                     <option value="เปลี่ยนกรองน้ำมันเครื่อง">เปลี่ยนกรองน้ำมันเครื่อง</option>
@@ -491,7 +491,7 @@
                                     <option value="other">อื่นๆ (ระบุเอง)</option>
                                 </select>
                                 <input type="text" class="form-control bg-dark text-light border-warning rep-custom d-none shadow-none" placeholder="ระบุอาการ/รายการ">
-                                <button type="button" class="btn btn-outline-danger btn-remove-rep shadow-none" onclick="window.removeUserRepairRow(this)">
+                                <button type="button" class="btn btn-outline-danger btn-remove-rep shadow-none" onclick="window.u_removeRepairRow(this)">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -500,7 +500,7 @@
 
                     <div class="logistics-card p-3 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
                         <label class="small text-muted mb-2 fw-bold">หมายเหตุ / อาการเพิ่มเติม</label>
-                        <textarea class="form-control bg-dark text-light border-secondary shadow-none" id="repNote" rows="2" placeholder="อธิบายอาการเบื้องต้น หรือ ตำแหน่งเพิ่มเติม..."></textarea>
+                        <textarea class="form-control bg-dark text-light border-secondary shadow-none" id="u_repNote" rows="2" placeholder="อธิบายอาการเบื้องต้น หรือ ตำแหน่งเพิ่มเติม..."></textarea>
                     </div>
 
                     <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
@@ -526,7 +526,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
-                <form id="u_empForm" onsubmit="window.submitUserEmpForm(event)">
+                <form id="u_empForm" onsubmit="window.u_submitEmpForm(event)">
                     <input type="hidden" id="u_formMode" value="edit">
                     <input type="hidden" id="u_empId">
                     <input type="hidden" id="u_role">
@@ -696,16 +696,16 @@
                 <div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
                     <div class="d-flex align-items-center gap-2">
                         <label class="text-light fw-bold mb-0 text-nowrap">ประจำเดือน:</label>
-                        <input type="month" id="u_evalMonth" class="form-control bg-dark text-white border-success form-control-sm shadow-none" required onchange="window.checkCurrentMonthEvalStatus()">
+                        <input type="month" id="u_evalMonth" class="form-control bg-dark text-white border-success form-control-sm shadow-none" required onchange="window.u_checkCurrentMonthEvalStatus()">
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <label class="text-light fw-bold mb-0 text-nowrap">ค้นหา / ตำแหน่ง:</label>
-                        <select id="u_evalPositionFilter" class="form-select bg-dark text-white border-success form-control-sm shadow-none" onchange="window.filterEvalDrivers()">
+                        <select id="u_evalPositionFilter" class="form-select bg-dark text-white border-success form-control-sm shadow-none" onchange="window.u_filterEvalDrivers()">
                             <option value="all">ทั้งหมด</option>
                         </select>
                     </div>
-                    <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3" onclick="window.setAllVisibleToNA()">
-                        <i class="bi bi-check2-all"></i> เซ็ต 'ไม่ได้ประสานงาน' (เฉพาะที่แสดง)
+                    <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3" onclick="window.u_setAllVisibleToNA()">
+                        <i class="bi bi-check2-all"></i> เซ็ต 'ไม่ได้ประสานงาน'
                     </button>
                 </div>
                 <div id="u_evalDriverList" class="d-flex flex-column gap-2">
@@ -714,18 +714,18 @@
             </div>
             <div class="modal-footer border-top border-secondary">
                 <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
-                <button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.saveEvaluations()">บันทึกการประเมิน</button>
+                <button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.u_saveEvaluations()">บันทึกการประเมิน</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    var globalUserPayslips = [];
-    var globalEvalDrivers = []; 
-    var globalUserEvals = [];
-    var globalYardData = [];
-    var evaluatedDriverIds = [];
+    window.globalUserPayslips = [];
+    window.globalEvalDrivers = []; 
+    window.globalUserEvals = [];
+    window.globalYardData = [];
+    window.u_evaluatedDriverIds = [];
 
     window.loadUserData = function() { 
         var userLoadingEl = document.getElementById('userLoading');
@@ -782,8 +782,8 @@
                 if(userProfileContentEl) userProfileContentEl.style.display = 'flex'; 
             }
             
-            window.renderUserProfile(d); 
-            window.renderUserDocs(d); 
+            window.u_renderUserProfile(d); 
+            window.u_renderDocs(d); 
 
             // ตรวจสอบว่าเป็นใคร ให้แสดงปุ่มและข้อความประเมินให้ถูกต้อง
             var pos = d.position || "";
@@ -797,7 +797,7 @@
                 var btnOpen = document.getElementById('btnOpenEvalModal');
                 if(btnOpen) btnOpen.innerHTML = evalBtnText + '<span id="u_evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>';
                 
-                window.checkCurrentMonthEvalStatus(); 
+                window.u_checkCurrentMonthEvalStatus(); 
             } else {
                 if(evalContainer) evalContainer.style.display = 'none';
             }
@@ -810,7 +810,7 @@
             } 
             var warnCountEl = document.getElementById('u_warnCountBadge');
             if(warnCountEl) warnCountEl.innerText = window.globalUserWarnings.length; 
-            window.renderUserWarningsList(); 
+            window.u_renderWarningsList(); 
             
             window.callAPI({ 
                 action: 'getAccidentData', 
@@ -820,7 +820,7 @@
                 window.globalUserAccidents = accData || []; 
                 var accCountEl = document.getElementById('u_accCountBadge');
                 if(accCountEl) accCountEl.innerText = window.globalUserAccidents.length; 
-                window.renderUserAccidentsList(); 
+                window.u_renderAccidentsList(); 
             }); 
 
             window.callAPI({ 
@@ -830,7 +830,7 @@
                 window.globalUserPayslips = payslipData || [];
                 var payCountEl = document.getElementById('u_payslipCountBadge');
                 if(payCountEl) payCountEl.innerText = window.globalUserPayslips.length;
-                window.renderUserPayslipsList();
+                window.u_renderPayslipsList();
             });
 
             window.callAPI({
@@ -840,7 +840,7 @@
                 window.globalUserEvals = evalData || [];
                 var evCountEl = document.getElementById('u_evalCountBadge');
                 if(evCountEl) evCountEl.innerText = window.globalUserEvals.length;
-                window.renderUserEvalsList();
+                window.u_renderEvalsList();
             });
 
             // โหลด Setting (License Type) ให้พร้อมใช้ตอน User กดอัปเดตข้อมูลส่วนตัว
@@ -856,7 +856,7 @@
         }); 
     };
 
-    window.checkCurrentMonthEvalStatus = function() {
+    window.u_checkCurrentMonthEvalStatus = function() {
         if(!window.currentUserData) return;
         var d = new Date();
         var y = d.getFullYear();
@@ -874,7 +874,7 @@
                 evaluatorId: window.currentUserData.id 
             }
         }).then(function(res) {
-            window.evaluatedDriverIds = res.evaluatedDriverIds || [];
+            window.u_evaluatedDriverIds = res.evaluatedDriverIds || [];
             var badge = document.getElementById('u_evalStatusBadge');
             if(badge) {
                 if (res.evaluated) {
@@ -888,7 +888,7 @@
         });
     };
 
-    window.toggleAcceptRulesBtn = function(checkbox) {
+    window.u_toggleAcceptRulesBtn = function(checkbox) {
         var btnAccept = document.getElementById('btnAcceptRules');
         if(!btnAccept) return;
         if (checkbox.checked) {
@@ -902,7 +902,7 @@
         }
     };
 
-    window.acceptCompanyRules = function() {
+    window.u_acceptCompanyRules = function() {
         if (!window.currentUserData) return;
         var ruleKey = 'vkt_rules_accepted_' + window.currentUserData.id;
         
@@ -923,7 +923,7 @@
         });
     };
 
-    window.declineRules = function() {
+    window.u_declineRules = function() {
         var rulesOverlay = document.getElementById('rulesOverlay');
         if(rulesOverlay) rulesOverlay.style.display = 'none';
         document.body.style.overflow = '';
@@ -936,7 +936,7 @@
         }
     };
 
-    window.renderUserProfile = function(d) {
+    window.u_renderUserProfile = function(d) {
         if (!d) return;
         var finalLeaveUrl = "#"; 
         try { 
@@ -984,12 +984,12 @@
                 <div class="info-box d-flex justify-content-between align-items-center">
                     <span class="small text-muted"><i class="bi bi-calendar-check me-2"></i>อายุงาน</span>
                     <div class="text-end">
-                        <div class="text-warning fw-bold" style="font-size: 0.9rem;">${window.calcTenure(d.startDate)}</div>
-                        <div class="text-muted" style="font-size: 0.7rem;">(เริ่ม ${window.formatDate(d.startDate)})</div>
+                        <div class="text-warning fw-bold" style="font-size: 0.9rem;">${window.u_calcTenure(d.startDate)}</div>
+                        <div class="text-muted" style="font-size: 0.7rem;">(เริ่ม ${window.u_formatDate(d.startDate)})</div>
                     </div>
                 </div>
                 
-                <button class="btn btn-outline-warning w-100 rounded-pill mb-4 mt-3 fw-bold shadow-sm" onclick="window.openUserEditModal('${d.id}')">
+                <button class="btn btn-outline-warning w-100 rounded-pill mb-4 mt-3 fw-bold shadow-sm" onclick="window.u_openEditModal('${d.id}')">
                     <i class="bi bi-pencil-square me-2"></i>อัปเดตข้อมูลส่วนตัว
                 </button>
 
@@ -1001,17 +1001,17 @@
                         </a>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openAccidentModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                        <button onclick="window.u_openAccidentModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
                             <i class="bi bi-cone-striped fs-5 text-danger"></i><span class="small fw-bold" style="font-size: 0.8rem;">อุบัติเหตุ</span>
                         </button>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openUserRepairModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                        <button onclick="window.u_openRepairModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
                             <i class="bi bi-wrench-adjustable fs-5 text-primary"></i><span class="small fw-bold" style="font-size: 0.8rem;">แจ้งซ่อม</span>
                         </button>
                     </div>
                     <div class="col-6">
-                        <button onclick="window.openYardModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                        <button onclick="window.u_openYardModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
                             <i class="bi bi-geo-alt fs-5 text-info"></i><span class="small fw-bold" style="font-size: 0.8rem;">ลานตู้</span>
                         </button>
                     </div>
@@ -1022,7 +1022,7 @@
         if(uProfileCard) uProfileCard.innerHTML = html;
     };
 
-    window.openUserEvaluationModal = function() {
+    window.u_openEvaluationModal = function() {
         if(!window.currentUserData) return;
         var d = new Date();
         var y = d.getFullYear();
@@ -1064,24 +1064,25 @@
 
             var checkPayload = { monthYear: (y + "-" + m), evaluatorId: window.currentUserData.id };
             window.callAPI({ action: 'checkEvaluationStatus', payload: checkPayload }).then(function(res) {
-                window.evaluatedDriverIds = res.evaluatedDriverIds || [];
+                window.u_evaluatedDriverIds = res.evaluatedDriverIds || [];
                 
                 var html = '';
                 if(window.globalEvalDrivers.length === 0) {
                      html = '<div class="text-center text-muted py-5">ไม่พบรายชื่อเป้าหมายสำหรับการประเมิน</div>';
                 } else {
                     window.globalEvalDrivers.forEach(function(drv, index) {
-                        var isEvaluated = window.evaluatedDriverIds.includes(drv.id);
+                        var isEvaluated = window.u_evaluatedDriverIds.includes(drv.id);
                         var lockHtml = isEvaluated ? 'disabled' : '';
                         var lockScore = isEvaluated ? 'value="" disabled placeholder="ประเมินแล้ว"' : 'placeholder="0-10"';
                         var statusBadge = isEvaluated ? '<span class="badge bg-success ms-2 px-2 py-1">ประเมินแล้ว</span>' : '';
+                        var nickname = drv.nickname && drv.nickname !== "-" ? `(${drv.nickname})` : '';
 
                         html += `
                         <div class="u_eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
                             <div class="row align-items-center g-2">
                                 <div class="col-md-5">
-                                    <div class="fw-bold text-light">${index+1}. ${drv.name} <span class="text-muted small">(${drv.id})</span> ${statusBadge}</div>
-                                    <div class="text-secondary" style="font-size: 0.7rem;">${drv.position || '-'}</div>
+                                    <div class="fw-bold text-light" style="font-size: 0.9rem;">${index+1}. ${drv.name} <span class="text-warning">${nickname}</span> ${statusBadge}</div>
+                                    <div class="text-secondary" style="font-size: 0.75rem;">${drv.position || '-'}</div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="input-group input-group-sm">
@@ -1093,7 +1094,7 @@
                                 </div>
                                 <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
                                     <div class="form-check form-switch d-inline-block mb-0">
-                                        <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="u_na_${drv.id}" onchange="window.toggleUserEvalNA(this, '${drv.id}')" style="cursor: pointer;" ${lockHtml}>
+                                        <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="u_na_${drv.id}" onchange="window.u_toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;" ${lockHtml}>
                                         <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="u_na_${drv.id}">ไม่ได้ประสานงาน</label>
                                     </div>
                                 </div>
@@ -1107,13 +1108,13 @@
                 var listEl = document.getElementById('u_evalDriverList');
                 if(listEl) {
                     listEl.innerHTML = html;
-                    window.filterEvalDrivers(); 
+                    window.u_filterEvalDrivers(); 
                 }
             });
         });
     };
 
-    window.filterEvalDrivers = function() {
+    window.u_filterEvalDrivers = function() {
         var posFilterEl = document.getElementById('u_evalPositionFilter');
         var posFilter = posFilterEl ? posFilterEl.value : 'all';
         var rows = document.querySelectorAll('.u_eval-driver-row');
@@ -1128,7 +1129,7 @@
         });
     };
 
-    window.setAllVisibleToNA = function() {
+    window.u_setAllVisibleToNA = function() {
         var rows = document.querySelectorAll('.u_eval-driver-row');
         var count = 0;
         rows.forEach(function(row) {
@@ -1137,7 +1138,7 @@
                 var scoreInput = row.querySelector('.eval-score-input');
                 if (naCheck && scoreInput && !naCheck.disabled && !naCheck.checked && scoreInput.value === "") {
                     naCheck.checked = true;
-                    window.toggleUserEvalNA(naCheck, scoreInput.getAttribute('data-id'));
+                    window.u_toggleEvalNA(naCheck, scoreInput.getAttribute('data-id'));
                     count++;
                 }
             }
@@ -1157,7 +1158,7 @@
         }
     };
 
-    window.toggleUserEvalNA = function(cb, id) {
+    window.u_toggleEvalNA = function(cb, id) {
         var row = cb.closest('.u_eval-driver-row');
         if(!row) return;
         var input = row.querySelector('.eval-score-input');
@@ -1186,7 +1187,7 @@
         }
     };
 
-    window.saveEvaluations = function() {
+    window.u_saveEvaluations = function() {
         var monthEl = document.getElementById('u_evalMonth');
         var monthYear = monthEl ? monthEl.value : '';
         if(!monthYear) {
@@ -1245,14 +1246,14 @@
                 Swal.fire('สำเร็จ', res.message, 'success');
                 var mObj = bootstrap.Modal.getInstance(document.getElementById('u_evaluationModal'));
                 if(mObj) mObj.hide();
-                window.checkCurrentMonthEvalStatus(); 
+                window.u_checkCurrentMonthEvalStatus(); 
             } else {
                 Swal.fire('ผิดพลาด', res.message, 'error');
             }
         });
     };
 
-    window.renderUserEvalsList = function() {
+    window.u_renderEvalsList = function() {
         var list = window.globalUserEvals || [];
         var html = '';
         if (list.length > 0) {
@@ -1278,17 +1279,17 @@
         if(tab) tab.innerHTML = html;
     };
 
-    window.renderUserPayslipsList = function() {
+    window.u_renderPayslipsList = function() {
         var list = window.globalUserPayslips || [];
         var html = '';
         if (list.length > 0) {
             list.forEach(function(p) {
-                var formattedDate = window.formatDate(p.payDate);
+                var formattedDate = window.u_formatDate(p.payDate);
                 html += `
                 <div class="history-item d-flex flex-wrap justify-content-between align-items-center border-start border-4 border-warning">
                     <div>
                         <div class="text-warning fw-bold mb-1"><i class="bi bi-calendar-check me-2"></i>งวดวันที่: ${formattedDate}</div>
-                        <div class="text-light small"><i class="bi bi-cash me-2"></i>รับสุทธิ: <b class="fs-6 ms-1 text-white">${window.numberWithCommas(p.netSalary)}</b> บาท</div>
+                        <div class="text-light small"><i class="bi bi-cash me-2"></i>รับสุทธิ: <b class="fs-6 ms-1 text-white">${window.u_numberWithCommas(p.netSalary)}</b> บาท</div>
                     </div>
                     <a href="${p.pdfUrl}" target="_blank" class="btn btn-sm btn-warning rounded-pill px-4 mt-2 mt-md-0 fw-bold text-dark">
                         <i class="bi bi-file-pdf me-1"></i> เปิดสลิป
@@ -1302,7 +1303,7 @@
         if(tab) tab.innerHTML = html;
     };
 
-    window.renderUserAccidentsList = function() { 
+    window.u_renderAccidentsList = function() { 
         var limitEl = document.getElementById('u_accLimit');
         var limit = limitEl ? limitEl.value : '10'; 
         var list = limit === 'all' ? (window.globalUserAccidents || []) : (window.globalUserAccidents || []).slice(0, parseInt(limit)); 
@@ -1336,7 +1337,7 @@
         if(tab) tab.innerHTML = html; 
     };
 
-    window.renderUserWarningsList = function() { 
+    window.u_renderWarningsList = function() { 
         var limitEl = document.getElementById('u_warnLimit');
         var limit = limitEl ? limitEl.value : '10'; 
         var list = limit === 'all' ? (window.globalUserWarnings || []) : (window.globalUserWarnings || []).slice(0, parseInt(limit)); 
@@ -1346,9 +1347,9 @@
                 html += `
                 <div class="history-item border-start border-4 border-danger d-flex flex-wrap justify-content-between align-items-center">
                     <div class="text-danger fw-bold mb-2 mb-md-0">
-                        <i class="bi bi-exclamation-circle-fill me-2"></i>วันที่ออกใบเตือน: <span class="text-light fw-normal ms-1">${window.formatDate(w.date)}</span>
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>วันที่ออกใบเตือน: <span class="text-light fw-normal ms-1">${window.u_formatDate(w.date)}</span>
                     </div>
-                    <button onclick="window.openPreview('${w.url}')" class="btn btn-sm btn-outline-danger px-4 rounded-pill">
+                    <button onclick="window.u_openPreview('${w.url}')" class="btn btn-sm btn-outline-danger px-4 rounded-pill">
                         <i class="bi bi-eye me-1"></i>ดูเอกสาร
                     </button>
                 </div>`; 
@@ -1360,7 +1361,7 @@
         if(tab) tab.innerHTML = html; 
     };
 
-    window.renderUserDocs = function(d) {
+    window.u_renderDocs = function(d) {
         if(!d || !d.docs) return;
         var docTypes = [ 
             {key:'PHOTO', name:'รูปถ่ายหน้าตรง', icon:'bi-person-bounding-box'}, 
@@ -1383,7 +1384,7 @@
             if(hasFile) uploadedCount++;
             
             var statusBadge = hasFile ? '<span class="text-success small fw-bold"><i class="bi bi-check-circle me-1"></i>อัปโหลดแล้ว</span>' : '<span class="text-secondary small opacity-50">ยังไม่มีไฟล์</span>';
-            var viewBtn = hasFile ? `<button type="button" onclick="window.openPreview('${d.docs[t.key].url}')" class="btn btn-sm btn-dark border-secondary text-light ms-1 rounded-circle hover-scale" title="ดูไฟล์"><i class="bi bi-eye"></i></button>` : '<button type="button" class="btn btn-sm btn-dark border-secondary text-muted ms-1 rounded-circle" disabled><i class="bi bi-eye-slash"></i></button>';
+            var viewBtn = hasFile ? `<button type="button" onclick="window.u_openPreview('${d.docs[t.key].url}')" class="btn btn-sm btn-dark border-secondary text-light ms-1 rounded-circle hover-scale" title="ดูไฟล์"><i class="bi bi-eye"></i></button>` : '<button type="button" class="btn btn-sm btn-dark border-secondary text-muted ms-1 rounded-circle" disabled><i class="bi bi-eye-slash"></i></button>';
             
             var inputId = 'u_fileInput_' + index; 
             var spinnerId = 'u_spinner_' + index;
@@ -1401,7 +1402,7 @@
                         <div id="${spinnerId}" class="spinner-border spinner-border-sm text-warning" role="status" style="display:none;"></div>
                     </div>
                     <div class="input-group input-group-sm mt-2">
-                        <input type="file" class="form-control bg-dark border-secondary text-secondary shadow-none" id="${inputId}" onchange="window.handleSingleUpload('${t.key}', '${inputId}', '${spinnerId}')">
+                        <input type="file" class="form-control bg-dark border-secondary text-secondary shadow-none" id="${inputId}" onchange="window.u_handleSingleUpload('${t.key}', '${inputId}', '${spinnerId}')">
                     </div>
                 </div>
             </div>`;
@@ -1413,7 +1414,7 @@
         if(badge) badge.innerText = uploadedCount + '/' + docTypes.length;
     };
 
-    window.handleSingleUpload = async function(docKey, inputId, spinnerId) {
+    window.u_handleSingleUpload = async function(docKey, inputId, spinnerId) {
         var fileInput = document.getElementById(inputId); 
         var spinner = document.getElementById(spinnerId); 
         if (!fileInput || fileInput.files.length === 0) return;
@@ -1421,7 +1422,7 @@
         fileInput.disabled = true; 
         if(spinner) spinner.style.display = 'block';
         
-        var fileData = await window.getBase64User(fileInput.files[0]);
+        var fileData = await window.u_getBase64User(fileInput.files[0]);
         var payload = { 
             empId: window.currentUserData.id, 
             currentUserRole: 'User', 
@@ -1456,7 +1457,7 @@
         });
     };
 
-    window.openUserEditModal = function(id) { 
+    window.u_openEditModal = function(id) { 
         var form = document.getElementById('u_empForm');
         if(form) form.reset();
         
@@ -1465,11 +1466,11 @@
             document.getElementById('u_empId').value = d.id;
             document.getElementById('u_role').value = d.role;
             document.getElementById('u_empStatus').value = d.status || 'Active';
-            document.getElementById('u_resignDate').value = safeDate(d.resignDate);
+            document.getElementById('u_resignDate').value = window.u_safeDate(d.resignDate);
             document.getElementById('u_username').value = d.username;
             document.getElementById('u_fullname').value = d.name;
             document.getElementById('u_prefix').value = "";
-            document.getElementById('u_startDate').value = safeDate(d.startDate);
+            document.getElementById('u_startDate').value = window.u_safeDate(d.startDate);
             document.getElementById('u_gender').value = d.gender || '';
             document.getElementById('u_ssoType').value = d.ssoType || '';
             document.getElementById('u_ssoHosp').value = d.ssoHosp || '';
@@ -1477,12 +1478,12 @@
             document.getElementById('u_nickname').value = d.nickname || '';
             document.getElementById('u_phone').value = d.phone || '';
             document.getElementById('u_password').value = d.password;
-            document.getElementById('u_birthDate').value = safeDate(d.birthDate);
+            document.getElementById('u_birthDate').value = window.u_safeDate(d.birthDate);
             
             document.getElementById('u_idCardNum').value = d.idCardNum || '';
-            document.getElementById('u_idExp').value = safeDate(d.idExp);
+            document.getElementById('u_idExp').value = window.u_safeDate(d.idExp);
             document.getElementById('u_licNum').value = d.licNum || '';
-            document.getElementById('u_licExp').value = safeDate(d.licExp);
+            document.getElementById('u_licExp').value = window.u_safeDate(d.licExp);
             
             var lSelect = document.getElementById('u_licType');
             if(lSelect) {
@@ -1506,7 +1507,7 @@
         }, 200); 
     };
 
-    window.submitUserEmpForm = async function(e) {
+    window.u_submitEmpForm = async function(e) {
         e.preventDefault();
         Swal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
         
@@ -1536,14 +1537,14 @@
             startDate: getVal('u_startDate'),
             phone: getVal('u_phone'),
             currentUserRole: 'User',
-            filePhoto: await window.getBase64User(document.getElementById('u_filePhoto') ? document.getElementById('u_filePhoto').files[0] : null),
-            fileIdCard: await window.getBase64User(document.getElementById('u_fileIdCard') ? document.getElementById('u_fileIdCard').files[0] : null),
-            filePassport: await window.getBase64User(document.getElementById('u_filePassport') ? document.getElementById('u_filePassport').files[0] : null),
-            fileHouse: await window.getBase64User(document.getElementById('u_fileHouse') ? document.getElementById('u_fileHouse').files[0] : null),
-            fileDrive: await window.getBase64User(document.getElementById('u_fileDrive') ? document.getElementById('u_fileDrive').files[0] : null),
-            fileEdu: await window.getBase64User(document.getElementById('u_fileEdu') ? document.getElementById('u_fileEdu').files[0] : null),
-            fileCriminal: await window.getBase64User(document.getElementById('u_fileCriminal') ? document.getElementById('u_fileCriminal').files[0] : null),
-            fileHealth: await window.getBase64User(document.getElementById('u_fileHealth') ? document.getElementById('u_fileHealth').files[0] : null),
+            filePhoto: await window.u_getBase64User(document.getElementById('u_filePhoto') ? document.getElementById('u_filePhoto').files[0] : null),
+            fileIdCard: await window.u_getBase64User(document.getElementById('u_fileIdCard') ? document.getElementById('u_fileIdCard').files[0] : null),
+            filePassport: await window.u_getBase64User(document.getElementById('u_filePassport') ? document.getElementById('u_filePassport').files[0] : null),
+            fileHouse: await window.u_getBase64User(document.getElementById('u_fileHouse') ? document.getElementById('u_fileHouse').files[0] : null),
+            fileDrive: await window.u_getBase64User(document.getElementById('u_fileDrive') ? document.getElementById('u_fileDrive').files[0] : null),
+            fileEdu: await window.u_getBase64User(document.getElementById('u_fileEdu') ? document.getElementById('u_fileEdu').files[0] : null),
+            fileCriminal: await window.u_getBase64User(document.getElementById('u_fileCriminal') ? document.getElementById('u_fileCriminal').files[0] : null),
+            fileHealth: await window.u_getBase64User(document.getElementById('u_fileHealth') ? document.getElementById('u_fileHealth').files[0] : null),
             fileWarn: null,
             fileOther1: null,
             fileOther2: null
@@ -1569,7 +1570,247 @@
         }
     };
 
-    window.openAccidentModal = function() {
+    window.u_openYardModal = function() { 
+        var sInput = document.getElementById('u_yardSearchInput');
+        if(sInput) sInput.value = ''; 
+        var modalEl = document.getElementById('u_yardModal');
+        if(modalEl) new bootstrap.Modal(modalEl).show(); 
+        
+        var yList = document.getElementById("u_yardList");
+        if(yList) yList.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-info"></div><p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p></div>'; 
+        
+        window.callAPI({ action: 'getYardData' }).then(function(list) { 
+            window.globalYardData = list; 
+            var zones = []; 
+            list.forEach(function(y) { 
+                if(y.zone && y.zone !== "ไม่ระบุโซน" && y.zone !== "") { 
+                    if(zones.indexOf(y.zone) === -1) zones.push(y.zone); 
+                } 
+            }); 
+            var select = document.getElementById("u_yardZoneSelect"); 
+            if(select) {
+                select.innerHTML = '<option value="all" class="text-dark">🌐 แสดงทุกโซน</option>'; 
+                zones.sort().forEach(function(z) { 
+                    select.innerHTML += '<option value="' + z + '" class="text-dark">' + z + '</option>'; 
+                }); 
+            }
+            window.u_renderYards(list); 
+        }); 
+    };
+
+    window.u_filterYards = function() { 
+        var sInput = document.getElementById("u_yardSearchInput");
+        var searchTxt = sInput ? sInput.value.toLowerCase() : ''; 
+        var zSelect = document.getElementById("u_yardZoneSelect");
+        var selectedZone = zSelect ? zSelect.value : 'all'; 
+        
+        var filteredList = (window.globalYardData || []).filter(function(y) { 
+            var matchSearch = y.name.toLowerCase().includes(searchTxt) || y.location.toLowerCase().includes(searchTxt); 
+            var matchZone = (selectedZone === "all") || (y.zone === selectedZone); 
+            return matchSearch && matchZone; 
+        }); 
+        window.u_renderYards(filteredList); 
+    };
+
+    window.u_renderYards = function(list) { 
+        var html = ""; 
+        if(!list || list.length === 0){ 
+            html = "<div class='col-12 text-center p-5 text-muted'>ไม่พบข้อมูลลานตู้คอนเทนเนอร์ที่ค้นหา</div>"; 
+        } else { 
+            list.forEach(function(y) { 
+                var zoneBadge = (y.zone && y.zone !== "ไม่ระบุโซน" && y.zone !== "") ? '<span class="badge bg-secondary bg-opacity-50 border border-secondary text-light mb-2">' + y.zone + '</span>' : ''; 
+                html += `
+                <div class="col-md-6">
+                    <div class="card bg-black border-secondary h-100 hover-scale position-relative">
+                        <div class="card-body">
+                            ${zoneBadge}
+                            <h5 class="text-info fw-bold mb-2">${y.name}</h5>
+                            <p class="small text-secondary mb-1"><i class="bi bi-geo-alt text-danger me-1"></i> ${y.location}</p>
+                            <p class="small text-secondary mb-3"><i class="bi bi-telephone text-success me-1"></i> ${y.contact || '-'}</p>
+                            <table class="table table-dark table-sm border-secondary text-center align-middle mb-3" style="background: rgba(255,255,255,0.02);">
+                                <thead class="text-muted" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <tr><th></th><th>ตู้สั้น (20')</th><th>ตู้ยาว (40')</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="text-start text-warning">ตู้เปล่า</td><td>${y.emptyShort || '-'}</td><td>${y.emptyLong || '-'}</td></tr>
+                                    <tr><td class="text-start text-danger">ตู้หนัก</td><td>${y.fullShort || '-'}</td><td>${y.fullLong || '-'}</td></tr>
+                                </tbody>
+                            </table>
+                            <a href="${y.map}" target="_blank" class="btn btn-outline-info btn-sm w-100 rounded-pill"><i class="bi bi-map me-1"></i> เปิดแผนที่ (Google Map)</a>
+                        </div>
+                    </div>
+                </div>`; 
+            }); 
+        } 
+        var yList = document.getElementById("u_yardList");
+        if(yList) yList.innerHTML = html; 
+    };
+
+    window.u_openRepairModal = function() { 
+        var form = document.getElementById('u_userRepairForm');
+        if(form) form.reset(); 
+        
+        var dEl = document.getElementById('u_repDate');
+        if(dEl) dEl.valueAsDate = new Date(); 
+        
+        const container = document.getElementById('u_userRepairItemsContainer'); 
+        if(container) {
+            const rows = container.querySelectorAll('.u-repair-row'); 
+            rows.forEach((row, index) => { if(index > 0) row.remove(); }); 
+            if(rows.length > 0) {
+                let firstRow = rows[0]; 
+                var rs = firstRow.querySelector('.rep-select'); if(rs) rs.value = ""; 
+                var rc = firstRow.querySelector('.rep-custom'); 
+                if(rc) { rc.value = ""; rc.classList.add('d-none'); rc.required = false; }
+            }
+        }
+        
+        var pSelect = document.getElementById('u_repPlate');
+        if (pSelect && pSelect.options.length <= 1) { 
+            window.u_loadFleetVehicles(); 
+        } 
+        
+        var modalEl = document.getElementById('u_userRepairModal');
+        if(modalEl) new bootstrap.Modal(modalEl).show(); 
+    };
+
+    window.u_loadFleetVehicles = async function() { 
+        var pSelect = document.getElementById('u_repPlate');
+        if(!pSelect) return;
+        try { 
+            const response = await fetch(window.FLEET_API_URL, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+                body: JSON.stringify({ action: 'getFleetAnalytics' }) 
+            }); 
+            const data = await response.json(); 
+            if (data.status === 'success' && data.data && data.data.summary) { 
+                let options = '<option value="" disabled selected>-- เลือกทะเบียนรถ --</option>'; 
+                data.data.summary.forEach(v => { 
+                    options += `<option value="${v.plate}">${v.plate} ${v.type ? '('+v.type+')' : ''}</option>`; 
+                }); 
+                pSelect.innerHTML = options; 
+            } 
+        } catch (e) { 
+            pSelect.innerHTML = '<option value="">โหลดข้อมูลทะเบียนล้มเหลว</option>'; 
+        } 
+    };
+
+    window.u_toggleCustomInput = function(selectElem) { 
+        const customInput = selectElem.nextElementSibling; 
+        if(!customInput) return;
+        const needsDetails = ["other", "สลับยาง", "เปลี่ยนยาง", "อัดจารบี"].includes(selectElem.value); 
+        if (needsDetails) { 
+            customInput.classList.remove('d-none'); 
+            customInput.required = true; 
+            customInput.focus(); 
+            if(selectElem.value !== "other") { 
+                customInput.placeholder = "ระบุรายละเอียด (เช่น ตำแหน่งล้อ/จุดที่ทำ)"; 
+            } else { 
+                customInput.placeholder = "ระบุรายการ/อาการ"; 
+            } 
+        } else { 
+            customInput.classList.add('d-none'); 
+            customInput.required = false; 
+        } 
+    };
+
+    window.u_addRepairRow = function() { 
+        const container = document.getElementById('u_userRepairItemsContainer'); 
+        if(!container) return;
+        const firstRow = container.querySelector('.u-repair-row'); 
+        if(!firstRow) return;
+        const newRow = firstRow.cloneNode(true); 
+        var rs = newRow.querySelector('.rep-select'); if(rs) rs.value = ""; 
+        var rc = newRow.querySelector('.rep-custom'); 
+        if(rc) { rc.value = ""; rc.classList.add('d-none'); rc.required = false; }
+        container.appendChild(newRow); 
+    };
+
+    window.u_removeRepairRow = function(btn) { 
+        const rows = document.querySelectorAll('.u-repair-row'); 
+        if(rows.length > 1) { 
+            btn.parentElement.remove(); 
+        } else { 
+            Swal.fire({
+                toast: true, position:'top', icon:'warning', title:'ต้องมีอย่างน้อย 1 รายการ', 
+                showConfirmButton: false, timer: 2000, background: '#1e1e1e', color: '#fff'
+            }); 
+        } 
+    };
+
+    window.u_submitRepair = async function(e) { 
+        e.preventDefault(); 
+        let itemsList = []; 
+        document.querySelectorAll('.u-repair-row').forEach(row => { 
+            var rs = row.querySelector('.rep-select');
+            var rc = row.querySelector('.rep-custom');
+            let selVal = rs ? rs.value : ''; 
+            let custVal = rc ? rc.value : ''; 
+            let itemName = selVal; 
+            if (["other", "สลับยาง", "เปลี่ยนยาง", "อัดจารบี"].includes(selVal) && custVal.trim() !== "") { 
+                itemName = (selVal === "other") ? custVal.trim() : `${selVal} - ${custVal.trim()}`; 
+            } 
+            if(itemName) { itemsList.push({ name: itemName, cost: 0 }); } 
+        }); 
+        
+        if(itemsList.length === 0) { 
+            Swal.fire({icon: 'warning', title: 'แจ้งเตือน', text: 'กรุณาระบุรายการซ่อมอย่างน้อย 1 รายการ', background: '#1e1e1e', color: '#fff'}); 
+            return; 
+        } 
+        
+        var repNoteEl = document.getElementById('u_repNote');
+        let userNote = repNoteEl ? repNoteEl.value : ''; 
+        let finalNote = userNote ? userNote + `\n(แจ้งโดย: ${window.currentUserData.name})` : `(แจ้งโดย: ${window.currentUserData.name})`; 
+        
+        var dateEl = document.getElementById('u_repDate');
+        var plateEl = document.getElementById('u_repPlate');
+        var mileEl = document.getElementById('u_repMile');
+        
+        let payload = { 
+            action: 'manageRepair', subAction: 'add', 
+            date: dateEl ? dateEl.value : '', 
+            plate: plateEl ? plateEl.value : '', 
+            mile: mileEl ? (mileEl.value || 0) : 0, 
+            mechanic: '', note: finalNote, itemsJSON: JSON.stringify(itemsList) 
+        }; 
+        
+        let btn = document.getElementById('btnSubmitRep'); 
+        if(!btn) return;
+        let originalText = btn.innerHTML; 
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังส่งคิวช่าง...'; 
+        btn.disabled = true; 
+        
+        try { 
+            const response = await fetch(window.FLEET_API_URL, { 
+                method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) 
+            }); 
+            const data = await response.json(); 
+            btn.innerHTML = originalText; btn.disabled = false; 
+            if (data.status === 'success') { 
+                Swal.fire({
+                    icon: 'success', 
+                    title: 'แจ้งซ่อมสำเร็จ!', 
+                    text: 'ข้อมูลถูกส่งเข้าคิวช่าง (สถานะ: รอซ่อม) เรียบร้อยแล้ว', 
+                    background: '#1e1e1e', 
+                    color: '#fff'
+                }); 
+                var mObj = bootstrap.Modal.getInstance(document.getElementById('u_userRepairModal'));
+                if(mObj) mObj.hide(); 
+            } else { throw new Error(data.message); } 
+        } catch(err) { 
+            btn.innerHTML = originalText; btn.disabled = false; 
+            Swal.fire({
+                icon: 'error', 
+                title: 'ผิดพลาด', 
+                text: 'ไม่สามารถส่งข้อมูลได้: ' + err.message, 
+                background: '#1e1e1e', 
+                color: '#fff'
+            }); 
+        } 
+    };
+
+    window.u_openAccidentModal = function() {
         var form = document.getElementById('u_accidentForm');
         if(form) form.reset();
         var dateEl = document.getElementById('u_accDate');
@@ -1591,7 +1832,7 @@
         if(modalEl) new bootstrap.Modal(modalEl).show();
     };
 
-    window.toggleUserAccOther = function(selectId, divId) {
+    window.u_toggleAccOther = function(selectId, divId) {
         var sel = document.getElementById(selectId);
         var div = document.getElementById(divId);
         if(!sel || !div) return;
@@ -1612,7 +1853,7 @@
         }
     };
 
-    window.submitUserAccident = async function(e) {
+    window.u_submitAccident = async function(e) {
         e.preventDefault();
         
         var getVal = (id) => { var el = document.getElementById(id); return el ? el.value : ''; };
@@ -1620,7 +1861,7 @@
 
         var btn = document.getElementById('btnSubmitUserAccident');
         if(!btn) return;
-        var originalText = btn.innerText;
+        var originalText = btn.innerHTML;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังส่งรายงาน...';
         btn.disabled = true;
 
@@ -1629,8 +1870,8 @@
         var b64_1 = null, type1 = null;
         var b64_2 = null, type2 = null;
 
-        if (file1) { var data1 = await window.getBase64User(file1); b64_1 = data1.base64; type1 = data1.type; }
-        if (file2) { var data2 = await window.getBase64User(file2); b64_2 = data2.base64; type2 = data2.type; }
+        if (file1) { var data1 = await window.u_getBase64User(file1); b64_1 = data1.base64; type1 = data1.type; }
+        if (file2) { var data2 = await window.u_getBase64User(file2); b64_2 = data2.base64; type2 = data2.type; }
 
         var payload = {
             empId: window.currentUserData.id,
@@ -1638,7 +1879,7 @@
             idCard: window.currentUserData.idCardNum || "-",
             phone: window.currentUserData.phone || "-",
             gender: window.currentUserData.gender || "-",
-            tenure: window.calcTenure(window.currentUserData.startDate).replace(/<[^>]*>?/gm, ''),
+            tenure: window.u_calcTenure(window.currentUserData.startDate).replace(/<[^>]*>?/gm, ''),
             accDate: getVal('u_accDate'),
             accTime: getVal('u_accTime'),
             location: getVal('u_accLocation'),
@@ -1674,5 +1915,87 @@
         });
     };
 
+    window.u_getBase64User = function(file) { 
+        return new Promise(function(resolve) { 
+            if (!file) { resolve(null); return; } 
+            var reader = new FileReader(); 
+            reader.onload = function() { 
+                resolve({base64: reader.result.split(',')[1], type: file.type}); 
+            }; 
+            reader.readAsDataURL(file); 
+        }); 
+    };
+
+    window.u_calcAge = function(d) { 
+        if(!d) return "-"; 
+        var today = new Date(); 
+        var birthDate = new Date(d); 
+        if(isNaN(birthDate)) return "-"; 
+        var age = today.getFullYear() - birthDate.getFullYear(); 
+        var m = today.getMonth() - birthDate.getMonth(); 
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } 
+        return age + " ปี"; 
+    };
+
+    window.u_formatDate = function(d) { 
+        if(!d) return '-'; 
+        try { 
+            var date = new Date(d); 
+            if(isNaN(date.getTime())) return '-'; 
+            return date.toLocaleDateString('th-TH-u-ca-gregory', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
+        } catch(e) { return '-'; } 
+    };
+
+    window.u_calcTenure = function(dateString) { 
+        if(!dateString) return '-'; 
+        var start = new Date(dateString); 
+        var now = new Date(); 
+        start.setHours(0,0,0,0); 
+        now.setHours(0,0,0,0); 
+        if(isNaN(start.getTime())) return "-"; 
+        if (start.getTime() > now.getTime()) { 
+            return '<span class="badge bg-warning text-dark border border-warning shadow-sm" style="font-weight:600;">รอเริ่มงาน</span>'; 
+        } 
+        var years = now.getFullYear() - start.getFullYear(); 
+        var months = now.getMonth() - start.getMonth(); 
+        var days = now.getDate() - start.getDate(); 
+        if (days < 0) { 
+            months--; 
+            var prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); 
+            days += prevMonth.getDate(); 
+        } 
+        if (months < 0) { 
+            years--; 
+            months += 12; 
+        } 
+        var result = []; 
+        if (years > 0) result.push(years + " ปี"); 
+        if (months > 0) result.push(months + " เดือน"); 
+        if (days > 0) result.push(days + " วัน"); 
+        if (result.length === 0) return "เริ่มงานวันนี้"; 
+        return result.join(" "); 
+    };
+
+    window.u_numberWithCommas = function(x) {
+        if (!x && x !== 0) return "0";
+        var parts = x.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.length > 1 ? parts.join(".") : parts[0];
+    };
+
+    window.u_openPreview = function(url) {
+        window.open(url, '_blank');
+    };
+
+    window.u_safeDate = function(d) {
+        if(!d) return '';
+        try {
+            var date = new Date(d);
+            if(isNaN(date.getTime())) return '';
+            return date.toISOString().split('T')[0];
+        } catch(e) {
+            return '';
+        }
+    };
 </script>
 </div>
