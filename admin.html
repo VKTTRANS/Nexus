@@ -2406,7 +2406,7 @@
                 if (typeof window.logout === 'function') {
                     window.logout();
                 } else {
-                    // เผื่อหาฟังก์ชัน logout ไม่เจอ ให้ล้าง Session และรีเฟรชหน้าต่างใหม่เลย
+         
                     localStorage.removeItem('hr_user_session');
                     location.reload();
                 }
