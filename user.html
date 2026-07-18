@@ -963,10 +963,14 @@
             var ruleKey = 'vkt_rules_accepted_' + d.id;
             var hasAcceptedRules = localStorage.getItem(ruleKey);
 
-            if (!hasAcceptedRules && !d.rulesAccepted) {
+            // ยึดข้อมูลจาก Google Sheet เป็นหลัก 100%
+            if (d.rulesAccepted === false) {
+                // ถ้าใน Sheet ไม่มีคำว่า "ยอมรับแล้ว" ให้ล้างแคชทิ้ง แล้วโชว์ Popup บังคับอ่านใหม่
+                localStorage.removeItem('vkt_rules_accepted_' + d.id);
                 var rulesModal = new bootstrap.Modal(document.getElementById('rulesModal'));
                 rulesModal.show();
             } else {
+                // ถ้าใน Sheet มีคำว่า "ยอมรับแล้ว" ค่อยให้เข้าใช้งาน
                 document.getElementById('userProfileContent').style.display = 'flex'; 
             }
             
