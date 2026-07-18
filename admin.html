@@ -890,6 +890,469 @@
         </div>
     </div>
 
+    <!-- ==================== MISSING MODALS ==================== -->
+    <!-- Modal วันเกิด -->
+    <div class="modal fade" id="birthdayModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content logistics-modal">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-warning"><i class="bi bi-cake2 me-2"></i>วันเกิดเดือนนี้</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="birthdayListBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สถิติตำแหน่ง -->
+    <div class="modal fade" id="positionStatsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content logistics-modal">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-success"><i class="bi bi-pie-chart me-2"></i>สถิติแยกตามตำแหน่ง</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="positionStatsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal รายชื่อตามตำแหน่ง -->
+    <div class="modal fade" id="positionDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content logistics-modal border-success">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-success fs-6" id="positionDetailTitle">...</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="positionDetailList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สถิติรายปี -->
+    <div class="modal fade" id="yearlyStatsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content logistics-modal">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-info"><i class="bi bi-graph-up me-2"></i>สถิติพนักงานเข้า-ออกรายปี</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <table class="table table-dark table-hover mb-0 text-center m-0">
+                        <thead class="text-secondary"><tr><th>ปี</th><th class="text-success">เข้าใหม่</th><th class="text-danger">ลาออก</th><th>สุทธิสะสม</th></tr></thead>
+                        <tbody id="yearStatsBodyModal"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal รายละเอียดรายปี -->
+    <div class="modal fade" id="yearDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content logistics-modal border-info">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-info fs-6" id="yearDetailTitle">...</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="yearDetailList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal รายละเอียดอุบัติเหตุ -->
+    <div class="modal fade" id="accidentDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content logistics-modal border-warning">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-warning"><i class="bi bi-cone-striped me-2"></i>อัปเดตสถานะอุบัติเหตุ: <span id="m_accDocNo"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="m_accDocNoHidden">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6"><small class="text-muted d-block">พนักงาน</small><div class="text-white fw-bold" id="m_accEmpName"></div></div>
+                        <div class="col-md-6"><small class="text-muted d-block">วันเวลาเกิดเหตุ</small><div class="text-white" id="m_accDateTime"></div></div>
+                        <div class="col-md-6"><small class="text-muted d-block">ยานพาหนะ</small><div class="text-white" id="m_accVehicle"></div></div>
+                        <div class="col-md-6"><small class="text-muted d-block">สาเหตุหลัก</small><div class="text-danger fw-bold" id="m_accCause"></div></div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">สถานที่เกิดเหตุ</label>
+                            <input type="text" id="m_accLocation" class="form-control bg-dark text-white border-secondary input-dark">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">ความเสียหายเบื้องต้น</label>
+                            <input type="text" id="m_accDamage" class="form-control bg-dark text-white border-secondary input-dark">
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">รายละเอียดเหตุการณ์</label>
+                            <textarea id="m_accDetail" class="form-control bg-dark text-white border-secondary input-dark" rows="3"></textarea>
+                        </div>
+                        <div class="col-12"><hr class="border-secondary opacity-25"></div>
+                        <div class="col-md-4">
+                            <label class="small text-warning fw-bold mb-1">สถานะการดำเนินการ</label>
+                            <select id="m_accStatus" class="form-select bg-dark text-white border-warning input-dark">
+                                <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                <option value="กำลังตรวจสอบ">กำลังตรวจสอบ</option>
+                                <option value="ส่งซ่อม/เคลมประกัน">ส่งซ่อม/เคลมประกัน</option>
+                                <option value="ปิดงานเรียบร้อย">ปิดงานเรียบร้อย</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="small text-success fw-bold mb-1">แนวทางการแก้ไข (แสดงใน PDF)</label>
+                            <input type="text" id="m_accFix" class="form-control bg-dark text-white border-success input-dark" placeholder="ระบุการชดใช้ หรือการซ่อมแซม">
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-info fw-bold mb-1">ข้อปฏิบัติ/ป้องกัน (แสดงใน PDF)</label>
+                            <textarea id="m_accPrevent" class="form-control bg-dark text-white border-info input-dark" rows="2" placeholder="มาตรการป้องกันไม่ให้เกิดซ้ำ"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button class="btn btn-outline-danger me-auto rounded-pill px-4" onclick="window.deleteAccident()">ลบเอกสารทิ้ง</button>
+                    <button class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button class="btn btn-warning fw-bold text-dark rounded-pill px-4" onclick="window.saveAccidentResolution()">บันทึกอัปเดต & แก้ไข PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ออกใบเตือน -->
+    <div class="modal fade" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content logistics-modal border-danger">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-danger"><i class="bi bi-file-earmark-plus me-2"></i>ออกหนังสือเตือน (Warning Letter)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="warningForm" onsubmit="window.submitWarningForm(event)">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="small text-muted mb-1 fw-bold">เลือกพนักงาน (พิมพ์ชื่อหรือรหัส) *</label>
+                                <input class="form-control bg-dark text-white border-secondary input-dark" list="warnEmpOptions" id="warnEmpInput" placeholder="ค้นหาพนักงาน..." required>
+                                <datalist id="warnEmpOptions"></datalist>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1">วันที่ออกเอกสาร *</label>
+                                <input type="date" id="warnIssueDate" class="form-control bg-dark text-white border-secondary input-dark" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1">วันที่ทำผิด *</label>
+                                <input type="date" id="warnIncidentDate" class="form-control bg-dark text-white border-secondary input-dark" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="small text-muted mb-1">สิ่งที่แนบมาด้วย</label>
+                                <input type="text" id="warnAttachments" class="form-control bg-dark text-white border-secondary input-dark" placeholder="เช่น รูปถ่าย, บันทึกข้อความ">
+                            </div>
+                            <div class="col-12">
+                                <label class="small text-muted mb-1">ฐานความผิดข้อที่ 1 *</label>
+                                <input type="text" id="warnOffense1" class="form-control bg-dark text-white border-secondary input-dark" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="small text-muted mb-1">ฐานความผิดข้อที่ 2</label>
+                                <input type="text" id="warnOffense2" class="form-control bg-dark text-white border-secondary input-dark">
+                            </div>
+                            <div class="col-12">
+                                <label class="small text-muted mb-1">หมายเหตุเพิ่มเติม</label>
+                                <textarea id="warnNotes" class="form-control bg-dark text-white border-secondary input-dark" rows="2"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1">ผู้ออกใบเตือน *</label>
+                                <select id="warnIssuedBy" class="form-select bg-dark text-white border-secondary input-dark" required>
+                                    <option value="กิตติศักดิ์ อุส่าห์ (หัวหน้าฝ่ายขนส่ง)">กิตติศักดิ์ อุส่าห์ (หัวหน้าฝ่ายขนส่ง)</option>
+                                    <option value="admin (ผู้ดูแลระบบ)">admin (ผู้ดูแลระบบ)</option>
+                                    <option value="ฝ่ายบุคคล (HR)">ฝ่ายบุคคล (HR)</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <label class="small text-white mb-2 fw-bold d-block"><i class="bi bi-camera text-danger me-2"></i>แนบหลักฐาน (ถ้ามี)</label>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <input type="file" id="warnPhoto1" class="form-control bg-dark border-secondary text-secondary input-dark" accept="image/*">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="file" id="warnPhoto2" class="form-control bg-dark border-secondary text-secondary input-dark" accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-end border-top border-secondary pt-3">
+                            <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                            <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold" id="btnSubmitWarning">สร้างใบเตือน PDF</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal รายละเอียดใบเตือน -->
+    <div class="modal fade" id="warningDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content logistics-modal border-danger">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-danger"><i class="bi bi-file-earmark-text me-2"></i>รายละเอียดใบเตือน: <span id="e_warnDocNo"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="e_warnDocNoHidden">
+                    <div class="mb-3 text-white fw-bold">พนักงาน: <span id="e_warnEmpName" class="text-warning"></span></div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">วันที่ออกเอกสาร</label>
+                            <input type="date" id="e_warnIssueDate" class="form-control bg-dark text-white border-secondary input-dark">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">วันที่ทำผิด</label>
+                            <input type="date" id="e_warnIncidentDate" class="form-control bg-dark text-white border-secondary input-dark">
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">สิ่งที่แนบมาด้วย</label>
+                            <input type="text" id="e_warnAttachments" class="form-control bg-dark text-white border-secondary input-dark">
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">ฐานความผิด 1</label>
+                            <input type="text" id="e_warnOffense1" class="form-control bg-dark text-white border-secondary input-dark">
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">ฐานความผิด 2</label>
+                            <input type="text" id="e_warnOffense2" class="form-control bg-dark text-white border-secondary input-dark">
+                        </div>
+                        <div class="col-12">
+                            <label class="small text-muted mb-1">หมายเหตุ</label>
+                            <textarea id="e_warnNotes" class="form-control bg-dark text-white border-secondary input-dark" rows="2"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small text-muted mb-1">ผู้ออกใบเตือน (ปัจจุบัน: <span id="e_warnIssuedByText" class="text-info"></span>)</label>
+                            <select id="e_warnIssuedBy" class="form-select bg-dark text-white border-secondary input-dark">
+                                <option value="กิตติศักดิ์ อุส่าห์ (หัวหน้าฝ่ายขนส่ง)">กิตติศักดิ์ อุส่าห์ (หัวหน้าฝ่ายขนส่ง)</option>
+                                <option value="admin (ผู้ดูแลระบบ)">admin (ผู้ดูแลระบบ)</option>
+                                <option value="ฝ่ายบุคคล (HR)">ฝ่ายบุคคล (HR)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button class="btn btn-outline-danger me-auto rounded-pill px-4" onclick="window.deleteWarning()">ลบเอกสารทิ้ง</button>
+                    <button class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button class="btn btn-danger fw-bold text-white rounded-pill px-4" onclick="window.saveWarningResolution()">บันทึกอัปเดต</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ออกสลิปเงินเดือน -->
+    <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content logistics-modal border-success">
+                <div class="modal-header logistics-modal-header py-3 border-bottom border-success">
+                    <h5 class="modal-title fw-bold text-success fs-5"><i class="bi bi-cash-coin me-2"></i>ออกสลิปเงินเดือน</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 bg-black bg-opacity-50">
+                    <form id="payrollForm" onsubmit="window.submitPayrollForm(event)">
+                        <input type="hidden" id="pr_empId">
+                        <input type="hidden" id="pr_prefix">
+                        <input type="hidden" id="pr_firstName">
+                        <input type="hidden" id="pr_lastName">
+                        <input type="hidden" id="pr_position">
+                        <input type="hidden" id="pr_email">
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <h5 class="fw-bold text-white mb-0" id="pr_empName">...</h5>
+                            <div class="d-flex align-items-center gap-2" id="keepPrevDataContainer">
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input border-warning shadow-none" type="checkbox" id="keepPrevData" onchange="window.toggleKeepData()" style="cursor:pointer; width:2em;">
+                                    <label class="form-check-label text-warning small ms-1" for="keepPrevData" style="cursor:pointer;">ดึงข้อมูลรายได้/หัก เดือนล่าสุด</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <!-- ข้อมูลหลัก -->
+                            <div class="col-12">
+                                <div class="row g-3 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                                    <div class="col-md-6">
+                                        <label class="small text-muted mb-1 fw-bold">วันที่จ่ายเงิน (Pay Date) *</label>
+                                        <input type="date" class="form-control bg-dark text-warning border-secondary shadow-none fw-bold" id="pr_payDate" required onchange="window.calcPayrollTotals()">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small text-muted mb-1 fw-bold">เงินเดือนพื้นฐาน (Base Salary) *</label>
+                                        <input type="number" class="form-control bg-dark text-white border-secondary shadow-none fw-bold text-end" id="pr_baseSalary" required onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- รายได้ & รายการหัก -->
+                            <div class="col-md-6">
+                                <div class="p-3 rounded h-100" style="background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2);">
+                                    <h6 class="text-success fw-bold border-bottom border-success border-opacity-25 pb-2 mb-3"><i class="bi bi-plus-circle-fill me-2"></i>รายได้อื่นๆ (Incomes)</h6>
+                                    
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">1. เบี้ยขยัน / โอที</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc1" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc1')" title="ดึงค่าเดือนที่แล้ว"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">2. ค่าเที่ยว / ค่ารันไมล์</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc2" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc2')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">3. ค่าโทรศัพท์ / อินเทอร์เน็ต</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc3" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc3')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">4. ค่าตำแหน่ง / ความรับผิดชอบ</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc4" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc4')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">5. โบนัส / เงินรางวัลพิเศษ</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc5" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc5')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">6. รายได้อื่นๆ (ระบุในหมายเหตุ)</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc6" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc6')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="p-3 rounded h-100" style="background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.2);">
+                                    <h6 class="text-danger fw-bold border-bottom border-danger border-opacity-25 pb-2 mb-3"><i class="bi bi-dash-circle-fill me-2"></i>รายการหัก (Deductions)</h6>
+                                    
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">1. ภาษีหัก ณ ที่จ่าย (3%)</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec1" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec1')" title="ดึงค่าเดือนที่แล้ว"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">2. ประกันสังคม (5%)</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec2" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec2')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">3. หักมาสาย / ขาดงาน / ลา</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec3" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec3')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">4. หักเบิกล่วงหน้า</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec4" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec4')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">5. หักกองทุน / เงินออม</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec5" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec5')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">6. รายการหักอื่นๆ (ระบุในหมายเหตุ)</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec6" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec6')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- สรุป -->
+                            <div class="col-12 mt-4">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="p-3 text-center rounded border border-success border-opacity-50" style="background: rgba(0, 230, 118, 0.05);">
+                                            <div class="small text-muted mb-1">รวมรายรับทั้งหมด (Gross)</div>
+                                            <h4 class="text-success fw-bold mb-0" id="pr_totalIncomeShow">0.00</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-3 text-center rounded border border-danger border-opacity-50" style="background: rgba(255, 77, 77, 0.05);">
+                                            <div class="small text-muted mb-1">รวมรายการหักทั้งหมด (Deduction)</div>
+                                            <h4 class="text-danger fw-bold mb-0" id="pr_totalDeductShow">0.00</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-3 text-center rounded border border-warning" style="background: rgba(255, 193, 7, 0.1);">
+                                            <div class="small text-warning fw-bold mb-1">ยอดรับสุทธิ (Net Salary)</div>
+                                            <h3 class="text-warning fw-bold mb-0" id="pr_netSalaryShow">0.00</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-end border-top border-secondary pt-3">
+                            <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                            <button type="submit" class="btn btn-success fw-bold text-dark rounded-pill px-5 shadow-lg" id="btnSubmitPayroll">
+                                <i class="bi bi-file-earmark-pdf me-2"></i>บันทึกและสร้าง PDF
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ประวัติเงินเดือน -->
+    <div class="modal fade" id="payrollHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content logistics-modal border-warning">
+                <div class="modal-header logistics-modal-header py-3 border-bottom border-warning">
+                    <h5 class="modal-title fw-bold text-warning"><i class="bi bi-clock-history me-2"></i>ประวัติการออกสลิปเงินเดือน</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover mb-0 align-middle">
+                            <thead>
+                                <tr class="text-secondary text-center small">
+                                    <th class="ps-4 text-start">วันที่จ่ายเงิน</th>
+                                    <th class="text-end">รวมรายได้</th>
+                                    <th class="text-end">รวมรายการหัก</th>
+                                    <th class="text-end">รับสุทธิ</th>
+                                    <th>ดูสลิป</th>
+                                    <th class="pe-4">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payrollHistoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal อุบัติเหตุยอดฮิต -->
+    <div class="modal fade" id="accTopCausesModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content logistics-modal border-warning">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-warning"><i class="bi bi-cone-striped me-2"></i>สถิติอุบัติเหตุ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="accTopCausesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ใบเตือนยอดฮิต -->
+    <div class="modal fade" id="warnTopEmpModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content logistics-modal border-danger">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-danger"><i class="bi bi-file-earmark-break me-2"></i>พนักงานที่ได้รับใบเตือน</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="warnTopEmployeesList"></div>
+            </div>
+        </div>
+    </div>
+
 <script>
     window.filterAdminEvalTable = function() {
         var search = (document.getElementById('searchEvalInput') ? document.getElementById('searchEvalInput').value.toLowerCase() : "");
@@ -1229,6 +1692,8 @@
                 ? '<span class="text-success" title="ยอมรับแล้ว"><i class="bi bi-check-circle-fill fs-5"></i></span>' 
                 : '<span class="text-danger" title="ยังไม่ยอมรับ"><i class="bi bi-x-circle-fill fs-5"></i></span>';
 
+            var ageText = window.calcAge(emp.birthDate); // คำนวณอายุ
+
             var tr = document.createElement('tr');
             tr.onclick = function(e) { 
                 if (!e.target.closest('button') && !e.target.closest('a') && !e.target.closest('select')) { 
@@ -1236,7 +1701,7 @@
                 } 
             };
             tr.innerHTML = '<td class="ps-4"><span class="font-monospace text-success fw-bold">' + emp.id + '</span></td>' +
-                           '<td><div class="fw-bold text-white">' + emp.name + '</div><div class="small text-secondary" style="font-size:0.75rem;">' + (emp.nickname || '-') + '</div></td>' +
+                           '<td><div class="fw-bold text-white">' + emp.name + '</div><div class="small text-secondary" style="font-size:0.75rem;">' + (emp.nickname || '-') + ' | อายุ: ' + ageText + '</div></td>' +
                            '<td><span class="badge bg-dark border border-secondary fw-normal text-secondary px-2">' + (emp.position || '-') + '</span></td>' +
                            '<td class="text-center small text-secondary">' + window.calcTenure(emp.startDate) + '</td>' +
                            '<td class="text-center"><span class="badge rounded-pill ' + badgeClass + ' px-3 shadow-sm">' + emp.status + '</span></td>' +
