@@ -1,7 +1,7 @@
 <div id="view-user" class="view-section container p-3 p-md-4">
 
     <style>
-        
+        /* --- Logistics Theme สำหรับ User --- */
         :root {
             --logistic-bg: #0a0a0a;
             --logistic-card: #151515;
@@ -967,13 +967,16 @@
                     localStorage.removeItem('vkt_rules_accepted_' + d.id);
                     document.getElementById('userProfileContent').style.display = 'none'; 
                     
-                    // ใช้ getInstance เพื่อป้องกันปัญหา Modal ค้างใน SPA (Single Page App)
                     var rulesModalEl = document.getElementById('rulesModal');
                     if (rulesModalEl) {
-                        var rulesModal = bootstrap.Modal.getInstance(rulesModalEl);
-                        if (!rulesModal) {
-                            rulesModal = new bootstrap.Modal(rulesModalEl);
-                        }
+                        // ทำลายแคช Modal เก่าของ Bootstrap ทิ้งก่อน แล้วสร้างใหม่ เพื่อแก้ปัญหาจอดำ/ไม่เด้ง
+                        var oldModal = bootstrap.Modal.getInstance(rulesModalEl);
+                        if (oldModal) { oldModal.dispose(); }
+                        
+                        var rulesModal = new bootstrap.Modal(rulesModalEl, {
+                            backdrop: 'static',
+                            keyboard: false
+                        });
                         rulesModal.show();
                     }
                 } else {
@@ -1087,9 +1090,14 @@
             var rulesModalEl = document.getElementById('rulesModal');
             if (rulesModalEl) {
                 var modal = bootstrap.Modal.getInstance(rulesModalEl);
-                if (modal) { modal.hide(); }
+                if (modal) { 
+                    modal.hide(); 
+                    // ให้เวลา Bootstrap ปิด Modal ค่อยเคลียร์
+                    setTimeout(() => { modal.dispose(); }, 300);
+                }
             }
 
+            // Cleanup fallback
             var backdrops = document.querySelectorAll('.modal-backdrop');
             backdrops.forEach(b => b.remove());
             document.body.classList.remove('modal-open');
@@ -1109,11 +1117,17 @@
             var rulesModalEl = document.getElementById('rulesModal');
             if (rulesModalEl) {
                 var modal = bootstrap.Modal.getInstance(rulesModalEl);
-                if (modal) { modal.hide(); }
+                if (modal) { 
+                    modal.hide(); 
+                }
             }
 
             // Clean up UI safely
             setTimeout(function() {
+                if (rulesModalEl) {
+                    var m = bootstrap.Modal.getInstance(rulesModalEl);
+                    if(m) m.dispose();
+                }
                 var backdrops = document.querySelectorAll('.modal-backdrop');
                 backdrops.forEach(b => b.remove());
                 document.body.classList.remove('modal-open');
