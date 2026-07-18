@@ -174,7 +174,7 @@
                             <span class="badge bg-info text-dark ms-1 rounded-pill" id="u_accCountBadge">0</span>
                         </button>
                     </li>
-                    <!-- แท็บผลประเมิน (ให้พนักงานดู) -->
+                    <!-- แท็บผลประเมิน (ให้พนักงานดูว่าตัวเองได้กี่คะแนน) -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link py-2 text-success" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
                             <i class="bi bi-star-fill me-1"></i> ผลประเมิน
@@ -728,8 +728,11 @@
     var evaluatedDriverIds = [];
 
     window.loadUserData = function() { 
-        document.getElementById('userLoading').style.display = 'block'; 
-        document.getElementById('userProfileContent').style.display = 'none'; 
+        var userLoadingEl = document.getElementById('userLoading');
+        if(userLoadingEl) userLoadingEl.style.display = 'block'; 
+        
+        var userProfileContentEl = document.getElementById('userProfileContent');
+        if(userProfileContentEl) userProfileContentEl.style.display = 'none'; 
         
         // ล้างบักจอดำของ Bootstrap
         document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
@@ -742,7 +745,7 @@
             role: 'User', 
             userId: window.currentUser.empId 
         }).then(function(data){ 
-            document.getElementById('userLoading').style.display = 'none'; 
+            if(userLoadingEl) userLoadingEl.style.display = 'none'; 
             
             if (!data || data.length === 0) return; 
             
@@ -756,7 +759,7 @@
 
             if (!isAccepted) {
                 localStorage.removeItem('vkt_rules_accepted_' + d.id);
-                document.getElementById('userProfileContent').style.display = 'none'; 
+                if(userProfileContentEl) userProfileContentEl.style.display = 'none'; 
                 document.body.style.overflow = 'hidden'; 
                 
                 var rulesOverlay = document.getElementById('rulesOverlay');
@@ -776,7 +779,7 @@
                 
                 document.body.style.overflow = '';
                 localStorage.setItem('vkt_rules_accepted_' + d.id, 'true');
-                document.getElementById('userProfileContent').style.display = 'flex'; 
+                if(userProfileContentEl) userProfileContentEl.style.display = 'flex'; 
             }
             
             window.renderUserProfile(d); 
@@ -840,7 +843,7 @@
                 window.renderUserEvalsList();
             });
 
-         
+            // โหลด Setting (License Type) ให้พร้อมใช้ตอน User กดอัปเดตข้อมูลส่วนตัว
             window.callAPI({ action: 'getSettingsData' }).then(function(res) {
                 var lSelect = document.getElementById('u_licType');
                 if(lSelect) {
