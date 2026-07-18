@@ -41,11 +41,13 @@
             border-radius: 8px;
             padding: 4px;
             border: 1px solid rgba(255,255,255,0.08);
+            flex-wrap: wrap;
         }
         .nav-tabs-custom .tab-btn {
             background: transparent; color: #aaa; border: none;
             padding: 6px 16px; border-radius: 6px; font-weight: 500; font-size: 0.9rem;
             transition: all 0.3s;
+            white-space: nowrap;
         }
         .nav-tabs-custom .tab-btn.active {
             background: rgba(255,255,255,0.1); color: #fff;
@@ -116,13 +118,12 @@
         .payroll-dec { color: #ff4d4d !important; }
         .lbl-fit { font-size: 0.8rem; width: 175px; text-align: left; padding: 0.375rem 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: space-between; background-color: #1a1a1a; border-color: #333; color: #aaa;}
         
-        /* สไตล์สำหรับ checkbox ตำแหน่ง */
         .pos-checkbox-wrapper { background: #000; border: 1px solid #333; border-radius: 6px; padding: 10px; max-height: 180px; overflow-y: auto;}
     </style>
 
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 stagger-1">
-        <div class="d-flex align-items-center gap-3 mb-2 mb-md-0">
-            <h5 class="fw-bold text-white mb-0 d-flex align-items-center">
+        <div class="d-flex align-items-center gap-3 mb-2 mb-md-0 flex-wrap">
+            <h5 class="fw-bold text-white mb-0 d-flex align-items-center text-nowrap">
                 <div class="bg-success text-black rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px; height:28px; font-size:1rem;"><i class="bi bi-shield-check"></i></div>
                 Admin Console
             </h5>
@@ -132,6 +133,7 @@
                 <button class="tab-btn" id="btnTabAcc" onclick="window.switchAdminTab('acc')"><i class="bi bi-cone-striped me-1"></i>อุบัติเหตุ</button>
                 <button class="tab-btn" id="btnTabWarn" onclick="window.switchAdminTab('warn')"><i class="bi bi-exclamation-triangle-fill me-1 text-danger"></i>ใบเตือน</button>
                 <button class="tab-btn" id="btnTabPayroll" onclick="window.switchAdminTab('payroll')"><i class="bi bi-cash-coin me-1 text-warning"></i>เงินเดือน</button>
+                <button class="tab-btn" id="btnTabEval" onclick="window.switchAdminTab('eval')"><i class="bi bi-star-fill me-1 text-success"></i>ประเมิน</button>
             </div>
         </div>
         
@@ -225,6 +227,70 @@
         </div>
     </div>
 
+    <!-- Section: ประเมินพนักงาน -->
+    <div id="section-admin-eval" class="d-none">
+        <div class="row g-2 mb-3 stagger-2">
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #198754;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">การประเมินทั้งหมด (ที่แสดง)</div>
+                        <h3 class="fw-bold text-success mb-0" id="statEvalTotal">0</h3>
+                    </div>
+                    <div class="stat-icon text-success bg-success bg-opacity-10"><i class="bi bi-card-checklist"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #ffc107;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">คะแนนเฉลี่ย</div>
+                        <h3 class="fw-bold text-warning mb-0" id="statEvalAvg">0.00</h3>
+                    </div>
+                    <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-star-fill"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #6c757d;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">ไม่ได้ประสานงาน</div>
+                        <h3 class="fw-bold text-secondary mb-0" id="statEvalNA">0</h3>
+                    </div>
+                    <div class="stat-icon text-secondary bg-secondary bg-opacity-10"><i class="bi bi-dash-circle"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 p-2 rounded-3 border border-secondary border-opacity-25 bg-black bg-opacity-25 stagger-3">
+            <div class="d-flex gap-2 flex-wrap">
+                <input type="month" id="filterEvalMonth" class="form-control form-control-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 150px; cursor: pointer;" onchange="window.filterAdminEvalTable()">
+                
+                <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-50 px-2 py-1" style="width: 250px;">
+                    <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchEvalInput" onkeyup="window.filterAdminEvalTable()" placeholder="ค้นหาชื่อผู้ประเมิน, คนขับ...">
+                </div>
+            </div>
+            <button class="btn btn-sm btn-outline-success rounded-pill px-3 shadow-sm hover-scale" onclick="window.loadAdminData()"><i class="bi bi-arrow-clockwise me-1"></i>รีเฟรช</button>
+        </div>
+        
+        <div class="glass-container-table stagger-4">
+            <div class="table-responsive">
+                <table class="table table-hover table-custom mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">เดือนที่ประเมิน</th>
+                            <th>ผู้ประเมิน (ต้นสังกัด)</th>
+                            <th>พนักงานขับรถ</th>
+                            <th class="text-center">คะแนน (เต็ม 10)</th>
+                            <th>คอมเมนต์ / เสนอแนะ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminEvalTableBody">
+                        <tr><td colspan="5" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <!-- Section: อุบัติเหตุ -->
     <div id="section-admin-acc" class="d-none">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
@@ -305,8 +371,6 @@
 
     <!-- Section: เงินเดือน (Payroll) -->
     <div id="section-admin-payroll" class="d-none">
-        
-        <!-- การ์ดสรุปยอดเงินเดือน (ตามเดือนที่เลือกกรอง) -->
         <div class="row g-2 mb-3 stagger-2">
             <div class="col-md-4">
                 <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #00E676;">
@@ -486,7 +550,7 @@
                                                             <small class="text-muted">Role</small>
                                                             <span class="fw-bold text-success" id="view_role">-</span>
                                                         </div>
-                                                        <!-- จุดที่เพิ่มสถานะการยอมรับกฎระเบียบในโปรไฟล์ -->
+                                                        <!-- จุดที่เพิ่มสถานะการยอมรับกฎระเบียบ -->
                                                         <div class="d-flex justify-content-between align-items-center pt-2 mt-2 border-top border-secondary border-opacity-25">
                                                             <small class="text-muted">การยอมรับกฎระเบียบ</small>
                                                             <span id="view_rule_status">-</span>
@@ -1097,16 +1161,20 @@
             document.getElementById('btnTabAcc').classList.remove('active');
             document.getElementById('btnTabWarn').classList.remove('active');
             document.getElementById('btnTabPayroll').classList.remove('active');
+            document.getElementById('btnTabEval').classList.remove('active');
             
             document.getElementById('section-admin-emp').classList.add('d-none');
             document.getElementById('section-admin-acc').classList.add('d-none');
             document.getElementById('section-admin-warn').classList.add('d-none');
             document.getElementById('section-admin-payroll').classList.add('d-none');
+            document.getElementById('section-admin-eval').classList.add('d-none');
             
             var searchEmp = document.getElementById('searchInput'); if(searchEmp) searchEmp.value = '';
             var searchAcc = document.getElementById('searchAccidentInput'); if(searchAcc) searchAcc.value = '';
             var searchWarn = document.getElementById('searchWarnInput'); if(searchWarn) searchWarn.value = '';
             var searchPay = document.getElementById('searchPayrollInput'); if(searchPay) searchPay.value = '';
+            var searchEval = document.getElementById('searchEvalInput'); if(searchEval) searchEval.value = '';
+            
             var filterPos = document.getElementById('filterPayrollPosition'); if(filterPos) filterPos.value = 'all';
             var filterStatus = document.getElementById('filterSlipStatus'); if(filterStatus) filterStatus.value = 'all';
 
@@ -1146,6 +1214,17 @@
                 }
 
                 if(window.allEmpData) window.filterPayrollTable(); 
+            } else if (tab === 'eval') {
+                document.getElementById('btnTabEval').classList.add('active'); 
+                document.getElementById('section-admin-eval').classList.remove('d-none'); 
+                
+                if(!document.getElementById('filterEvalMonth').value) {
+                    var d = new Date();
+                    var y = d.getFullYear();
+                    var m = ("0" + (d.getMonth() + 1)).slice(-2);
+                    document.getElementById('filterEvalMonth').value = y + "-" + m;
+                }
+                if(window.allEvalData) window.filterAdminEvalTable();
             }
         };
 
@@ -1154,6 +1233,9 @@
             document.getElementById('adminAccidentTableBody').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลอุบัติเหตุ...</td></tr>';
             document.getElementById('adminWarnTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูลใบเตือน...</td></tr>';
             document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
+            if(document.getElementById('adminEvalTableBody')) {
+                document.getElementById('adminEvalTableBody').innerHTML = '<tr><td colspan="5" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูลประเมิน...</td></tr>';
+            }
             
             window.callAPI({ 
                 action: 'getAccidentData', 
@@ -1188,10 +1270,7 @@
                         window.renderAccidentTable(window.currentAccidentDisplayData); 
                         window.renderWarningTable(window.currentWarningDisplayData);
                         
-                        window.callAPI({ 
-                            action: 'getUserPayslips', 
-                            empId: 'ALL' 
-                        }).then(function(prData) {
+                        window.callAPI({ action: 'getUserPayslips', empId: 'ALL' }).then(function(prData) {
                             window.allPayrollData = prData || [];
                             var posSet = new Set();
                             data.forEach(function(e) { 
@@ -1208,10 +1287,77 @@
                             });
                             window.filterPayrollTable();
                         });
+
+                        window.callAPI({ action: 'getAllEvaluations' }).then(function(evalData) {
+                            window.allEvalData = evalData || [];
+                            window.filterAdminEvalTable();
+                        });
                     });
                 });
             });
         };
+
+        window.filterAdminEvalTable = function() {
+            var search = (document.getElementById('searchEvalInput') ? document.getElementById('searchEvalInput').value.toLowerCase() : "");
+            var filterMonth = document.getElementById('filterEvalMonth') ? document.getElementById('filterEvalMonth').value : "";
+            
+            var filtered = window.allEvalData || [];
+            
+            if(filterMonth) {
+                filtered = filtered.filter(function(d) { return d.monthYear === filterMonth; });
+            }
+            if(search) {
+                filtered = filtered.filter(function(d) { 
+                    return (d.driverName + d.evaluatorName + d.comment).toLowerCase().includes(search);
+                });
+            }
+            
+            var html = '';
+            var totalScore = 0;
+            var scoreCount = 0;
+            var naCount = 0;
+            
+            if(filtered.length === 0) {
+                html = '<tr><td colspan="5" class="text-center py-5 text-muted">ไม่พบข้อมูลการประเมิน</td></tr>';
+            } else {
+                filtered.forEach(function(r) {
+                    var scoreHtml = '';
+                    if(r.status === 'ไม่ได้ประสานงาน') {
+                        scoreHtml = '<span class="badge bg-secondary">ไม่ได้ประสานงาน</span>';
+                        naCount++;
+                    } else {
+                        scoreHtml = `<span class="badge bg-success fs-6">${r.score}/10</span>`;
+                        totalScore += parseInt(r.score);
+                        scoreCount++;
+                    }
+                    
+                    var commentHtml = r.comment ? `<span class="text-light fst-italic">"${r.comment}"</span>` : '<span class="text-muted small opacity-50">-</span>';
+                    var evaluatorNameShort = r.evaluatorName ? r.evaluatorName.split(' ')[0] + ' ' + (r.evaluatorName.split(' ')[1] || '') : '-';
+                    
+                    html += `<tr>
+                        <td class="ps-4 text-warning fw-bold">${r.monthYear}</td>
+                        <td class="text-info">${evaluatorNameShort}</td>
+                        <td class="text-light fw-bold">${r.driverName}</td>
+                        <td class="text-center">${scoreHtml}</td>
+                        <td>${commentHtml}</td>
+                    </tr>`;
+                });
+            }
+            
+            var avg = scoreCount > 0 ? (totalScore / scoreCount).toFixed(2) : "0.00";
+            
+            var tb = document.getElementById('adminEvalTableBody');
+            if(tb) tb.innerHTML = html;
+            
+            var stTot = document.getElementById('statEvalTotal');
+            if(stTot) stTot.innerText = filtered.length;
+            
+            var stAvg = document.getElementById('statEvalAvg');
+            if(stAvg) stAvg.innerText = avg;
+            
+            var stNa = document.getElementById('statEvalNA');
+            if(stNa) stNa.innerText = naCount;
+        }
 
         window.renderTable = function(data) {
             var tbody = document.getElementById('tableBody'); 
@@ -1267,7 +1413,6 @@
                     }
                 }
                 
-                // จุดที่เพิ่มสัญลักษณ์การยอมรับกฎลงในตารางหลัก
                 var ruleBadge = emp.rulesAccepted 
                     ? '<span class="text-success" title="ยอมรับแล้ว"><i class="bi bi-check-circle-fill fs-5"></i></span>' 
                     : '<span class="text-danger" title="ยังไม่ยอมรับ"><i class="bi bi-x-circle-fill fs-5"></i></span>';
@@ -2284,10 +2429,7 @@
                 document.getElementById('view_ssoType').innerText = d.ssoType || '-'; 
                 document.getElementById('view_ssoHosp').innerText = d.ssoHosp || '-'; 
                 
-                // จุดที่เพิ่มสัญลักษณ์การยอมรับกฎลงในโปรไฟล์
                 var ruleStatusHtml = d.rulesAccepted ? '<span class="badge bg-success text-dark"><i class="bi bi-check-circle-fill me-1"></i>ยอมรับแล้ว</span>' : '<span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i>ยังไม่ยอมรับ</span>';
-                
-                // สร้าง div สำหรับใส่ rule status ในช่องข้อมูลส่วนตัว
                 var ruleDiv = document.getElementById('view_rule_status');
                 if (!ruleDiv) {
                     var personalInfoContainer = document.querySelector('#view_ssoHosp').closest('.p-3').parentNode.querySelector('.mt-4.pt-3');
@@ -2457,6 +2599,27 @@
             if (days > 0) result.push(days + " วัน"); 
             if (result.length === 0) return "เริ่มงานวันนี้"; 
             return result.join(" "); 
+        };
+        
+        window.declineRules = function() {
+            var rulesModalEl = document.getElementById('rulesModal');
+            var modal = bootstrap.Modal.getInstance(rulesModalEl);
+            if (modal) { modal.hide(); }
+
+            var backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+
+            setTimeout(function() {
+                if (typeof window.logout === 'function') {
+                    window.logout();
+                } else {
+                    localStorage.removeItem('hr_user_session');
+                    location.reload();
+                }
+            }, 300);
         };
     </script>
 </div>
