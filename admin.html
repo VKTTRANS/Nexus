@@ -1180,7 +1180,7 @@
                                         <input type="date" class="form-control bg-dark text-warning border-secondary shadow-none fw-bold" id="pr_payDate" required onchange="window.calcPayrollTotals()">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="small text-muted mb-1 fw-bold">เงินเดือนพื้นฐาน (Base Salary) *</label>
+                                        <label class="small text-muted mb-1 fw-bold">เงินเดือน ค่าจ้าง (Base Salary) *</label>
                                         <input type="number" class="form-control bg-dark text-white border-secondary shadow-none fw-bold text-end" id="pr_baseSalary" required onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                     </div>
                                 </div>
@@ -1192,34 +1192,54 @@
                                     <h6 class="text-success fw-bold border-bottom border-success border-opacity-25 pb-2 mb-3"><i class="bi bi-plus-circle-fill me-2"></i>รายได้อื่นๆ (Incomes)</h6>
                                     
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">1. เบี้ยขยัน / โอที</span>
+                                        <span class="input-group-text lbl-fit">1. ประกันสังคม (ออกให้)</span>
                                         <input type="number" class="form-control payroll-input" id="pr_inc1" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc1')" title="ดึงค่าเดือนที่แล้ว"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">2. ค่าเที่ยว / ค่ารันไมล์</span>
+                                        <span class="input-group-text lbl-fit">2. ค่าเที่ยว</span>
                                         <input type="number" class="form-control payroll-input" id="pr_inc2" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc2')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">3. ค่าโทรศัพท์ / อินเทอร์เน็ต</span>
+                                        <span class="input-group-text lbl-fit">3. ค่ายกชน</span>
                                         <input type="number" class="form-control payroll-input" id="pr_inc3" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc3')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">4. ค่าตำแหน่ง / ความรับผิดชอบ</span>
+                                        <span class="input-group-text lbl-fit">4. ค่าดูแลลูกพ่วง/หาง</span>
                                         <input type="number" class="form-control payroll-input" id="pr_inc4" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc4')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">5. โบนัส / เงินรางวัลพิเศษ</span>
+                                        <span class="input-group-text lbl-fit">5. เบี้ยขยัน</span>
                                         <input type="number" class="form-control payroll-input" id="pr_inc5" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc5')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">6. รายได้อื่นๆ (ระบุในหมายเหตุ)</span>
+                                        <span class="input-group-text lbl-fit">6. เบี้ยพิเศษ</span>
                                         <input type="number" class="form-control payroll-input" id="pr_inc6" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc6')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">7. เงินเบี้ยเลี้ยง</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc7" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc7')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">8. ค่าล่วงเวลา</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc8" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc8')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">9. รายได้อื่นๆ 1</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc9" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc9')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">10. รายได้อื่นๆ 2</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc10" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc10')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -1229,34 +1249,54 @@
                                     <h6 class="text-danger fw-bold border-bottom border-danger border-opacity-25 pb-2 mb-3"><i class="bi bi-dash-circle-fill me-2"></i>รายการหัก (Deductions)</h6>
                                     
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">1. ภาษีหัก ณ ที่จ่าย (3%)</span>
+                                        <span class="input-group-text lbl-fit">1. ภาษีหัก ณ ที่จ่าย (1%)</span>
                                         <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec1" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec1')" title="ดึงค่าเดือนที่แล้ว"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">2. ประกันสังคม (5%)</span>
+                                        <span class="input-group-text lbl-fit">2. ประกันสังคม</span>
                                         <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec2" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec2')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">3. หักมาสาย / ขาดงาน / ลา</span>
+                                        <span class="input-group-text lbl-fit">3. เงินประกัน</span>
                                         <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec3" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec3')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">4. หักเบิกล่วงหน้า</span>
+                                        <span class="input-group-text lbl-fit">4. เงินเบิกล่วงหน้า</span>
                                         <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec4" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec4')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">5. หักกองทุน / เงินออม</span>
+                                        <span class="input-group-text lbl-fit">5. ค่าไฟ</span>
                                         <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec5" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec5')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                     <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">6. รายการหักอื่นๆ (ระบุในหมายเหตุ)</span>
+                                        <span class="input-group-text lbl-fit">6. ค่าผ่อนโทรศัพท์</span>
                                         <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec6" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
                                         <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec6')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">7. เงินกู้ยืม</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec7" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec7')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">8. ค่าเสียหายรถ</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec8" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec8')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">9. ค่างวดรถส่วนตัว</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec9" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec9')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <span class="input-group-text lbl-fit">10. ค่าค้างตู้ / อื่นๆ</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec10" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec10')"><i class="bi bi-arrow-counterclockwise"></i></button>
                                     </div>
                                 </div>
                             </div>
