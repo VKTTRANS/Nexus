@@ -984,9 +984,12 @@
 
     window.openEvalDetailModal = function(jsonStr) {
         var g = JSON.parse(decodeURIComponent(jsonStr));
-        document.getElementById('detailEvalName').innerText = g.evaluatedName;
-        document.getElementById('detailEvalMonth').innerText = g.monthYear;
-        document.getElementById('detailEvalAvg').innerText = g.validCount > 0 ? (g.totalScore / g.validCount).toFixed(2) : "-";
+        var detailNameEl = document.getElementById('detailEvalName');
+        if(detailNameEl) detailNameEl.innerText = g.evaluatedName;
+        var detailMonthEl = document.getElementById('detailEvalMonth');
+        if(detailMonthEl) detailMonthEl.innerText = g.monthYear;
+        var detailAvgEl = document.getElementById('detailEvalAvg');
+        if(detailAvgEl) detailAvgEl.innerText = g.validCount > 0 ? (g.totalScore / g.validCount).toFixed(2) : "-";
         
         var html = '';
         g.evaluators.forEach(function(ev) {
@@ -1005,18 +1008,26 @@
                 ${commentHtml}
             </div>`;
         });
-        document.getElementById('evalDetailList').innerHTML = html;
+        var detailListEl = document.getElementById('evalDetailList');
+        if(detailListEl) detailListEl.innerHTML = html;
         new bootstrap.Modal(document.getElementById('evalDetailModal')).show();
     };
 
     window.loadAdminData = function() {
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="10" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
-        document.getElementById('adminAccidentTableBody').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลอุบัติเหตุ...</td></tr>';
-        document.getElementById('adminWarnTableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูลใบเตือน...</td></tr>';
-        document.getElementById('adminPayrollTableBody').innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
-        if(document.getElementById('adminEvalTableBody')) {
-            document.getElementById('adminEvalTableBody').innerHTML = '<tr><td colspan="5" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูลประเมิน...</td></tr>';
-        }
+        var tbEmp = document.getElementById('tableBody');
+        if(tbEmp) tbEmp.innerHTML = '<tr><td colspan="10" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
+        
+        var tbAcc = document.getElementById('adminAccidentTableBody');
+        if(tbAcc) tbAcc.innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลอุบัติเหตุ...</td></tr>';
+        
+        var tbWarn = document.getElementById('adminWarnTableBody');
+        if(tbWarn) tbWarn.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-danger spinner-border-sm me-2"></div> กำลังโหลดข้อมูลใบเตือน...</td></tr>';
+        
+        var tbPay = document.getElementById('adminPayrollTableBody');
+        if(tbPay) tbPay.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><div class="spinner-border text-warning spinner-border-sm me-2"></div> กำลังโหลดข้อมูลพนักงาน...</td></tr>';
+        
+        var tbEval = document.getElementById('adminEvalTableBody');
+        if(tbEval) tbEval.innerHTML = '<tr><td colspan="5" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูลประเมิน...</td></tr>';
         
         window.callAPI({ 
             action: 'getAccidentData', 
@@ -1062,10 +1073,12 @@
                             }
                         });
                         var posSelect = document.getElementById('filterPayrollPosition');
-                        posSelect.innerHTML = '<option value="all">🌐 ทุกตำแหน่ง</option>';
-                        Array.from(posSet).sort().forEach(function(p) { 
-                            posSelect.innerHTML += '<option value="' + p + '">' + p + '</option>'; 
-                        });
+                        if(posSelect) {
+                            posSelect.innerHTML = '<option value="all">🌐 ทุกตำแหน่ง</option>';
+                            Array.from(posSet).sort().forEach(function(p) { 
+                                posSelect.innerHTML += '<option value="' + p + '">' + p + '</option>'; 
+                            });
+                        }
                         window.filterPayrollTable();
                     });
 
@@ -1079,17 +1092,17 @@
     };
 
     window.switchAdminTab = function(tab) {
-        document.getElementById('btnTabEmp').classList.remove('active');
-        document.getElementById('btnTabAcc').classList.remove('active');
-        document.getElementById('btnTabWarn').classList.remove('active');
-        document.getElementById('btnTabPayroll').classList.remove('active');
-        document.getElementById('btnTabEval').classList.remove('active');
+        var elEmp = document.getElementById('btnTabEmp'); if(elEmp) elEmp.classList.remove('active');
+        var elAcc = document.getElementById('btnTabAcc'); if(elAcc) elAcc.classList.remove('active');
+        var elWarn = document.getElementById('btnTabWarn'); if(elWarn) elWarn.classList.remove('active');
+        var elPay = document.getElementById('btnTabPayroll'); if(elPay) elPay.classList.remove('active');
+        var elEval = document.getElementById('btnTabEval'); if(elEval) elEval.classList.remove('active');
         
-        document.getElementById('section-admin-emp').classList.add('d-none');
-        document.getElementById('section-admin-acc').classList.add('d-none');
-        document.getElementById('section-admin-warn').classList.add('d-none');
-        document.getElementById('section-admin-payroll').classList.add('d-none');
-        document.getElementById('section-admin-eval').classList.add('d-none');
+        var secEmp = document.getElementById('section-admin-emp'); if(secEmp) secEmp.classList.add('d-none');
+        var secAcc = document.getElementById('section-admin-acc'); if(secAcc) secAcc.classList.add('d-none');
+        var secWarn = document.getElementById('section-admin-warn'); if(secWarn) secWarn.classList.add('d-none');
+        var secPay = document.getElementById('section-admin-payroll'); if(secPay) secPay.classList.add('d-none');
+        var secEval = document.getElementById('section-admin-eval'); if(secEval) secEval.classList.add('d-none');
         
         var searchEmp = document.getElementById('searchInput'); if(searchEmp) searchEmp.value = '';
         var searchAcc = document.getElementById('searchAccidentInput'); if(searchAcc) searchAcc.value = '';
@@ -1101,20 +1114,20 @@
         var filterStatus = document.getElementById('filterSlipStatus'); if(filterStatus) filterStatus.value = 'all';
 
         if (tab === 'emp') { 
-            document.getElementById('btnTabEmp').classList.add('active'); 
-            document.getElementById('section-admin-emp').classList.remove('d-none'); 
+            if(elEmp) elEmp.classList.add('active'); 
+            if(secEmp) secEmp.classList.remove('d-none'); 
             if(window.allEmpData) window.filterTable();
         } else if (tab === 'acc') { 
-            document.getElementById('btnTabAcc').classList.add('active'); 
-            document.getElementById('section-admin-acc').classList.remove('d-none'); 
+            if(elAcc) elAcc.classList.add('active'); 
+            if(secAcc) secAcc.classList.remove('d-none'); 
             if(window.allAccidentData) window.filterAccidentTable();
         } else if (tab === 'warn') { 
-            document.getElementById('btnTabWarn').classList.add('active'); 
-            document.getElementById('section-admin-warn').classList.remove('d-none'); 
+            if(elWarn) elWarn.classList.add('active'); 
+            if(secWarn) secWarn.classList.remove('d-none'); 
             if(window.allWarningData) window.filterWarnTable();
         } else if (tab === 'payroll') {
-            document.getElementById('btnTabPayroll').classList.add('active'); 
-            document.getElementById('section-admin-payroll').classList.remove('d-none');
+            if(elPay) elPay.classList.add('active'); 
+            if(secPay) secPay.classList.remove('d-none');
             
             var yearSelect = document.getElementById('filterPayrollYear');
             if (yearSelect && yearSelect.options.length === 0) {
@@ -1137,14 +1150,15 @@
 
             if(window.allEmpData) window.filterPayrollTable(); 
         } else if (tab === 'eval') {
-            document.getElementById('btnTabEval').classList.add('active'); 
-            document.getElementById('section-admin-eval').classList.remove('d-none'); 
+            if(elEval) elEval.classList.add('active'); 
+            if(secEval) secEval.classList.remove('d-none'); 
             
-            if(!document.getElementById('filterEvalMonth').value) {
+            var evalMonthInput = document.getElementById('filterEvalMonth');
+            if(evalMonthInput && !evalMonthInput.value) {
                 var d = new Date();
                 var y = d.getFullYear();
                 var m = ("0" + (d.getMonth() + 1)).slice(-2);
-                document.getElementById('filterEvalMonth').value = y + "-" + m;
+                evalMonthInput.value = y + "-" + m;
             }
             if(window.allEvalData) window.filterAdminEvalTable();
         }
@@ -1153,13 +1167,17 @@
     // โค้ดส่วนอื่นๆ ที่เหลือ ยังคงเหมือนเดิม
     window.renderTable = function(data) {
         var tbody = document.getElementById('tableBody'); 
+        if(!tbody) return;
         tbody.innerHTML = '';
-        var limit = document.getElementById('rowsPerPage').value;
+        var limitEl = document.getElementById('rowsPerPage');
+        var limit = limitEl ? limitEl.value : 'all';
         var list = (limit === 'all') ? data : data.slice(0, parseInt(limit));
+        
+        var tableFooter = document.getElementById('tableFooter');
         
         if (list.length === 0) { 
             tbody.innerHTML = '<tr><td colspan="10" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>'; 
-            document.getElementById('tableFooter').innerText = 'Total: 0'; 
+            if(tableFooter) tableFooter.innerText = 'Total: 0'; 
             return; 
         }
         
@@ -1169,14 +1187,14 @@
             else if (emp.status === 'Resigned') badgeClass = 'bg-danger text-white'; 
             else if (emp.status === 'Suspended') badgeClass = 'bg-warning text-dark';
             
-            var accCount = window.allAccidentData.filter(function(a) { return String(a.empId).trim() === String(emp.id).trim(); }).length;
+            var accCount = window.allAccidentData ? window.allAccidentData.filter(function(a) { return String(a.empId).trim() === String(emp.id).trim(); }).length : 0;
             var accBadge = accCount > 0 ? '<span class="badge bg-warning text-dark rounded-pill shadow-sm">' + accCount + ' ครั้ง</span>' : '<span class="text-muted small">-</span>';
             
-            var warnCount = window.allWarningData.filter(function(w) { return String(w.empId).trim() === String(emp.id).trim(); }).length;
+            var warnCount = window.allWarningData ? window.allWarningData.filter(function(w) { return String(w.empId).trim() === String(emp.id).trim(); }).length : 0;
             var warnBadge = warnCount > 0 ? '<span class="badge bg-danger rounded-pill shadow-sm">' + warnCount + ' ครั้ง</span>' : '<span class="text-muted small">-</span>';
             
             var editBtn = ''; 
-            if (window.currentUser.role !== 'Viewer') { 
+            if (window.currentUser && window.currentUser.role !== 'Viewer') { 
                 editBtn = '<button class="btn btn-sm btn-dark border-secondary text-warning rounded-circle hover-scale" onclick="event.stopPropagation(); window.openModal(\'edit\', \'' + emp.id + '\')" title="แก้ไข"><i class="bi bi-pencil-fill"></i></button>'; 
             }
             
@@ -1227,12 +1245,15 @@
                            '<td class="text-end pe-4">' + editBtn + '</td>';
             tbody.appendChild(tr);
         });
-        document.getElementById('tableFooter').innerText = 'แสดง ' + list.length + ' จาก ' + data.length + ' รายการ';
+        if(tableFooter) tableFooter.innerText = 'แสดง ' + list.length + ' จาก ' + data.length + ' รายการ';
     };
 
     window.filterTable = function() { 
-        var val = document.getElementById('searchInput').value.toLowerCase(); 
-        var showResigned = document.getElementById('showResignedCheck').checked; 
+        var searchInput = document.getElementById('searchInput');
+        var val = searchInput ? searchInput.value.toLowerCase() : ''; 
+        var showResignedCheck = document.getElementById('showResignedCheck');
+        var showResigned = showResignedCheck ? showResignedCheck.checked : false; 
+        
         var filtered = window.allEmpData.filter(function(d) { 
             var matchSearch = (d.name + d.id + d.position + (d.nickname||'')).toLowerCase().includes(val); 
             var matchStatus = showResigned ? true : (d.status === 'Active'); 
@@ -1261,14 +1282,21 @@
 
     window.filterPayrollTable = function() {
         if (!window.allEmpData) return;
-        var val = document.getElementById('searchPayrollInput').value.toLowerCase(); 
-        var posVal = document.getElementById('filterPayrollPosition').value;
+        var searchEl = document.getElementById('searchPayrollInput');
+        var val = searchEl ? searchEl.value.toLowerCase() : ''; 
         
-        var yearVal = document.getElementById('filterPayrollYear').value;
-        var monthVal = document.getElementById('filterPayrollMonthSelect').value;
+        var posEl = document.getElementById('filterPayrollPosition');
+        var posVal = posEl ? posEl.value : 'all';
+        
+        var yearEl = document.getElementById('filterPayrollYear');
+        var yearVal = yearEl ? yearEl.value : new Date().getFullYear().toString();
+        
+        var monthEl = document.getElementById('filterPayrollMonthSelect');
+        var monthVal = monthEl ? monthEl.value : 'all';
         var filterPeriod = monthVal === 'all' ? yearVal : yearVal + "-" + monthVal;
         
-        var statusVal = document.getElementById('filterSlipStatus') ? document.getElementById('filterSlipStatus').value : 'all';
+        var statusEl = document.getElementById('filterSlipStatus');
+        var statusVal = statusEl ? statusEl.value : 'all';
 
         var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; });
         
@@ -1358,11 +1386,17 @@
             });
         }
         
-        document.getElementById('adminPayrollTableBody').innerHTML = html;
+        var adminPayrollBody = document.getElementById('adminPayrollTableBody');
+        if(adminPayrollBody) adminPayrollBody.innerHTML = html;
         
-        document.getElementById('statPayrollNet').innerText = window.numberWithCommas(totalNet);
-        document.getElementById('statPayrollSSO').innerText = window.numberWithCommas(totalSSO);
-        document.getElementById('statPayrollCount').innerText = slipCount;
+        var statNetEl = document.getElementById('statPayrollNet');
+        if(statNetEl) statNetEl.innerText = window.numberWithCommas(totalNet);
+        
+        var statSsoEl = document.getElementById('statPayrollSSO');
+        if(statSsoEl) statSsoEl.innerText = window.numberWithCommas(totalSSO);
+        
+        var statCountEl = document.getElementById('statPayrollCount');
+        if(statCountEl) statCountEl.innerText = slipCount;
     };
 
     window.openPayrollHistory = function(empId) {
@@ -1386,31 +1420,39 @@
                 </tr>`;
             });
         }
-        document.getElementById('payrollHistoryBody').innerHTML = html;
+        var historyBody = document.getElementById('payrollHistoryBody');
+        if(historyBody) historyBody.innerHTML = html;
         new bootstrap.Modal(document.getElementById('payrollHistoryModal')).show();
     };
 
     window.toggleKeepData = function() {
-        var empId = document.getElementById('pr_empId').value;
+        var empIdEl = document.getElementById('pr_empId');
+        if(!empIdEl) return;
+        var empId = empIdEl.value;
         var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
         
-        if (document.getElementById('keepPrevData').checked && empSlips.length > 0) {
+        var keepPrev = document.getElementById('keepPrevData');
+        if (keepPrev && keepPrev.checked && empSlips.length > 0) {
             var lastM = empSlips[0];
             for (var i=2; i<=10; i++) { 
-                document.getElementById('pr_inc'+i).value = lastM.incomes[i-1] || 0;
+                var inc = document.getElementById('pr_inc'+i);
+                if(inc) inc.value = lastM.incomes[i-1] || 0;
             }
             for (var i=3; i<=10; i++) { 
-                document.getElementById('pr_dec'+i).value = lastM.deducts[i-1] || 0;
+                var dec = document.getElementById('pr_dec'+i);
+                if(dec) dec.value = lastM.deducts[i-1] || 0;
             }
         } else {
-            for (var i=2; i<=10; i++) document.getElementById('pr_inc'+i).value = '';
-            for (var i=3; i<=10; i++) document.getElementById('pr_dec'+i).value = '';
+            for (var i=2; i<=10; i++) { var inc = document.getElementById('pr_inc'+i); if(inc) inc.value = ''; }
+            for (var i=3; i<=10; i++) { var dec = document.getElementById('pr_dec'+i); if(dec) dec.value = ''; }
         }
         window.calcPayrollTotals();
     };
 
     window.pullPrevField = function(fieldId) {
-        var empId = document.getElementById('pr_empId').value;
+        var empIdEl = document.getElementById('pr_empId');
+        if(!empIdEl) return;
+        var empId = empIdEl.value;
         var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
         
         if (empSlips.length > 0) {
@@ -1423,7 +1465,8 @@
                 var idx = parseInt(fieldId.replace('dec', '')) - 1;
                 val = lastM.deducts[idx] || 0;
             }
-            document.getElementById('pr_' + fieldId).value = val;
+            var fieldEl = document.getElementById('pr_' + fieldId);
+            if(fieldEl) fieldEl.value = val;
             window.calcPayrollTotals(); 
         } else {
             Swal.fire({
@@ -1440,12 +1483,13 @@
         var emp = window.allEmpData.find(function(e){ return String(e.id).trim() === String(empId).trim(); });
         if (!emp) return;
         
-        document.getElementById('payrollForm').reset();
+        var formEl = document.getElementById('payrollForm');
+        if(formEl) formEl.reset();
         
-        document.getElementById('pr_empId').value = emp.id;
-        document.getElementById('pr_empName').innerText = emp.name + " (" + emp.id + ")";
-        document.getElementById('pr_position').value = emp.position || '';
-        document.getElementById('pr_email').value = emp.username + "@vktnexus.com"; 
+        var prEmpId = document.getElementById('pr_empId'); if(prEmpId) prEmpId.value = emp.id;
+        var prEmpName = document.getElementById('pr_empName'); if(prEmpName) prEmpName.innerText = emp.name + " (" + emp.id + ")";
+        var prPos = document.getElementById('pr_position'); if(prPos) prPos.value = emp.position || '';
+        var prEmail = document.getElementById('pr_email'); if(prEmail) prEmail.value = emp.username + "@vktnexus.com"; 
         
         var parts = emp.name.split(' ');
         var prefix = ""; var fname = ""; var lname = "";
@@ -1456,34 +1500,41 @@
             fname = parts[0] || ''; lname = parts.slice(1).join(' ') || '';
         }
         
-        document.getElementById('pr_prefix').value = prefix;
-        document.getElementById('pr_firstName').value = fname;
-        document.getElementById('pr_lastName').value = lname;
+        var prPrefix = document.getElementById('pr_prefix'); if(prPrefix) prPrefix.value = prefix;
+        var prFname = document.getElementById('pr_firstName'); if(prFname) prFname.value = fname;
+        var prLname = document.getElementById('pr_lastName'); if(prLname) prLname.value = lname;
         
         var empSlips = window.allPayrollData ? window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); }) : [];
 
+        var keepDataContainer = document.getElementById('keepPrevDataContainer');
+        var payDateEl = document.getElementById('pr_payDate');
+        var baseSalaryEl = document.getElementById('pr_baseSalary');
+
         if (isEdit && monthData) {
-            document.getElementById('keepPrevDataContainer').style.display = 'none';
-            document.getElementById('pr_payDate').value = monthData.payDate.split('T')[0];
-            document.getElementById('pr_baseSalary').value = monthData.baseSalary || 0;
+            if(keepDataContainer) keepDataContainer.style.display = 'none';
+            if(payDateEl) payDateEl.value = monthData.payDate.split('T')[0];
+            if(baseSalaryEl) baseSalaryEl.value = monthData.baseSalary || 0;
             for (var i=2; i<=10; i++) { 
-                document.getElementById('pr_inc'+i).value = monthData.incomes[i-1] || 0;
+                var incEl = document.getElementById('pr_inc'+i);
+                if(incEl) incEl.value = monthData.incomes[i-1] || 0;
             }
             for (var i=3; i<=10; i++) { 
-                document.getElementById('pr_dec'+i).value = monthData.deducts[i-1] || 0;
+                var decEl = document.getElementById('pr_dec'+i);
+                if(decEl) decEl.value = monthData.deducts[i-1] || 0;
             }
             window.calcPayrollTotals();
             new bootstrap.Modal(document.getElementById('payrollModal')).show();
         } else {
-            document.getElementById('keepPrevDataContainer').style.display = 'flex';
-            document.getElementById('keepPrevData').checked = false; 
-            document.getElementById('pr_payDate').valueAsDate = new Date();
+            if(keepDataContainer) keepDataContainer.style.display = 'flex';
+            var keepPrevCheck = document.getElementById('keepPrevData');
+            if(keepPrevCheck) keepPrevCheck.checked = false; 
+            if(payDateEl) payDateEl.valueAsDate = new Date();
             
             var defaultBase = empSlips.length > 0 ? empSlips[0].baseSalary : parseFloat(emp.appSalary || emp.reqSalary || 0);
-            document.getElementById('pr_baseSalary').value = defaultBase;
+            if(baseSalaryEl) baseSalaryEl.value = defaultBase;
 
-            for (var i=2; i<=10; i++) { document.getElementById('pr_inc'+i).value = ''; }
-            for (var i=3; i<=10; i++) { document.getElementById('pr_dec'+i).value = ''; }
+            for (var i=2; i<=10; i++) { var inc = document.getElementById('pr_inc'+i); if(inc) inc.value = ''; }
+            for (var i=3; i<=10; i++) { var dec = document.getElementById('pr_dec'+i); if(dec) dec.value = ''; }
 
             window.calcPayrollTotals();
             new bootstrap.Modal(document.getElementById('payrollModal')).show();
@@ -1516,7 +1567,8 @@
                 window.callAPI({ action: 'deletePayslipRecord', empId: empId, payMonth: payMonth }).then(function(res) { 
                     if(res.success) { 
                         Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message, background: '#1a1a1a', color: '#fff'}); 
-                        bootstrap.Modal.getInstance(document.getElementById('payrollHistoryModal')).hide(); 
+                        var modalInst = bootstrap.Modal.getInstance(document.getElementById('payrollHistoryModal'));
+                        if(modalInst) modalInst.hide(); 
                         window.loadAdminData(); 
                     } else { 
                         Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message, background: '#1a1a1a', color: '#fff'}); 
@@ -1527,9 +1579,12 @@
     };
 
     window.calcPayrollTotals = function() {
-        var empId = document.getElementById('pr_empId').value;
+        var empIdEl = document.getElementById('pr_empId');
+        if(!empIdEl) return;
+        var empId = empIdEl.value;
         var emp = window.allEmpData.find(function(e) { return String(e.id).trim() === String(empId).trim(); });
-        var baseSal = parseFloat(document.getElementById('pr_baseSalary').value) || 0;
+        var baseSalEl = document.getElementById('pr_baseSalary');
+        var baseSal = baseSalEl ? (parseFloat(baseSalEl.value) || 0) : 0;
         
         var totalManualInc = 0;
         for (var i = 2; i <= 10; i++) {
@@ -1538,9 +1593,9 @@
         }
         var baseGross = baseSal + totalManualInc;
 
-        var inc2 = parseFloat(document.getElementById('pr_inc2').value) || 0;
-        var inc3 = parseFloat(document.getElementById('pr_inc3').value) || 0;
-        var inc4 = parseFloat(document.getElementById('pr_inc4').value) || 0;
+        var inc2 = parseFloat(document.getElementById('pr_inc2') ? document.getElementById('pr_inc2').value : 0) || 0;
+        var inc3 = parseFloat(document.getElementById('pr_inc3') ? document.getElementById('pr_inc3').value : 0) || 0;
+        var inc4 = parseFloat(document.getElementById('pr_inc4') ? document.getElementById('pr_inc4').value : 0) || 0;
         var ssoIncomeBase = baseSal + inc2 + inc3 + inc4;
         
         var ssoAmt = 0;
@@ -1577,30 +1632,32 @@
         
         var netSalary = grossIncome - totalDec;
 
-        document.getElementById('pr_totalIncomeShow').innerText = window.numberWithCommas(grossIncome);
-        document.getElementById('pr_totalDeductShow').innerText = window.numberWithCommas(totalDec);
-        document.getElementById('pr_netSalaryShow').innerText = window.numberWithCommas(netSalary);
+        var incShow = document.getElementById('pr_totalIncomeShow'); if(incShow) incShow.innerText = window.numberWithCommas(grossIncome);
+        var decShow = document.getElementById('pr_totalDeductShow'); if(decShow) decShow.innerText = window.numberWithCommas(totalDec);
+        var netShow = document.getElementById('pr_netSalaryShow'); if(netShow) netShow.innerText = window.numberWithCommas(netSalary);
     };
 
     window.submitPayrollForm = function(e) {
         e.preventDefault();
         
         var payload = {
-            empId: document.getElementById('pr_empId').value,
-            payDate: document.getElementById('pr_payDate').value,
-            baseSalary: parseFloat(document.getElementById('pr_baseSalary').value) || 0,
-            prefix: document.getElementById('pr_prefix').value,
-            firstName: document.getElementById('pr_firstName').value,
-            lastName: document.getElementById('pr_lastName').value,
-            position: document.getElementById('pr_position').value,
-            email: document.getElementById('pr_email').value
+            empId: document.getElementById('pr_empId') ? document.getElementById('pr_empId').value : '',
+            payDate: document.getElementById('pr_payDate') ? document.getElementById('pr_payDate').value : '',
+            baseSalary: document.getElementById('pr_baseSalary') ? (parseFloat(document.getElementById('pr_baseSalary').value) || 0) : 0,
+            prefix: document.getElementById('pr_prefix') ? document.getElementById('pr_prefix').value : '',
+            firstName: document.getElementById('pr_firstName') ? document.getElementById('pr_firstName').value : '',
+            lastName: document.getElementById('pr_lastName') ? document.getElementById('pr_lastName').value : '',
+            position: document.getElementById('pr_position') ? document.getElementById('pr_position').value : '',
+            email: document.getElementById('pr_email') ? document.getElementById('pr_email').value : ''
         };
 
         var totalInc = 0;
         var totalDec = 0;
         for (var i=1; i<=10; i++) {
-            var incVal = parseFloat(document.getElementById('pr_inc'+i).value) || 0;
-            var decVal = parseFloat(document.getElementById('pr_dec'+i).value) || 0;
+            var incEl = document.getElementById('pr_inc'+i);
+            var decEl = document.getElementById('pr_dec'+i);
+            var incVal = incEl ? (parseFloat(incEl.value) || 0) : 0;
+            var decVal = decEl ? (parseFloat(decEl.value) || 0) : 0;
             payload['inc'+i] = incVal;
             payload['dec'+i] = decVal;
             totalInc += incVal;
@@ -1612,6 +1669,7 @@
         payload.netSalary = payload.totalIncome - payload.totalDeduct;
 
         var btn = document.getElementById('btnSubmitPayroll');
+        if(!btn) return;
         var originalText = btn.innerText;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังสร้าง PDF...';
         btn.disabled = true;
@@ -1626,7 +1684,8 @@
                     html: `ส่งเข้าโปรไฟล์พนักงานเรียบร้อย<br><a href="${res.url}" target="_blank" class="btn btn-warning mt-3 rounded-pill px-4"><i class="bi bi-file-pdf me-1"></i> ดูสลิปที่สร้าง</a>`,
                     background: '#1a1a1a', color: '#fff'
                 });
-                bootstrap.Modal.getInstance(document.getElementById('payrollModal')).hide();
+                var modalInst = bootstrap.Modal.getInstance(document.getElementById('payrollModal'));
+                if(modalInst) modalInst.hide();
                 window.loadAdminData(); 
             } else {
                 Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message, background: '#1a1a1a', color: '#fff'});
@@ -1646,44 +1705,54 @@
     };
 
     window.renderAccidentTable = function(data) {
-       document.getElementById('accTotalCount').innerText = window.allAccidentData.length;
+       var accCountEl = document.getElementById('accTotalCount');
+       if(accCountEl) accCountEl.innerText = window.allAccidentData.length;
+       
        var accCounts = {}; 
-       window.allAccidentData.forEach(function(a) { accCounts[a.empName] = (accCounts[a.empName] || 0) + 1; });
+       if(window.allAccidentData) {
+           window.allAccidentData.forEach(function(a) { accCounts[a.empName] = (accCounts[a.empName] || 0) + 1; });
+       }
        var topAccs = Object.keys(accCounts).map(function(k) { return {name:k, count:accCounts[k]}; }).sort(function(a,b) { return b.count - a.count; }).slice(0,10);
        var topAccHtml = '';
        topAccs.forEach(function(c, i) { 
            topAccHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-warning text-dark rounded-pill">' + c.count + ' ครั้ง</span></div>'; 
        });
-       document.getElementById('accTopCausesList').innerHTML = topAccHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
+       var accTopCausesListEl = document.getElementById('accTopCausesList');
+       if(accTopCausesListEl) accTopCausesListEl.innerHTML = topAccHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
        
        var html = '';
-       data.forEach(function(r) {
-           var isResolved = (r.status === 'ปิดงานเรียบร้อย');
-           var statClass = r.status === 'รอดำเนินการ' || r.status === 'Pending' ? 'bg-warning text-dark' : (isResolved ? 'bg-success text-white' : 'bg-secondary');
-           var statText = r.status === 'Pending' ? 'รอดำเนินการ' : r.status;
-           var pdfBtn = r.pdfUrl !== '-' ? '<a href="' + r.pdfUrl + '" target="_blank" onclick="event.stopPropagation()" class="btn btn-sm btn-outline-danger py-0 px-2 me-1 mb-1 shadow-sm"><i class="bi bi-file-pdf"></i> PDF</a>' : '';
-           
-           var photoHtml = '';
-           if (r.photoUrl !== '-') { 
-               var photoLinks = r.photoUrl.split(','); 
-               photoLinks.forEach(function(link) { 
-                   var cleanLink = link.trim(); 
-                   if(cleanLink) { 
-                       photoHtml += '<button type="button" onclick="event.stopPropagation(); window.openPreview(\'' + cleanLink + '\')" class="btn btn-sm btn-outline-info py-0 px-2 mb-1 me-1 shadow-sm"><i class="bi bi-image"></i></button>'; 
-                   } 
-               }); 
-           }
-           var docsHtml = pdfBtn + photoHtml; 
-           if(docsHtml === '') docsHtml = '-';
-           
-           var trailerText = (r.trailerPlate && r.trailerPlate !== '-') ? '<br><small class="text-info">หาง: ' + r.trailerPlate + '</small>' : '';
-           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><span class="text-danger">' + r.cause + '</span><br><small class="text-muted">' + r.causedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
-       });
-       document.getElementById('adminAccidentTableBody').innerHTML = html || '<tr><td colspan="7" class="text-center py-4 text-muted">ไม่พบข้อมูลอุบัติเหตุ</td></tr>';
+       if(data) {
+           data.forEach(function(r) {
+               var isResolved = (r.status === 'ปิดงานเรียบร้อย');
+               var statClass = r.status === 'รอดำเนินการ' || r.status === 'Pending' ? 'bg-warning text-dark' : (isResolved ? 'bg-success text-white' : 'bg-secondary');
+               var statText = r.status === 'Pending' ? 'รอดำเนินการ' : r.status;
+               var pdfBtn = r.pdfUrl !== '-' ? '<a href="' + r.pdfUrl + '" target="_blank" onclick="event.stopPropagation()" class="btn btn-sm btn-outline-danger py-0 px-2 me-1 mb-1 shadow-sm"><i class="bi bi-file-pdf"></i> PDF</a>' : '';
+               
+               var photoHtml = '';
+               if (r.photoUrl !== '-') { 
+                   var photoLinks = r.photoUrl.split(','); 
+                   photoLinks.forEach(function(link) { 
+                       var cleanLink = link.trim(); 
+                       if(cleanLink) { 
+                           photoHtml += '<button type="button" onclick="event.stopPropagation(); window.openPreview(\'' + cleanLink + '\')" class="btn btn-sm btn-outline-info py-0 px-2 mb-1 me-1 shadow-sm"><i class="bi bi-image"></i></button>'; 
+                       } 
+                   }); 
+               }
+               var docsHtml = pdfBtn + photoHtml; 
+               if(docsHtml === '') docsHtml = '-';
+               
+               var trailerText = (r.trailerPlate && r.trailerPlate !== '-') ? '<br><small class="text-info">หาง: ' + r.trailerPlate + '</small>' : '';
+               html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><span class="text-danger">' + r.cause + '</span><br><small class="text-muted">' + r.causedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
+           });
+       }
+       var tableBody = document.getElementById('adminAccidentTableBody');
+       if(tableBody) tableBody.innerHTML = html || '<tr><td colspan="7" class="text-center py-4 text-muted">ไม่พบข้อมูลอุบัติเหตุ</td></tr>';
     };
 
     window.filterAccidentTable = function() { 
-        var val = document.getElementById('searchAccidentInput').value.toLowerCase(); 
+        var searchInput = document.getElementById('searchAccidentInput');
+        if(!searchInput) return;
+        var val = searchInput.value.toLowerCase(); 
         window.currentAccidentDisplayData = window.allAccidentData.filter(function(d) { 
             return (d.docNo + d.empName + d.empId).toLowerCase().includes(val); 
         }); 
@@ -1700,35 +1769,35 @@
             return;
         }
 
-        document.getElementById('m_accDocNo').innerText = data.docNo; 
-        document.getElementById('m_accDocNoHidden').value = data.docNo; 
-        document.getElementById('m_accEmpName').innerText = data.empName + " (" + data.empId + ")"; 
-        document.getElementById('m_accDateTime').innerText = data.accDate + " เวลา " + data.accTime;
+        var mDocNo = document.getElementById('m_accDocNo'); if(mDocNo) mDocNo.innerText = data.docNo; 
+        var mDocNoHidden = document.getElementById('m_accDocNoHidden'); if(mDocNoHidden) mDocNoHidden.value = data.docNo; 
+        var mEmpName = document.getElementById('m_accEmpName'); if(mEmpName) mEmpName.innerText = data.empName + " (" + data.empId + ")"; 
+        var mDateTime = document.getElementById('m_accDateTime'); if(mDateTime) mDateTime.innerText = data.accDate + " เวลา " + data.accTime;
         
         var trailerInfo = (data.trailerPlate && data.trailerPlate !== '-') ? (" หาง: " + data.trailerPlate) : "";
-        document.getElementById('m_accVehicle').innerText = data.vehType + " ทะเบียนหัว: " + data.truckPlate + trailerInfo; 
-        document.getElementById('m_accCause').innerText = data.cause; 
-        document.getElementById('m_accLocation').value = data.location; 
-        document.getElementById('m_accDamage').value = data.damage; 
-        document.getElementById('m_accDetail').value = data.detail;
+        var mVehicle = document.getElementById('m_accVehicle'); if(mVehicle) mVehicle.innerText = data.vehType + " ทะเบียนหัว: " + data.truckPlate + trailerInfo; 
+        var mCause = document.getElementById('m_accCause'); if(mCause) mCause.innerText = data.cause; 
+        var mLocation = document.getElementById('m_accLocation'); if(mLocation) mLocation.value = data.location; 
+        var mDamage = document.getElementById('m_accDamage'); if(mDamage) mDamage.value = data.damage; 
+        var mDetail = document.getElementById('m_accDetail'); if(mDetail) mDetail.value = data.detail;
         
         var stat = data.status === 'Pending' ? 'รอดำเนินการ' : data.status; 
-        document.getElementById('m_accStatus').value = stat; 
-        document.getElementById('m_accFix').value = data.fixText || ""; 
-        document.getElementById('m_accPrevent').value = data.preventText || "";
+        var mStatus = document.getElementById('m_accStatus'); if(mStatus) mStatus.value = stat; 
+        var mFix = document.getElementById('m_accFix'); if(mFix) mFix.value = data.fixText || ""; 
+        var mPrevent = document.getElementById('m_accPrevent'); if(mPrevent) mPrevent.value = data.preventText || "";
         
         new bootstrap.Modal(modalEl).show();
     };
 
     window.saveAccidentResolution = function() {
         var payload = { 
-            docNo: document.getElementById('m_accDocNoHidden').value, 
-            status: document.getElementById('m_accStatus').value, 
-            fixText: document.getElementById('m_accFix').value, 
-            preventText: document.getElementById('m_accPrevent').value, 
-            location: document.getElementById('m_accLocation').value, 
-            damage: document.getElementById('m_accDamage').value, 
-            detail: document.getElementById('m_accDetail').value 
+            docNo: document.getElementById('m_accDocNoHidden') ? document.getElementById('m_accDocNoHidden').value : '', 
+            status: document.getElementById('m_accStatus') ? document.getElementById('m_accStatus').value : '', 
+            fixText: document.getElementById('m_accFix') ? document.getElementById('m_accFix').value : '', 
+            preventText: document.getElementById('m_accPrevent') ? document.getElementById('m_accPrevent').value : '', 
+            location: document.getElementById('m_accLocation') ? document.getElementById('m_accLocation').value : '', 
+            damage: document.getElementById('m_accDamage') ? document.getElementById('m_accDamage').value : '', 
+            detail: document.getElementById('m_accDetail') ? document.getElementById('m_accDetail').value : '' 
         };
         if(!payload.docNo) return;
         
@@ -1737,7 +1806,8 @@
         window.callAPI({ action: 'updateAccidentResolution', payload: payload }).then(function(res) { 
             if (res.success) { 
                 Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message}); 
-                bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal')).hide(); 
+                var mod = bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal'));
+                if(mod) mod.hide(); 
                 window.loadAdminData(); 
             } else { 
                 Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); 
@@ -1746,7 +1816,8 @@
     };
 
     window.deleteAccident = function() {
-        var docNo = document.getElementById('m_accDocNoHidden').value; 
+        var docNoEl = document.getElementById('m_accDocNoHidden');
+        var docNo = docNoEl ? docNoEl.value : ''; 
         if(!docNo) return;
         
         Swal.fire({ 
@@ -1764,7 +1835,8 @@
                 window.callAPI({ action: 'deleteAccidentRecord', docNo: docNo }).then(function(res) { 
                     if (res.success) { 
                         Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message}); 
-                        bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal')).hide(); 
+                        var mod = bootstrap.Modal.getInstance(document.getElementById('accidentDetailModal'));
+                        if(mod) mod.hide(); 
                         window.loadAdminData(); 
                     } else { 
                         Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); 
@@ -1775,27 +1847,37 @@
     };
 
     window.renderWarningTable = function(data) {
-       document.getElementById('warnTotalCount').innerText = window.allWarningData.length;
+       var warnCountEl = document.getElementById('warnTotalCount');
+       if(warnCountEl) warnCountEl.innerText = window.allWarningData.length;
+       
        var warnCounts = {}; 
-       window.allWarningData.forEach(function(w) { warnCounts[w.empName] = (warnCounts[w.empName] || 0) + 1; });
+       if(window.allWarningData) {
+           window.allWarningData.forEach(function(w) { warnCounts[w.empName] = (warnCounts[w.empName] || 0) + 1; });
+       }
        var topWarns = Object.keys(warnCounts).map(function(k) { return {name:k, count:warnCounts[k]}; }).sort(function(a,b) { return b.count - a.count; }).slice(0,10);
        
        var topHtml = ''; 
        topWarns.forEach(function(c, i) { 
            topHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-danger rounded-pill">' + c.count + ' ครั้ง</span></div>'; 
        }); 
-       document.getElementById('warnTopEmployeesList').innerHTML = topHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
+       var warnTopEmpEl = document.getElementById('warnTopEmployeesList');
+       if(warnTopEmpEl) warnTopEmpEl.innerHTML = topHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
        
        var html = '';
-       data.forEach(function(r) {
-           var pdfBtn = r.pdfUrl && r.pdfUrl.indexOf('http') > -1 ? '<a href="' + r.pdfUrl + '" target="_blank" onclick="event.stopPropagation()" class="btn btn-sm btn-outline-danger py-0 px-3 rounded-pill shadow-sm"><i class="bi bi-file-pdf me-1"></i> เปิดดู</a>' : '-';
-           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openWarningDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-danger font-monospace fw-bold">' + r.docNo + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + (r.issueDate.split(' ')[0] || r.issueDate) + '</td><td>' + (r.incidentDate.split(' ')[0] || r.incidentDate) + '</td><td><div class="text-truncate text-light" style="max-width:200px;" title="' + r.offense1 + '">' + r.offense1 + '</div></td><td class="text-center pe-4">' + pdfBtn + '</td></tr>';
-       });
-       document.getElementById('adminWarnTableBody').innerHTML = html || '<tr><td colspan="6" class="text-center py-4 text-muted">ยังไม่มีข้อมูลการออกใบเตือน</td></tr>';
+       if(data) {
+           data.forEach(function(r) {
+               var pdfBtn = r.pdfUrl && r.pdfUrl.indexOf('http') > -1 ? '<a href="' + r.pdfUrl + '" target="_blank" onclick="event.stopPropagation()" class="btn btn-sm btn-outline-danger py-0 px-3 rounded-pill shadow-sm"><i class="bi bi-file-pdf me-1"></i> เปิดดู</a>' : '-';
+               html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openWarningDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-danger font-monospace fw-bold">' + r.docNo + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + (r.issueDate.split(' ')[0] || r.issueDate) + '</td><td>' + (r.incidentDate.split(' ')[0] || r.incidentDate) + '</td><td><div class="text-truncate text-light" style="max-width:200px;" title="' + r.offense1 + '">' + r.offense1 + '</div></td><td class="text-center pe-4">' + pdfBtn + '</td></tr>';
+           });
+       }
+       var warnBody = document.getElementById('adminWarnTableBody');
+       if(warnBody) warnBody.innerHTML = html || '<tr><td colspan="6" class="text-center py-4 text-muted">ยังไม่มีข้อมูลการออกใบเตือน</td></tr>';
     };
 
     window.filterWarnTable = function() { 
-        var val = document.getElementById('searchWarnInput').value.toLowerCase(); 
+        var searchInput = document.getElementById('searchWarnInput');
+        if(!searchInput) return;
+        var val = searchInput.value.toLowerCase(); 
         window.currentWarningDisplayData = window.allWarningData.filter(function(d) { 
             return (d.docNo + d.empName + d.empId).toLowerCase().includes(val); 
         }); 
@@ -1814,39 +1896,41 @@
         }
 
         el.innerText = data.docNo; 
-        document.getElementById('e_warnDocNoHidden').value = data.docNo; 
-        document.getElementById('e_warnEmpName').innerText = data.empName + " (" + data.empId + ")";
+        var docNoHidden = document.getElementById('e_warnDocNoHidden'); if(docNoHidden) docNoHidden.value = data.docNo; 
+        var empNameEl = document.getElementById('e_warnEmpName'); if(empNameEl) empNameEl.innerText = data.empName + " (" + data.empId + ")";
         
         var issuedByShort = data.issuedBy.split('(')[0].trim(); 
-        document.getElementById('e_warnIssuedByText').innerText = issuedByShort;
+        var issueByText = document.getElementById('e_warnIssuedByText'); if(issueByText) issueByText.innerText = issuedByShort;
 
-        document.getElementById('e_warnIssueDate').value = data.issueDateEdit; 
-        document.getElementById('e_warnIncidentDate').value = data.incidentDateEdit; 
-        document.getElementById('e_warnAttachments').value = data.attachments; 
-        document.getElementById('e_warnOffense1').value = data.offense1; 
-        document.getElementById('e_warnOffense2').value = data.offense2; 
-        document.getElementById('e_warnNotes').value = data.notes;
+        var issueDateEl = document.getElementById('e_warnIssueDate'); if(issueDateEl) issueDateEl.value = data.issueDateEdit; 
+        var incidentDateEl = document.getElementById('e_warnIncidentDate'); if(incidentDateEl) incidentDateEl.value = data.incidentDateEdit; 
+        var attachmentsEl = document.getElementById('e_warnAttachments'); if(attachmentsEl) attachmentsEl.value = data.attachments; 
+        var off1El = document.getElementById('e_warnOffense1'); if(off1El) off1El.value = data.offense1; 
+        var off2El = document.getElementById('e_warnOffense2'); if(off2El) off2El.value = data.offense2; 
+        var notesEl = document.getElementById('e_warnNotes'); if(notesEl) notesEl.value = data.notes;
 
         var select = document.getElementById('e_warnIssuedBy'); 
-        for(var i=0; i<select.options.length; i++) { 
-            if (select.options[i].value.includes(issuedByShort)) { 
-                select.selectedIndex = i; 
-                break; 
-            } 
+        if(select) {
+            for(var i=0; i<select.options.length; i++) { 
+                if (select.options[i].value.includes(issuedByShort)) { 
+                    select.selectedIndex = i; 
+                    break; 
+                } 
+            }
         }
         new bootstrap.Modal(modalEl).show();
     };
 
     window.saveWarningResolution = function() {
         var payload = { 
-            docNo: document.getElementById('e_warnDocNoHidden').value, 
-            issueDate: document.getElementById('e_warnIssueDate').value, 
-            incidentDate: document.getElementById('e_warnIncidentDate').value, 
-            attachments: document.getElementById('e_warnAttachments').value, 
-            offense1: document.getElementById('e_warnOffense1').value, 
-            offense2: document.getElementById('e_warnOffense2').value, 
-            notes: document.getElementById('e_warnNotes').value, 
-            issuedBy: document.getElementById('e_warnIssuedBy').value 
+            docNo: document.getElementById('e_warnDocNoHidden') ? document.getElementById('e_warnDocNoHidden').value : '', 
+            issueDate: document.getElementById('e_warnIssueDate') ? document.getElementById('e_warnIssueDate').value : '', 
+            incidentDate: document.getElementById('e_warnIncidentDate') ? document.getElementById('e_warnIncidentDate').value : '', 
+            attachments: document.getElementById('e_warnAttachments') ? document.getElementById('e_warnAttachments').value : '', 
+            offense1: document.getElementById('e_warnOffense1') ? document.getElementById('e_warnOffense1').value : '', 
+            offense2: document.getElementById('e_warnOffense2') ? document.getElementById('e_warnOffense2').value : '', 
+            notes: document.getElementById('e_warnNotes') ? document.getElementById('e_warnNotes').value : '', 
+            issuedBy: document.getElementById('e_warnIssuedBy') ? document.getElementById('e_warnIssuedBy').value : '' 
         };
         if(!payload.docNo) return;
 
@@ -1855,7 +1939,8 @@
         window.callAPI({ action: 'updateWarningResolution', payload: payload }).then(function(res) { 
             if (res.success) { 
                 Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message}); 
-                bootstrap.Modal.getInstance(document.getElementById('warningDetailModal')).hide(); 
+                var mod = bootstrap.Modal.getInstance(document.getElementById('warningDetailModal'));
+                if(mod) mod.hide(); 
                 window.loadAdminData(); 
             } else { 
                 Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); 
@@ -1864,7 +1949,8 @@
     };
 
     window.deleteWarning = function() {
-        var docNo = document.getElementById('e_warnDocNoHidden').value; 
+        var docNoEl = document.getElementById('e_warnDocNoHidden');
+        var docNo = docNoEl ? docNoEl.value : ''; 
         if(!docNo) return;
 
         Swal.fire({ 
@@ -1882,7 +1968,8 @@
                 window.callAPI({ action: 'deleteWarningRecord', docNo: docNo }).then(function(res) { 
                     if(res.success) { 
                         Swal.fire({icon: 'success', title: 'ลบสำเร็จ', text: res.message}); 
-                        bootstrap.Modal.getInstance(document.getElementById('warningDetailModal')).hide(); 
+                        var mod = bootstrap.Modal.getInstance(document.getElementById('warningDetailModal'));
+                        if(mod) mod.hide(); 
                         window.loadAdminData(); 
                     } else { 
                         Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); 
@@ -1903,11 +1990,13 @@
 
         form.reset(); 
         var datalist = document.getElementById('warnEmpOptions'); 
-        if(datalist) datalist.innerHTML = ''; 
-        var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; }); 
-        activeEmps.forEach(function(e) { 
-            if(datalist) datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">'; 
-        }); 
+        if(datalist) {
+            datalist.innerHTML = ''; 
+            var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; }); 
+            activeEmps.forEach(function(e) { 
+                datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">'; 
+            }); 
+        }
         
         var issueDate = document.getElementById('warnIssueDate');
         if(issueDate) issueDate.valueAsDate = new Date(); 
@@ -1927,13 +2016,15 @@
 
     window.submitWarningForm = async function(e) {
         e.preventDefault(); 
-        var inputValue = document.getElementById('warnEmpInput').value; 
+        var inputEl = document.getElementById('warnEmpInput');
+        var inputValue = inputEl ? inputEl.value : ''; 
         if (!inputValue || inputValue.indexOf(':') === -1) { 
             Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ถูกต้อง', text: 'กรุณาเลือกพนักงานจากรายชื่อที่กำหนด'}); 
             return; 
         }
         
         var btn = document.getElementById('btnSubmitWarning'); 
+        if(!btn) return;
         var originalText = btn.innerText; 
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังสร้าง PDF...'; 
         btn.disabled = true;
@@ -1943,8 +2034,10 @@
         var empNameText = parts[1] ? parts[1].trim() : ''; 
         if (empNameText) empNameText = empNameText.split('(')[0].trim();
 
-        var file1 = document.getElementById('warnPhoto1').files[0]; 
-        var file2 = document.getElementById('warnPhoto2').files[0]; 
+        var file1El = document.getElementById('warnPhoto1');
+        var file2El = document.getElementById('warnPhoto2');
+        var file1 = file1El ? file1El.files[0] : null; 
+        var file2 = file2El ? file2El.files[0] : null; 
         var b64_1 = null, type1 = null; 
         var b64_2 = null, type2 = null;
 
@@ -1954,13 +2047,13 @@
         var payload = { 
             empId: empIdValue, 
             empName: empNameText, 
-            issueDate: document.getElementById('warnIssueDate').value, 
-            incidentDate: document.getElementById('warnIncidentDate').value, 
-            attachments: document.getElementById('warnAttachments').value, 
-            offense1: document.getElementById('warnOffense1').value, 
-            offense2: document.getElementById('warnOffense2').value, 
-            notes: document.getElementById('warnNotes').value, 
-            issuedBy: document.getElementById('warnIssuedBy').value, 
+            issueDate: document.getElementById('warnIssueDate') ? document.getElementById('warnIssueDate').value : '', 
+            incidentDate: document.getElementById('warnIncidentDate') ? document.getElementById('warnIncidentDate').value : '', 
+            attachments: document.getElementById('warnAttachments') ? document.getElementById('warnAttachments').value : '', 
+            offense1: document.getElementById('warnOffense1') ? document.getElementById('warnOffense1').value : '', 
+            offense2: document.getElementById('warnOffense2') ? document.getElementById('warnOffense2').value : '', 
+            notes: document.getElementById('warnNotes') ? document.getElementById('warnNotes').value : '', 
+            issuedBy: document.getElementById('warnIssuedBy') ? document.getElementById('warnIssuedBy').value : '', 
             warnPhoto1Base64: b64_1, warnPhoto1Type: type1, 
             warnPhoto2Base64: b64_2, warnPhoto2Type: type2 
         };
@@ -1970,7 +2063,8 @@
             btn.disabled = false; 
             if (res.success) { 
                 Swal.fire({icon: 'success', title: 'สร้างใบเตือนสำเร็จ', html: 'ส่งเข้าประวัติพนักงานเรียบร้อย<br>เลขที่อ้างอิง: <b class="text-danger">' + res.docNo + '</b>'}); 
-                bootstrap.Modal.getInstance(document.getElementById('warningCreateModal')).hide(); 
+                var mod = bootstrap.Modal.getInstance(document.getElementById('warningCreateModal'));
+                if(mod) mod.hide(); 
                 window.loadAdminData(); 
             } else { 
                 Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message}); 
@@ -1980,19 +2074,20 @@
 
     window.renderStats = function(data) { 
         var active = data.filter(function(d) { return d.status === 'Active'; }); 
-        document.getElementById('statTotal').innerText = active.length; 
+        var statTotalEl = document.getElementById('statTotal');
+        if(statTotalEl) statTotalEl.innerText = active.length; 
         
         var male = active.filter(function(d) { return d.gender === 'ชาย'; }).length; 
         var female = active.filter(function(d) { return d.gender === 'หญิง'; }).length; 
-        document.getElementById('statMale').innerText = male; 
-        document.getElementById('statFemale').innerText = female; 
+        var statMaleEl = document.getElementById('statMale'); if(statMaleEl) statMaleEl.innerText = male; 
+        var statFemaleEl = document.getElementById('statFemale'); if(statFemaleEl) statFemaleEl.innerText = female; 
         
         var thisMonth = new Date().getMonth() + 1; 
         var bdays = active.filter(function(d) { 
             if (!d.birthDate) return false; 
             try { return (new Date(d.birthDate).getMonth() + 1) === thisMonth; } catch(e){ return false; } 
         }); 
-        document.getElementById('statBirth').innerText = bdays.length; 
+        var statBirthEl = document.getElementById('statBirth'); if(statBirthEl) statBirthEl.innerText = bdays.length; 
     };
 
     window.openBirthdayModal = function() { 
@@ -2008,7 +2103,8 @@
                 html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div class="d-flex align-items-center"><div class="bg-dark border border-secondary rounded-circle d-flex align-items-center justify-content-center me-3 text-warning fw-bold" style="width:36px;height:36px;">' + day + '</div><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div></div><i class="bi bi-chevron-right text-muted small"></i></div>'; 
             }); 
         } 
-        document.getElementById('birthdayListBody').innerHTML = html; 
+        var bodyEl = document.getElementById('birthdayListBody');
+        if(bodyEl) bodyEl.innerHTML = html; 
         new bootstrap.Modal(document.getElementById('birthdayModal')).show(); 
     };
 
@@ -2028,7 +2124,8 @@
         sorted.forEach(function(i) { 
             html += '<div class="col-sm-6"><div class="list-item-glass clickable-item" onclick="window.openPositionDetail(\'' + i.n + '\')"><span>' + i.n + '</span><span class="badge bg-success text-dark ms-2">' + i.c + '</span></div></div>'; 
         }); 
-        document.getElementById('positionStatsList').innerHTML = html + '</div>'; 
+        var pList = document.getElementById('positionStatsList');
+        if(pList) pList.innerHTML = html + '</div>'; 
         new bootstrap.Modal(document.getElementById('positionStatsModal')).show(); 
     };
 
@@ -2036,8 +2133,8 @@
         var list = window.allEmpData.filter(function(d) { return d.status === 'Active' && d.position && d.position.includes(pos); }); 
         var html = ''; 
         list.forEach(function(e) { html += '<div class="list-item-glass static-item"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + (e.phone || '-') + '</div></div></div>'; }); 
-        document.getElementById('positionDetailTitle').innerText = 'ตำแหน่ง: ' + pos; 
-        document.getElementById('positionDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
+        var pTitle = document.getElementById('positionDetailTitle'); if(pTitle) pTitle.innerText = 'ตำแหน่ง: ' + pos; 
+        var pList = document.getElementById('positionDetailList'); if(pList) pList.innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
         new bootstrap.Modal(document.getElementById('positionDetailModal')).show(); 
     };
 
@@ -2052,7 +2149,7 @@
             var d = yearMap[y]; cum += (d.j - d.r); 
             html += '<tr class="static-item"><td class="py-3">' + y + '</td><td class="text-success clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'join\')">+' + d.j + '</td><td class="text-danger clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'resign\')">-' + d.r + '</td><td class="text-white">' + cum + '</td></tr>'; 
         }); 
-        document.getElementById('yearStatsBodyModal').innerHTML = html; 
+        var bModal = document.getElementById('yearStatsBodyModal'); if(bModal) bModal.innerHTML = html; 
         new bootstrap.Modal(document.getElementById('yearlyStatsModal')).show(); 
     };
 
@@ -2067,15 +2164,20 @@
         } 
         var html = ''; 
         list.forEach(function(e) { html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div><span class="badge bg-dark border border-secondary text-light">' + window.formatDate(type === 'join' ? e.startDate : e.resignDate) + '</span></div>'; }); 
-        document.getElementById('yearDetailTitle').innerText = title; 
-        document.getElementById('yearDetailList').innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
+        var dTitle = document.getElementById('yearDetailTitle'); if(dTitle) dTitle.innerText = title; 
+        var dList = document.getElementById('yearDetailList'); if(dList) dList.innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
         new bootstrap.Modal(document.getElementById('yearDetailModal')).show(); 
     };
 
     window.openModal = function(mode, targetId, preloadedData) { 
-        document.getElementById('empForm').reset(); 
-        document.getElementById('formMode').value = mode; 
+        var empFormEl = document.getElementById('empForm');
+        if(empFormEl) empFormEl.reset(); 
+        
+        var formModeEl = document.getElementById('formMode');
+        if(formModeEl) formModeEl.value = mode; 
+        
         var modalEl = document.getElementById('empModal'); 
+        if(!modalEl) return;
         modalObj = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl); 
         var targetData = preloadedData || null; 
         if (!targetData && mode !== 'create' && targetId) { 
@@ -2098,9 +2200,9 @@
         var btnSave = document.getElementById('btnSaveModal'); 
         var viewSection = document.getElementById('viewModeSection'); 
         var editSection = document.getElementById('editModeSection'); 
-        viewSection.style.display = 'none'; 
-        editSection.style.display = 'none'; 
-        btnSave.style.display = 'none'; 
+        if(viewSection) viewSection.style.display = 'none'; 
+        if(editSection) editSection.style.display = 'none'; 
+        if(btnSave) btnSave.style.display = 'none'; 
         
         var lock = (id, state) => { 
             var el = document.getElementById(id); 
@@ -2122,27 +2224,27 @@
         var allFields = ['empId','role','username','password','fullname','nickname','startDate','phone','birthDate','gender','ssoType','ssoHosp','idExp','licExp','idCardNum','licNum','licType','resignReason','prefix']; 
         
         if (mode === 'create') { 
-            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>เพิ่มพนักงานใหม่'; 
-            editSection.style.display = 'block'; 
-            btnSave.style.display = 'block'; 
+            var modTitle = document.getElementById('modalTitle'); if(modTitle) modTitle.innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>เพิ่มพนักงานใหม่'; 
+            if(editSection) editSection.style.display = 'block'; 
+            if(btnSave) btnSave.style.display = 'block'; 
             allFields.forEach(f => lock(f,false)); 
             lockPositions(false); 
-            document.getElementById('btnGenId').style.display = 'inline-block'; 
+            var btnGenId = document.getElementById('btnGenId'); if(btnGenId) btnGenId.style.display = 'inline-block'; 
             window.genId(); 
-            document.getElementById('empStatus').value = 'Active'; 
+            var empStatEl = document.getElementById('empStatus'); if(empStatEl) empStatEl.value = 'Active'; 
             lock('empStatus', false); 
             window.toggleResignDate(); 
         } else if (mode === 'view' || currentUser.role === 'Viewer') { 
-            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)'; 
-            viewSection.style.display = 'block'; 
-            document.getElementById('btnGenId').style.display = 'none'; 
+            var modTitle = document.getElementById('modalTitle'); if(modTitle) modTitle.innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)'; 
+            if(viewSection) viewSection.style.display = 'block'; 
+            var btnGenId = document.getElementById('btnGenId'); if(btnGenId) btnGenId.style.display = 'none'; 
             if(d) window.fillData(d, true); 
         } else { 
             var isUser = (currentUser.role === 'User'); 
-            document.getElementById('modalTitle').innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน'; 
-            editSection.style.display = 'block'; 
-            btnSave.style.display = 'block'; 
-            document.getElementById('btnGenId').style.display = 'none'; 
+            var modTitle = document.getElementById('modalTitle'); if(modTitle) modTitle.innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน'; 
+            if(editSection) editSection.style.display = 'block'; 
+            if(btnSave) btnSave.style.display = 'block'; 
+            var btnGenId = document.getElementById('btnGenId'); if(btnGenId) btnGenId.style.display = 'none'; 
             if(d) window.fillData(d, false); 
             lock('empId', true); 
             if (isUser) { 
@@ -2172,27 +2274,19 @@
 
     window.fillData = function(d, isViewMode) { 
         if(!d) return; 
-        document.getElementById('empId').value = d.id; 
-        document.getElementById('fullname').value = d.name; 
-        document.getElementById('prefix').value = ""; 
-        document.getElementById('nickname').value = d.nickname || ''; 
-        document.getElementById('phone').value = d.phone; 
-        document.getElementById('username').value = d.username; 
-        document.getElementById('password').value = d.password; 
-        document.getElementById('role').value = d.role; 
-        document.getElementById('gender').value = d.gender || ''; 
-        document.getElementById('empStatus').value = d.status || 'Active'; 
-        document.getElementById('startDate').value = safeDate(d.startDate); 
-        document.getElementById('resignDate').value = safeDate(d.resignDate); 
-        document.getElementById('birthDate').value = safeDate(d.birthDate); 
-        document.getElementById('ssoType').value = d.ssoType || ''; 
-        document.getElementById('ssoHosp').value = d.ssoHosp || ''; 
-        document.getElementById('idExp').value = safeDate(d.idExp); 
-        document.getElementById('licExp').value = safeDate(d.licExp); 
-        document.getElementById('idCardNum').value = d.idCardNum || ''; 
-        document.getElementById('licNum').value = d.licNum || ''; 
-        document.getElementById('licType').value = d.licType || ''; 
-        document.getElementById('resignReason').value = d.resignReason || ''; 
+        var fields = {
+            'empId': d.id, 'fullname': d.name, 'prefix': "", 'nickname': d.nickname || '',
+            'phone': d.phone, 'username': d.username, 'password': d.password, 'role': d.role,
+            'gender': d.gender || '', 'empStatus': d.status || 'Active', 'startDate': safeDate(d.startDate),
+            'resignDate': safeDate(d.resignDate), 'birthDate': safeDate(d.birthDate), 'ssoType': d.ssoType || '',
+            'ssoHosp': d.ssoHosp || '', 'idExp': safeDate(d.idExp), 'licExp': safeDate(d.licExp),
+            'idCardNum': d.idCardNum || '', 'licNum': d.licNum || '', 'licType': d.licType || '',
+            'resignReason': d.resignReason || ''
+        };
+        for(let id in fields) {
+            let el = document.getElementById(id);
+            if(el) el.value = fields[id];
+        }
         
         var currentPos = (d.position || '').split(',').map(p => p.trim()); 
         document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => { 
@@ -2201,63 +2295,74 @@
         window.toggleResignDate(); 
         
         if (isViewMode) { 
-            document.getElementById('view_fullname').innerText = d.name; 
-            document.getElementById('view_nickname_badge').innerText = d.nickname ? d.nickname : '-'; 
-            document.getElementById('view_empId').innerText = d.id; 
+            var viewIds = ['view_fullname','view_nickname_badge','view_empId','view_status_badge','view_birthDate','view_age','view_gender','view_phone','view_username','view_password','view_role','view_startDate','view_tenure','view_ssoType','view_ssoHosp','view_resignDate','view_resignReason','view_idCardNum','view_idExp','view_licType','view_licNum','view_licExp'];
+            
+            var eFull = document.getElementById('view_fullname'); if(eFull) eFull.innerText = d.name; 
+            var eNick = document.getElementById('view_nickname_badge'); if(eNick) eNick.innerText = d.nickname ? d.nickname : '-'; 
+            var eEmpId = document.getElementById('view_empId'); if(eEmpId) eEmpId.innerText = d.id; 
+            
             var statusClass = d.status === 'Active' ? 'bg-success text-black' : (d.status === 'Resigned' ? 'bg-danger text-white' : 'bg-warning text-dark'); 
             var statusEl = document.getElementById('view_status_badge'); 
-            statusEl.innerText = d.status; 
-            statusEl.className = 'badge rounded-pill fs-6 px-3 py-2 ' + statusClass; 
+            if(statusEl) {
+                statusEl.innerText = d.status; 
+                statusEl.className = 'badge rounded-pill fs-6 px-3 py-2 ' + statusClass; 
+            }
             
-            document.getElementById('view_birthDate').innerText = window.formatDate(d.birthDate); 
-            document.getElementById('view_age').innerText = window.calcAge(d.birthDate); 
-            document.getElementById('view_gender').innerText = d.gender || '-'; 
-            document.getElementById('view_phone').innerText = d.phone || '-'; 
-            document.getElementById('view_username').innerText = d.username; 
-            document.getElementById('view_password').innerText = d.password; 
-            document.getElementById('view_role').innerText = d.role; 
-            document.getElementById('view_startDate').innerText = window.formatDate(d.startDate); 
-            document.getElementById('view_tenure').innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate); 
-            document.getElementById('view_ssoType').innerText = d.ssoType || '-'; 
-            document.getElementById('view_ssoHosp').innerText = d.ssoHosp || '-'; 
+            var eBD = document.getElementById('view_birthDate'); if(eBD) eBD.innerText = window.formatDate(d.birthDate); 
+            var eAge = document.getElementById('view_age'); if(eAge) eAge.innerText = window.calcAge(d.birthDate); 
+            var eGen = document.getElementById('view_gender'); if(eGen) eGen.innerText = d.gender || '-'; 
+            var ePhone = document.getElementById('view_phone'); if(ePhone) ePhone.innerText = d.phone || '-'; 
+            var eUser = document.getElementById('view_username'); if(eUser) eUser.innerText = d.username; 
+            var ePass = document.getElementById('view_password'); if(ePass) ePass.innerText = d.password; 
+            var eRole = document.getElementById('view_role'); if(eRole) eRole.innerText = d.role; 
+            var eStart = document.getElementById('view_startDate'); if(eStart) eStart.innerText = window.formatDate(d.startDate); 
+            var eTenure = document.getElementById('view_tenure'); if(eTenure) eTenure.innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate); 
+            var eSsoT = document.getElementById('view_ssoType'); if(eSsoT) eSsoT.innerText = d.ssoType || '-'; 
+            var eSsoH = document.getElementById('view_ssoHosp'); if(eSsoH) eSsoH.innerText = d.ssoHosp || '-'; 
             
             var ruleStatusHtml = d.rulesAccepted ? '<span class="badge bg-success text-dark"><i class="bi bi-check-circle-fill me-1"></i>ยอมรับแล้ว</span>' : '<span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i>ยังไม่ยอมรับ</span>';
             var ruleDiv = document.getElementById('view_rule_status');
             if (!ruleDiv) {
-                var personalInfoContainer = document.querySelector('#view_ssoHosp').closest('.p-3').parentNode.querySelector('.mt-4.pt-3');
-                if(personalInfoContainer) {
-                     var newRuleDiv = document.createElement('div');
-                     newRuleDiv.className = 'd-flex justify-content-between align-items-center pt-2 mt-2 border-top border-secondary border-opacity-25';
-                     newRuleDiv.innerHTML = '<small class="text-muted">การยอมรับกฎระเบียบ</small><span id="view_rule_status">' + ruleStatusHtml + '</span>';
-                     personalInfoContainer.appendChild(newRuleDiv);
+                var ssoHospEl = document.querySelector('#view_ssoHosp');
+                if(ssoHospEl) {
+                    var personalInfoContainer = ssoHospEl.closest('.p-3').parentNode.querySelector('.mt-4.pt-3');
+                    if(personalInfoContainer) {
+                         var newRuleDiv = document.createElement('div');
+                         newRuleDiv.className = 'd-flex justify-content-between align-items-center pt-2 mt-2 border-top border-secondary border-opacity-25';
+                         newRuleDiv.innerHTML = '<small class="text-muted">การยอมรับกฎระเบียบ</small><span id="view_rule_status">' + ruleStatusHtml + '</span>';
+                         personalInfoContainer.appendChild(newRuleDiv);
+                    }
                 }
             } else {
                 ruleDiv.innerHTML = ruleStatusHtml;
             }
 
+            var rsSection = document.getElementById('view_resign_section');
             if(d.status === 'Resigned') { 
-                document.getElementById('view_resign_section').style.display = 'block'; 
-                document.getElementById('view_resignDate').innerText = window.formatDate(d.resignDate); 
-                document.getElementById('view_resignReason').innerText = d.resignReason || '-'; 
+                if(rsSection) rsSection.style.display = 'block'; 
+                var rsDate = document.getElementById('view_resignDate'); if(rsDate) rsDate.innerText = window.formatDate(d.resignDate); 
+                var rsR = document.getElementById('view_resignReason'); if(rsR) rsR.innerText = d.resignReason || '-'; 
             } else { 
-                document.getElementById('view_resign_section').style.display = 'none'; 
+                if(rsSection) rsSection.style.display = 'none'; 
             } 
             
-            document.getElementById('view_idCardNum').innerText = d.idCardNum || '-'; 
-            document.getElementById('view_idExp').innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : ''; 
-            document.getElementById('view_licType').innerText = d.licType || '-'; 
-            document.getElementById('view_licNum').innerText = d.licNum ? 'เลขที่: ' + d.licNum : ''; 
-            document.getElementById('view_licExp').innerText = d.licExp ? 'หมดอายุ: ' + window.formatDate(d.licExp) : ''; 
+            var idCard = document.getElementById('view_idCardNum'); if(idCard) idCard.innerText = d.idCardNum || '-'; 
+            var idExp = document.getElementById('view_idExp'); if(idExp) idExp.innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : ''; 
+            var licType = document.getElementById('view_licType'); if(licType) licType.innerText = d.licType || '-'; 
+            var licNum = document.getElementById('view_licNum'); if(licNum) licNum.innerText = d.licNum ? 'เลขที่: ' + d.licNum : ''; 
+            var licExp = document.getElementById('view_licExp'); if(licExp) licExp.innerText = d.licExp ? 'หมดอายุ: ' + window.formatDate(d.licExp) : ''; 
             
             var posContainer = document.getElementById('view_positions_badges'); 
-            posContainer.innerHTML = ''; 
-            if(currentPos.length > 0 && currentPos[0] !== "") { 
-                currentPos.forEach(p => { 
-                    posContainer.innerHTML += `<span class="badge bg-dark text-light border border-secondary fw-normal py-2 px-3">${p}</span>`; 
-                }); 
-            } else { 
-                posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>'; 
-            } 
+            if(posContainer) {
+                posContainer.innerHTML = ''; 
+                if(currentPos.length > 0 && currentPos[0] !== "") { 
+                    currentPos.forEach(p => { 
+                        posContainer.innerHTML += `<span class="badge bg-dark text-light border border-secondary fw-normal py-2 px-3">${p}</span>`; 
+                    }); 
+                } else { 
+                    posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>'; 
+                } 
+            }
         } 
     };
 
@@ -2270,51 +2375,54 @@
     window.submitEmpForm = async function(e) { 
         e.preventDefault(); 
         Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()}); 
+        
+        var getVal = (id) => { var el = document.getElementById(id); return el ? el.value : ''; };
+        
         var form = { 
-            empId: document.getElementById('empId').value, 
-            role: document.getElementById('role').value, 
-            status: document.getElementById('empStatus').value, 
-            resignDate: document.getElementById('resignDate').value, 
-            birthDate: document.getElementById('birthDate').value, 
-            gender: document.getElementById('gender').value, 
-            username: document.getElementById('username').value, 
-            password: document.getElementById('password').value, 
-            prefix: document.getElementById('prefix').value, 
-            fullname: document.getElementById('fullname').value, 
-            nickname: document.getElementById('nickname').value, 
-            ssoType: document.getElementById('ssoType').value, 
-            ssoHosp: document.getElementById('ssoHosp').value, 
-            idExp: document.getElementById('idExp').value, 
-            licExp: document.getElementById('licExp').value, 
-            idCardNum: document.getElementById('idCardNum').value, 
-            licNum: document.getElementById('licNum').value, 
-            licType: document.getElementById('licType').value, 
-            resignReason: document.getElementById('resignReason').value, 
+            empId: getVal('empId'), 
+            role: getVal('role'), 
+            status: getVal('empStatus'), 
+            resignDate: getVal('resignDate'), 
+            birthDate: getVal('birthDate'), 
+            gender: getVal('gender'), 
+            username: getVal('username'), 
+            password: getVal('password'), 
+            prefix: getVal('prefix'), 
+            fullname: getVal('fullname'), 
+            nickname: getVal('nickname'), 
+            ssoType: getVal('ssoType'), 
+            ssoHosp: getVal('ssoHosp'), 
+            idExp: getVal('idExp'), 
+            licExp: getVal('licExp'), 
+            idCardNum: getVal('idCardNum'), 
+            licNum: getVal('licNum'), 
+            licType: getVal('licType'), 
+            resignReason: getVal('resignReason'), 
             position: window.getSelectedPositions(), 
-            startDate: document.getElementById('startDate').value, 
-            phone: document.getElementById('phone').value, 
+            startDate: getVal('startDate'), 
+            phone: getVal('phone'), 
             currentUserRole: currentUser.role, 
-            filePhoto: await window.getBase64User(document.getElementById('filePhoto').files[0]), 
-            fileIdCard: await window.getBase64User(document.getElementById('fileIdCard').files[0]), 
-            filePassport: await window.getBase64User(document.getElementById('filePassport').files[0]), 
-            fileHouse: await window.getBase64User(document.getElementById('fileHouse').files[0]), 
-            fileDrive: await window.getBase64User(document.getElementById('fileDrive').files[0]), 
-            fileEdu: await window.getBase64User(document.getElementById('fileEdu').files[0]), 
-            fileCriminal: await window.getBase64User(document.getElementById('fileCriminal').files[0]), 
-            fileHealth: await window.getBase64User(document.getElementById('fileHealth').files[0]), 
+            filePhoto: await window.getBase64User(document.getElementById('filePhoto') ? document.getElementById('filePhoto').files[0] : null), 
+            fileIdCard: await window.getBase64User(document.getElementById('fileIdCard') ? document.getElementById('fileIdCard').files[0] : null), 
+            filePassport: await window.getBase64User(document.getElementById('filePassport') ? document.getElementById('filePassport').files[0] : null), 
+            fileHouse: await window.getBase64User(document.getElementById('fileHouse') ? document.getElementById('fileHouse').files[0] : null), 
+            fileDrive: await window.getBase64User(document.getElementById('fileDrive') ? document.getElementById('fileDrive').files[0] : null), 
+            fileEdu: await window.getBase64User(document.getElementById('fileEdu') ? document.getElementById('fileEdu').files[0] : null), 
+            fileCriminal: await window.getBase64User(document.getElementById('fileCriminal') ? document.getElementById('fileCriminal').files[0] : null), 
+            fileHealth: await window.getBase64User(document.getElementById('fileHealth') ? document.getElementById('fileHealth').files[0] : null), 
             fileWarn: null, 
-            fileOther1: await window.getBase64User(document.getElementById('fileOther1').files[0]), 
-            fileOther2: await window.getBase64User(document.getElementById('fileOther2').files[0]) 
+            fileOther1: await window.getBase64User(document.getElementById('fileOther1') ? document.getElementById('fileOther1').files[0] : null), 
+            fileOther2: await window.getBase64User(document.getElementById('fileOther2') ? document.getElementById('fileOther2').files[0] : null) 
         }; 
         try { 
             const res = await window.callAPI({ 
                 action: 'handleEmployeeSave', 
                 form: form, 
-                mode: document.getElementById('formMode').value 
+                mode: getVal('formMode') 
             }); 
             if(res.success) { 
                 Swal.fire('สำเร็จ', res.message, 'success'); 
-                modalObj.hide(); 
+                if(modalObj) modalObj.hide(); 
                 if(currentUser.role === 'Admin') window.loadAdminData(); 
                 else window.loadUserData(); 
             } else { 
@@ -2324,10 +2432,11 @@
     };
 
     window.genId = function() { 
-        document.getElementById('empId').value='...'; 
+        var eId = document.getElementById('empId');
+        if(eId) eId.value='...'; 
         try { 
             window.callAPI({ action: 'getNextEmployeeId' }).then(res => { 
-                document.getElementById('empId').value = res.empId; 
+                if(eId) eId.value = res.empId; 
             }); 
         } catch(e) {} 
     };
@@ -2395,8 +2504,10 @@
     
     window.declineRules = function() {
         var rulesModalEl = document.getElementById('rulesModal');
-        var modal = bootstrap.Modal.getInstance(rulesModalEl);
-        if (modal) { modal.hide(); }
+        if(rulesModalEl) {
+            var modal = bootstrap.Modal.getInstance(rulesModalEl);
+            if (modal) { modal.hide(); }
+        }
 
         var backdrops = document.querySelectorAll('.modal-backdrop');
         backdrops.forEach(b => b.remove());
