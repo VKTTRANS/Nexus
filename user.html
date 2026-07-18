@@ -959,14 +959,26 @@
                 window.currentUserData = d; 
                 document.getElementById('userNameHeader').innerText = d.name; 
                 
-                // ยึดข้อมูลจาก Google Sheet เป็นหลัก 100%
-                if (d.rulesAccepted === false) {
-                    // ถ้าใน Sheet ไม่มีคำว่า "ยอมรับแล้ว" ให้ล้างแคชทิ้ง แล้วโชว์ Popup บังคับอ่านใหม่
+                // ตรวจสอบการยอมรับกฎ (ดึงจาก Sheet โดยตรง)
+                var isAccepted = (d.rulesAccepted === true || d.rulesAccepted === "true" || d.rulesAccepted === "ยอมรับแล้ว");
+
+                if (!isAccepted) {
+                    // ถ้ายังไม่ยอมรับ
                     localStorage.removeItem('vkt_rules_accepted_' + d.id);
-                    var rulesModal = new bootstrap.Modal(document.getElementById('rulesModal'));
-                    rulesModal.show();
+                    document.getElementById('userProfileContent').style.display = 'none'; 
+                    
+                    // ใช้ getInstance เพื่อป้องกันปัญหา Modal ค้างใน SPA (Single Page App)
+                    var rulesModalEl = document.getElementById('rulesModal');
+                    if (rulesModalEl) {
+                        var rulesModal = bootstrap.Modal.getInstance(rulesModalEl);
+                        if (!rulesModal) {
+                            rulesModal = new bootstrap.Modal(rulesModalEl);
+                        }
+                        rulesModal.show();
+                    }
                 } else {
-                    // ถ้าใน Sheet มีคำว่า "ยอมรับแล้ว" ค่อยให้เข้าใช้งาน
+                    // ถ้ายอมรับแล้ว
+                    localStorage.setItem('vkt_rules_accepted_' + d.id, 'true');
                     document.getElementById('userProfileContent').style.display = 'flex'; 
                 }
                 
@@ -1073,8 +1085,10 @@
             });
 
             var rulesModalEl = document.getElementById('rulesModal');
-            var modal = bootstrap.Modal.getInstance(rulesModalEl);
-            if (modal) { modal.hide(); }
+            if (rulesModalEl) {
+                var modal = bootstrap.Modal.getInstance(rulesModalEl);
+                if (modal) { modal.hide(); }
+            }
 
             var backdrops = document.querySelectorAll('.modal-backdrop');
             backdrops.forEach(b => b.remove());
@@ -1093,16 +1107,19 @@
 
         window.declineRules = function() {
             var rulesModalEl = document.getElementById('rulesModal');
-            var modal = bootstrap.Modal.getInstance(rulesModalEl);
-            if (modal) { modal.hide(); }
+            if (rulesModalEl) {
+                var modal = bootstrap.Modal.getInstance(rulesModalEl);
+                if (modal) { modal.hide(); }
+            }
 
-            var backdrops = document.querySelectorAll('.modal-backdrop');
-            backdrops.forEach(b => b.remove());
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-
+            // Clean up UI safely
             setTimeout(function() {
+                var backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach(b => b.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                
                 if (typeof window.logout === 'function') {
                     window.logout();
                 } else {
