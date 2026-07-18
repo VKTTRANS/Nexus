@@ -840,7 +840,7 @@
                 window.renderUserEvalsList();
             });
 
-            // โหลด Setting (License Type) ให้พร้อมใช้ตอน User กดอัปเดตข้อมูลส่วนตัว
+         
             window.callAPI({ action: 'getSettingsData' }).then(function(res) {
                 var lSelect = document.getElementById('u_licType');
                 if(lSelect) {
