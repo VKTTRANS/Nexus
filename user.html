@@ -62,12 +62,14 @@
             border-radius: 10px;
             padding: 5px;
             border: 1px solid #222;
+            flex-wrap: wrap;
         }
         .custom-nav-pills .nav-link {
             color: #888;
             border-radius: 8px;
             font-weight: 600;
             transition: 0.3s;
+            white-space: nowrap;
         }
         .custom-nav-pills .nav-link.active {
             background-color: #222;
@@ -99,6 +101,16 @@
         .upload-zone:hover { border-color: var(--logistic-primary); background: #111; }
         
         .logistics-modal .modal-body { text-align: left !important; }
+
+        /* Style ซ่อนลูกศรขึ้นลงใน input number */
+        .eval-score-input::-webkit-outer-spin-button,
+        .eval-score-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .eval-score-input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 fade-in-up gap-3">
@@ -111,13 +123,11 @@
             </div>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <!-- ปุ่มประเมินจะมาโผล่ตรงนี้ถ้ามีสิทธิ์ -->
             <div id="evalTopMenuContainer" style="display: none;">
                 <button onclick="window.openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
                     <i class="bi bi-star-fill me-1"></i> ประเมินคนขับ <span id="evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>
                 </button>
             </div>
-            
             <button class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-bold shadow-sm" onclick="window.logout()">
                 <i class="bi bi-power me-1"></i> ออกจากระบบ
             </button>
@@ -165,6 +175,13 @@
                             <span class="badge bg-info text-dark ms-1 rounded-pill" id="accCountBadge">0</span>
                         </button>
                     </li>
+                    <!-- แท็บผลประเมิน (ให้พนักงานดู) -->
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-2 text-success" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
+                            <i class="bi bi-star-fill me-1"></i> ผลประเมิน
+                            <span class="badge bg-success ms-1 rounded-pill" id="evalCountBadge">0</span>
+                        </button>
+                    </li>
                 </ul>
                 
                 <div class="tab-content" id="userTabsContent">
@@ -209,6 +226,16 @@
                             <div class="text-center text-muted py-4 small"><div class="spinner-border spinner-border-sm text-info mb-2"></div><br>กำลังโหลด...</div>
                         </div>
                     </div>
+
+                    <!-- พื้นที่แสดงผลประเมิน -->
+                    <div class="tab-pane fade" id="tab-content-evals" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
+                            <h6 class="fw-bold text-success mb-0"><i class="bi bi-star-half me-2"></i>ผลการประเมินการทำงานประจำเดือน</h6>
+                        </div>
+                        <div id="userEvalListTab">
+                            <div class="text-center text-muted py-4 small"><div class="spinner-border spinner-border-sm text-success mb-2"></div><br>กำลังโหลด...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -225,6 +252,7 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
+            
             <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
                 <form id="accidentForm" onsubmit="window.submitAccident(event)">
                     <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
@@ -419,6 +447,7 @@
             </div>
             <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
                 <form id="userRepairForm" onsubmit="window.submitUserRepair(event)">
+                    
                     <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
                         <div class="row g-3">
                             <div class="col-md-6">
@@ -456,7 +485,8 @@
                                     <option value="เป่ากรองอากาศ">เป่ากรองอากาศ</option>
                                     <option value="เป่ากรองแอร์">เป่ากรองแอร์</option>
                                     <option value="เป่าหน้าเครื่อง">เป่าหน้าเครื่อง</option>
-                                    <option value="เช็คน้ำกลั่น">เช็คลมยาง</option>
+                                    <option value="เช็คน้ำกลั่น">เช็คน้ำกลั่น</option>
+                                    <option value="เช็คลมยาง">เช็คลมยาง</option>
                                     <option value="อัดจารบี">อัดจารบี</option>
                                     <option value="สลับยาง">สลับยาง</option>
                                     <option value="เปลี่ยนยาง">เปลี่ยนยาง</option>
@@ -905,7 +935,8 @@
 
 <script>
     var globalUserPayslips = [];
-    var globalEvalDrivers = []; // เก็บรายชื่อพนักงานทั้งหมดที่จะประเมิน
+    var globalEvalDrivers = []; 
+    var globalUserEvals = [];
 
     window.loadUserData = function() { 
         document.getElementById('userLoading').style.display = 'block'; 
@@ -924,7 +955,6 @@
             window.currentUserData = d; 
             document.getElementById('userNameHeader').innerText = d.name; 
             
-            // เช็คว่าเคยกดยอมรับกฎระเบียบหรือยัง?
             var ruleKey = 'vkt_rules_accepted_' + d.id;
             var hasAcceptedRules = localStorage.getItem(ruleKey);
 
@@ -938,12 +968,11 @@
             window.renderUserProfile(d); 
             window.renderUserDocs(d); 
 
-            // ตรวจสอบสิทธิ์และดึงสถานะการประเมินประจำเดือน
             var evaluatorRoles = ["เจ้าหน้าที่ธุรการบัญชี", "เจ้าหน้าที่ธุรการขนส่ง", "เจ้าหน้าที่ประสานงาน", "เจ้าหน้าที่ความปลอดภัย"];
             var isEvaluator = d.position && evaluatorRoles.some(function(role) { return d.position.indexOf(role) > -1; });
             if (isEvaluator) {
                 document.getElementById('evalTopMenuContainer').style.display = 'block';
-                window.checkCurrentMonthEvalStatus(); // เช็คสถานะการประเมิน
+                window.checkCurrentMonthEvalStatus(); 
             }
             
             window.globalUserWarnings = []; 
@@ -973,17 +1002,25 @@
                 document.getElementById('payslipCountBadge').innerText = window.globalUserPayslips.length;
                 window.renderUserPayslipsList();
             });
+
+            // ดึงผลประเมินของตัวเองมาแสดงในแท็บ "ผลประเมิน"
+            window.callAPI({
+                action: 'getUserEvaluations',
+                empId: window.currentUser.empId
+            }).then(function(evalData) {
+                window.globalUserEvals = evalData || [];
+                document.getElementById('evalCountBadge').innerText = window.globalUserEvals.length;
+                window.renderUserEvalsList();
+            });
         }); 
     };
 
-    // เช็คสถานะประเมินเดือนปัจจุบัน
     window.checkCurrentMonthEvalStatus = function() {
         var d = new Date();
         var y = d.getFullYear();
         var m = ("0" + (d.getMonth() + 1)).slice(-2);
         var currentMonthYear = y + "-" + m;
         
-        // ถ้าดึงค่าจากช่อง Input ใน Modal ได้ก็ให้ใช้ค่าจาก Input
         var inputMonth = document.getElementById('evalMonth').value;
         var monthToCheck = inputMonth ? inputMonth : currentMonthYear;
 
@@ -1168,7 +1205,6 @@
         window.callAPI({ action: 'getDriversToEvaluate' }).then(function(drivers) {
             window.globalEvalDrivers = drivers || [];
             
-            // สร้าง Dropdown ตำแหน่งรถ
             var posSet = new Set();
             window.globalEvalDrivers.forEach(function(drv) {
                 var posList = drv.position.split(',');
@@ -1185,64 +1221,74 @@
                 filterSelect.innerHTML += `<option value="${p}">${p}</option>`;
             });
 
-            window.filterEvalDrivers();
+            // สร้าง HTML ครั้งเดียว แล้วเก็บไว้
+            var html = '';
+            window.globalEvalDrivers.forEach(function(drv, index) {
+                html += `
+                <div class="eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
+                    <div class="row align-items-center g-2">
+                        <div class="col-md-5">
+                            <div class="fw-bold text-light">${index+1}. ${drv.name} <span class="text-muted small">(${drv.id})</span></div>
+                            <div class="text-secondary" style="font-size: 0.7rem;">${drv.position}</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-dark text-warning border-warning">คะแนน (0-10)</span>
+                                <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" 
+                                    data-id="${drv.id}" data-name="${drv.name}" placeholder="0-10"
+                                    oninput="if(this.value > 10) this.value = 10; else if(this.value < 0 && this.value !== '') this.value = 0;">
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
+                            <div class="form-check form-switch d-inline-block mb-0">
+                                <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="na_${drv.id}" onchange="window.toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;">
+                                <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="na_${drv.id}">ไม่ได้ประสานงาน</label>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2 eval-comment-container">
+                            <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary eval-comment-input shadow-none" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)...">
+                        </div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('evalDriverList').innerHTML = html;
+            window.filterEvalDrivers(); // กรองให้แสดงตาม Dropdown
         });
     };
 
     window.filterEvalDrivers = function() {
         var posFilter = document.getElementById('evalPositionFilter').value;
-        var filteredDrivers = window.globalEvalDrivers;
-
-        if (posFilter !== 'all') {
-            filteredDrivers = window.globalEvalDrivers.filter(function(drv) {
-                return drv.position.includes(posFilter);
-            });
-        }
-
-        if(!filteredDrivers || filteredDrivers.length === 0) {
-            document.getElementById('evalDriverList').innerHTML = '<div class="text-center text-muted py-4">ไม่พบรายชื่อพนักงานในกลุ่มนี้</div>';
-            return;
-        }
-
-        var html = '';
-        filteredDrivers.forEach(function(drv, index) {
-            // โครงสร้าง 1 แถว / 1 คน
-            html += `
-            <div class="eval-driver-row p-2 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
-                <div class="row align-items-center g-2">
-                    <div class="col-md-5">
-                        <div class="fw-bold text-light">${index+1}. ${drv.name} <span class="text-muted small">(${drv.id})</span></div>
-                        <div class="text-secondary" style="font-size: 0.7rem;">${drv.position}</div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text bg-dark text-warning border-warning">คะแนน (0-10)</span>
-                            <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" data-id="${drv.id}" data-name="${drv.name}">
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
-                        <div class="form-check form-switch d-inline-block mb-0">
-                            <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="na_${drv.id}" onchange="window.toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;">
-                            <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="na_${drv.id}">ไม่ได้ประสานงาน</label>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
+        var rows = document.querySelectorAll('.eval-driver-row');
+        
+        rows.forEach(row => {
+            var rowPos = row.getAttribute('data-position');
+            if (posFilter === 'all' || rowPos.includes(posFilter)) {
+                row.style.display = 'block';
+            } else {
+                row.style.display = 'none';
+            }
         });
-        document.getElementById('evalDriverList').innerHTML = html;
     };
 
     window.toggleEvalNA = function(cb, id) {
-        var input = document.querySelector('.eval-score-input[data-id="'+id+'"]');
+        var row = cb.closest('.eval-driver-row');
+        var input = row.querySelector('.eval-score-input');
+        var comment = row.querySelector('.eval-comment-input');
+        
         if(cb.checked) {
             input.value = '';
             input.disabled = true;
             input.classList.remove('border-warning');
             input.classList.add('border-secondary');
+            
+            comment.value = '';
+            comment.disabled = true;
         } else {
             input.disabled = false;
             input.classList.remove('border-secondary');
             input.classList.add('border-warning');
+            
+            comment.disabled = false;
         }
     };
 
@@ -1253,51 +1299,89 @@
             return;
         }
 
-        var inputs = document.querySelectorAll('.eval-score-input');
+        var rows = document.querySelectorAll('.eval-driver-row');
         var evals = [];
-        var allValid = true;
+        var emptyCount = 0;
 
-        inputs.forEach(function(inp) {
-            var id = inp.getAttribute('data-id');
-            var name = inp.getAttribute('data-name');
-            var cb = document.getElementById('na_' + id);
+        rows.forEach(function(row) {
+            var scoreInput = row.querySelector('.eval-score-input');
+            var id = scoreInput.getAttribute('data-id');
+            var name = scoreInput.getAttribute('data-name');
+            var naCheck = row.querySelector('.eval-na-check');
+            var comment = row.querySelector('.eval-comment-input').value.trim();
             
-            if (cb.checked) {
-                evals.push({ driverId: id, driverName: name, score: '-', status: 'ไม่ได้ประสานงาน' });
+            if (naCheck.checked) {
+                evals.push({ driverId: id, driverName: name, score: '-', status: 'ไม่ได้ประสานงาน', comment: comment });
+            } else if (scoreInput.value !== "") {
+                evals.push({ driverId: id, driverName: name, score: parseInt(scoreInput.value), status: 'ประเมินแล้ว', comment: comment });
             } else {
-                var score = parseInt(inp.value);
-                if (isNaN(score) || score < 0 || score > 10) {
-                    allValid = false;
-                } else {
-                    evals.push({ driverId: id, driverName: name, score: score, status: 'ประเมินแล้ว' });
+                emptyCount++;
+                evals.push({ driverId: id, driverName: name, score: '-', status: 'ไม่ได้ประสานงาน', comment: comment });
+            }
+        });
+
+        var doSave = function() {
+            Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()});
+            window.callAPI({
+                action: 'submitEvaluations',
+                payload: {
+                    monthYear: monthYear,
+                    evaluatorId: window.currentUserData.id,
+                    evaluatorName: window.currentUserData.name,
+                    evaluations: evals
                 }
-            }
-        });
+            }).then(function(res) {
+                if(res.success) {
+                    Swal.fire('สำเร็จ', res.message, 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('evaluationModal')).hide();
+                    window.checkCurrentMonthEvalStatus(); 
+                } else {
+                    Swal.fire('ผิดพลาด', res.message, 'error');
+                }
+            });
+        };
 
-        if (!allValid) {
-            Swal.fire({icon:'error', title:'ข้อมูลไม่สมบูรณ์', text:'กรุณากรอกคะแนน 0-10 ให้ครบทุกคน (หรือติ๊ก "ไม่ได้ประสานงาน")'});
-            return;
+        if (emptyCount > 0) {
+            Swal.fire({
+                title: 'มีพนักงาน ' + emptyCount + ' คนที่ไม่ได้ระบุคะแนน',
+                text: "ระบบจะกำหนดให้เป็น 'ไม่ได้ประสานงาน' โดยอัตโนมัติ ยืนยันการบันทึกหรือไม่?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'ยืนยันบันทึก',
+                cancelButtonText: 'กลับไปแก้ไข'
+            }).then((result) => {
+                if(result.isConfirmed) { doSave(); }
+            });
+        } else {
+            doSave();
         }
+    };
 
-        Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()});
-        
-        window.callAPI({
-            action: 'submitEvaluations',
-            payload: {
-                monthYear: monthYear,
-                evaluatorId: window.currentUserData.id,
-                evaluatorName: window.currentUserData.name,
-                evaluations: evals
-            }
-        }).then(function(res) {
-            if(res.success) {
-                Swal.fire('สำเร็จ', res.message, 'success');
-                bootstrap.Modal.getInstance(document.getElementById('evaluationModal')).hide();
-                window.checkCurrentMonthEvalStatus(); // อัปเดตสถานะปุ่มหน้าแรกทันที
-            } else {
-                Swal.fire('ผิดพลาด', res.message, 'error');
-            }
-        });
+    window.renderUserEvalsList = function() {
+        var list = window.globalUserEvals;
+        var html = '';
+        if (list.length > 0) {
+            list.forEach(function(e) {
+                var scoreHtml = e.status === 'ไม่ได้ประสานงาน' 
+                    ? '<span class="badge bg-secondary">ไม่ได้ประสานงาน</span>'
+                    : `<span class="badge bg-success fs-6 px-3">${e.score} / 10</span>`;
+                var commentHtml = e.comment ? `<div class="mt-2 text-light small fst-italic"><i class="bi bi-chat-quote text-success me-1"></i> "${e.comment}"</div>` : '';
+                
+                html += `
+                <div class="history-item border-start border-4 border-success">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="fw-bold text-success"><i class="bi bi-calendar-event me-2"></i>ประจำเดือน: <span class="text-white ms-1">${e.monthYear}</span></div>
+                        <div>${scoreHtml}</div>
+                    </div>
+                    ${commentHtml}
+                </div>`;
+            });
+        } else {
+            html = '<div class="text-center text-muted py-5 small"><i class="bi bi-star fs-1 d-block mb-3 text-success opacity-50"></i>ยังไม่มีประวัติการถูกประเมิน</div>';
+        }
+        document.getElementById('userEvalListTab').innerHTML = html;
     };
 
     window.renderUserPayslipsList = function() {
