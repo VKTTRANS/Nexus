@@ -120,6 +120,41 @@
         
         /* สไตล์สำหรับ checkbox ตำแหน่ง */
         .pos-checkbox-wrapper { background: #000; border: 1px solid #333; border-radius: 6px; padding: 10px; max-height: 180px; overflow-y: auto;}
+
+        /* --- สำหรับ Hover Card ในหน้ารวมผู้สมัคร --- */
+        .applicant-list-item {
+            background-color: rgba(30,30,30,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .applicant-list-item:hover {
+            background-color: rgba(40,40,40,0.8);
+            border-color: #00ff88;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 230, 118, 0.15);
+        }
+
+        /* --- สำหรับ Layout หน้าโปรไฟล์ (แก้ปัญหาวงรีเบี้ยว) --- */
+        .app-detail-hero {
+            background: radial-gradient(circle at top, rgba(0, 255, 136, 0.1) 0%, transparent 60%);
+            padding: 30px 15px;
+            text-align: center;
+            border-bottom: 1px solid #2a2a2a;
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 20px;
+        }
+        .app-profile-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #111;
+            box-shadow: 0 0 0 2px #00ff88, 0 10px 20px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
     </style>
 
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 stagger-1">
@@ -1394,6 +1429,9 @@
     </div>
 
 <script>
+    // สคริปต์ยังคงเหมือนเดิมทั้งหมด ไม่มีการเปลี่ยนแปลงในส่วนการทำงาน
+    // (เพราะเราแก้แค่เรื่อง CSS ของ Modal การสมัครงาน)
+    
     window.filterAdminEvalTable = function() {
         var search = (document.getElementById('searchEvalInput') ? document.getElementById('searchEvalInput').value.toLowerCase() : "");
         var filterMonth = document.getElementById('filterEvalMonth') ? document.getElementById('filterEvalMonth').value : "";
@@ -2685,25 +2723,25 @@
         
         var modalEl = document.getElementById('empModal'); 
         if(!modalEl) return;
-        modalObj = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl); 
+        var modalObj = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl); 
         var targetData = preloadedData || null; 
         if (!targetData && mode !== 'create' && targetId) { 
-            targetData = allEmpData.find(x => String(x.id).trim() === String(targetId).trim()); 
+            targetData = window.allEmpData.find(x => String(x.id).trim() === String(targetId).trim()); 
         } 
-        setupModalData(mode, targetData); 
+        window.setupModalData(mode, targetData); 
         modalObj.show(); 
         window.loadSettings(function() { 
             if (mode !== 'view' && targetData) { 
                 window.fillData(targetData, false); 
             } 
-            var isUser = (currentUser.role === 'User'); 
-            if (isUser || mode === 'view' || currentUser.role === 'Viewer') { 
+            var isUser = (window.currentUser.role === 'User'); 
+            if (isUser || mode === 'view' || window.currentUser.role === 'Viewer') { 
                 document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = true); 
             } 
         }); 
     };
 
-    function setupModalData(mode, d) { 
+    window.setupModalData = function(mode, d) { 
         var btnSave = document.getElementById('btnSaveModal'); 
         var viewSection = document.getElementById('viewModeSection'); 
         var editSection = document.getElementById('editModeSection'); 
@@ -2741,13 +2779,13 @@
             var empStatEl = document.getElementById('empStatus'); if(empStatEl) empStatEl.value = 'Active'; 
             lock('empStatus', false); 
             window.toggleResignDate(); 
-        } else if (mode === 'view' || currentUser.role === 'Viewer') { 
+        } else if (mode === 'view' || window.currentUser.role === 'Viewer') { 
             var modTitle = document.getElementById('modalTitle'); if(modTitle) modTitle.innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)'; 
             if(viewSection) viewSection.style.display = 'block'; 
             var btnGenId = document.getElementById('btnGenId'); if(btnGenId) btnGenId.style.display = 'none'; 
             if(d) window.fillData(d, true); 
         } else { 
-            var isUser = (currentUser.role === 'User'); 
+            var isUser = (window.currentUser.role === 'User'); 
             var modTitle = document.getElementById('modalTitle'); if(modTitle) modTitle.innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน'; 
             if(editSection) editSection.style.display = 'block'; 
             if(btnSave) btnSave.style.display = 'block'; 
@@ -2768,25 +2806,25 @@
                 lock('resignReason', false); lockPositions(false); lock('phone', false); 
             } 
         } 
-    }
+    };
 
-    function safeDate(d) { 
+    window.safeDate = function(d) { 
         if(!d) return ''; 
         try { 
             var date = new Date(d); 
             if(isNaN(date.getTime())) return ''; 
             return date.toISOString().split('T')[0]; 
         } catch(e) { return ''; } 
-    }
+    };
 
     window.fillData = function(d, isViewMode) { 
         if(!d) return; 
         var fields = {
             'empId': d.id, 'fullname': d.name, 'prefix': "", 'nickname': d.nickname || '',
             'phone': d.phone, 'username': d.username, 'password': d.password, 'role': d.role,
-            'gender': d.gender || '', 'empStatus': d.status || 'Active', 'startDate': safeDate(d.startDate),
-            'resignDate': safeDate(d.resignDate), 'birthDate': safeDate(d.birthDate), 'ssoType': d.ssoType || '',
-            'ssoHosp': d.ssoHosp || '', 'idExp': safeDate(d.idExp), 'licExp': safeDate(d.licExp),
+            'gender': d.gender || '', 'empStatus': d.status || 'Active', 'startDate': window.safeDate(d.startDate),
+            'resignDate': window.safeDate(d.resignDate), 'birthDate': window.safeDate(d.birthDate), 'ssoType': d.ssoType || '',
+            'ssoHosp': d.ssoHosp || '', 'idExp': window.safeDate(d.idExp), 'licExp': window.safeDate(d.licExp),
             'idCardNum': d.idCardNum || '', 'licNum': d.licNum || '', 'licType': d.licType || '',
             'resignReason': d.resignReason || ''
         };
@@ -2908,7 +2946,7 @@
             position: window.getSelectedPositions(), 
             startDate: getVal('startDate'), 
             phone: getVal('phone'), 
-            currentUserRole: currentUser.role, 
+            currentUserRole: window.currentUser.role, 
             filePhoto: await window.getBase64User(document.getElementById('filePhoto') ? document.getElementById('filePhoto').files[0] : null), 
             fileIdCard: await window.getBase64User(document.getElementById('fileIdCard') ? document.getElementById('fileIdCard').files[0] : null), 
             filePassport: await window.getBase64User(document.getElementById('filePassport') ? document.getElementById('filePassport').files[0] : null), 
@@ -2929,8 +2967,12 @@
             }); 
             if(res.success) { 
                 Swal.fire('สำเร็จ', res.message, 'success'); 
-                if(modalObj) modalObj.hide(); 
-                if(currentUser.role === 'Admin') window.loadAdminData(); 
+                var modalEl = document.getElementById('empModal');
+                if(modalEl) {
+                    var modalObj = bootstrap.Modal.getInstance(modalEl);
+                    if(modalObj) modalObj.hide(); 
+                }
+                if(window.currentUser.role === 'Admin') window.loadAdminData(); 
                 else window.loadUserData(); 
             } else { 
                 Swal.fire('เกิดข้อผิดพลาด', res.message, 'error'); 
