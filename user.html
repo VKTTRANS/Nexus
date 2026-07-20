@@ -110,6 +110,19 @@
         .eval-score-input[type=number] {
             -moz-appearance: textfield;
         }
+        
+        /* สไตล์ Accordion สำหรับหน้าแสดงผลประเมิน */
+        .accordion-item { border: none; }
+        .accordion-button {
+            background-color: #1a1a1a;
+            color: #fff;
+            box-shadow: none !important;
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: #222;
+            color: var(--logistic-primary);
+        }
+        .accordion-button::after { filter: invert(1) grayscale(100%) brightness(200%); }
     </style>
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 fade-in-up gap-3">
@@ -174,6 +187,7 @@
                             <span class="badge bg-info text-dark ms-1 rounded-pill" id="u_accCountBadge">0</span>
                         </button>
                     </li>
+                    <!-- แท็บผลประเมิน (ให้พนักงานดูว่าตัวเองได้กี่คะแนน) -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link py-2 text-success" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
                             <i class="bi bi-star-fill me-1"></i> ผลประเมิน
@@ -225,9 +239,10 @@
                         </div>
                     </div>
 
+                    <!-- พื้นที่แสดงผลประเมิน -->
                     <div class="tab-pane fade" id="tab-content-evals" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
-                            <h6 class="fw-bold text-success mb-0"><i class="bi bi-star-half me-2"></i>ผลการประเมินการทำงานประจำเดือน</h6>
+                            <h6 class="fw-bold text-success mb-0"><i class="bi bi-star-half me-2"></i>ผลการประเมินการทำงาน (รายเดือน)</h6>
                         </div>
                         <div id="u_userEvalListTab">
                             <div class="text-center text-muted py-4 small"><div class="spinner-border spinner-border-sm text-success mb-2"></div><br>กำลังโหลด...</div>
@@ -527,7 +542,6 @@
     </div>
 </div>
 
-<!-- Modal สำหรับแจ้งซ่อม -->
 <div class="modal fade" id="u_userRepairModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content logistics-modal" style="border-color: #0d6efd;">
@@ -806,7 +820,7 @@
             </div>
             <div class="modal-footer border-top border-secondary">
                 <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
-                <button type="button" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.u_saveEvaluations()">บันทึกการประเมิน</button>
+                <button type="button" id="u_btnSaveEval" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.u_saveEvaluations()">บันทึกการประเมิน</button>
             </div>
         </div>
     </div>
@@ -948,172 +962,6 @@
         }); 
     };
 
-    window.u_checkCurrentMonthEvalStatus = function() {
-        if(!window.currentUserData) return;
-        var d = new Date();
-        var y = d.getFullYear();
-        var m = ("0" + (d.getMonth() + 1)).slice(-2);
-        var currentMonthYear = y + "-" + m;
-        
-        var evalMonthEl = document.getElementById('u_evalMonth');
-        var inputMonth = evalMonthEl ? evalMonthEl.value : currentMonthYear;
-        var monthToCheck = inputMonth ? inputMonth : currentMonthYear;
-
-        window.callAPI({ 
-            action: 'checkEvaluationStatus', 
-            payload: { 
-                monthYear: monthToCheck, 
-                evaluatorId: window.currentUserData.id 
-            }
-        }).then(function(res) {
-            window.u_evaluatedDriverIds = res.evaluatedDriverIds || [];
-            var badge = document.getElementById('u_evalStatusBadge');
-            if(badge) {
-                if (res.evaluated) {
-                    badge.className = "badge bg-success ms-1";
-                    badge.innerText = "ประเมินแล้ว";
-                } else {
-                    badge.className = "badge bg-danger ms-1";
-                    badge.innerText = "ยังไม่ประเมิน";
-                }
-            }
-        });
-    };
-
-    window.u_toggleAcceptRulesBtn = function(checkbox) {
-        var btnAccept = document.getElementById('btnAcceptRules');
-        if(!btnAccept) return;
-        if (checkbox.checked) {
-            btnAccept.disabled = false;
-            btnAccept.classList.remove('btn-secondary');
-            btnAccept.classList.add('btn-success');
-        } else {
-            btnAccept.disabled = true;
-            btnAccept.classList.remove('btn-success');
-            btnAccept.classList.add('btn-secondary');
-        }
-    };
-
-    window.u_acceptCompanyRules = function() {
-        if (!window.currentUserData) return;
-        var ruleKey = 'vkt_rules_accepted_' + window.currentUserData.id;
-        
-        localStorage.setItem(ruleKey, 'true');
-        window.callAPI({ action: 'acceptCompanyRules', empId: window.currentUserData.id }).then(function(res){});
-
-        var rulesOverlay = document.getElementById('rulesOverlay');
-        if(rulesOverlay) rulesOverlay.style.display = 'none';
-        
-        document.body.style.overflow = '';
-        var uProfile = document.getElementById('userProfileContent');
-        if(uProfile) uProfile.style.display = 'flex';
-        
-        Swal.fire({
-            toast: true, position: 'top-end', icon: 'success', 
-            title: 'ขอบคุณที่รับทราบข้อตกลงครับ', showConfirmButton: false, timer: 2000, 
-            background: '#1e1e1e', color: '#fff'
-        });
-    };
-
-    window.u_declineRules = function() {
-        var rulesOverlay = document.getElementById('rulesOverlay');
-        if(rulesOverlay) rulesOverlay.style.display = 'none';
-        document.body.style.overflow = '';
-        
-        if (typeof window.logout === 'function') {
-            window.logout();
-        } else {
-            localStorage.removeItem('hr_user_session');
-            location.reload();
-        }
-    };
-
-    window.u_renderUserProfile = function(d) {
-        if (!d) return;
-        var finalLeaveUrl = "#"; 
-        try { 
-            var token = btoa(unescape(encodeURIComponent(d.id + "|" + new Date().getTime()))); 
-            finalLeaveUrl = "https://script.google.com/macros/s/AKfycby32LX4-2iN0zPA9EmhSneiX1Pz66uCMlBnqE2jiWtnVD8L9BG6zcLUyJ4Rh15WilT0uQ/exec?sso_user=" + encodeURIComponent(d.id) + "&sso_token=" + token; 
-        } catch (e) {}
-        
-        var photoUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; 
-        if (d.docs && d.docs.PHOTO && d.docs.PHOTO.url && d.docs.PHOTO.url.indexOf('drive.google.com') !== -1) { 
-            var m = d.docs.PHOTO.url.match(/[-\w]{25,}/); 
-            if (m) photoUrl = "https://drive.google.com/thumbnail?id=" + m[0] + "&sz=w300-h300"; 
-        }
-        
-        var nicknameText = d.nickname ? '(' + d.nickname + ')' : ''; 
-        var phoneText = d.phone || '-'; 
-        var ssoText = (d.ssoHosp && d.ssoHosp !== '-') ? d.ssoHosp : (d.ssoType || 'ไม่มีข้อมูล');
-        
-        var html = `
-        <div class="driver-card text-center overflow-hidden mb-4">
-            <div class="driver-card-header position-relative">
-                <div class="mt-4 mb-3 position-relative d-inline-block">
-                    <img src="${photoUrl}" class="rounded-circle object-fit-cover shadow-lg" style="width: 130px; height: 130px; border: 4px solid var(--logistic-primary); background: #222;">
-                </div>
-                <h4 class="fw-bold mb-1 text-white">${d.name}</h4>
-                <div class="text-warning small fw-bold mb-2">${nicknameText}</div>
-                <span class="badge bg-dark border border-secondary text-light fw-normal px-3 py-2 rounded-pill mt-1">
-                    <i class="bi bi-briefcase text-warning me-1"></i> ${d.position || '-'}
-                </span>
-            </div>
-            
-            <div class="p-3 text-start bg-black bg-opacity-25">
-                <div class="info-box d-flex justify-content-between align-items-center">
-                    <span class="small text-muted"><i class="bi bi-person-vcard me-2"></i>รหัสพนักงาน</span>
-                    <span class="text-white font-monospace fw-bold fs-6">${d.id}</span>
-                </div>
-                <div class="info-box d-flex justify-content-between align-items-center">
-                    <span class="small text-muted"><i class="bi bi-telephone me-2"></i>เบอร์โทรศัพท์</span>
-                    <span class="text-white fw-bold fs-6">${phoneText}</span>
-                </div>
-                <div class="info-box d-flex justify-content-between align-items-center">
-                    <span class="small text-muted"><i class="bi bi-hospital me-2"></i>ประกันสังคม</span>
-                    <span class="text-info fw-bold text-truncate text-end" style="max-width: 140px;" title="${ssoText}">${ssoText}</span>
-                </div>
-                
-                <div class="info-box d-flex justify-content-between align-items-center">
-                    <span class="small text-muted"><i class="bi bi-calendar-check me-2"></i>อายุงาน</span>
-                    <div class="text-end">
-                        <div class="text-warning fw-bold" style="font-size: 0.9rem;">${window.u_calcTenure(d.startDate)}</div>
-                        <div class="text-muted" style="font-size: 0.7rem;">(เริ่ม ${window.u_formatDate(d.startDate)})</div>
-                    </div>
-                </div>
-                
-                <button class="btn btn-outline-warning w-100 rounded-pill mb-4 mt-3 fw-bold shadow-sm" onclick="window.u_openEditModal('${d.id}')">
-                    <i class="bi bi-pencil-square me-2"></i>อัปเดตข้อมูลส่วนตัว
-                </button>
-
-                <h6 class="text-warning small fw-bold mb-3 px-2 border-bottom border-secondary border-opacity-50 pb-2"><i class="bi bi-lightning-charge me-1"></i> เมนูด่วน (Quick Actions)</h6>
-                <div class="row g-2">
-                    <div class="col-6">
-                        <a href="${finalLeaveUrl}" target="_blank" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 text-decoration-none shadow-sm">
-                            <i class="bi bi-calendar2-week fs-5 text-white"></i><span class="small fw-bold" style="font-size: 0.8rem;">ลางาน</span>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <button onclick="window.u_openAccidentModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
-                            <i class="bi bi-cone-striped fs-5 text-danger"></i><span class="small fw-bold" style="font-size: 0.8rem;">อุบัติเหตุ</span>
-                        </button>
-                    </div>
-                    <div class="col-6">
-                        <button onclick="window.u_openRepairModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
-                            <i class="bi bi-wrench-adjustable fs-5 text-primary"></i><span class="small fw-bold" style="font-size: 0.8rem;">แจ้งซ่อม</span>
-                        </button>
-                    </div>
-                    <div class="col-6">
-                        <button onclick="window.u_openYardModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
-                            <i class="bi bi-geo-alt fs-5 text-info"></i><span class="small fw-bold" style="font-size: 0.8rem;">ลานตู้</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-        var uProfileCard = document.getElementById('userProfileCard');
-        if(uProfileCard) uProfileCard.innerHTML = html;
-    };
-
     window.u_openEvaluationModal = function() {
         if(!window.currentUserData) return;
         var d = new Date();
@@ -1131,6 +979,9 @@
         
         var drvListEl = document.getElementById('u_evalDriverList');
         if(drvListEl) drvListEl.innerHTML = '<div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังโหลดรายชื่อ...</div>';
+
+        var btnSave = document.getElementById('u_btnSaveEval');
+        if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = 'กำลังโหลด...'; }
 
         window.callAPI({ action: 'getEmployeesToEvaluate', position: window.currentUserData.position }).then(function(drivers) {
             window.globalEvalDrivers = drivers || [];
@@ -1154,56 +1005,107 @@
                 });
             }
 
-            var checkPayload = { monthYear: (y + "-" + m), evaluatorId: window.currentUserData.id };
-            window.callAPI({ action: 'checkEvaluationStatus', payload: checkPayload }).then(function(res) {
-                window.u_evaluatedDriverIds = res.evaluatedDriverIds || [];
-                
-                var html = '';
-                if(window.globalEvalDrivers.length === 0) {
-                     html = '<div class="text-center text-muted py-5">ไม่พบรายชื่อเป้าหมายสำหรับการประเมิน</div>';
-                } else {
-                    window.globalEvalDrivers.forEach(function(drv, index) {
-                        var isEvaluated = window.u_evaluatedDriverIds.includes(drv.id);
-                        var lockHtml = isEvaluated ? 'disabled' : '';
-                        var lockScore = isEvaluated ? 'value="" disabled placeholder="ประเมินแล้ว"' : 'placeholder="0-10"';
-                        var statusBadge = isEvaluated ? '<span class="badge bg-success ms-2 px-2 py-1">ประเมินแล้ว</span>' : '';
-                        var nickname = drv.nickname && drv.nickname !== "-" ? `(${drv.nickname})` : '';
-
-                        html += `
-                        <div class="u_eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
-                            <div class="row align-items-center g-2">
-                                <div class="col-md-5">
-                                    <div class="fw-bold text-light" style="font-size: 0.9rem;">${index+1}. ${drv.name} <span class="text-warning">${nickname}</span> ${statusBadge}</div>
-                                    <div class="text-secondary" style="font-size: 0.75rem;">${drv.position || '-'}</div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-text bg-dark text-warning border-warning">คะแนน</span>
-                                        <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" 
-                                            data-id="${drv.id}" data-name="${drv.name}" ${lockScore}
-                                            oninput="if(this.value > 10) this.value = 10; else if(this.value < 0 && this.value !== '') this.value = 0;">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
-                                    <div class="form-check form-switch d-inline-block mb-0">
-                                        <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="u_na_${drv.id}" onchange="window.u_toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;" ${lockHtml}>
-                                        <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="u_na_${drv.id}">ไม่ได้ประสานงาน</label>
-                                    </div>
-                                </div>
-                                <div class="col-12 mt-2 eval-comment-container">
-                                    <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary eval-comment-input shadow-none" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)..." ${lockHtml}>
-                                </div>
-                            </div>
-                        </div>`;
-                    });
-                }
-                var listEl = document.getElementById('u_evalDriverList');
-                if(listEl) {
-                    listEl.innerHTML = html;
-                    window.u_filterEvalDrivers(); 
-                }
-            });
+            window.u_checkCurrentMonthEvalStatus();
         });
+    };
+
+    window.u_checkCurrentMonthEvalStatus = function() {
+        if(!window.currentUserData) return;
+        var d = new Date();
+        var y = d.getFullYear();
+        var m = ("0" + (d.getMonth() + 1)).slice(-2);
+        var currentMonthYear = y + "-" + m;
+        
+        var evalMonthEl = document.getElementById('u_evalMonth');
+        var inputMonth = evalMonthEl ? evalMonthEl.value : currentMonthYear;
+        var monthToCheck = inputMonth ? inputMonth : currentMonthYear;
+
+        var drvListEl = document.getElementById('u_evalDriverList');
+        if(drvListEl && window.globalEvalDrivers.length > 0) {
+            drvListEl.innerHTML = '<div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังตรวจสอบสถานะ...</div>';
+        }
+
+        var btnSave = document.getElementById('u_btnSaveEval');
+        if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = 'กำลังโหลด...'; }
+
+        window.callAPI({ 
+            action: 'checkEvaluationStatus', 
+            payload: { 
+                monthYear: monthToCheck, 
+                evaluatorId: window.currentUserData.id 
+            }
+        }).then(function(res) {
+            window.u_evaluatedDriverIds = res.evaluatedDriverIds || [];
+            var badge = document.getElementById('u_evalStatusBadge');
+            if(badge) {
+                if (res.evaluated) {
+                    badge.className = "badge bg-success ms-1";
+                    badge.innerText = "ประเมินแล้ว";
+                } else {
+                    badge.className = "badge bg-danger ms-1";
+                    badge.innerText = "ยังไม่ประเมิน";
+                }
+            }
+            
+            if(window.globalEvalDrivers && window.globalEvalDrivers.length > 0) {
+                window.u_renderEvalDriversList(res.evaluated);
+            }
+        });
+    };
+
+    window.u_renderEvalDriversList = function(isAlreadyEvaluated) {
+        var html = '';
+        var btnSave = document.getElementById('u_btnSaveEval');
+        
+        if(isAlreadyEvaluated) {
+            if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = '<i class="bi bi-check-circle me-1"></i>ประเมินเรียบร้อยแล้ว'; }
+            html += '<div class="alert alert-success bg-success bg-opacity-10 border-success text-success fw-bold small mb-3"><i class="bi bi-info-circle-fill me-2"></i>คุณได้ส่งผลประเมินของเดือนนี้เรียบร้อยแล้ว ไม่สามารถแก้ไขหรือประเมินซ้ำได้</div>';
+        } else {
+            if(btnSave) { btnSave.disabled = false; btnSave.innerHTML = 'บันทึกการประเมิน'; }
+        }
+
+        if(window.globalEvalDrivers.length === 0) {
+             html += '<div class="text-center text-muted py-5">ไม่พบรายชื่อเป้าหมายสำหรับการประเมิน</div>';
+        } else {
+            window.globalEvalDrivers.forEach(function(drv, index) {
+                var lockHtml = isAlreadyEvaluated ? 'disabled' : '';
+                var lockScore = isAlreadyEvaluated ? 'value="" disabled placeholder="ประเมินแล้ว"' : 'placeholder="0-10"';
+                var statusBadge = isAlreadyEvaluated ? '<span class="badge bg-success ms-2 px-2 py-1">ประเมินแล้ว</span>' : '';
+                var nickname = drv.nickname && drv.nickname !== "-" ? `(${drv.nickname})` : '';
+
+                html += `
+                <div class="u_eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
+                    <div class="row align-items-center g-2">
+                        <div class="col-md-5">
+                            <div class="fw-bold text-light" style="font-size: 0.9rem;">${index+1}. ${drv.name} <span class="text-warning">${nickname}</span> ${statusBadge}</div>
+                            <div class="text-secondary" style="font-size: 0.75rem;">${drv.position || '-'}</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-dark text-warning border-warning">คะแนน</span>
+                                <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" 
+                                    data-id="${drv.id}" data-name="${drv.name}" ${lockScore}
+                                    oninput="if(this.value > 10) this.value = 10; else if(this.value < 0 && this.value !== '') this.value = 0;">
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
+                            <div class="form-check form-switch d-inline-block mb-0">
+                                <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="u_na_${drv.id}" onchange="window.u_toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;" ${lockHtml}>
+                                <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="u_na_${drv.id}">ไม่ได้ประสานงาน</label>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2 eval-comment-container">
+                            <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary eval-comment-input shadow-none" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)..." ${lockHtml}>
+                        </div>
+                    </div>
+                </div>`;
+            });
+        }
+        var listEl = document.getElementById('u_evalDriverList');
+        if(listEl) {
+            listEl.innerHTML = html;
+            window.u_filterEvalDrivers(); 
+        }
     };
 
     window.u_filterEvalDrivers = function() {
@@ -1339,6 +1241,17 @@
                 var mObj = bootstrap.Modal.getInstance(document.getElementById('u_evaluationModal'));
                 if(mObj) mObj.hide();
                 window.u_checkCurrentMonthEvalStatus(); 
+                
+                // รีโหลดรายการประวัติ
+                window.callAPI({
+                    action: 'getUserEvaluations',
+                    empId: window.currentUserData.id
+                }).then(function(evalData) {
+                    window.globalUserEvals = evalData || [];
+                    var evCountEl = document.getElementById('u_evalCountBadge');
+                    if(evCountEl) evCountEl.innerText = window.globalUserEvals.length;
+                    window.u_renderEvalsList();
+                });
             } else {
                 Swal.fire('ผิดพลาด', res.message, 'error');
             }
@@ -1347,28 +1260,116 @@
 
     window.u_renderEvalsList = function() {
         var list = window.globalUserEvals || [];
-        var html = '';
-        if (list.length > 0) {
-            list.forEach(function(e) {
+        var tab = document.getElementById('u_userEvalListTab');
+        if (!list || list.length === 0) {
+            if(tab) tab.innerHTML = '<div class="text-center text-muted py-5 small"><i class="bi bi-star fs-1 d-block mb-3 text-success opacity-50"></i>ยังไม่มีประวัติการถูกประเมิน</div>';
+            return;
+        }
+
+        var grouped = {};
+        list.forEach(function(e) {
+            if (!grouped[e.monthYear]) grouped[e.monthYear] = { items: [], totalScore: 0, validCount: 0 };
+            grouped[e.monthYear].items.push(e);
+            if (e.status !== 'ไม่ได้ประสานงาน' && !isNaN(parseFloat(e.score))) {
+                grouped[e.monthYear].totalScore += parseFloat(e.score);
+                grouped[e.monthYear].validCount++;
+            }
+        });
+
+        var sortedMonths = Object.keys(grouped).sort().reverse();
+        var html = '<div class="accordion accordion-flush rounded-3 overflow-hidden border border-secondary border-opacity-25" id="evalAccordion">';
+        
+        sortedMonths.forEach(function(month, index) {
+            var group = grouped[month];
+            var avg = group.validCount > 0 ? (group.totalScore / group.validCount).toFixed(2) : "-";
+            var avgHtml = group.validCount > 0 ? `<span class="badge bg-success ms-2">${avg} / 10</span>` : `<span class="badge bg-secondary ms-2">ไม่มีคะแนน</span>`;
+            var isExpanded = index === 0 ? 'show' : '';
+            var isCollapsedBtn = index === 0 ? '' : 'collapsed';
+
+            var itemsHtml = '';
+            group.items.forEach(function(e, i) {
                 var scoreHtml = e.status === 'ไม่ได้ประสานงาน' 
                     ? '<span class="badge bg-secondary">ไม่ได้ประสานงาน</span>'
                     : `<span class="badge bg-success fs-6 px-3">${e.score} / 10</span>`;
                 var commentHtml = e.comment ? `<div class="mt-2 text-light small fst-italic"><i class="bi bi-chat-quote text-success me-1"></i> "${e.comment}"</div>` : '';
                 
-                html += `
-                <div class="history-item border-start border-4 border-success">
+                itemsHtml += `
+                <div class="history-item border-start border-4 border-success mb-2" style="background: rgba(255,255,255,0.02);">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="fw-bold text-success"><i class="bi bi-calendar-event me-2"></i>ประจำเดือน: <span class="text-white ms-1">${e.monthYear}</span></div>
+                        <div class="fw-bold text-success small"><i class="bi bi-person-check me-2"></i>ผู้ประเมินคนที่ ${i+1}</div>
                         <div>${scoreHtml}</div>
                     </div>
                     ${commentHtml}
                 </div>`;
             });
-        } else {
-            html = '<div class="text-center text-muted py-5 small"><i class="bi bi-star fs-1 d-block mb-3 text-success opacity-50"></i>ยังไม่มีประวัติการถูกประเมิน</div>';
-        }
-        var tab = document.getElementById('u_userEvalListTab');
+
+            html += `
+            <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-25">
+                <h2 class="accordion-header" id="heading${index}">
+                    <button class="accordion-button ${isCollapsedBtn} shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}">
+                        <div class="d-flex justify-content-between align-items-center w-100 pe-3">
+                            <span class="fw-bold text-warning"><i class="bi bi-calendar-event me-2"></i>ประจำเดือน: ${month}</span>
+                            <div><span class="small text-muted d-none d-md-inline">เฉลี่ยรวม:</span> ${avgHtml}</div>
+                        </div>
+                    </button>
+                </h2>
+                <div id="collapse${index}" class="accordion-collapse collapse ${isExpanded}" data-bs-parent="#evalAccordion">
+                    <div class="accordion-body p-3" style="background: rgba(0,0,0,0.3);">
+                        ${itemsHtml}
+                    </div>
+                </div>
+            </div>`;
+        });
+        html += '</div>';
         if(tab) tab.innerHTML = html;
+    };
+
+    window.u_toggleAcceptRulesBtn = function(checkbox) {
+        var btnAccept = document.getElementById('btnAcceptRules');
+        if(!btnAccept) return;
+        if (checkbox.checked) {
+            btnAccept.disabled = false;
+            btnAccept.classList.remove('btn-secondary');
+            btnAccept.classList.add('btn-success');
+        } else {
+            btnAccept.disabled = true;
+            btnAccept.classList.remove('btn-success');
+            btnAccept.classList.add('btn-secondary');
+        }
+    };
+
+    window.u_acceptCompanyRules = function() {
+        if (!window.currentUserData) return;
+        var ruleKey = 'vkt_rules_accepted_' + window.currentUserData.id;
+        
+        localStorage.setItem(ruleKey, 'true');
+        window.callAPI({ action: 'acceptCompanyRules', empId: window.currentUserData.id }).then(function(res){});
+
+        var rulesOverlay = document.getElementById('rulesOverlay');
+        if(rulesOverlay) rulesOverlay.style.display = 'none';
+        
+        document.body.style.overflow = '';
+        var uProfile = document.getElementById('userProfileContent');
+        if(uProfile) uProfile.style.display = 'flex';
+        
+        Swal.fire({
+            toast: true, position: 'top-end', icon: 'success', 
+            title: 'ขอบคุณที่รับทราบข้อตกลงครับ', showConfirmButton: false, timer: 2000, 
+            background: '#1e1e1e', color: '#fff'
+        });
+    };
+
+    window.u_declineRules = function() {
+        var rulesOverlay = document.getElementById('rulesOverlay');
+        if(rulesOverlay) rulesOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+        
+        if (typeof window.logout === 'function') {
+            window.logout();
+        } else {
+            localStorage.removeItem('hr_user_session');
+            location.reload();
+        }
     };
 
     window.u_renderPayslipsList = function() {
