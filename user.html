@@ -187,7 +187,6 @@
                             <span class="badge bg-info text-dark ms-1 rounded-pill" id="u_accCountBadge">0</span>
                         </button>
                     </li>
-                    <!-- แท็บผลประเมิน (ให้พนักงานดูว่าตัวเองได้กี่คะแนน) -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link py-2 text-success" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
                             <i class="bi bi-star-fill me-1"></i> ผลประเมิน
@@ -239,7 +238,6 @@
                         </div>
                     </div>
 
-                    <!-- พื้นที่แสดงผลประเมิน -->
                     <div class="tab-pane fade" id="tab-content-evals" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
                             <h6 class="fw-bold text-success mb-0"><i class="bi bi-star-half me-2"></i>ผลการประเมินการทำงาน (รายเดือน)</h6>
@@ -254,7 +252,7 @@
     </div>
 </div>
 
-<!-- Modal กฎระเบียบ (ใส่คืนมาให้แล้วครับ ไม่จอดำแน่นอน) -->
+<!-- Modal กฎระเบียบ -->
 <div id="rulesOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999;">
     <div class="d-flex justify-content-center align-items-center w-100 h-100 p-2 p-md-4">
         <div class="d-flex flex-column rounded-4 w-100" style="background: #111; border: 1px solid #ffc107; box-shadow: 0 0 30px rgba(255, 193, 7, 0.2); max-width: 800px; max-height: 95vh;">
@@ -639,12 +637,7 @@
                     <input type="hidden" id="u_empStatus">
                     <input type="hidden" id="u_resignDate">
                     <input type="hidden" id="u_username">
-                    <input type="hidden" id="u_fullname">
-                    <input type="hidden" id="u_prefix">
                     <input type="hidden" id="u_startDate">
-                    <input type="hidden" id="u_gender">
-                    <input type="hidden" id="u_ssoType">
-                    <input type="hidden" id="u_ssoHosp">
                     
                     <div class="card border-0 mb-4 bg-transparent shadow-none">
                         <div class="card-body p-0">
@@ -662,10 +655,34 @@
                         <!-- Tab: ข้อมูลทั่วไป -->
                         <div class="tab-pane fade show active" id="u_tabInfo">
                             <div class="row g-4">
+                                <!-- ข้อมูลที่อ่านได้อย่างเดียว (Read-Only) -->
+                                <div class="col-12">
+                                    <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
+                                        <div class="fw-bold text-secondary mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                            <i class="bi bi-person-lines-fill me-2"></i>ข้อมูลพื้นฐาน (ไม่สามารถแก้ไขเองได้)
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-md-5">
+                                                <label class="small text-muted mb-1 fw-bold">ชื่อ-นามสกุล</label>
+                                                <input type="text" class="form-control form-control-sm bg-dark text-secondary border-secondary shadow-none" id="u_fullname" readonly>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="small text-muted mb-1 fw-bold">เพศ</label>
+                                                <input type="text" class="form-control form-control-sm bg-dark text-secondary border-secondary shadow-none" id="u_gender" readonly>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="small text-muted mb-1 fw-bold">สิทธิ์ประกันสังคม</label>
+                                                <input type="text" class="form-control form-control-sm bg-dark text-secondary border-secondary shadow-none" id="u_ssoType" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ข้อมูลส่วนตัว (แก้ไขได้) -->
                                 <div class="col-12">
                                     <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                         <div class="fw-bold text-success mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                            <i class="bi bi-pencil-square me-2"></i>ข้อมูลส่วนตัว (อนุญาตให้แก้ไขได้)
+                                            <i class="bi bi-pencil-square me-2"></i>ข้อมูลส่วนตัว (อนุญาตให้อัปเดตได้)
                                         </div>
                                         <div class="row g-3">
                                             <div class="col-md-3">
@@ -684,10 +701,21 @@
                                                 <label class="small text-muted mb-1 fw-bold">วันเดือนปีเกิด</label>
                                                 <input type="date" class="form-control form-control-sm bg-dark text-light border-secondary shadow-none" id="u_birthDate">
                                             </div>
+                                            <div class="col-md-4">
+                                                <label class="small text-muted mb-1 fw-bold">โรงพยาบาลประกันสังคม</label>
+                                                <select class="form-select form-select-sm bg-dark text-light border-secondary shadow-none" id="u_ssoHosp">
+                                                    <option value="">- เลือกโรงพยาบาล -</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <label class="small text-muted mb-1 fw-bold">ที่อยู่ปัจจุบัน</label>
+                                                <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary shadow-none" id="u_address">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
+                                <!-- Section 4: ข้อมูลบัตรและใบขับขี่ -->
                                 <div class="col-12">
                                     <div class="row g-3">
                                         <div class="col-md-6">
@@ -949,7 +977,7 @@
                 window.u_renderEvalsList();
             });
 
-            // โหลด Setting (License Type) ให้พร้อมใช้ตอน User กดอัปเดตข้อมูลส่วนตัว
+            // โหลด Setting ให้พร้อมใช้ตอน User กดอัปเดตข้อมูลส่วนตัว
             window.callAPI({ action: 'getSettingsData' }).then(function(res) {
                 var lSelect = document.getElementById('u_licType');
                 if(lSelect) {
@@ -958,55 +986,15 @@
                         res.licenseTypes.forEach(t => { lSelect.innerHTML += `<option value="${t}">${t}</option>`; });
                     }
                 }
+                var hSelect = document.getElementById('u_ssoHosp');
+                if(hSelect) {
+                    hSelect.innerHTML = '<option value="">- เลือกโรงพยาบาล -</option>';
+                    if(res.hospitals) {
+                        res.hospitals.forEach(h => { hSelect.innerHTML += `<option value="${h}">${h}</option>`; });
+                    }
+                }
             });
         }); 
-    };
-
-    window.u_openEvaluationModal = function() {
-        if(!window.currentUserData) return;
-        var d = new Date();
-        var y = d.getFullYear();
-        var m = ("0" + (d.getMonth() + 1)).slice(-2);
-        
-        var evalMonthEl = document.getElementById('u_evalMonth');
-        if(evalMonthEl) evalMonthEl.value = y + "-" + m;
-        
-        var posFilterEl = document.getElementById('u_evalPositionFilter');
-        if(posFilterEl) posFilterEl.value = 'all';
-
-        var evalModalEl = document.getElementById('u_evaluationModal');
-        if(evalModalEl) new bootstrap.Modal(evalModalEl).show();
-        
-        var drvListEl = document.getElementById('u_evalDriverList');
-        if(drvListEl) drvListEl.innerHTML = '<div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังโหลดรายชื่อ...</div>';
-
-        var btnSave = document.getElementById('u_btnSaveEval');
-        if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = 'กำลังโหลด...'; }
-
-        window.callAPI({ action: 'getEmployeesToEvaluate', position: window.currentUserData.position }).then(function(drivers) {
-            window.globalEvalDrivers = drivers || [];
-            
-            var posSet = new Set();
-            window.globalEvalDrivers.forEach(function(drv) {
-                var posList = (drv.position || "").split(',');
-                posList.forEach(function(p) {
-                    var cleanP = p.trim();
-                    if(cleanP && !cleanP.includes("รถร่วมบริการ")) {
-                        posSet.add(cleanP);
-                    }
-                });
-            });
-            
-            var filterSelect = document.getElementById('u_evalPositionFilter');
-            if(filterSelect) {
-                filterSelect.innerHTML = '<option value="all">ทั้งหมด</option>';
-                Array.from(posSet).sort().forEach(function(p) {
-                    filterSelect.innerHTML += `<option value="${p}">${p}</option>`;
-                });
-            }
-
-            window.u_checkCurrentMonthEvalStatus();
-        });
     };
 
     window.u_checkCurrentMonthEvalStatus = function() {
@@ -1372,6 +1360,97 @@
         }
     };
 
+    window.u_renderUserProfile = function(d) {
+        if (!d) return;
+        var finalLeaveUrl = "#"; 
+        try { 
+            var token = btoa(unescape(encodeURIComponent(d.id + "|" + new Date().getTime()))); 
+            finalLeaveUrl = "https://script.google.com/macros/s/AKfycby32LX4-2iN0zPA9EmhSneiX1Pz66uCMlBnqE2jiWtnVD8L9BG6zcLUyJ4Rh15WilT0uQ/exec?sso_user=" + encodeURIComponent(d.id) + "&sso_token=" + token; 
+        } catch (e) {}
+        
+        var photoUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; 
+        if (d.docs && d.docs.PHOTO && d.docs.PHOTO.url && d.docs.PHOTO.url.indexOf('drive.google.com') !== -1) { 
+            var m = d.docs.PHOTO.url.match(/[-\w]{25,}/); 
+            if (m) photoUrl = "https://drive.google.com/thumbnail?id=" + m[0] + "&sz=w300-h300"; 
+        }
+        
+        var nicknameText = d.nickname ? '(' + d.nickname + ')' : ''; 
+        var phoneText = d.phone || '-'; 
+        var ssoText = (d.ssoHosp && d.ssoHosp !== '-') ? d.ssoHosp : (d.ssoType || 'ไม่มีข้อมูล');
+        var ageText = window.u_calcAge(d.birthDate);
+        
+        var html = `
+        <div class="driver-card text-center overflow-hidden mb-4">
+            <div class="driver-card-header position-relative">
+                <div class="mt-4 mb-3 position-relative d-inline-block">
+                    <img src="${photoUrl}" class="rounded-circle object-fit-cover shadow-lg" style="width: 130px; height: 130px; border: 4px solid var(--logistic-primary); background: #222;">
+                </div>
+                <h4 class="fw-bold mb-1 text-white">${d.name}</h4>
+                <div class="text-warning small fw-bold mb-2">${nicknameText}</div>
+                <span class="badge bg-dark border border-secondary text-light fw-normal px-3 py-2 rounded-pill mt-1">
+                    <i class="bi bi-briefcase text-warning me-1"></i> ${d.position || '-'}
+                </span>
+            </div>
+            
+            <div class="p-3 text-start bg-black bg-opacity-25">
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-person-vcard me-2"></i>รหัสพนักงาน</span>
+                    <span class="text-white font-monospace fw-bold fs-6">${d.id}</span>
+                </div>
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-calendar-heart me-2"></i>อายุ</span>
+                    <span class="text-white fw-bold fs-6">${ageText}</span>
+                </div>
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-telephone me-2"></i>เบอร์โทรศัพท์</span>
+                    <span class="text-white fw-bold fs-6">${phoneText}</span>
+                </div>
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-hospital me-2"></i>ประกันสังคม</span>
+                    <span class="text-info fw-bold text-truncate text-end" style="max-width: 140px;" title="${ssoText}">${ssoText}</span>
+                </div>
+                
+                <div class="info-box d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-calendar-check me-2"></i>อายุงาน</span>
+                    <div class="text-end">
+                        <div class="text-warning fw-bold" style="font-size: 0.9rem;">${window.u_calcTenure(d.startDate)}</div>
+                        <div class="text-muted" style="font-size: 0.7rem;">(เริ่ม ${window.u_formatDate(d.startDate)})</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-outline-warning w-100 rounded-pill mb-4 mt-3 fw-bold shadow-sm" onclick="window.u_openEditModal('${d.id}')">
+                    <i class="bi bi-pencil-square me-2"></i>อัปเดตข้อมูลส่วนตัว
+                </button>
+
+                <h6 class="text-warning small fw-bold mb-3 px-2 border-bottom border-secondary border-opacity-50 pb-2"><i class="bi bi-lightning-charge me-1"></i> เมนูด่วน (Quick Actions)</h6>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <a href="${finalLeaveUrl}" target="_blank" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 text-decoration-none shadow-sm">
+                            <i class="bi bi-calendar2-week fs-5 text-white"></i><span class="small fw-bold" style="font-size: 0.8rem;">ลางาน</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <button onclick="window.u_openAccidentModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-cone-striped fs-5 text-danger"></i><span class="small fw-bold" style="font-size: 0.8rem;">อุบัติเหตุ</span>
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button onclick="window.u_openRepairModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-wrench-adjustable fs-5 text-primary"></i><span class="small fw-bold" style="font-size: 0.8rem;">แจ้งซ่อม</span>
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button onclick="window.u_openYardModal()" class="btn quick-action-btn w-100 py-2 d-flex flex-column align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-geo-alt fs-5 text-info"></i><span class="small fw-bold" style="font-size: 0.8rem;">ลานตู้</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        var uProfileCard = document.getElementById('userProfileCard');
+        if(uProfileCard) uProfileCard.innerHTML = html;
+    };
+
     window.u_renderPayslipsList = function() {
         var list = window.globalUserPayslips || [];
         var html = '';
@@ -1561,17 +1640,19 @@
             document.getElementById('u_empStatus').value = d.status || 'Active';
             document.getElementById('u_resignDate').value = window.u_safeDate(d.resignDate);
             document.getElementById('u_username').value = d.username;
-            document.getElementById('u_fullname').value = d.name;
-            document.getElementById('u_prefix').value = "";
             document.getElementById('u_startDate').value = window.u_safeDate(d.startDate);
-            document.getElementById('u_gender').value = d.gender || '';
-            document.getElementById('u_ssoType').value = d.ssoType || '';
-            document.getElementById('u_ssoHosp').value = d.ssoHosp || '';
             
+            // ข้อมูลแบบ Read-Only แสดงให้ผู้ใช้เห็น
+            document.getElementById('u_fullname').value = d.name;
+            document.getElementById('u_gender').value = d.gender || '-';
+            document.getElementById('u_ssoType').value = d.ssoType || '-';
+            
+            // ข้อมูลที่แก้ไขได้
             document.getElementById('u_nickname').value = d.nickname || '';
             document.getElementById('u_phone').value = d.phone || '';
             document.getElementById('u_password').value = d.password;
             document.getElementById('u_birthDate').value = window.u_safeDate(d.birthDate);
+            document.getElementById('u_address').value = d.address || '';
             
             document.getElementById('u_idCardNum').value = d.idCardNum || '';
             document.getElementById('u_idExp').value = window.u_safeDate(d.idExp);
@@ -1583,6 +1664,14 @@
                 for(var i=0; i<lSelect.options.length; i++){
                     if(lSelect.options[i].value === d.licType){
                         lSelect.selectedIndex = i; break;
+                    }
+                }
+            }
+            var hSelect = document.getElementById('u_ssoHosp');
+            if(hSelect) {
+                for(var i=0; i<hSelect.options.length; i++){
+                    if(hSelect.options[i].value === d.ssoHosp){
+                        hSelect.selectedIndex = i; break;
                     }
                 }
             }
@@ -1612,14 +1701,15 @@
             status: getVal('u_empStatus'),
             resignDate: getVal('u_resignDate'),
             birthDate: getVal('u_birthDate'),
-            gender: getVal('u_gender'),
+            gender: getVal('u_gender'), // ส่งค่าเดิมกลับไป
             username: getVal('u_username'),
             password: getVal('u_password'),
-            prefix: getVal('u_prefix'),
-            fullname: getVal('u_fullname'),
+            prefix: '',
+            fullname: getVal('u_fullname'), // ส่งค่าเดิมกลับไป
             nickname: getVal('u_nickname'),
-            ssoType: getVal('u_ssoType'),
-            ssoHosp: getVal('u_ssoHosp'),
+            ssoType: getVal('u_ssoType'), // ส่งค่าเดิมกลับไป
+            ssoHosp: getVal('u_ssoHosp'), // สามารถเปลี่ยนได้แล้ว
+            address: getVal('u_address'), // เพิ่มช่องที่อยู่
             idExp: getVal('u_idExp'),
             licExp: getVal('u_licExp'),
             idCardNum: getVal('u_idCardNum'),
