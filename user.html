@@ -111,7 +111,6 @@
             -moz-appearance: textfield;
         }
         
-        /* สไตล์ Accordion สำหรับหน้าแสดงผลประเมิน */
         .accordion-item { border: none; }
         .accordion-button {
             background-color: #1a1a1a;
@@ -123,10 +122,100 @@
             color: var(--logistic-primary);
         }
         .accordion-button::after { filter: invert(1) grayscale(100%) brightness(200%); }
+
+        /* ==========================================
+           ปรับแต่ง Slider สำหรับประเมินผล
+           ========================================== */
+        .eval-range {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            height: 35px;
+        }
+        .eval-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+            background: #6c757d;
+            cursor: pointer;
+            margin-top: -11px;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .eval-range.touched::-webkit-slider-thumb {
+            background: #198754;
+            box-shadow: 0 0 12px rgba(25, 135, 84, 0.8);
+        }
+        .eval-range::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #333;
+            border-radius: 3px;
+        }
+        .eval-range:focus { outline: none; }
+        .eval-range:disabled::-webkit-slider-thumb { background: #444; border-color: #555; cursor: not-allowed; box-shadow: none; }
+        .eval-range:disabled::-webkit-slider-runnable-track { background: #222; cursor: not-allowed; }
+        
+        .eval-driver-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid #333;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+        .eval-driver-card:hover {
+            border-color: rgba(25, 135, 84, 0.5);
+            background: rgba(255,255,255,0.04);
+        }
+
+        /* ==========================================
+           Mobile Responsive (หน้าจอมือถือ) 
+           ========================================== */
+        @media (max-width: 767.98px) {
+            /* 1. ปรับเมนู Tab ให้เป็น List รายการแนวตั้ง */
+            .custom-nav-pills {
+                background: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+                gap: 8px !important;
+            }
+            .custom-nav-pills .nav-link {
+                background: #111;
+                border: 1px solid #333 !important;
+                padding: 14px 16px !important;
+            }
+            .custom-nav-pills .nav-link.active {
+                border-color: var(--logistic-primary) !important;
+                background: rgba(255, 193, 7, 0.1) !important;
+                box-shadow: none;
+            }
+            
+            /* 2. จัดปุ่ม Header ด้านบนให้เรียงบน-ล่าง ขยายเต็มจอ */
+            .top-header-actions { flex-direction: column; width: 100%; margin-top: 10px; }
+            .top-header-actions > div, .top-header-actions button { width: 100%; justify-content: center; }
+            #u_evalTopMenuContainer { width: 100%; }
+            #btnOpenEvalModal { width: 100%; margin-bottom: 8px; }
+            
+            /* 3. ประวัติสลิป และรายการอื่นๆ จัดเป็นบน-ล่าง */
+            .history-item { flex-direction: column !important; align-items: flex-start !important; gap: 12px; }
+            .history-item > div { width: 100%; }
+            .history-item .btn, .history-item .text-end { width: 100%; text-align: center !important; justify-content: center; display: flex; }
+            
+            /* 4. ปรับขนาดฟอนต์ใน Profile Card */
+            .driver-card-header img { width: 100px !important; height: 100px !important; }
+            .info-box { padding: 8px 12px; }
+            .info-box .fs-6 { font-size: 0.9rem !important; }
+            .quick-action-btn span { font-size: 0.75rem !important; }
+            
+            /* 5. ปรับ Layout ฟอร์มอัปโหลดรูป ให้เต็มบรรทัด */
+            .upload-zone { padding: 10px; }
+        }
     </style>
 
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 fade-in-up gap-3">
-        <div>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center align-items-start mb-4 fade-in-up gap-3">
+        <div class="w-100">
             <h4 class="fw-bold text-white mb-1" style="letter-spacing: 1px;">
                 <i class="bi bi-truck text-warning me-2"></i>DRIVER PORTAL
             </h4>
@@ -134,15 +223,15 @@
                 ยินดีต้อนรับ, <span id="userNameHeader" class="fw-bold text-warning">...</span>
             </div>
         </div>
-        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
-            <!-- ปุ่มประเมิน -->
+        
+        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-md-end top-header-actions">
             <div id="u_evalTopMenuContainer" style="display: none;">
-                <button id="btnOpenEvalModal" onclick="window.u_openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
-                    <i class="bi bi-star-fill me-1"></i> ประเมินการทำงาน <span id="u_evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>
+                <button id="btnOpenEvalModal" onclick="window.u_openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm d-flex justify-content-center align-items-center">
+                    <i class="bi bi-star-fill me-1"></i> ประเมิน <span id="u_evalStatusBadge" class="badge bg-danger ms-2">ยังไม่ประเมิน</span>
                 </button>
             </div>
             
-            <button class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-bold shadow-sm" onclick="window.logout()">
+            <button class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-bold shadow-sm d-flex justify-content-center align-items-center" onclick="window.logout()">
                 <i class="bi bi-power me-1"></i> ออกจากระบบ
             </button>
         </div>
@@ -162,35 +251,36 @@
         
         <div class="col-lg-8">
             <div class="main-content-card p-3 p-md-4 shadow-lg">
-                <ul class="nav nav-pills nav-fill custom-nav-pills mb-4 gap-2" id="userTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active py-2" id="tab-btn-payslips" data-bs-toggle="tab" data-bs-target="#tab-content-payslips" type="button" role="tab">
-                            <i class="bi bi-cash-stack me-1"></i> สลิปเงินเดือน
-                            <span class="badge bg-warning text-dark ms-1 rounded-pill" id="u_payslipCountBadge">0</span>
+                <!-- เมนู Tab จัดเรียงใหม่รองรับ Mobile แบบ List -->
+                <ul class="nav nav-pills custom-nav-pills mb-4 gap-2 flex-column flex-md-row" id="userTabs" role="tablist">
+                    <li class="nav-item flex-md-fill" role="presentation">
+                        <button class="nav-link active py-2 px-3 w-100 d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-payslips" data-bs-toggle="tab" data-bs-target="#tab-content-payslips" type="button" role="tab">
+                            <span class="d-flex align-items-center"><i class="bi bi-cash-stack me-2 fs-5"></i> สลิปเงินเดือน</span>
+                            <span class="badge bg-warning text-dark rounded-pill ms-md-2" id="u_payslipCountBadge">0</span>
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-2" id="tab-btn-docs" data-bs-toggle="tab" data-bs-target="#tab-content-docs" type="button" role="tab">
-                            <i class="bi bi-folder2-open me-1"></i> เอกสารส่วนตัว
-                            <span class="badge bg-secondary ms-1 rounded-pill" id="u_docCountBadge">0</span>
+                    <li class="nav-item flex-md-fill" role="presentation">
+                        <button class="nav-link py-2 px-3 w-100 d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-docs" data-bs-toggle="tab" data-bs-target="#tab-content-docs" type="button" role="tab">
+                            <span class="d-flex align-items-center"><i class="bi bi-folder2-open me-2 fs-5"></i> เอกสารส่วนตัว</span>
+                            <span class="badge bg-secondary rounded-pill ms-md-2" id="u_docCountBadge">0</span>
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-2 text-danger" id="tab-btn-warns" data-bs-toggle="tab" data-bs-target="#tab-content-warns" type="button" role="tab">
-                            <i class="bi bi-exclamation-triangle-fill me-1"></i> ใบเตือน
-                            <span class="badge bg-danger ms-1 rounded-pill" id="u_warnCountBadge">0</span>
+                    <li class="nav-item flex-md-fill" role="presentation">
+                        <button class="nav-link py-2 px-3 w-100 text-danger d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-warns" data-bs-toggle="tab" data-bs-target="#tab-content-warns" type="button" role="tab">
+                            <span class="d-flex align-items-center"><i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i> ใบเตือน</span>
+                            <span class="badge bg-danger rounded-pill ms-md-2" id="u_warnCountBadge">0</span>
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-2 text-info" id="tab-btn-accs" data-bs-toggle="tab" data-bs-target="#tab-content-accs" type="button" role="tab">
-                            <i class="bi bi-cone-striped me-1"></i> อุบัติเหตุ
-                            <span class="badge bg-info text-dark ms-1 rounded-pill" id="u_accCountBadge">0</span>
+                    <li class="nav-item flex-md-fill" role="presentation">
+                        <button class="nav-link py-2 px-3 w-100 text-info d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-accs" data-bs-toggle="tab" data-bs-target="#tab-content-accs" type="button" role="tab">
+                            <span class="d-flex align-items-center"><i class="bi bi-cone-striped me-2 fs-5"></i> อุบัติเหตุ</span>
+                            <span class="badge bg-info text-dark rounded-pill ms-md-2" id="u_accCountBadge">0</span>
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-2 text-success" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
-                            <i class="bi bi-star-fill me-1"></i> ผลประเมิน
-                            <span class="badge bg-success ms-1 rounded-pill" id="u_evalCountBadge">0</span>
+                    <li class="nav-item flex-md-fill" role="presentation">
+                        <button class="nav-link py-2 px-3 w-100 text-success d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
+                            <span class="d-flex align-items-center"><i class="bi bi-star-fill me-2 fs-5"></i> ผลประเมิน</span>
+                            <span class="badge bg-success rounded-pill ms-md-2" id="u_evalCountBadge">0</span>
                         </button>
                     </li>
                 </ul>
@@ -371,7 +461,6 @@
                                 <label class="small text-muted mb-1 fw-bold">เวลาเกิดเหตุ *</label>
                                 <select class="form-select bg-dark text-light border-secondary shadow-none" id="u_accTime" required>
                                     <option value="">- เลือกเวลาโดยประมาณ -</option>
-                                    <!-- Options populated by JS -->
                                 </select>
                             </div>
                             <div class="col-12">
@@ -609,9 +698,7 @@
 
                     <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
                         <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitRep">
-                            <i class="bi bi-send-fill me-2"></i>ส่งใบแจ้งซ่อม
-                        </button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitRep">ส่งใบแจ้งซ่อม</button>
                     </div>
                 </form>
             </div>
@@ -619,7 +706,7 @@
     </div>
 </div>
 
-<!-- Modal สำหรับแก้ไข/จัดการพนักงานในมุมมอง User -->
+<!-- Modal จัดการข้อมูลส่วนตัว -->
 <div class="modal fade" id="u_empModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content logistics-modal">
@@ -641,21 +728,19 @@
                     
                     <div class="card border-0 mb-4 bg-transparent shadow-none">
                         <div class="card-body p-0">
-                            <ul class="nav nav-pills nav-fill gap-2" role="tablist">
+                            <ul class="nav nav-pills nav-fill gap-2 flex-md-wrap" role="tablist">
                                 <li class="nav-item">
-                                    <button type="button" class="nav-link active rounded-pill fw-bold" data-bs-toggle="tab" data-bs-target="#u_tabInfo">1. ข้อมูลส่วนตัวเบื้องต้น</button>
+                                    <button type="button" class="nav-link active rounded-pill fw-bold w-100" data-bs-toggle="tab" data-bs-target="#u_tabInfo">1. ข้อมูลเบื้องต้น</button>
                                 </li>
                                 <li class="nav-item">
-                                    <button type="button" class="nav-link rounded-pill fw-bold" data-bs-toggle="tab" data-bs-target="#u_tabDocs">2. อัปเดตเอกสาร</button>
+                                    <button type="button" class="nav-link rounded-pill fw-bold w-100" data-bs-toggle="tab" data-bs-target="#u_tabDocs">2. อัปเดตเอกสาร</button>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="tab-content">
-                        <!-- Tab: ข้อมูลทั่วไป -->
                         <div class="tab-pane fade show active" id="u_tabInfo">
                             <div class="row g-4">
-                                <!-- ข้อมูลที่อ่านได้อย่างเดียว (Read-Only) -->
                                 <div class="col-12">
                                     <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                         <div class="fw-bold text-secondary mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -678,7 +763,6 @@
                                     </div>
                                 </div>
 
-                                <!-- ข้อมูลส่วนตัว (แก้ไขได้) -->
                                 <div class="col-12">
                                     <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                         <div class="fw-bold text-success mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -715,7 +799,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Section 4: ข้อมูลบัตรและใบขับขี่ -->
                                 <div class="col-12">
                                     <div class="row g-3">
                                         <div class="col-md-6">
@@ -761,7 +844,6 @@
                             </div>
                         </div>
                         
-                        <!-- Tab: เอกสารแนบ -->
                         <div class="tab-pane fade" id="u_tabDocs">
                             <div class="p-4 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                 <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50 text-start">
@@ -816,39 +898,40 @@
     </div>
 </div>
 
-<!-- Modal ประเมิน (Cross-Role) -->
+<!-- Modal ประเมิน (Cross-Role) ที่ปรับใหม่ให้ใช้ Slider บนมือถือได้ง่ายๆ -->
 <div class="modal fade" id="u_evaluationModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content logistics-modal" style="border-color: #198754;">
+        <div class="modal-content logistics-modal" style="border-color: #198754; background: #111;">
             <div class="modal-header logistics-modal-header py-3 border-bottom border-success">
                 <h5 class="modal-title fw-bold text-success fs-5">
                     <i class="bi bi-star-fill me-2"></i>ประเมินการทำงานประจำเดือน
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
-                <div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
+            <div class="modal-body p-3 p-md-4 bg-black bg-opacity-50 text-start">
+                <div class="d-flex justify-content-between align-items-center mb-4 gap-2 flex-wrap bg-dark p-3 rounded border border-success border-opacity-25">
                     <div class="d-flex align-items-center gap-2">
                         <label class="text-light fw-bold mb-0 text-nowrap">ประจำเดือน:</label>
-                        <input type="month" id="u_evalMonth" class="form-control bg-dark text-white border-success form-control-sm shadow-none" required onchange="window.u_checkCurrentMonthEvalStatus()">
+                        <input type="month" id="u_evalMonth" class="form-control bg-black text-white border-success form-control-sm shadow-none" required onchange="window.u_checkCurrentMonthEvalStatus()">
                     </div>
                     <div class="d-flex align-items-center gap-2">
-                        <label class="text-light fw-bold mb-0 text-nowrap">ค้นหา / ตำแหน่ง:</label>
-                        <select id="u_evalPositionFilter" class="form-select bg-dark text-white border-success form-control-sm shadow-none" onchange="window.u_filterEvalDrivers()">
+                        <label class="text-light fw-bold mb-0 text-nowrap">ตำแหน่ง:</label>
+                        <select id="u_evalPositionFilter" class="form-select bg-black text-white border-success form-control-sm shadow-none" onchange="window.u_filterEvalDrivers()">
                             <option value="all">ทั้งหมด</option>
                         </select>
                     </div>
-                    <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3" onclick="window.u_setAllVisibleToNA()">
-                        <i class="bi bi-check2-all"></i> เซ็ต 'ไม่ได้ประสานงาน'
+                    <button type="button" class="btn btn-outline-warning btn-sm rounded-pill px-3 mt-2 mt-md-0 w-100 w-md-auto" onclick="window.u_setAllVisibleToNA()">
+                        <i class="bi bi-check2-all"></i> ตั้งค่าคนที่เหลือเป็น 'ไม่ได้ประสานงาน'
                     </button>
                 </div>
+                
                 <div id="u_evalDriverList" class="d-flex flex-column gap-2">
                     <div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังโหลดรายชื่อ...</div>
                 </div>
             </div>
             <div class="modal-footer border-top border-secondary">
-                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
-                <button type="button" id="u_btnSaveEval" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.u_saveEvaluations()">บันทึกการประเมิน</button>
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ปิด</button>
+                <button type="button" id="u_btnSaveEval" class="btn btn-success rounded-pill px-5 fw-bold" onclick="window.u_saveEvaluations()">บันทึกผลการประเมิน</button>
             </div>
         </div>
     </div>
@@ -868,7 +951,6 @@
         var userProfileContentEl = document.getElementById('userProfileContent');
         if(userProfileContentEl) userProfileContentEl.style.display = 'none'; 
         
-        // ล้างบักจอดำของ Bootstrap
         document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
         document.body.classList.remove('modal-open');
         document.body.style.overflow = '';
@@ -880,7 +962,6 @@
             userId: window.currentUser.empId 
         }).then(function(data){ 
             if(userLoadingEl) userLoadingEl.style.display = 'none'; 
-            
             if (!data || data.length === 0) return; 
             
             var d = data[0]; 
@@ -898,15 +979,6 @@
                 
                 var rulesOverlay = document.getElementById('rulesOverlay');
                 if(rulesOverlay) rulesOverlay.style.display = 'block';
-                
-                var chk = document.getElementById('acceptRulesCheck');
-                if(chk) chk.checked = false;
-                var btnAccept = document.getElementById('btnAcceptRules');
-                if(btnAccept) {
-                    btnAccept.disabled = true;
-                    btnAccept.classList.remove('btn-success');
-                    btnAccept.classList.add('btn-secondary');
-                }
             } else {
                 var rulesOverlay = document.getElementById('rulesOverlay');
                 if(rulesOverlay) rulesOverlay.style.display = 'none';
@@ -919,7 +991,6 @@
             window.u_renderUserProfile(d); 
             window.u_renderDocs(d); 
 
-            // ตรวจสอบว่าเป็นใคร ให้แสดงปุ่มและข้อความประเมินให้ถูกต้อง
             var pos = d.position || "";
             var isDriver = pos.indexOf('พนักงานขับรถ') > -1 && pos.indexOf('รถร่วม') === -1;
             var isOffice = pos.indexOf('ประสานงาน') > -1 || pos.indexOf('ธุรการ') > -1 || pos.indexOf('ความปลอดภัย') > -1;
@@ -927,9 +998,9 @@
             var evalContainer = document.getElementById('u_evalTopMenuContainer');
             if (isDriver || isOffice) {
                 if(evalContainer) evalContainer.style.display = 'block';
-                var evalBtnText = isDriver ? '<i class="bi bi-star-fill me-1"></i> ประเมินเจ้าหน้าที่ออฟฟิศ ' : '<i class="bi bi-star-fill me-1"></i> ประเมินพนักงานขับรถ ';
+                var evalBtnText = isDriver ? '<i class="bi bi-star-fill me-1"></i> ประเมินออฟฟิศ ' : '<i class="bi bi-star-fill me-1"></i> ประเมินคนขับรถ ';
                 var btnOpen = document.getElementById('btnOpenEvalModal');
-                if(btnOpen) btnOpen.innerHTML = evalBtnText + '<span id="u_evalStatusBadge" class="badge bg-danger ms-1">ยังไม่ประเมิน</span>';
+                if(btnOpen) btnOpen.innerHTML = evalBtnText + '<span id="u_evalStatusBadge" class="badge bg-danger ms-2">ยังไม่ประเมิน</span>';
                 
                 window.u_checkCurrentMonthEvalStatus(); 
             } else {
@@ -977,7 +1048,6 @@
                 window.u_renderEvalsList();
             });
 
-            // โหลด Setting ให้พร้อมใช้ตอน User กดอัปเดตข้อมูลส่วนตัว
             window.callAPI({ action: 'getSettingsData' }).then(function(res) {
                 var lSelect = document.getElementById('u_licType');
                 if(lSelect) {
@@ -995,6 +1065,53 @@
                 }
             });
         }); 
+    };
+
+    window.u_openEvaluationModal = function() {
+        if(!window.currentUserData) return;
+        var d = new Date();
+        var y = d.getFullYear();
+        var m = ("0" + (d.getMonth() + 1)).slice(-2);
+        
+        var evalMonthEl = document.getElementById('u_evalMonth');
+        if(evalMonthEl) evalMonthEl.value = y + "-" + m;
+        
+        var posFilterEl = document.getElementById('u_evalPositionFilter');
+        if(posFilterEl) posFilterEl.value = 'all';
+
+        var evalModalEl = document.getElementById('u_evaluationModal');
+        if(evalModalEl) new bootstrap.Modal(evalModalEl).show();
+        
+        var drvListEl = document.getElementById('u_evalDriverList');
+        if(drvListEl) drvListEl.innerHTML = '<div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังโหลดรายชื่อ...</div>';
+
+        var btnSave = document.getElementById('u_btnSaveEval');
+        if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = 'กำลังโหลด...'; }
+
+        window.callAPI({ action: 'getEmployeesToEvaluate', position: window.currentUserData.position }).then(function(drivers) {
+            window.globalEvalDrivers = drivers || [];
+            
+            var posSet = new Set();
+            window.globalEvalDrivers.forEach(function(drv) {
+                var posList = (drv.position || "").split(',');
+                posList.forEach(function(p) {
+                    var cleanP = p.trim();
+                    if(cleanP && !cleanP.includes("รถร่วมบริการ")) {
+                        posSet.add(cleanP);
+                    }
+                });
+            });
+            
+            var filterSelect = document.getElementById('u_evalPositionFilter');
+            if(filterSelect) {
+                filterSelect.innerHTML = '<option value="all">ทั้งหมด</option>';
+                Array.from(posSet).sort().forEach(function(p) {
+                    filterSelect.innerHTML += `<option value="${p}">${p}</option>`;
+                });
+            }
+
+            window.u_checkCurrentMonthEvalStatus();
+        });
     };
 
     window.u_checkCurrentMonthEvalStatus = function() {
@@ -1023,72 +1140,88 @@
                 evaluatorId: window.currentUserData.id 
             }
         }).then(function(res) {
-            window.u_evaluatedDriverIds = res.evaluatedDriverIds || [];
+            window.u_evaluatedDriverIds = (res.evaluatedDriverIds || []).map(String);
+            var pendingCount = window.globalEvalDrivers.filter(drv => !window.u_evaluatedDriverIds.includes(String(drv.id))).length;
+
             var badge = document.getElementById('u_evalStatusBadge');
             if(badge) {
-                if (res.evaluated) {
-                    badge.className = "badge bg-success ms-1";
-                    badge.innerText = "ประเมินแล้ว";
+                if (window.globalEvalDrivers.length > 0 && pendingCount === 0) {
+                    badge.className = "badge bg-success ms-2";
+                    badge.innerText = "ครบแล้ว";
                 } else {
-                    badge.className = "badge bg-danger ms-1";
-                    badge.innerText = "ยังไม่ประเมิน";
+                    badge.className = "badge bg-danger ms-2";
+                    badge.innerText = "เหลือ " + pendingCount + " คน";
                 }
             }
             
             if(window.globalEvalDrivers && window.globalEvalDrivers.length > 0) {
-                window.u_renderEvalDriversList(res.evaluated);
+                window.u_renderEvalDriversList();
             }
         });
     };
 
-    window.u_renderEvalDriversList = function(isAlreadyEvaluated) {
+    window.u_renderEvalDriversList = function() {
         var html = '';
         var btnSave = document.getElementById('u_btnSaveEval');
         
-        if(isAlreadyEvaluated) {
-            if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = '<i class="bi bi-check-circle me-1"></i>ประเมินเรียบร้อยแล้ว'; }
-            html += '<div class="alert alert-success bg-success bg-opacity-10 border-success text-success fw-bold small mb-3"><i class="bi bi-info-circle-fill me-2"></i>คุณได้ส่งผลประเมินของเดือนนี้เรียบร้อยแล้ว ไม่สามารถแก้ไขหรือประเมินซ้ำได้</div>';
-        } else {
-            if(btnSave) { btnSave.disabled = false; btnSave.innerHTML = 'บันทึกการประเมิน'; }
-        }
+        var pendingDrivers = window.globalEvalDrivers.filter(function(drv) {
+            return !window.u_evaluatedDriverIds.includes(String(drv.id));
+        });
 
-        if(window.globalEvalDrivers.length === 0) {
+        if (window.globalEvalDrivers.length === 0) {
              html += '<div class="text-center text-muted py-5">ไม่พบรายชื่อเป้าหมายสำหรับการประเมิน</div>';
+             if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = 'บันทึกผลการประเมิน'; }
+
+        } else if (pendingDrivers.length === 0) {
+            html += '<div class="alert alert-success bg-success bg-opacity-10 border-success text-success fw-bold small mb-3 text-center py-5 rounded-4"><i class="bi bi-check-circle-fill d-block fs-1 mb-3"></i>เยี่ยมมาก!<br>คุณประเมินพนักงานครบทุกคนแล้วในเดือนนี้ 🎉</div>';
+            if(btnSave) { btnSave.disabled = true; btnSave.innerHTML = '<i class="bi bi-check-circle me-1"></i>ประเมินครบแล้ว'; }
+
         } else {
-            window.globalEvalDrivers.forEach(function(drv, index) {
-                var lockHtml = isAlreadyEvaluated ? 'disabled' : '';
-                var lockScore = isAlreadyEvaluated ? 'value="" disabled placeholder="ประเมินแล้ว"' : 'placeholder="0-10"';
-                var statusBadge = isAlreadyEvaluated ? '<span class="badge bg-success ms-2 px-2 py-1">ประเมินแล้ว</span>' : '';
+            if(btnSave) { btnSave.disabled = false; btnSave.innerHTML = 'บันทึกผลการประเมิน'; }
+
+            pendingDrivers.forEach(function(drv, index) {
                 var nickname = drv.nickname && drv.nickname !== "-" ? `(${drv.nickname})` : '';
 
                 html += `
-                <div class="u_eval-driver-row p-3 mb-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);" data-position="${drv.position}">
-                    <div class="row align-items-center g-2">
-                        <div class="col-md-5">
-                            <div class="fw-bold text-light" style="font-size: 0.9rem;">${index+1}. ${drv.name} <span class="text-warning">${nickname}</span> ${statusBadge}</div>
-                            <div class="text-secondary" style="font-size: 0.75rem;">${drv.position || '-'}</div>
+                <div class="eval-driver-card p-3 p-md-4 mb-3" data-position="${drv.position}">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 border-bottom border-success border-opacity-25 pb-3">
+                        <div class="mb-2 mb-md-0">
+                            <div class="fw-bold text-light" style="font-size: 1.1rem;">${index+1}. ${drv.name} <span class="text-warning">${nickname}</span></div>
+                            <div class="text-secondary small mt-1"><i class="bi bi-briefcase me-1"></i>${drv.position || '-'}</div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-dark text-warning border-warning">คะแนน</span>
-                                <input type="number" min="0" max="10" class="form-control bg-dark text-white border-warning eval-score-input shadow-none text-center" 
-                                    data-id="${drv.id}" data-name="${drv.name}" ${lockScore}
-                                    oninput="if(this.value > 10) this.value = 10; else if(this.value < 0 && this.value !== '') this.value = 0;">
-                            </div>
+                        <div class="form-check form-switch mb-0 bg-dark px-3 py-2 rounded border border-secondary border-opacity-50">
+                            <input class="form-check-input border-secondary shadow-none eval-na-check ms-0 mt-1" type="checkbox" id="u_na_${drv.id}" onchange="window.u_toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;">
+                            <label class="form-check-label text-secondary small ms-2 cursor-pointer pt-1" for="u_na_${drv.id}">ไม่ได้ประสานงาน</label>
                         </div>
-                        <div class="col-md-4 text-md-end text-start mt-2 mt-md-0">
-                            <div class="form-check form-switch d-inline-block mb-0">
-                                <input class="form-check-input border-secondary shadow-none eval-na-check" type="checkbox" id="u_na_${drv.id}" onchange="window.u_toggleEvalNA(this, '${drv.id}')" style="cursor: pointer;" ${lockHtml}>
-                                <label class="form-check-label text-secondary small ms-1 cursor-pointer" for="u_na_${drv.id}">ไม่ได้ประสานงาน</label>
-                            </div>
+                    </div>
+                    
+                    <div class="eval-score-section mb-4 mt-2">
+                        <div class="d-flex justify-content-between align-items-end mb-3">
+                            <label class="small text-muted fw-bold mb-0"><i class="bi bi-arrows-collapse me-1"></i> เลื่อนสไลเดอร์เพื่อให้คะแนน (0-10)</label>
+                            <span class="badge bg-secondary text-light fs-6 eval-score-display px-3 py-2 shadow-sm rounded-pill" id="score_val_${drv.id}">แตะเลื่อนให้คะแนน</span>
                         </div>
-                        <div class="col-12 mt-2 eval-comment-container">
-                            <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary eval-comment-input shadow-none" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)..." ${lockHtml}>
+                        <input type="range" class="eval-range eval-score-input w-100" min="0" max="10" step="1" value="0" 
+                            data-id="${drv.id}" data-name="${drv.name}" data-touched="false" 
+                            oninput="
+                                this.setAttribute('data-touched', 'true');
+                                this.classList.add('touched');
+                                var disp = document.getElementById('score_val_${drv.id}');
+                                disp.innerText = this.value + ' คะแนน';
+                                disp.className = 'badge bg-success text-white fs-6 eval-score-display px-4 py-2 shadow-lg rounded-pill';
+                            ">
+                        <div class="d-flex justify-content-between text-muted small mt-1 px-1" style="font-size: 0.7rem;">
+                            <span>0 (ปรับปรุง)</span>
+                            <span>10 (ดีเยี่ยม)</span>
                         </div>
+                    </div>
+
+                    <div class="eval-comment-container border-top border-secondary border-opacity-25 pt-3">
+                        <input type="text" class="form-control bg-black text-light border-secondary eval-comment-input shadow-none py-2" placeholder="เพิ่มคอมเมนต์เสนอแนะ (ไม่บังคับ)...">
                     </div>
                 </div>`;
             });
         }
+        
         var listEl = document.getElementById('u_evalDriverList');
         if(listEl) {
             listEl.innerHTML = html;
@@ -1099,7 +1232,7 @@
     window.u_filterEvalDrivers = function() {
         var posFilterEl = document.getElementById('u_evalPositionFilter');
         var posFilter = posFilterEl ? posFilterEl.value : 'all';
-        var rows = document.querySelectorAll('.u_eval-driver-row');
+        var rows = document.querySelectorAll('.eval-driver-card');
         
         rows.forEach(row => {
             var rowPos = row.getAttribute('data-position') || '';
@@ -1112,13 +1245,13 @@
     };
 
     window.u_setAllVisibleToNA = function() {
-        var rows = document.querySelectorAll('.u_eval-driver-row');
+        var rows = document.querySelectorAll('.eval-driver-card');
         var count = 0;
         rows.forEach(function(row) {
             if (row.style.display !== 'none') {
                 var naCheck = row.querySelector('.eval-na-check');
                 var scoreInput = row.querySelector('.eval-score-input');
-                if (naCheck && scoreInput && !naCheck.disabled && !naCheck.checked && scoreInput.value === "") {
+                if (naCheck && scoreInput && !naCheck.disabled && !naCheck.checked && scoreInput.getAttribute('data-touched') !== 'true') {
                     naCheck.checked = true;
                     window.u_toggleEvalNA(naCheck, scoreInput.getAttribute('data-id'));
                     count++;
@@ -1127,13 +1260,13 @@
         });
         if(count > 0) {
             Swal.fire({
-                toast: true, position: 'top-end', icon: 'success', 
+                toast: true, position: 'top', icon: 'success', 
                 title: 'ตั้งค่า "ไม่ได้ประสานงาน" ' + count + ' รายการ', 
                 showConfirmButton: false, timer: 1500, background: '#1e1e1e', color: '#fff'
             });
         } else {
             Swal.fire({
-                toast: true, position: 'top-end', icon: 'info', 
+                toast: true, position: 'top', icon: 'info', 
                 title: 'ไม่มีรายการที่สามารถตั้งค่าได้', 
                 showConfirmButton: false, timer: 1500, background: '#1e1e1e', color: '#fff'
             });
@@ -1141,31 +1274,33 @@
     };
 
     window.u_toggleEvalNA = function(cb, id) {
-        var row = cb.closest('.u_eval-driver-row');
+        var row = cb.closest('.eval-driver-card');
         if(!row) return;
         var input = row.querySelector('.eval-score-input');
+        var display = row.querySelector('#score_val_' + id);
         var comment = row.querySelector('.eval-comment-input');
         
         if(cb.checked) {
-            if(input) {
-                input.value = '';
-                input.disabled = true;
-                input.classList.remove('border-warning');
-                input.classList.add('border-secondary');
+            row.style.opacity = '0.5'; 
+            if(input) { input.disabled = true; }
+            if(display) { 
+                display.innerText = 'ไม่ได้ประสานงาน'; 
+                display.className = 'badge bg-secondary text-light fs-6 eval-score-display px-3 py-2 shadow-sm rounded-pill';
             }
-            if(comment) {
-                comment.value = '';
-                comment.disabled = true;
-            }
+            if(comment) { comment.disabled = true; comment.value = ''; }
         } else {
-            if(input) {
-                input.disabled = false;
-                input.classList.remove('border-secondary');
-                input.classList.add('border-warning');
+            row.style.opacity = '1';
+            if(input) { input.disabled = false; }
+            if(display) { 
+                if(input.getAttribute('data-touched') === 'true') {
+                    display.innerText = input.value + ' คะแนน';
+                    display.className = 'badge bg-success text-white fs-6 eval-score-display px-4 py-2 shadow-lg rounded-pill';
+                } else {
+                    display.innerText = 'แตะเลื่อนให้คะแนน';
+                    display.className = 'badge bg-secondary text-light fs-6 eval-score-display px-3 py-2 shadow-sm rounded-pill';
+                }
             }
-            if(comment) {
-                comment.disabled = false;
-            }
+            if(comment) { comment.disabled = false; }
         }
     };
 
@@ -1177,13 +1312,13 @@
             return;
         }
 
-        var rows = document.querySelectorAll('.u_eval-driver-row');
+        var rows = document.querySelectorAll('.eval-driver-card');
         var evals = [];
-        var allValid = true;
+        var untouchedCount = 0;
 
         rows.forEach(function(row) {
             var scoreInput = row.querySelector('.eval-score-input');
-            if(!scoreInput || scoreInput.placeholder === "ประเมินแล้ว") return;
+            if(!scoreInput) return;
 
             var id = scoreInput.getAttribute('data-id');
             var name = scoreInput.getAttribute('data-name');
@@ -1193,23 +1328,23 @@
             
             if (naCheck && naCheck.checked) {
                 evals.push({ driverId: id, driverName: name, score: '-', status: 'ไม่ได้ประสานงาน', comment: comment });
-            } else if (scoreInput.value !== "") {
-                var score = parseInt(scoreInput.value);
-                if (isNaN(score) || score < 0 || score > 10) {
-                    allValid = false;
-                } else {
+            } else {
+                if (scoreInput.getAttribute('data-touched') === 'true') {
+                    var score = parseInt(scoreInput.value);
                     evals.push({ driverId: id, driverName: name, score: score, status: 'ประเมินแล้ว', comment: comment });
+                } else {
+                    untouchedCount++;
                 }
             }
         });
 
-        if (evals.length === 0) {
-            Swal.fire({icon:'warning', title:'แจ้งเตือน', text:'ไม่มีข้อมูลใหม่ให้บันทึก (กรุณากรอกคะแนนหรือติ๊ก "ไม่ได้ประสานงาน")'});
+        if (untouchedCount > 0) {
+            Swal.fire({icon:'warning', title:'ประเมินยังไม่ครบ', text:'กรุณาเลื่อนสไลเดอร์ให้คะแนน หรือติ๊กเลือก "ไม่ได้ประสานงาน" ให้ครบทุกคนที่แสดงอยู่บนหน้าจอครับ'});
             return;
         }
 
-        if (!allValid) {
-            Swal.fire({icon:'error', title:'ข้อมูลไม่ถูกต้อง', text:'กรุณากรอกคะแนนให้อยู่ในช่วง 0-10'});
+        if (evals.length === 0) {
+            Swal.fire({icon:'warning', title:'แจ้งเตือน', text:'ไม่มีข้อมูลใหม่ให้บันทึก'});
             return;
         }
 
@@ -1225,12 +1360,9 @@
             }
         }).then(function(res) {
             if(res.success) {
-                Swal.fire('สำเร็จ', res.message, 'success');
-                var mObj = bootstrap.Modal.getInstance(document.getElementById('u_evaluationModal'));
-                if(mObj) mObj.hide();
+                Swal.fire('สำเร็จ', 'ส่งผลประเมินเรียบร้อยแล้ว', 'success');
                 window.u_checkCurrentMonthEvalStatus(); 
                 
-                // รีโหลดรายการประวัติ
                 window.callAPI({
                     action: 'getUserEvaluations',
                     empId: window.currentUserData.id
@@ -1270,21 +1402,24 @@
         sortedMonths.forEach(function(month, index) {
             var group = grouped[month];
             var avg = group.validCount > 0 ? (group.totalScore / group.validCount).toFixed(2) : "-";
-            var avgHtml = group.validCount > 0 ? `<span class="badge bg-success ms-2">${avg} / 10</span>` : `<span class="badge bg-secondary ms-2">ไม่มีคะแนน</span>`;
+            var avgHtml = group.validCount > 0 ? `<span class="badge bg-success ms-2 fs-6 shadow-sm">${avg} / 10</span>` : `<span class="badge bg-secondary ms-2 shadow-sm">ไม่มีคะแนน</span>`;
             var isExpanded = index === 0 ? 'show' : '';
             var isCollapsedBtn = index === 0 ? '' : 'collapsed';
 
             var itemsHtml = '';
             group.items.forEach(function(e, i) {
-                var scoreHtml = e.status === 'ไม่ได้ประสานงาน' 
-                    ? '<span class="badge bg-secondary">ไม่ได้ประสานงาน</span>'
-                    : `<span class="badge bg-success fs-6 px-3">${e.score} / 10</span>`;
-                var commentHtml = e.comment ? `<div class="mt-2 text-light small fst-italic"><i class="bi bi-chat-quote text-success me-1"></i> "${e.comment}"</div>` : '';
+                var isNA = (e.status === 'ไม่ได้ประสานงาน');
+                var scoreHtml = isNA 
+                    ? '<span class="badge bg-dark border border-secondary text-secondary fw-normal px-2 py-1">ไม่ได้ประสานงาน</span>'
+                    : `<span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 fs-6 px-3 py-1 shadow-sm">${e.score} / 10</span>`;
+                var commentHtml = e.comment ? `<div class="mt-2 text-light small fst-italic py-2 px-3 rounded" style="background: rgba(0,0,0,0.3); border-left: 2px solid #ffc107;"><i class="bi bi-chat-quote text-warning me-2"></i>${e.comment}</div>` : '';
+                var textClass = isNA ? 'text-secondary opacity-50' : 'text-success';
+                var iconClass = isNA ? 'bi-person-dash' : 'bi-person-check-fill';
                 
                 itemsHtml += `
-                <div class="history-item border-start border-4 border-success mb-2" style="background: rgba(255,255,255,0.02);">
+                <div class="p-3 mb-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="fw-bold text-success small"><i class="bi bi-person-check me-2"></i>ผู้ประเมินคนที่ ${i+1}</div>
+                        <div class="fw-bold ${textClass} small"><i class="bi ${iconClass} me-2"></i>ผู้ประเมินคนที่ ${i+1}</div>
                         <div>${scoreHtml}</div>
                     </div>
                     ${commentHtml}
@@ -1310,54 +1445,6 @@
         });
         html += '</div>';
         if(tab) tab.innerHTML = html;
-    };
-
-    window.u_toggleAcceptRulesBtn = function(checkbox) {
-        var btnAccept = document.getElementById('btnAcceptRules');
-        if(!btnAccept) return;
-        if (checkbox.checked) {
-            btnAccept.disabled = false;
-            btnAccept.classList.remove('btn-secondary');
-            btnAccept.classList.add('btn-success');
-        } else {
-            btnAccept.disabled = true;
-            btnAccept.classList.remove('btn-success');
-            btnAccept.classList.add('btn-secondary');
-        }
-    };
-
-    window.u_acceptCompanyRules = function() {
-        if (!window.currentUserData) return;
-        var ruleKey = 'vkt_rules_accepted_' + window.currentUserData.id;
-        
-        localStorage.setItem(ruleKey, 'true');
-        window.callAPI({ action: 'acceptCompanyRules', empId: window.currentUserData.id }).then(function(res){});
-
-        var rulesOverlay = document.getElementById('rulesOverlay');
-        if(rulesOverlay) rulesOverlay.style.display = 'none';
-        
-        document.body.style.overflow = '';
-        var uProfile = document.getElementById('userProfileContent');
-        if(uProfile) uProfile.style.display = 'flex';
-        
-        Swal.fire({
-            toast: true, position: 'top-end', icon: 'success', 
-            title: 'ขอบคุณที่รับทราบข้อตกลงครับ', showConfirmButton: false, timer: 2000, 
-            background: '#1e1e1e', color: '#fff'
-        });
-    };
-
-    window.u_declineRules = function() {
-        var rulesOverlay = document.getElementById('rulesOverlay');
-        if(rulesOverlay) rulesOverlay.style.display = 'none';
-        document.body.style.overflow = '';
-        
-        if (typeof window.logout === 'function') {
-            window.logout();
-        } else {
-            localStorage.removeItem('hr_user_session');
-            location.reload();
-        }
     };
 
     window.u_renderUserProfile = function(d) {
@@ -1463,7 +1550,7 @@
                         <div class="text-warning fw-bold mb-1"><i class="bi bi-calendar-check me-2"></i>งวดวันที่: ${formattedDate}</div>
                         <div class="text-light small"><i class="bi bi-cash me-2"></i>รับสุทธิ: <b class="fs-6 ms-1 text-white">${window.u_numberWithCommas(p.netSalary)}</b> บาท</div>
                     </div>
-                    <a href="${p.pdfUrl}" target="_blank" class="btn btn-sm btn-warning rounded-pill px-4 mt-2 mt-md-0 fw-bold text-dark">
+                    <a href="${p.pdfUrl}" target="_blank" class="btn btn-sm btn-warning rounded-pill px-4 mt-2 mt-md-0 fw-bold text-dark d-flex justify-content-center align-items-center">
                         <i class="bi bi-file-pdf me-1"></i> เปิดสลิป
                     </a>
                 </div>`;
@@ -1487,17 +1574,17 @@
                 var statusText = a.status === 'Pending' ? 'รอดำเนินการ' : a.status; 
                 html += `
                 <div class="history-item border-start border-4 border-info">
-                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-secondary border-opacity-25">
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-secondary border-opacity-25 w-100">
                         <span class="font-monospace text-info fw-bold"><i class="bi bi-hash"></i>${a.docNo}</span>
                         <span class="badge bg-dark border border-secondary ${statusColor} px-3 py-1 rounded-pill">${statusText}</span>
                     </div>
-                    <div class="row g-2 small text-light mb-3">
+                    <div class="row g-2 small text-light mb-3 w-100">
                         <div class="col-md-6"><i class="bi bi-calendar-event me-2 text-muted"></i>${a.accDate} เวลา ${a.accTime}</div>
                         <div class="col-md-6 text-truncate" title="${a.location}"><i class="bi bi-geo-alt me-2 text-muted"></i>${a.location}</div>
                         <div class="col-md-6"><i class="bi bi-truck me-2 text-muted"></i>${a.vehType} (${a.truckPlate})</div>
                         <div class="col-md-6"><i class="bi bi-exclamation-triangle me-2 text-danger"></i>${a.cause}</div>
                     </div>
-                    <div class="text-end">
+                    <div class="text-md-end text-center w-100">
                         <a href="${safePdfUrl}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-4"><i class="bi bi-file-pdf me-1"></i>เอกสารแจ้งเหตุ</a>
                     </div>
                 </div>`; 
@@ -1518,7 +1605,7 @@
             list.forEach(function(w) { 
                 html += `
                 <div class="history-item border-start border-4 border-danger d-flex flex-wrap justify-content-between align-items-center">
-                    <div class="text-danger fw-bold mb-2 mb-md-0">
+                    <div class="text-danger fw-bold mb-2 mb-md-0 w-100">
                         <i class="bi bi-exclamation-circle-fill me-2"></i>วันที่ออกใบเตือน: <span class="text-light fw-normal ms-1">${window.u_formatDate(w.date)}</span>
                     </div>
                     <button onclick="window.u_openPreview('${w.url}')" class="btn btn-sm btn-outline-danger px-4 rounded-pill">
@@ -1642,12 +1729,10 @@
             document.getElementById('u_username').value = d.username;
             document.getElementById('u_startDate').value = window.u_safeDate(d.startDate);
             
-            // ข้อมูลแบบ Read-Only แสดงให้ผู้ใช้เห็น
             document.getElementById('u_fullname').value = d.name;
             document.getElementById('u_gender').value = d.gender || '-';
             document.getElementById('u_ssoType').value = d.ssoType || '-';
             
-            // ข้อมูลที่แก้ไขได้
             document.getElementById('u_nickname').value = d.nickname || '';
             document.getElementById('u_phone').value = d.phone || '';
             document.getElementById('u_password').value = d.password;
@@ -1701,15 +1786,15 @@
             status: getVal('u_empStatus'),
             resignDate: getVal('u_resignDate'),
             birthDate: getVal('u_birthDate'),
-            gender: getVal('u_gender'), // ส่งค่าเดิมกลับไป
+            gender: getVal('u_gender'), 
             username: getVal('u_username'),
             password: getVal('u_password'),
             prefix: '',
-            fullname: getVal('u_fullname'), // ส่งค่าเดิมกลับไป
+            fullname: getVal('u_fullname'), 
             nickname: getVal('u_nickname'),
-            ssoType: getVal('u_ssoType'), // ส่งค่าเดิมกลับไป
-            ssoHosp: getVal('u_ssoHosp'), // สามารถเปลี่ยนได้แล้ว
-            address: getVal('u_address'), // เพิ่มช่องที่อยู่
+            ssoType: getVal('u_ssoType'), 
+            ssoHosp: getVal('u_ssoHosp'), 
+            address: getVal('u_address'), 
             idExp: getVal('u_idExp'),
             licExp: getVal('u_licExp'),
             idCardNum: getVal('u_idCardNum'),
