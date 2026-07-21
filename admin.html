@@ -113,10 +113,12 @@
         .input-dark:disabled, .input-dark[readonly] { background-color: #111 !important; color: #666 !important; border-color: #222 !important; }
         .label-logistics { color: #888; font-size: 0.8rem; margin-bottom: 5px; }
         
-        .payroll-input { background: #0a0a0a !important; color: #fff !important; border-color: #333 !important; text-align: right; }
+        /* แก้ไขฟอร์มสลิปบีบอัด Layout */
+        .payroll-input { background: #0a0a0a !important; color: #fff !important; border-color: #333 !important; text-align: right; height: 30px; font-size: 0.85rem;}
         .payroll-input:focus { border-color: #ffc107 !important; box-shadow: none !important; }
         .payroll-dec { color: #ff4d4d !important; }
-        .lbl-fit { font-size: 0.8rem; width: 175px; text-align: left; padding: 0.375rem 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: space-between; background-color: #1a1a1a; border-color: #333; color: #aaa;}
+        .payroll-btn-prev { height: 30px; padding: 0 8px; display: flex; align-items: center; justify-content: center; }
+        .lbl-fit { font-size: 0.75rem; width: 160px; text-align: left; padding: 0 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: space-between; background-color: #1a1a1a; border-color: #333; color: #aaa; height: 30px;}
         
         /* สไตล์สำหรับ checkbox ตำแหน่ง */
         .pos-checkbox-wrapper { background: #000; border: 1px solid #333; border-radius: 6px; padding: 10px; max-height: 180px; overflow-y: auto;}
@@ -137,7 +139,7 @@
             box-shadow: 0 10px 20px rgba(0, 230, 118, 0.15);
         }
 
-        /* --- สำหรับ Layout หน้าโปรไฟล์ (แก้ปัญหาวงรีเบี้ยว) --- */
+        /* --- สำหรับ Layout หน้าโปรไฟล์ --- */
         .app-detail-hero {
             background: radial-gradient(circle at top, rgba(0, 255, 136, 0.1) 0%, transparent 60%);
             padding: 30px 15px;
@@ -514,6 +516,7 @@
                 <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
                     <form id="empForm" onsubmit="window.submitEmpForm(event)">
                         <input type="hidden" id="formMode">
+                        <input type="hidden" id="empId">
                         <div class="card border-0 mb-4 bg-transparent shadow-none">
                             <div class="card-body p-0">
                                 <ul class="nav nav-pills nav-fill gap-2" id="myTab" role="tablist">
@@ -900,6 +903,208 @@
         </div>
     </div>
 
+    <!-- Modal ออกสลิปเงินเดือน (ที่ปรับแก้แล้ว) -->
+    <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content logistics-modal border-success">
+                <div class="modal-header py-2 logistics-modal-header border-bottom border-success">
+                    <h5 class="modal-title fw-bold text-success fs-6"><i class="bi bi-cash-coin me-2"></i>ออกสลิปเงินเดือน</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3 bg-black bg-opacity-50">
+                    <form id="payrollForm" onsubmit="window.submitPayrollForm(event)">
+                        <input type="hidden" id="pr_empId">
+                        <input type="hidden" id="pr_prefix">
+                        <input type="hidden" id="pr_firstName">
+                        <input type="hidden" id="pr_lastName">
+                        <input type="hidden" id="pr_position">
+                        <input type="hidden" id="pr_email">
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                            <h6 class="fw-bold text-white mb-0" id="pr_empName">...</h6>
+                            <div class="d-flex align-items-center gap-2" id="keepPrevDataContainer">
+                                <div class="form-check form-switch mb-0 d-flex align-items-center">
+                                    <input class="form-check-input border-warning shadow-none mt-0" type="checkbox" id="keepPrevData" onchange="window.toggleKeepData()" style="cursor:pointer; width:2em; height:1em;">
+                                    <label class="form-check-label text-warning ms-2" for="keepPrevData" style="cursor:pointer; font-size: 0.8rem; padding-top:2px;">ดึงข้อมูลรายได้/หัก เดือนล่าสุด</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-2">
+                            <!-- ข้อมูลหลัก -->
+                            <div class="col-12">
+                                <div class="row g-2 p-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                                    <div class="col-md-6">
+                                        <label class="text-muted mb-1 fw-bold" style="font-size: 0.75rem;">วันที่จ่ายเงิน (Pay Date) *</label>
+                                        <input type="date" class="form-control form-control-sm bg-dark text-warning border-secondary shadow-none fw-bold" id="pr_payDate" required onchange="window.calcPayrollTotals()">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="text-muted mb-1 fw-bold" style="font-size: 0.75rem;">เงินเดือน ค่าจ้าง (Base Salary) *</label>
+                                        <input type="number" class="form-control form-control-sm bg-dark text-white border-secondary shadow-none fw-bold text-end" id="pr_baseSalary" required onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- รายได้ & รายการหัก -->
+                            <div class="col-md-6">
+                                <div class="p-2 rounded h-100" style="background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2);">
+                                    <div class="text-success fw-bold border-bottom border-success border-opacity-25 pb-1 mb-2" style="font-size: 0.85rem;"><i class="bi bi-plus-circle-fill me-2"></i>รายได้อื่นๆ (Incomes)</div>
+                                    
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">1. ประกันสังคม (ออกให้)</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc1" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc1')" title="ดึงค่าเดือนที่แล้ว"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">2. ค่าเที่ยว</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc2" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc2')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">3. ค่ายกชน</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc3" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc3')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">4. ค่าดูแลลูกพ่วง/หาง</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc4" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc4')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">5. เบี้ยขยัน</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc5" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc5')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">6. เบี้ยพิเศษ</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc6" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc6')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">7. เงินเบี้ยเลี้ยง</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc7" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc7')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">8. ค่าล่วงเวลา</span>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc8" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc8')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <input type="text" id="pr_inc9_name" class="form-control bg-dark text-warning border-secondary px-2" value="รายได้อื่นๆ 1" style="max-width:110px; font-size:0.75rem;">
+                                        <div class="input-group-text bg-dark border-secondary px-1" title="รวมฐานคำนวณประกันสังคม">
+                                            <input class="form-check-input mt-0 border-success shadow-none cursor-pointer" type="checkbox" id="pr_inc9_sso" onchange="window.calcPayrollTotals()">
+                                            <small class="text-success ms-1 fw-bold" style="font-size:0.65rem;">+ปกส.</small>
+                                        </div>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc9" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc9')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <input type="text" id="pr_inc10_name" class="form-control bg-dark text-warning border-secondary px-2" value="รายได้อื่นๆ 2" style="max-width:110px; font-size:0.75rem;">
+                                        <div class="input-group-text bg-dark border-secondary px-1" title="รวมฐานคำนวณประกันสังคม">
+                                            <input class="form-check-input mt-0 border-success shadow-none cursor-pointer" type="checkbox" id="pr_inc10_sso" onchange="window.calcPayrollTotals()">
+                                            <small class="text-success ms-1 fw-bold" style="font-size:0.65rem;">+ปกส.</small>
+                                        </div>
+                                        <input type="number" class="form-control payroll-input" id="pr_inc10" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('inc10')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="p-2 rounded h-100" style="background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.2);">
+                                    <div class="text-danger fw-bold border-bottom border-danger border-opacity-25 pb-1 mb-2" style="font-size: 0.85rem;"><i class="bi bi-dash-circle-fill me-2"></i>รายการหัก (Deductions)</div>
+                                    
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">1. ภาษีหัก ณ ที่จ่าย (1%)</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec1" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec1')" title="ดึงค่าเดือนที่แล้ว"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">2. ประกันสังคม</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec2" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec2')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">3. เงินประกัน</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec3" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec3')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">4. เงินเบิกล่วงหน้า</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec4" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec4')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">5. ค่าไฟ</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec5" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec5')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">6. ค่าผ่อนโทรศัพท์</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec6" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec6')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">7. เงินกู้ยืม</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec7" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec7')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text lbl-fit">8. ค่าเสียหายรถ</span>
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec8" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec8')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <input type="text" id="pr_dec9_name" class="form-control bg-dark text-danger border-secondary lbl-fit px-2" value="ค่างวดรถส่วนตัว">
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec9" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec9')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <input type="text" id="pr_dec10_name" class="form-control bg-dark text-danger border-secondary lbl-fit px-2" value="ค่าค้างตู้ / อื่นๆ">
+                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec10" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
+                                        <button type="button" class="btn btn-outline-secondary payroll-btn-prev" onclick="window.pullPrevField('dec10')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- สรุป -->
+                            <div class="col-12 mt-2">
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <div class="p-2 text-center rounded border border-success border-opacity-50" style="background: rgba(0, 230, 118, 0.05);">
+                                            <div class="text-muted mb-1" style="font-size: 0.7rem;">รวมรายรับทั้งหมด (Gross)</div>
+                                            <div class="text-success fw-bold fs-5 mb-0" id="pr_totalIncomeShow">0.00</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-2 text-center rounded border border-danger border-opacity-50" style="background: rgba(255, 77, 77, 0.05);">
+                                            <div class="text-muted mb-1" style="font-size: 0.7rem;">รวมรายการหักทั้งหมด (Deduction)</div>
+                                            <div class="text-danger fw-bold fs-5 mb-0" id="pr_totalDeductShow">0.00</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-2 text-center rounded border border-warning" style="background: rgba(255, 193, 7, 0.1);">
+                                            <div class="text-warning fw-bold mb-1" style="font-size: 0.75rem;">ยอดรับสุทธิ (Net Salary)</div>
+                                            <div class="text-warning fw-bold fs-4 mb-0" id="pr_netSalaryShow">0.00</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 text-end border-top border-secondary pt-2">
+                            <button type="button" class="btn btn-sm btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                            <button type="submit" class="btn btn-sm btn-success fw-bold text-dark rounded-pill px-5 shadow-lg" id="btnSubmitPayroll">
+                                <i class="bi bi-file-earmark-pdf me-2"></i>บันทึกและสร้าง PDF
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal สำหรับแสดงผลประเมินย่อยของ Admin (เอาไว้ใช้กรณีสลับหน้า) -->
     <div class="modal fade" id="evalDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -926,6 +1131,61 @@
     </div>
 
     <!-- ==================== MISSING MODALS ==================== -->
+    <!-- Modal ประวัติสลิปเงินเดือน (Payroll History) -->
+    <div class="modal fade" id="payrollHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content logistics-modal border-info">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-info"><i class="bi bi-clock-history me-2"></i>ประวัติสลิปเงินเดือน</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <table class="table table-dark table-hover mb-0 text-center m-0 align-middle">
+                        <thead class="text-secondary">
+                            <tr>
+                                <th class="ps-4 text-start">วันที่จ่าย</th>
+                                <th class="text-end">รายรับรวม</th>
+                                <th class="text-end">รายการหัก</th>
+                                <th class="text-end">สุทธิ</th>
+                                <th class="text-center">ดูสลิป</th>
+                                <th class="text-center pe-4">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payrollHistoryBody">
+                            <tr><td colspan="6" class="text-center py-4 text-muted">กำลังโหลด...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal อุบัติเหตุสูงสุด -->
+    <div class="modal fade" id="accTopCausesModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content logistics-modal border-warning">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-warning fs-6"><i class="bi bi-bar-chart-fill me-2"></i>พนักงานที่เกิดอุบัติเหตุบ่อย (Top 10)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="accTopCausesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ใบเตือนสูงสุด -->
+    <div class="modal fade" id="warnTopEmpModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content logistics-modal border-danger">
+                <div class="modal-header logistics-modal-header py-3">
+                    <h5 class="modal-title fw-bold text-danger fs-6"><i class="bi bi-bar-chart-fill me-2"></i>พนักงานที่ถูกเตือนบ่อย (Top 10)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="warnTopEmployeesList"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal วันเกิด -->
     <div class="modal fade" id="birthdayModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -1179,259 +1439,17 @@
         </div>
     </div>
 
-    <!-- Modal ออกสลิปเงินเดือน -->
-    <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal border-success">
-                <div class="modal-header logistics-modal-header py-3 border-bottom border-success">
-                    <h5 class="modal-title fw-bold text-success fs-5"><i class="bi bi-cash-coin me-2"></i>ออกสลิปเงินเดือน</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4 bg-black bg-opacity-50">
-                    <form id="payrollForm" onsubmit="window.submitPayrollForm(event)">
-                        <input type="hidden" id="pr_empId">
-                        <input type="hidden" id="pr_prefix">
-                        <input type="hidden" id="pr_firstName">
-                        <input type="hidden" id="pr_lastName">
-                        <input type="hidden" id="pr_position">
-                        <input type="hidden" id="pr_email">
-                        
-                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                            <h5 class="fw-bold text-white mb-0" id="pr_empName">...</h5>
-                            <div class="d-flex align-items-center gap-2" id="keepPrevDataContainer">
-                                <div class="form-check form-switch mb-0">
-                                    <input class="form-check-input border-warning shadow-none" type="checkbox" id="keepPrevData" onchange="window.toggleKeepData()" style="cursor:pointer; width:2em;">
-                                    <label class="form-check-label text-warning small ms-1" for="keepPrevData" style="cursor:pointer;">ดึงข้อมูลรายได้/หัก เดือนล่าสุด</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row g-4">
-                            <!-- ข้อมูลหลัก -->
-                            <div class="col-12">
-                                <div class="row g-3 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-                                    <div class="col-md-6">
-                                        <label class="small text-muted mb-1 fw-bold">วันที่จ่ายเงิน (Pay Date) *</label>
-                                        <input type="date" class="form-control bg-dark text-warning border-secondary shadow-none fw-bold" id="pr_payDate" required onchange="window.calcPayrollTotals()">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="small text-muted mb-1 fw-bold">เงินเดือน ค่าจ้าง (Base Salary) *</label>
-                                        <input type="number" class="form-control bg-dark text-white border-secondary shadow-none fw-bold text-end" id="pr_baseSalary" required onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- รายได้ & รายการหัก -->
-                            <div class="col-md-6">
-                                <div class="p-3 rounded h-100" style="background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2);">
-                                    <h6 class="text-success fw-bold border-bottom border-success border-opacity-25 pb-2 mb-3"><i class="bi bi-plus-circle-fill me-2"></i>รายได้อื่นๆ (Incomes)</h6>
-                                    
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">1. ประกันสังคม (ออกให้)</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc1" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc1')" title="ดึงค่าเดือนที่แล้ว"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">2. ค่าเที่ยว</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc2" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc2')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">3. ค่ายกชน</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc3" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc3')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">4. ค่าดูแลลูกพ่วง/หาง</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc4" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc4')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">5. เบี้ยขยัน</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc5" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc5')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">6. เบี้ยพิเศษ</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc6" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc6')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">7. เงินเบี้ยเลี้ยง</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc7" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc7')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">8. ค่าล่วงเวลา</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc8" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc8')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">9. รายได้อื่นๆ 1</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc9" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc9')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">10. รายได้อื่นๆ 2</span>
-                                        <input type="number" class="form-control payroll-input" id="pr_inc10" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('inc10')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="p-3 rounded h-100" style="background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.2);">
-                                    <h6 class="text-danger fw-bold border-bottom border-danger border-opacity-25 pb-2 mb-3"><i class="bi bi-dash-circle-fill me-2"></i>รายการหัก (Deductions)</h6>
-                                    
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">1. ภาษีหัก ณ ที่จ่าย (1%)</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec1" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec1')" title="ดึงค่าเดือนที่แล้ว"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">2. ประกันสังคม</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec2" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec2')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">3. เงินประกัน</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec3" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec3')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">4. เงินเบิกล่วงหน้า</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec4" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec4')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">5. ค่าไฟ</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec5" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec5')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">6. ค่าผ่อนโทรศัพท์</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec6" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec6')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">7. เงินกู้ยืม</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec7" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec7')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">8. ค่าเสียหายรถ</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec8" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec8')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">9. ค่างวดรถส่วนตัว</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec9" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec9')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                    <div class="input-group input-group-sm mb-2">
-                                        <span class="input-group-text lbl-fit">10. ค่าค้างตู้ / อื่นๆ</span>
-                                        <input type="number" class="form-control payroll-input payroll-dec" id="pr_dec10" onkeyup="window.calcPayrollTotals()" onchange="window.calcPayrollTotals()">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="window.pullPrevField('dec10')"><i class="bi bi-arrow-counterclockwise"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- สรุป -->
-                            <div class="col-12 mt-4">
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <div class="p-3 text-center rounded border border-success border-opacity-50" style="background: rgba(0, 230, 118, 0.05);">
-                                            <div class="small text-muted mb-1">รวมรายรับทั้งหมด (Gross)</div>
-                                            <h4 class="text-success fw-bold mb-0" id="pr_totalIncomeShow">0.00</h4>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="p-3 text-center rounded border border-danger border-opacity-50" style="background: rgba(255, 77, 77, 0.05);">
-                                            <div class="small text-muted mb-1">รวมรายการหักทั้งหมด (Deduction)</div>
-                                            <h4 class="text-danger fw-bold mb-0" id="pr_totalDeductShow">0.00</h4>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="p-3 text-center rounded border border-warning" style="background: rgba(255, 193, 7, 0.1);">
-                                            <div class="small text-warning fw-bold mb-1">ยอดรับสุทธิ (Net Salary)</div>
-                                            <h3 class="text-warning fw-bold mb-0" id="pr_netSalaryShow">0.00</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 text-end border-top border-secondary pt-3">
-                            <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
-                            <button type="submit" class="btn btn-success fw-bold text-dark rounded-pill px-5 shadow-lg" id="btnSubmitPayroll">
-                                <i class="bi bi-file-earmark-pdf me-2"></i>บันทึกและสร้าง PDF
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal ประวัติเงินเดือน -->
-    <div class="modal fade" id="payrollHistoryModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal border-warning">
-                <div class="modal-header logistics-modal-header py-3 border-bottom border-warning">
-                    <h5 class="modal-title fw-bold text-warning"><i class="bi bi-clock-history me-2"></i>ประวัติการออกสลิปเงินเดือน</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-dark table-hover mb-0 align-middle">
-                            <thead>
-                                <tr class="text-secondary text-center small">
-                                    <th class="ps-4 text-start">วันที่จ่ายเงิน</th>
-                                    <th class="text-end">รวมรายได้</th>
-                                    <th class="text-end">รวมรายการหัก</th>
-                                    <th class="text-end">รับสุทธิ</th>
-                                    <th>ดูสลิป</th>
-                                    <th class="pe-4">จัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="payrollHistoryBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal อุบัติเหตุยอดฮิต -->
-    <div class="modal fade" id="accTopCausesModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content logistics-modal border-warning">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-warning"><i class="bi bi-cone-striped me-2"></i>สถิติอุบัติเหตุ</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-3" id="accTopCausesList"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal ใบเตือนยอดฮิต -->
-    <div class="modal fade" id="warnTopEmpModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content logistics-modal border-danger">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-danger"><i class="bi bi-file-earmark-break me-2"></i>พนักงานที่ได้รับใบเตือน</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-3" id="warnTopEmployeesList"></div>
-            </div>
-        </div>
-    </div>
-
 <script>
-    // สคริปต์ยังคงเหมือนเดิมทั้งหมด ไม่มีการเปลี่ยนแปลงในส่วนการทำงาน
-    // (เพราะเราแก้แค่เรื่อง CSS ของ Modal การสมัครงาน)
-    
+    window.showModalSafe = function(modalId) {
+        var el = document.getElementById(modalId);
+        if (!el) return;
+        var modalObj = bootstrap.Modal.getInstance(el);
+        if (!modalObj) {
+            modalObj = new bootstrap.Modal(el);
+        }
+        modalObj.show();
+    };
+
     window.filterAdminEvalTable = function() {
         var search = (document.getElementById('searchEvalInput') ? document.getElementById('searchEvalInput').value.toLowerCase() : "");
         var filterMonth = document.getElementById('filterEvalMonth') ? document.getElementById('filterEvalMonth').value : "";
@@ -1447,7 +1465,6 @@
             });
         }
         
-        // Group by Evaluated Person (driverId)
         var grouped = {};
         var totalScoreSum = 0;
         var totalValidEvals = 0;
@@ -1495,7 +1512,6 @@
                 var avgHtml = g.validCount > 0 ? `<span class="badge bg-success fs-6">${avg} / 10</span>` : `<span class="badge bg-secondary">ไม่มีคะแนน</span>`;
                 var totalEvaluators = g.evaluators.length;
                 
-                // Store JSON for modal
                 var safeJson = encodeURIComponent(JSON.stringify(g));
                 
                 html += `<tr style="cursor:pointer;" onclick="window.openEvalDetailModal('${safeJson}')">
@@ -1553,7 +1569,7 @@
         });
         var detailListEl = document.getElementById('evalDetailList');
         if(detailListEl) detailListEl.innerHTML = html;
-        new bootstrap.Modal(document.getElementById('evalDetailModal')).show();
+        window.showModalSafe('evalDetailModal');
     };
 
     window.loadAdminData = function() {
@@ -1707,7 +1723,6 @@
         }
     };
     
-    // โค้ดส่วนอื่นๆ ที่เหลือ ยังคงเหมือนเดิม
     window.renderTable = function(data) {
         var tbody = document.getElementById('tableBody'); 
         if(!tbody) return;
@@ -1770,7 +1785,7 @@
                 ? '<span class="text-success" title="ยอมรับแล้ว"><i class="bi bi-check-circle-fill fs-5"></i></span>' 
                 : '<span class="text-danger" title="ยังไม่ยอมรับ"><i class="bi bi-x-circle-fill fs-5"></i></span>';
 
-            var ageText = window.calcAge(emp.birthDate); // คำนวณอายุ
+            var ageText = window.calcAge(emp.birthDate); 
 
             var tr = document.createElement('tr');
             tr.onclick = function(e) { 
@@ -1967,7 +1982,7 @@
         }
         var historyBody = document.getElementById('payrollHistoryBody');
         if(historyBody) historyBody.innerHTML = html;
-        new bootstrap.Modal(document.getElementById('payrollHistoryModal')).show();
+        window.showModalSafe('payrollHistoryModal');
     };
 
     window.toggleKeepData = function() {
@@ -2067,8 +2082,17 @@
                 var decEl = document.getElementById('pr_dec'+i);
                 if(decEl) decEl.value = monthData.deducts[i-1] || 0;
             }
+            
+            var inc9NameEl = document.getElementById('pr_inc9_name'); if(inc9NameEl) inc9NameEl.value = monthData.inc9Name || "รายได้อื่นๆ 1";
+            var inc10NameEl = document.getElementById('pr_inc10_name'); if(inc10NameEl) inc10NameEl.value = monthData.inc10Name || "รายได้อื่นๆ 2";
+            var dec9NameEl = document.getElementById('pr_dec9_name'); if(dec9NameEl) dec9NameEl.value = monthData.dec9Name || "ค่างวดรถส่วนตัว";
+            var dec10NameEl = document.getElementById('pr_dec10_name'); if(dec10NameEl) dec10NameEl.value = monthData.dec10Name || "ค่าค้างตู้ / อื่นๆ";
+            
+            var inc9SsoEl = document.getElementById('pr_inc9_sso'); if(inc9SsoEl) inc9SsoEl.checked = monthData.isInc9Sso === true;
+            var inc10SsoEl = document.getElementById('pr_inc10_sso'); if(inc10SsoEl) inc10SsoEl.checked = monthData.isInc10Sso === true;
+
             window.calcPayrollTotals();
-            new bootstrap.Modal(document.getElementById('payrollModal')).show();
+            window.showModalSafe('payrollModal');
         } else {
             if(keepDataContainer) keepDataContainer.style.display = 'flex';
             var keepPrevCheck = document.getElementById('keepPrevData');
@@ -2080,16 +2104,25 @@
 
             for (var i=2; i<=10; i++) { var inc = document.getElementById('pr_inc'+i); if(inc) inc.value = ''; }
             for (var i=3; i<=10; i++) { var dec = document.getElementById('pr_dec'+i); if(dec) dec.value = ''; }
+            
+            var inc9NameEl = document.getElementById('pr_inc9_name'); if(inc9NameEl) inc9NameEl.value = "รายได้อื่นๆ 1";
+            var inc10NameEl = document.getElementById('pr_inc10_name'); if(inc10NameEl) inc10NameEl.value = "รายได้อื่นๆ 2";
+            var dec9NameEl = document.getElementById('pr_dec9_name'); if(dec9NameEl) dec9NameEl.value = "ค่างวดรถส่วนตัว";
+            var dec10NameEl = document.getElementById('pr_dec10_name'); if(dec10NameEl) dec10NameEl.value = "ค่าค้างตู้ / อื่นๆ";
+            
+            var inc9SsoEl = document.getElementById('pr_inc9_sso'); if(inc9SsoEl) inc9SsoEl.checked = false;
+            var inc10SsoEl = document.getElementById('pr_inc10_sso'); if(inc10SsoEl) inc10SsoEl.checked = false;
 
             window.calcPayrollTotals();
-            new bootstrap.Modal(document.getElementById('payrollModal')).show();
+            window.showModalSafe('payrollModal');
         }
     };
 
     window.editPayroll = function(empId, payMonth) {
         var monthData = window.allPayrollData.find(function(p) { return p.empId === empId && p.payMonth === payMonth; });
         if (monthData) {
-            bootstrap.Modal.getInstance(document.getElementById('payrollHistoryModal')).hide();
+            var modalInst = bootstrap.Modal.getInstance(document.getElementById('payrollHistoryModal'));
+            if(modalInst) modalInst.hide();
             window.openPayrollModal(empId, true, monthData);
         }
     };
@@ -2141,7 +2174,18 @@
         var inc2 = parseFloat(document.getElementById('pr_inc2') ? document.getElementById('pr_inc2').value : 0) || 0;
         var inc3 = parseFloat(document.getElementById('pr_inc3') ? document.getElementById('pr_inc3').value : 0) || 0;
         var inc4 = parseFloat(document.getElementById('pr_inc4') ? document.getElementById('pr_inc4').value : 0) || 0;
-        var ssoIncomeBase = baseSal + inc2 + inc3 + inc4;
+        
+        var inc9 = parseFloat(document.getElementById('pr_inc9') ? document.getElementById('pr_inc9').value : 0) || 0;
+        var inc10 = parseFloat(document.getElementById('pr_inc10') ? document.getElementById('pr_inc10').value : 0) || 0;
+        
+        var isInc9Sso = document.getElementById('pr_inc9_sso') && document.getElementById('pr_inc9_sso').checked;
+        var isInc10Sso = document.getElementById('pr_inc10_sso') && document.getElementById('pr_inc10_sso').checked;
+        
+        var extraSsoBase = 0;
+        if(isInc9Sso) extraSsoBase += inc9;
+        if(isInc10Sso) extraSsoBase += inc10;
+
+        var ssoIncomeBase = baseSal + inc2 + inc3 + inc4 + extraSsoBase;
         
         var ssoAmt = 0;
         if (emp && emp.ssoType && emp.ssoType.indexOf("33") !== -1) {
@@ -2154,11 +2198,6 @@
         
         var prDec2 = document.getElementById('pr_dec2');
         if(prDec2) prDec2.value = ssoAmt; 
-
-        var ssoEmpShow = document.getElementById('sso_emp_show');
-        if(ssoEmpShow) ssoEmpShow.innerText = window.numberWithCommas(ssoAmt);
-        var ssoEmployerShow = document.getElementById('sso_employer_show');
-        if(ssoEmployerShow) ssoEmployerShow.innerText = window.numberWithCommas(ssoAmt);
 
         var grossIncome = baseGross + ssoAmt;
 
@@ -2193,7 +2232,13 @@
             firstName: document.getElementById('pr_firstName') ? document.getElementById('pr_firstName').value : '',
             lastName: document.getElementById('pr_lastName') ? document.getElementById('pr_lastName').value : '',
             position: document.getElementById('pr_position') ? document.getElementById('pr_position').value : '',
-            email: document.getElementById('pr_email') ? document.getElementById('pr_email').value : ''
+            email: document.getElementById('pr_email') ? document.getElementById('pr_email').value : '',
+            inc9Name: document.getElementById('pr_inc9_name') && document.getElementById('pr_inc9_name').value !== '' ? document.getElementById('pr_inc9_name').value : 'รายได้อื่นๆ 1',
+            inc10Name: document.getElementById('pr_inc10_name') && document.getElementById('pr_inc10_name').value !== '' ? document.getElementById('pr_inc10_name').value : 'รายได้อื่นๆ 2',
+            dec9Name: document.getElementById('pr_dec9_name') && document.getElementById('pr_dec9_name').value !== '' ? document.getElementById('pr_dec9_name').value : 'ค่างวดรถส่วนตัว',
+            dec10Name: document.getElementById('pr_dec10_name') && document.getElementById('pr_dec10_name').value !== '' ? document.getElementById('pr_dec10_name').value : 'ค่าค้างตู้ / อื่นๆ',
+            isInc9Sso: document.getElementById('pr_inc9_sso') && document.getElementById('pr_inc9_sso').checked,
+            isInc10Sso: document.getElementById('pr_inc10_sso') && document.getElementById('pr_inc10_sso').checked
         };
 
         var totalInc = 0;
@@ -2240,13 +2285,6 @@
             btn.disabled = false;
             Swal.fire({icon: 'error', title: 'การเชื่อมต่อล้มเหลว', text: err.toString(), background: '#1a1a1a', color: '#fff'});
         });
-    };
-
-    window.numberWithCommas = function(x) {
-        if (!x && x !== 0) return "0";
-        var parts = x.toString().split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.length > 1 ? parts.join(".") : parts[0];
     };
 
     window.renderAccidentTable = function(data) {
@@ -2308,12 +2346,6 @@
         var data = window.allAccidentData.find(function(a) { return a.docNo === docNo; }); 
         if (!data) return;
         
-        var modalEl = document.getElementById('accidentDetailModal');
-        if (!modalEl) {
-            Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
-            return;
-        }
-
         var mDocNo = document.getElementById('m_accDocNo'); if(mDocNo) mDocNo.innerText = data.docNo; 
         var mDocNoHidden = document.getElementById('m_accDocNoHidden'); if(mDocNoHidden) mDocNoHidden.value = data.docNo; 
         var mEmpName = document.getElementById('m_accEmpName'); if(mEmpName) mEmpName.innerText = data.empName + " (" + data.empId + ")"; 
@@ -2331,7 +2363,7 @@
         var mFix = document.getElementById('m_accFix'); if(mFix) mFix.value = data.fixText || ""; 
         var mPrevent = document.getElementById('m_accPrevent'); if(mPrevent) mPrevent.value = data.preventText || "";
         
-        new bootstrap.Modal(modalEl).show();
+        window.showModalSafe('accidentDetailModal');
     };
 
     window.saveAccidentResolution = function() {
@@ -2434,11 +2466,7 @@
         if(!data) return;
 
         var el = document.getElementById('e_warnDocNo');
-        var modalEl = document.getElementById('warningDetailModal');
-        if(!el || !modalEl) {
-            Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
-            return;
-        }
+        if(!el) return;
 
         el.innerText = data.docNo; 
         var docNoHidden = document.getElementById('e_warnDocNoHidden'); if(docNoHidden) docNoHidden.value = data.docNo; 
@@ -2463,7 +2491,7 @@
                 } 
             }
         }
-        new bootstrap.Modal(modalEl).show();
+        window.showModalSafe('warningDetailModal');
     };
 
     window.saveWarningResolution = function() {
@@ -2526,14 +2554,9 @@
 
     window.openCreateWarningModal = function() { 
         var form = document.getElementById('warningForm'); 
-        var modalEl = document.getElementById('warningCreateModal');
-        
-        if (!form || !modalEl) {
-            Swal.fire({icon: 'warning', title: 'แคชตกค้าง', text: 'ระบบไม่พบฟอร์มใบเตือน กรุณากดล้างแคชโดยกด Ctrl + Shift + R'});
-            return;
-        }
-
+        if (!form) return;
         form.reset(); 
+        
         var datalist = document.getElementById('warnEmpOptions'); 
         if(datalist) {
             datalist.innerHTML = ''; 
@@ -2548,7 +2571,7 @@
         var incidentDate = document.getElementById('warnIncidentDate');
         if(incidentDate) incidentDate.valueAsDate = new Date(); 
         
-        new bootstrap.Modal(modalEl).show(); 
+        window.showModalSafe('warningCreateModal');
     };
 
     window.getBase64Warn = function(file) { 
@@ -2650,7 +2673,7 @@
         } 
         var bodyEl = document.getElementById('birthdayListBody');
         if(bodyEl) bodyEl.innerHTML = html; 
-        new bootstrap.Modal(document.getElementById('birthdayModal')).show(); 
+        window.showModalSafe('birthdayModal'); 
     };
 
     window.openPositionStatsModal = function() { 
@@ -2671,7 +2694,7 @@
         }); 
         var pList = document.getElementById('positionStatsList');
         if(pList) pList.innerHTML = html + '</div>'; 
-        new bootstrap.Modal(document.getElementById('positionStatsModal')).show(); 
+        window.showModalSafe('positionStatsModal'); 
     };
 
     window.openPositionDetail = function(pos) { 
@@ -2680,7 +2703,7 @@
         list.forEach(function(e) { html += '<div class="list-item-glass static-item"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + (e.phone || '-') + '</div></div></div>'; }); 
         var pTitle = document.getElementById('positionDetailTitle'); if(pTitle) pTitle.innerText = 'ตำแหน่ง: ' + pos; 
         var pList = document.getElementById('positionDetailList'); if(pList) pList.innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
-        new bootstrap.Modal(document.getElementById('positionDetailModal')).show(); 
+        window.showModalSafe('positionDetailModal'); 
     };
 
     window.openYearlyStatsModal = function() { 
@@ -2695,7 +2718,7 @@
             html += '<tr class="static-item"><td class="py-3">' + y + '</td><td class="text-success clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'join\')">+' + d.j + '</td><td class="text-danger clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'resign\')">-' + d.r + '</td><td class="text-white">' + cum + '</td></tr>'; 
         }); 
         var bModal = document.getElementById('yearStatsBodyModal'); if(bModal) bModal.innerHTML = html; 
-        new bootstrap.Modal(document.getElementById('yearlyStatsModal')).show(); 
+        window.showModalSafe('yearlyStatsModal'); 
     };
 
     window.openYearDetail = function(year, type) { 
@@ -2711,367 +2734,8 @@
         list.forEach(function(e) { html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div><span class="badge bg-dark border border-secondary text-light">' + window.formatDate(type === 'join' ? e.startDate : e.resignDate) + '</span></div>'; }); 
         var dTitle = document.getElementById('yearDetailTitle'); if(dTitle) dTitle.innerText = title; 
         var dList = document.getElementById('yearDetailList'); if(dList) dList.innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
-        new bootstrap.Modal(document.getElementById('yearDetailModal')).show(); 
+        window.showModalSafe('yearDetailModal'); 
     };
 
-    window.openModal = function(mode, targetId, preloadedData) { 
-        var empFormEl = document.getElementById('empForm');
-        if(empFormEl) empFormEl.reset(); 
-        
-        var formModeEl = document.getElementById('formMode');
-        if(formModeEl) formModeEl.value = mode; 
-        
-        var modalEl = document.getElementById('empModal'); 
-        if(!modalEl) return;
-        var modalObj = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl); 
-        var targetData = preloadedData || null; 
-        if (!targetData && mode !== 'create' && targetId) { 
-            targetData = window.allEmpData.find(x => String(x.id).trim() === String(targetId).trim()); 
-        } 
-        window.setupModalData(mode, targetData); 
-        modalObj.show(); 
-        window.loadSettings(function() { 
-            if (mode !== 'view' && targetData) { 
-                window.fillData(targetData, false); 
-            } 
-            var isUser = (window.currentUser.role === 'User'); 
-            if (isUser || mode === 'view' || window.currentUser.role === 'Viewer') { 
-                document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = true); 
-            } 
-        }); 
-    };
-
-    window.setupModalData = function(mode, d) { 
-        var btnSave = document.getElementById('btnSaveModal'); 
-        var viewSection = document.getElementById('viewModeSection'); 
-        var editSection = document.getElementById('editModeSection'); 
-        if(viewSection) viewSection.style.display = 'none'; 
-        if(editSection) editSection.style.display = 'none'; 
-        if(btnSave) btnSave.style.display = 'none'; 
-        
-        var lock = (id, state) => { 
-            var el = document.getElementById(id); 
-            if(el) { 
-                el.readOnly = state; 
-                el.disabled = state; 
-                if(state) {
-                    el.classList.add('readonly-field'); 
-                } else {
-                    el.classList.remove('readonly-field'); 
-                }
-            } 
-        }; 
-        
-        var lockPositions = (state) => { 
-            document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => cb.disabled = state); 
-        }; 
-        
-        var allFields = ['empId','role','username','password','fullname','nickname','startDate','phone','birthDate','gender','ssoType','ssoHosp','idExp','licExp','idCardNum','licNum','licType','resignReason','prefix']; 
-        
-        if (mode === 'create') { 
-            var modTitle = document.getElementById('modalTitle'); if(modTitle) modTitle.innerHTML = '<i class="bi bi-person-plus-fill me-2"></i>เพิ่มพนักงานใหม่'; 
-            if(editSection) editSection.style.display = 'block'; 
-            if(btnSave) btnSave.style.display = 'block'; 
-            allFields.forEach(f => lock(f,false)); 
-            lockPositions(false); 
-            var btnGenId = document.getElementById('btnGenId'); if(btnGenId) btnGenId.style.display = 'inline-block'; 
-            window.genId(); 
-            var empStatEl = document.getElementById('empStatus'); if(empStatEl) empStatEl.value = 'Active'; 
-            lock('empStatus', false); 
-            window.toggleResignDate(); 
-        } else if (mode === 'view' || window.currentUser.role === 'Viewer') { 
-            var modTitle = document.getElementById('modalTitle'); if(modTitle) modTitle.innerHTML = '<i class="bi bi-eye-fill me-2"></i>ดูข้อมูล (Read Only)'; 
-            if(viewSection) viewSection.style.display = 'block'; 
-            var btnGenId = document.getElementById('btnGenId'); if(btnGenId) btnGenId.style.display = 'none'; 
-            if(d) window.fillData(d, true); 
-        } else { 
-            var isUser = (window.currentUser.role === 'User'); 
-            var modTitle = document.getElementById('modalTitle'); if(modTitle) modTitle.innerHTML = isUser ? '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลส่วนตัว' : '<i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูลพนักงาน'; 
-            if(editSection) editSection.style.display = 'block'; 
-            if(btnSave) btnSave.style.display = 'block'; 
-            var btnGenId = document.getElementById('btnGenId'); if(btnGenId) btnGenId.style.display = 'none'; 
-            if(d) window.fillData(d, false); 
-            lock('empId', true); 
-            if (isUser) { 
-                lock('role', true); lock('empStatus', true); lock('resignDate', true); lock('resignReason', true); lock('username', true); 
-                lock('fullname', true); lock('prefix', true); lock('startDate', true); lock('gender', true); lock('ssoType', true); 
-                lock('birthDate', false); lock('password', false); lock('phone', false); lock('nickname', false); lock('ssoHosp', false); 
-                lock('idExp', false); lock('licExp', false); lock('idCardNum', false); lock('licNum', false); lock('licType', false); 
-                lockPositions(true); 
-            } else { 
-                lock('role', false); lock('empStatus', false); window.toggleResignDate(); 
-                lock('username', false); lock('password', false); lock('fullname', false); lock('prefix', false); lock('startDate', false); 
-                lock('birthDate', false); lock('gender', false); lock('ssoType', false); lock('ssoHosp', false); lock('nickname', false); 
-                lock('idExp', false); lock('licExp', false); lock('idCardNum', false); lock('licNum', false); lock('licType', false); 
-                lock('resignReason', false); lockPositions(false); lock('phone', false); 
-            } 
-        } 
-    };
-
-    window.safeDate = function(d) { 
-        if(!d) return ''; 
-        try { 
-            var date = new Date(d); 
-            if(isNaN(date.getTime())) return ''; 
-            return date.toISOString().split('T')[0]; 
-        } catch(e) { return ''; } 
-    };
-
-    window.fillData = function(d, isViewMode) { 
-        if(!d) return; 
-        var fields = {
-            'empId': d.id, 'fullname': d.name, 'prefix': "", 'nickname': d.nickname || '',
-            'phone': d.phone, 'username': d.username, 'password': d.password, 'role': d.role,
-            'gender': d.gender || '', 'empStatus': d.status || 'Active', 'startDate': window.safeDate(d.startDate),
-            'resignDate': window.safeDate(d.resignDate), 'birthDate': window.safeDate(d.birthDate), 'ssoType': d.ssoType || '',
-            'ssoHosp': d.ssoHosp || '', 'idExp': window.safeDate(d.idExp), 'licExp': window.safeDate(d.licExp),
-            'idCardNum': d.idCardNum || '', 'licNum': d.licNum || '', 'licType': d.licType || '',
-            'resignReason': d.resignReason || ''
-        };
-        for(let id in fields) {
-            let el = document.getElementById(id);
-            if(el) el.value = fields[id];
-        }
-        
-        var currentPos = (d.position || '').split(',').map(p => p.trim()); 
-        document.querySelectorAll('input[name="posCheckbox"]').forEach(cb => { 
-            cb.checked = currentPos.includes(cb.value); 
-        }); 
-        window.toggleResignDate(); 
-        
-        if (isViewMode) { 
-            var viewIds = ['view_fullname','view_nickname_badge','view_empId','view_status_badge','view_birthDate','view_age','view_gender','view_phone','view_username','view_password','view_role','view_startDate','view_tenure','view_ssoType','view_ssoHosp','view_resignDate','view_resignReason','view_idCardNum','view_idExp','view_licType','view_licNum','view_licExp'];
-            
-            var eFull = document.getElementById('view_fullname'); if(eFull) eFull.innerText = d.name; 
-            var eNick = document.getElementById('view_nickname_badge'); if(eNick) eNick.innerText = d.nickname ? d.nickname : '-'; 
-            var eEmpId = document.getElementById('view_empId'); if(eEmpId) eEmpId.innerText = d.id; 
-            
-            var statusClass = d.status === 'Active' ? 'bg-success text-black' : (d.status === 'Resigned' ? 'bg-danger text-white' : 'bg-warning text-dark'); 
-            var statusEl = document.getElementById('view_status_badge'); 
-            if(statusEl) {
-                statusEl.innerText = d.status; 
-                statusEl.className = 'badge rounded-pill fs-6 px-3 py-2 ' + statusClass; 
-            }
-            
-            var eBD = document.getElementById('view_birthDate'); if(eBD) eBD.innerText = window.formatDate(d.birthDate); 
-            var eAge = document.getElementById('view_age'); if(eAge) eAge.innerText = window.calcAge(d.birthDate); 
-            var eGen = document.getElementById('view_gender'); if(eGen) eGen.innerText = d.gender || '-'; 
-            var ePhone = document.getElementById('view_phone'); if(ePhone) ePhone.innerText = d.phone || '-'; 
-            var eUser = document.getElementById('view_username'); if(eUser) eUser.innerText = d.username; 
-            var ePass = document.getElementById('view_password'); if(ePass) ePass.innerText = d.password; 
-            var eRole = document.getElementById('view_role'); if(eRole) eRole.innerText = d.role; 
-            var eStart = document.getElementById('view_startDate'); if(eStart) eStart.innerText = window.formatDate(d.startDate); 
-            var eTenure = document.getElementById('view_tenure'); if(eTenure) eTenure.innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate); 
-            var eSsoT = document.getElementById('view_ssoType'); if(eSsoT) eSsoT.innerText = d.ssoType || '-'; 
-            var eSsoH = document.getElementById('view_ssoHosp'); if(eSsoH) eSsoH.innerText = d.ssoHosp || '-'; 
-            
-            var ruleStatusHtml = d.rulesAccepted ? '<span class="badge bg-success text-dark"><i class="bi bi-check-circle-fill me-1"></i>ยอมรับแล้ว</span>' : '<span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i>ยังไม่ยอมรับ</span>';
-            var ruleDiv = document.getElementById('view_rule_status');
-            if (!ruleDiv) {
-                var ssoHospEl = document.querySelector('#view_ssoHosp');
-                if(ssoHospEl) {
-                    var personalInfoContainer = ssoHospEl.closest('.p-3').parentNode.querySelector('.mt-4.pt-3');
-                    if(personalInfoContainer) {
-                         var newRuleDiv = document.createElement('div');
-                         newRuleDiv.className = 'd-flex justify-content-between align-items-center pt-2 mt-2 border-top border-secondary border-opacity-25';
-                         newRuleDiv.innerHTML = '<small class="text-muted">การยอมรับกฎระเบียบ</small><span id="view_rule_status">' + ruleStatusHtml + '</span>';
-                         personalInfoContainer.appendChild(newRuleDiv);
-                    }
-                }
-            } else {
-                ruleDiv.innerHTML = ruleStatusHtml;
-            }
-
-            var rsSection = document.getElementById('view_resign_section');
-            if(d.status === 'Resigned') { 
-                if(rsSection) rsSection.style.display = 'block'; 
-                var rsDate = document.getElementById('view_resignDate'); if(rsDate) rsDate.innerText = window.formatDate(d.resignDate); 
-                var rsR = document.getElementById('view_resignReason'); if(rsR) rsR.innerText = d.resignReason || '-'; 
-            } else { 
-                if(rsSection) rsSection.style.display = 'none'; 
-            } 
-            
-            var idCard = document.getElementById('view_idCardNum'); if(idCard) idCard.innerText = d.idCardNum || '-'; 
-            var idExp = document.getElementById('view_idExp'); if(idExp) idExp.innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : ''; 
-            var licType = document.getElementById('view_licType'); if(licType) licType.innerText = d.licType || '-'; 
-            var licNum = document.getElementById('view_licNum'); if(licNum) licNum.innerText = d.licNum ? 'เลขที่: ' + d.licNum : ''; 
-            var licExp = document.getElementById('view_licExp'); if(licExp) licExp.innerText = d.licExp ? 'หมดอายุ: ' + window.formatDate(d.licExp) : ''; 
-            
-            var posContainer = document.getElementById('view_positions_badges'); 
-            if(posContainer) {
-                posContainer.innerHTML = ''; 
-                if(currentPos.length > 0 && currentPos[0] !== "") { 
-                    currentPos.forEach(p => { 
-                        posContainer.innerHTML += `<span class="badge bg-dark text-light border border-secondary fw-normal py-2 px-3">${p}</span>`; 
-                    }); 
-                } else { 
-                    posContainer.innerHTML = '<span class="text-muted small">- ไม่ระบุตำแหน่ง -</span>'; 
-                } 
-            }
-        } 
-    };
-
-    window.getSelectedPositions = function() { 
-        var s=[]; 
-        document.querySelectorAll('input[name="posCheckbox"]:checked').forEach(c=>s.push(c.value)); 
-        return s.join(', '); 
-    };
-
-    window.submitEmpForm = async function(e) { 
-        e.preventDefault(); 
-        Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()}); 
-        
-        var getVal = (id) => { var el = document.getElementById(id); return el ? el.value : ''; };
-        
-        var form = { 
-            empId: getVal('empId'), 
-            role: getVal('role'), 
-            status: getVal('empStatus'), 
-            resignDate: getVal('resignDate'), 
-            birthDate: getVal('birthDate'), 
-            gender: getVal('gender'), 
-            username: getVal('username'), 
-            password: getVal('password'), 
-            prefix: getVal('prefix'), 
-            fullname: getVal('fullname'), 
-            nickname: getVal('nickname'), 
-            ssoType: getVal('ssoType'), 
-            ssoHosp: getVal('ssoHosp'), 
-            idExp: getVal('idExp'), 
-            licExp: getVal('licExp'), 
-            idCardNum: getVal('idCardNum'), 
-            licNum: getVal('licNum'), 
-            licType: getVal('licType'), 
-            resignReason: getVal('resignReason'), 
-            position: window.getSelectedPositions(), 
-            startDate: getVal('startDate'), 
-            phone: getVal('phone'), 
-            currentUserRole: window.currentUser.role, 
-            filePhoto: await window.getBase64User(document.getElementById('filePhoto') ? document.getElementById('filePhoto').files[0] : null), 
-            fileIdCard: await window.getBase64User(document.getElementById('fileIdCard') ? document.getElementById('fileIdCard').files[0] : null), 
-            filePassport: await window.getBase64User(document.getElementById('filePassport') ? document.getElementById('filePassport').files[0] : null), 
-            fileHouse: await window.getBase64User(document.getElementById('fileHouse') ? document.getElementById('fileHouse').files[0] : null), 
-            fileDrive: await window.getBase64User(document.getElementById('fileDrive') ? document.getElementById('fileDrive').files[0] : null), 
-            fileEdu: await window.getBase64User(document.getElementById('fileEdu') ? document.getElementById('fileEdu').files[0] : null), 
-            fileCriminal: await window.getBase64User(document.getElementById('fileCriminal') ? document.getElementById('fileCriminal').files[0] : null), 
-            fileHealth: await window.getBase64User(document.getElementById('fileHealth') ? document.getElementById('fileHealth').files[0] : null), 
-            fileWarn: null, 
-            fileOther1: await window.getBase64User(document.getElementById('fileOther1') ? document.getElementById('fileOther1').files[0] : null), 
-            fileOther2: await window.getBase64User(document.getElementById('fileOther2') ? document.getElementById('fileOther2').files[0] : null) 
-        }; 
-        try { 
-            const res = await window.callAPI({ 
-                action: 'handleEmployeeSave', 
-                form: form, 
-                mode: getVal('formMode') 
-            }); 
-            if(res.success) { 
-                Swal.fire('สำเร็จ', res.message, 'success'); 
-                var modalEl = document.getElementById('empModal');
-                if(modalEl) {
-                    var modalObj = bootstrap.Modal.getInstance(modalEl);
-                    if(modalObj) modalObj.hide(); 
-                }
-                if(window.currentUser.role === 'Admin') window.loadAdminData(); 
-                else window.loadUserData(); 
-            } else { 
-                Swal.fire('เกิดข้อผิดพลาด', res.message, 'error'); 
-            } 
-        } catch(err) {} 
-    };
-
-    window.genId = function() { 
-        var eId = document.getElementById('empId');
-        if(eId) eId.value='...'; 
-        try { 
-            window.callAPI({ action: 'getNextEmployeeId' }).then(res => { 
-                if(eId) eId.value = res.empId; 
-            }); 
-        } catch(e) {} 
-    };
-
-    window.getBase64User = function(file) { 
-        return new Promise(function(resolve) { 
-            if (!file) { resolve(null); return; } 
-            var reader = new FileReader(); 
-            reader.onload = function() { 
-                resolve({base64: reader.result.split(',')[1], type: file.type}); 
-            }; 
-            reader.readAsDataURL(file); 
-        }); 
-    };
-
-    window.calcAge = function(d) { 
-        if(!d) return "-"; 
-        var today = new Date(); 
-        var birthDate = new Date(d); 
-        if(isNaN(birthDate)) return "-"; 
-        var age = today.getFullYear() - birthDate.getFullYear(); 
-        var m = today.getMonth() - birthDate.getMonth(); 
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } 
-        return age + " ปี"; 
-    };
-
-    window.formatDate = function(d) { 
-        if(!d) return '-'; 
-        try { 
-            var date = new Date(d); 
-            if(isNaN(date.getTime())) return '-'; 
-            return date.toLocaleDateString('th-TH-u-ca-gregory', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
-        } catch(e) { return '-'; } 
-    };
-
-    window.calcTenure = function(dateString) { 
-        if(!dateString) return '-'; 
-        var start = new Date(dateString); 
-        var now = new Date(); 
-        start.setHours(0,0,0,0); 
-        now.setHours(0,0,0,0); 
-        if(isNaN(start.getTime())) return "-"; 
-        if (start.getTime() > now.getTime()) { 
-            return '<span class="badge bg-warning text-dark border border-warning shadow-sm" style="font-weight:600;">รอเริ่มงาน</span>'; 
-        } 
-        var years = now.getFullYear() - start.getFullYear(); 
-        var months = now.getMonth() - start.getMonth(); 
-        var days = now.getDate() - start.getDate(); 
-        if (days < 0) { 
-            months--; 
-            var prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); 
-            days += prevMonth.getDate(); 
-        } 
-        if (months < 0) { 
-            years--; 
-            months += 12; 
-        } 
-        var result = []; 
-        if (years > 0) result.push(years + " ปี"); 
-        if (months > 0) result.push(months + " เดือน"); 
-        if (days > 0) result.push(days + " วัน"); 
-        if (result.length === 0) return "เริ่มงานวันนี้"; 
-        return result.join(" "); 
-    };
-    
-    window.declineRules = function() {
-        var rulesModalEl = document.getElementById('rulesModal');
-        if(rulesModalEl) {
-            var modal = bootstrap.Modal.getInstance(rulesModalEl);
-            if (modal) { modal.hide(); }
-        }
-
-        var backdrops = document.querySelectorAll('.modal-backdrop');
-        backdrops.forEach(b => b.remove());
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-
-        setTimeout(function() {
-            if (typeof window.logout === 'function') {
-                window.logout();
-            } else {
-                localStorage.removeItem('hr_user_session');
-                location.reload();
-            }
-        }, 300);
-    };
 </script>
 </div>
