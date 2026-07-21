@@ -1,6 +1,7 @@
 <div id="view-admin" class="view-section container-fluid p-3 p-md-4">
     
     <style>
+        /* --- Base Animations --- */
         @keyframes fadeSlideIn { 
             from { opacity: 0; transform: translateY(15px); } 
             to { opacity: 1; transform: translateY(0); } 
@@ -10,6 +11,21 @@
         .stagger-3 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
         .stagger-4 { animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
         
+        .stagger-item {
+            opacity: 0;
+            animation: fadeSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* --- Custom Modal Animations (เด้งขยายตัว) --- */
+        .modal.fade .modal-dialog {
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        }
+        .modal.show .modal-dialog {
+            transform: scale(1);
+        }
+
+        /* --- Dashboard Stats --- */
         .stat-card {
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(12px); 
@@ -20,7 +36,6 @@
             cursor: default;
         }
         .stat-card:hover { border-color: rgba(255, 255, 255, 0.2); }
-        
         .stat-card.clickable:hover { 
             transform: translateY(-3px); 
             background: rgba(30, 30, 30, 0.8) !important;
@@ -28,7 +43,6 @@
             box-shadow: 0 8px 25px rgba(0, 230, 118, 0.12); 
             cursor: pointer;
         }
-        
         .stat-icon {
             width: 38px; height: 38px; border-radius: 10px;
             background: rgba(255, 255, 255, 0.05);
@@ -36,6 +50,7 @@
             font-size: 1.2rem; color: var(--accent-color);
         }
 
+        /* --- Tabs --- */
         .nav-tabs-custom {
             background: rgba(0,0,0,0.3);
             border-radius: 8px;
@@ -55,6 +70,7 @@
         }
         .nav-tabs-custom .tab-btn:hover:not(.active) { color: #fff; }
 
+        /* --- Tables --- */
         .glass-container-table {
             background: rgba(20, 20, 20, 0.5);
             backdrop-filter: blur(12px); 
@@ -64,9 +80,7 @@
             display: flex; flex-direction: column;
             height: 68vh; 
         }
-
         .table-responsive { flex-grow: 1; overflow-y: auto; min-height: 400px; }
-
         .table-custom th {
             background-color: rgba(15, 15, 15, 0.98) !important;
             position: sticky; top: 0; z-index: 10;
@@ -76,87 +90,107 @@
             padding: 12px 15px;
             white-space: nowrap;
         }
-
         .table-custom td {
             border-bottom: 1px solid rgba(255,255,255,0.03);
             color: #ddd; vertical-align: middle;
             padding: 8px 15px; 
             font-size: 0.85rem;
         }
-        
         .table-hover tbody tr:hover { background-color: rgba(0, 230, 118, 0.08) !important; }
 
-        .list-item-glass {
-            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; 
-            padding: 10px 15px; margin-bottom: 8px; transition: all 0.2s ease-in-out; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        
-        .list-item-glass.clickable-item { cursor: pointer; }
-        .list-item-glass.clickable-item:hover { background-color: rgba(0, 230, 118, 0.15) !important; border-color: var(--accent-color) !important; transform: translateX(5px); }
-        .list-item-glass.static-item:hover { background-color: rgba(255, 255, 255, 0.05); }
-
-        .dropdown-menu-dark { background-color: #202020; border-color: rgba(255,255,255,0.1); font-size: 0.85rem; }
-        .dropdown-item:hover { background-color: rgba(0, 230, 118, 0.2); color: #fff; }
-
-        /* --- Theme โลจิสติกส์ สำหรับฟอร์มพนักงานและเงินเดือน --- */
+        /* --- Forms & Logistics Overrides --- */
         .logistics-modal { border: 1px solid #444; background: #121212 !important; }
         .logistics-modal-header { background: #1a1a1a; border-bottom: 1px solid #333; }
         .logistics-section-title { font-size: 0.95rem; font-weight: 700; color: #ffc107; margin-bottom: 15px; display: flex; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px;}
         .logistics-section-title i { margin-right: 8px; }
         .logistics-card { background: transparent; border: 1px solid #222; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-        
         .logistics-modal .modal-body { text-align: left !important; }
-        
         .input-dark { background-color: #0a0a0a !important; border: 1px solid #333 !important; color: #e0e0e0 !important; font-size: 0.9rem; }
         .input-dark:focus { border-color: #ffc107 !important; box-shadow: 0 0 0 0.1rem rgba(255, 193, 7, 0.2) !important; }
         .input-dark:disabled, .input-dark[readonly] { background-color: #111 !important; color: #666 !important; border-color: #222 !important; }
         .label-logistics { color: #888; font-size: 0.8rem; margin-bottom: 5px; }
-        
-        /* แก้ไขฟอร์มสลิปบีบอัด Layout */
+
+        /* --- Payroll Inputs --- */
         .payroll-input { background: #0a0a0a !important; color: #fff !important; border-color: #333 !important; text-align: right; height: 30px; font-size: 0.85rem;}
         .payroll-input:focus { border-color: #ffc107 !important; box-shadow: none !important; }
         .payroll-dec { color: #ff4d4d !important; }
         .payroll-btn-prev { height: 30px; padding: 0 8px; display: flex; align-items: center; justify-content: center; }
         .lbl-fit { font-size: 0.75rem; width: 160px; text-align: left; padding: 0 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: space-between; background-color: #1a1a1a; border-color: #333; color: #aaa; height: 30px;}
-        
-        /* สไตล์สำหรับ checkbox ตำแหน่ง */
-        .pos-checkbox-wrapper { background: #000; border: 1px solid #333; border-radius: 6px; padding: 10px; max-height: 180px; overflow-y: auto;}
 
-        /* --- สำหรับ Hover Card ในหน้ารวมผู้สมัคร --- */
-        .applicant-list-item {
-            background-color: rgba(30,30,30,0.5);
-            border: 1px solid rgba(255,255,255,0.05);
+        /* --- Premium Admin Modals (Neon Glow & Full Card Style) --- */
+        .admin-popup-modal .modal-content {
+            background-color: #121212;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+        }
+        .admin-popup-modal .modal-header {
+            background: rgba(20,20,20,0.9);
+            border-bottom: 1px solid #222;
+            padding: 1rem 1.5rem;
+        }
+        .admin-popup-modal .modal-body {
+            padding: 1.5rem;
+            background: #0d0d0d;
+        }
+        .admin-popup-modal .modal-body::-webkit-scrollbar { width: 6px; }
+        .admin-popup-modal .modal-body::-webkit-scrollbar-track { background: transparent; }
+        .admin-popup-modal .modal-body::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .admin-popup-modal .modal-body::-webkit-scrollbar-thumb:hover { background: #00E676; }
+
+        .border-neon-success { border: 1px solid rgba(0, 230, 118, 0.4); box-shadow: 0 0 20px rgba(0, 230, 118, 0.05); }
+        .border-neon-info { border: 1px solid rgba(13, 202, 240, 0.4); box-shadow: 0 0 20px rgba(13, 202, 240, 0.05); }
+        .border-neon-warning { border: 1px solid rgba(255, 193, 7, 0.4); box-shadow: 0 0 20px rgba(255, 193, 7, 0.05); }
+        .border-neon-danger { border: 1px solid rgba(220, 53, 69, 0.4); box-shadow: 0 0 20px rgba(220, 53, 69, 0.05); }
+
+        .admin-modal-card {
+            background: #18181b;
+            border: 1px solid #27272a;
             border-radius: 12px;
-            transition: all 0.3s ease;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             cursor: pointer;
-            position: relative;
+            margin-bottom: 10px;
         }
-        .applicant-list-item:hover {
-            background-color: rgba(40,40,40,0.8);
-            border-color: #00ff88;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 230, 118, 0.15);
+        .admin-modal-card:hover {
+            background: #27272a;
+            border-color: #00E676;
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 10px 25px rgba(0,230,118,0.15);
+            z-index: 10;
         }
+        .admin-modal-card.static { cursor: default; }
+        .admin-modal-card.static:hover {
+            transform: none;
+            box-shadow: none;
+            background: #18181b;
+        }
+        
+        .hover-info:hover { border-color: #0dcaf0; box-shadow: 0 10px 25px rgba(13,202,240,0.15); }
+        .hover-warning:hover { border-color: #ffc107; box-shadow: 0 10px 25px rgba(255,193,7,0.15); }
+        .hover-danger:hover { border-color: #dc3545; box-shadow: 0 10px 25px rgba(220,53,69,0.15); }
 
-        /* --- สำหรับ Layout หน้าโปรไฟล์ --- */
-        .app-detail-hero {
-            background: radial-gradient(circle at top, rgba(0, 255, 136, 0.1) 0%, transparent 60%);
-            padding: 30px 15px;
-            text-align: center;
-            border-bottom: 1px solid #2a2a2a;
-            border-radius: 12px 12px 0 0;
-            margin-bottom: 20px;
+        .admin-modal-title { font-size: 0.95rem; color: #f4f4f5; font-weight: 600; line-height: 1.3; }
+        .admin-modal-subtitle { font-size: 0.8rem; color: #a1a1aa; margin-top: 4px; }
+        
+        .admin-modal-badge {
+            background: rgba(0, 230, 118, 0.1); color: #00E676; border: 1px solid rgba(0, 230, 118, 0.2);
+            padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; white-space: nowrap;
         }
-        .app-profile-img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid #111;
-            box-shadow: 0 0 0 2px #00ff88, 0 10px 20px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
+        .admin-modal-badge-danger { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .admin-modal-badge-warning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+        
+        .admin-modal-icon-btn {
+            background: transparent; border: 1px solid #3f3f46; color: #a1a1aa;
+            width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
         }
+        .admin-modal-card.hover-info:hover .admin-modal-icon-btn { background: rgba(13, 202, 240, 0.1); color: #0dcaf0; border-color: #0dcaf0; }
+        .admin-modal-card:not(.hover-info):hover .admin-modal-icon-btn { background: rgba(0, 230, 118, 0.1); color: #00E676; border-color: #00E676; }
+
     </style>
 
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 stagger-1">
@@ -904,14 +938,14 @@
     </div>
 
     <!-- Modal ออกสลิปเงินเดือน (ที่ปรับแก้แล้ว) -->
-    <div class="modal fade" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal fade admin-popup-modal" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal border-success">
-                <div class="modal-header py-2 logistics-modal-header border-bottom border-success">
+            <div class="modal-content border-success">
+                <div class="modal-header border-bottom border-success">
                     <h5 class="modal-title fw-bold text-success fs-6"><i class="bi bi-cash-coin me-2"></i>ออกสลิปเงินเดือน</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-3 bg-black bg-opacity-50">
+                <div class="modal-body p-3">
                     <form id="payrollForm" onsubmit="window.submitPayrollForm(event)">
                         <input type="hidden" id="pr_empId">
                         <input type="hidden" id="pr_prefix">
@@ -1106,14 +1140,14 @@
     </div>
 
     <!-- Modal สำหรับแสดงผลประเมินย่อยของ Admin (เอาไว้ใช้กรณีสลับหน้า) -->
-    <div class="modal fade" id="evalDetailModal" tabindex="-1">
+    <div class="modal fade admin-popup-modal" id="evalDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal border-success border-opacity-50">
-                <div class="modal-header py-3 logistics-modal-header text-start">
+            <div class="modal-content border-success border-opacity-50">
+                <div class="modal-header text-start">
                     <h5 class="modal-title text-success fw-bold"><i class="bi bi-list-stars me-2"></i>รายละเอียดผลประเมิน</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4 text-start">
+                <div class="modal-body text-start">
                     <div class="mb-3 d-flex justify-content-between align-items-center pb-3 border-bottom border-secondary border-opacity-25">
                         <div>
                             <h5 class="text-white mb-1" id="detailEvalName">...</h5>
@@ -1130,25 +1164,24 @@
         </div>
     </div>
 
-    <!-- ==================== MISSING MODALS ==================== -->
     <!-- Modal ประวัติสลิปเงินเดือน (Payroll History) -->
-    <div class="modal fade" id="payrollHistoryModal" tabindex="-1">
+    <div class="modal fade admin-popup-modal" id="payrollHistoryModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal border-info">
-                <div class="modal-header logistics-modal-header py-3">
+            <div class="modal-content border-info border-neon-info">
+                <div class="modal-header">
                     <h5 class="modal-title fw-bold text-info"><i class="bi bi-clock-history me-2"></i>ประวัติสลิปเงินเดือน</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-0">
                     <table class="table table-dark table-hover mb-0 text-center m-0 align-middle">
-                        <thead class="text-secondary">
+                        <thead class="text-secondary" style="background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.1);">
                             <tr>
-                                <th class="ps-4 text-start">วันที่จ่าย</th>
-                                <th class="text-end">รายรับรวม</th>
-                                <th class="text-end">รายการหัก</th>
-                                <th class="text-end">สุทธิ</th>
-                                <th class="text-center">ดูสลิป</th>
-                                <th class="text-center pe-4">จัดการ</th>
+                                <th class="ps-4 text-start fw-normal">วันที่จ่าย</th>
+                                <th class="text-end fw-normal">รายรับรวม</th>
+                                <th class="text-end fw-normal">รายการหัก</th>
+                                <th class="text-end fw-normal">สุทธิ</th>
+                                <th class="text-center fw-normal">ดูสลิป</th>
+                                <th class="text-center pe-4 fw-normal">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="payrollHistoryBody">
@@ -1161,81 +1194,88 @@
     </div>
 
     <!-- Modal อุบัติเหตุสูงสุด -->
-    <div class="modal fade" id="accTopCausesModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content logistics-modal border-warning">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-warning fs-6"><i class="bi bi-bar-chart-fill me-2"></i>พนักงานที่เกิดอุบัติเหตุบ่อย (Top 10)</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal fade admin-popup-modal" id="accTopCausesModal" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-warning border-neon-warning">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-warning" style="font-size: 1.1rem;"><i class="bi bi-bar-chart-fill me-2"></i>เกิดอุบัติเหตุบ่อย (Top 10)</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-3" id="accTopCausesList"></div>
+                <div class="modal-body" id="accTopCausesList" style="max-height: 70vh;"></div>
             </div>
         </div>
     </div>
 
     <!-- Modal ใบเตือนสูงสุด -->
-    <div class="modal fade" id="warnTopEmpModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content logistics-modal border-danger">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-danger fs-6"><i class="bi bi-bar-chart-fill me-2"></i>พนักงานที่ถูกเตือนบ่อย (Top 10)</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal fade admin-popup-modal" id="warnTopEmpModal" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-danger border-neon-danger">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-danger" style="font-size: 1.1rem;"><i class="bi bi-bar-chart-fill me-2"></i>ถูกเตือนบ่อย (Top 10)</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-3" id="warnTopEmployeesList"></div>
+                <div class="modal-body" id="warnTopEmployeesList" style="max-height: 70vh;"></div>
             </div>
         </div>
     </div>
 
     <!-- Modal วันเกิด -->
-    <div class="modal fade" id="birthdayModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content logistics-modal">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-warning"><i class="bi bi-cake2 me-2"></i>วันเกิดเดือนนี้</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal fade admin-popup-modal" id="birthdayModal" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-warning border-neon-warning">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-warning" style="font-size: 1.1rem;"><i class="bi bi-cake2 me-2"></i>วันเกิดเดือนนี้</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-3" id="birthdayListBody"></div>
+                <div class="modal-body" id="birthdayListBody" style="max-height: 70vh;"></div>
             </div>
         </div>
     </div>
 
     <!-- Modal สถิติตำแหน่ง -->
-    <div class="modal fade" id="positionStatsModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content logistics-modal">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-success"><i class="bi bi-pie-chart me-2"></i>สถิติแยกตามตำแหน่ง</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal fade admin-popup-modal" id="positionStatsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-success border-neon-success">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-success" style="font-size: 1.1rem;"><i class="bi bi-pie-chart me-2"></i>สถิติแยกตามตำแหน่ง</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-3" id="positionStatsList"></div>
+                <div class="modal-body" id="positionStatsList" style="max-height: 70vh;"></div>
             </div>
         </div>
     </div>
 
     <!-- Modal รายชื่อตามตำแหน่ง -->
-    <div class="modal fade" id="positionDetailModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content logistics-modal border-success">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-success fs-6" id="positionDetailTitle">...</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal fade admin-popup-modal" id="positionDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-success border-neon-success">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-success" style="font-size: 1.1rem;" id="positionDetailTitle">...</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-3" id="positionDetailList"></div>
+                <div class="modal-body" id="positionDetailList" style="max-height: 70vh;"></div>
             </div>
         </div>
     </div>
 
     <!-- Modal สถิติรายปี -->
-    <div class="modal fade" id="yearlyStatsModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content logistics-modal">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-info"><i class="bi bi-graph-up me-2"></i>สถิติพนักงานเข้า-ออกรายปี</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal fade admin-popup-modal" id="yearlyStatsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-info border-neon-info">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-info" style="font-size: 1.1rem;"><i class="bi bi-graph-up me-2"></i>สถิติพนักงานเข้า-ออกรายปี</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-0">
-                    <table class="table table-dark table-hover mb-0 text-center m-0">
-                        <thead class="text-secondary"><tr><th>ปี</th><th class="text-success">เข้าใหม่</th><th class="text-danger">ลาออก</th><th>สุทธิสะสม</th></tr></thead>
+                <div class="modal-body p-0" style="max-height: 70vh;">
+                    <table class="table table-borderless table-hover mb-0 text-center m-0 align-middle">
+                        <thead style="background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <tr>
+                                <th class="py-3 text-secondary fw-normal">ปี</th>
+                                <th class="py-3 text-success fw-normal">เข้าใหม่</th>
+                                <th class="py-3 text-danger fw-normal">ลาออก</th>
+                                <th class="py-3 text-light fw-normal">สุทธิสะสม</th>
+                            </tr>
+                        </thead>
                         <tbody id="yearStatsBodyModal"></tbody>
                     </table>
                 </div>
@@ -1244,27 +1284,27 @@
     </div>
 
     <!-- Modal รายละเอียดรายปี -->
-    <div class="modal fade" id="yearDetailModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content logistics-modal border-info">
-                <div class="modal-header logistics-modal-header py-3">
-                    <h5 class="modal-title fw-bold text-info fs-6" id="yearDetailTitle">...</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal fade admin-popup-modal" id="yearDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-info border-neon-info">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-info" style="font-size: 1.1rem;" id="yearDetailTitle">...</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-3" id="yearDetailList"></div>
+                <div class="modal-body" id="yearDetailList" style="max-height: 70vh;"></div>
             </div>
         </div>
     </div>
 
     <!-- Modal รายละเอียดอุบัติเหตุ -->
-    <div class="modal fade" id="accidentDetailModal" tabindex="-1">
+    <div class="modal fade admin-popup-modal" id="accidentDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal border-warning">
-                <div class="modal-header logistics-modal-header py-3">
+            <div class="modal-content border-warning border-neon-warning">
+                <div class="modal-header">
                     <h5 class="modal-title fw-bold text-warning"><i class="bi bi-cone-striped me-2"></i>อัปเดตสถานะอุบัติเหตุ: <span id="m_accDocNo"></span></h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body">
                     <input type="hidden" id="m_accDocNoHidden">
                     <div class="row g-3 mb-4">
                         <div class="col-md-6"><small class="text-muted d-block">พนักงาน</small><div class="text-white fw-bold" id="m_accEmpName"></div></div>
@@ -1305,7 +1345,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-top border-secondary">
+                <div class="modal-footer border-top border-secondary border-opacity-50">
                     <button class="btn btn-outline-danger me-auto rounded-pill px-4" onclick="window.deleteAccident()">ลบเอกสารทิ้ง</button>
                     <button class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
                     <button class="btn btn-warning fw-bold text-dark rounded-pill px-4" onclick="window.saveAccidentResolution()">บันทึกอัปเดต & แก้ไข PDF</button>
@@ -1315,14 +1355,14 @@
     </div>
 
     <!-- Modal ออกใบเตือน -->
-    <div class="modal fade" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal fade admin-popup-modal" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal border-danger">
-                <div class="modal-header logistics-modal-header py-3">
+            <div class="modal-content border-danger border-neon-danger">
+                <div class="modal-header">
                     <h5 class="modal-title fw-bold text-danger"><i class="bi bi-file-earmark-plus me-2"></i>ออกหนังสือเตือน (Warning Letter)</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body">
                     <form id="warningForm" onsubmit="window.submitWarningForm(event)">
                         <div class="row g-3">
                             <div class="col-12">
@@ -1374,7 +1414,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4 text-end border-top border-secondary pt-3">
+                        <div class="mt-4 text-end border-top border-secondary border-opacity-50 pt-3">
                             <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
                             <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold" id="btnSubmitWarning">สร้างใบเตือน PDF</button>
                         </div>
@@ -1385,14 +1425,14 @@
     </div>
 
     <!-- Modal รายละเอียดใบเตือน -->
-    <div class="modal fade" id="warningDetailModal" tabindex="-1">
+    <div class="modal fade admin-popup-modal" id="warningDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content logistics-modal border-danger">
-                <div class="modal-header logistics-modal-header py-3">
+            <div class="modal-content border-danger border-neon-danger">
+                <div class="modal-header">
                     <h5 class="modal-title fw-bold text-danger"><i class="bi bi-file-earmark-text me-2"></i>รายละเอียดใบเตือน: <span id="e_warnDocNo"></span></h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body">
                     <input type="hidden" id="e_warnDocNoHidden">
                     <div class="mb-3 text-white fw-bold">พนักงาน: <span id="e_warnEmpName" class="text-warning"></span></div>
                     <div class="row g-3">
@@ -1430,7 +1470,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-top border-secondary">
+                <div class="modal-footer border-top border-secondary border-opacity-50">
                     <button class="btn btn-outline-danger me-auto rounded-pill px-4" onclick="window.deleteWarning()">ลบเอกสารทิ้ง</button>
                     <button class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
                     <button class="btn btn-danger fw-bold text-white rounded-pill px-4" onclick="window.saveWarningResolution()">บันทึกอัปเดต</button>
@@ -1551,20 +1591,23 @@
         if(detailAvgEl) detailAvgEl.innerText = g.validCount > 0 ? (g.totalScore / g.validCount).toFixed(2) : "-";
         
         var html = '';
-        g.evaluators.forEach(function(ev) {
+        g.evaluators.forEach(function(ev, idx) {
+            var delay = idx * 0.05;
             var scoreHtml = ev.status === 'ไม่ได้ประสานงาน' 
-                ? '<span class="badge bg-secondary">ไม่ได้ประสานงาน</span>'
-                : `<span class="badge bg-success fs-6 px-2">${ev.score}/10</span>`;
+                ? '<span class="admin-modal-badge border-secondary text-secondary">ไม่ได้ประสานงาน</span>'
+                : `<span class="admin-modal-badge">${ev.score}/10</span>`;
                 
             var commentHtml = ev.comment ? `<div class="mt-2 text-light small fst-italic"><i class="bi bi-chat-quote text-success me-1"></i> "${ev.comment}"</div>` : '';
             var evaluatorNameShort = ev.evaluatorName ? ev.evaluatorName.split(' ')[0] + ' ' + (ev.evaluatorName.split(' ')[1] || '') : '-';
             
-            html += `<div class="p-3 mb-2 rounded border border-secondary border-opacity-25" style="background: rgba(0,0,0,0.3);">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="text-info fw-bold"><i class="bi bi-person me-1"></i>${evaluatorNameShort}</span>
-                    ${scoreHtml}
+            html += `<div class="admin-modal-card static mb-2 stagger-item" style="animation-delay: ${delay}s">
+                <div class="w-100">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-info fw-bold"><i class="bi bi-person me-2"></i>${evaluatorNameShort}</span>
+                        ${scoreHtml}
+                    </div>
+                    ${commentHtml}
                 </div>
-                ${commentHtml}
             </div>`;
         });
         var detailListEl = document.getElementById('evalDetailList');
@@ -2296,12 +2339,24 @@
            window.allAccidentData.forEach(function(a) { accCounts[a.empName] = (accCounts[a.empName] || 0) + 1; });
        }
        var topAccs = Object.keys(accCounts).map(function(k) { return {name:k, count:accCounts[k]}; }).sort(function(a,b) { return b.count - a.count; }).slice(0,10);
-       var topAccHtml = '';
-       topAccs.forEach(function(c, i) { 
-           topAccHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-warning text-dark rounded-pill">' + c.count + ' ครั้ง</span></div>'; 
+       var topAccHtml = '<div class="row g-3">';
+       topAccs.forEach(function(c, idx) { 
+           var delay = idx * 0.05;
+           topAccHtml += `
+           <div class="col-sm-6 stagger-item" style="animation-delay: ${delay}s">
+               <div class="admin-modal-card static hover-warning">
+                   <div class="d-flex align-items-center gap-3">
+                       <div class="text-warning fw-bold opacity-50" style="width: 20px;">${idx+1}.</div>
+                       <div class="admin-modal-title">${c.name}</div>
+                   </div>
+                   <div class="admin-modal-badge admin-modal-badge-warning">${c.count} ครั้ง</div>
+               </div>
+           </div>`; 
        });
+       topAccHtml += '</div>';
+       
        var accTopCausesListEl = document.getElementById('accTopCausesList');
-       if(accTopCausesListEl) accTopCausesListEl.innerHTML = topAccHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
+       if(accTopCausesListEl) accTopCausesListEl.innerHTML = topAccs.length > 0 ? topAccHtml : '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
        
        var html = '';
        if(data) {
@@ -2433,12 +2488,22 @@
        }
        var topWarns = Object.keys(warnCounts).map(function(k) { return {name:k, count:warnCounts[k]}; }).sort(function(a,b) { return b.count - a.count; }).slice(0,10);
        
-       var topHtml = ''; 
-       topWarns.forEach(function(c, i) { 
-           topHtml += '<div class="list-item-glass static-item"><span class="small">' + (i+1) + '. ' + c.name + '</span> <span class="badge bg-danger rounded-pill">' + c.count + ' ครั้ง</span></div>'; 
+       var topHtml = '<div class="d-flex flex-column gap-2">'; 
+       topWarns.forEach(function(c, idx) { 
+           var delay = idx * 0.05;
+           topHtml += `
+           <div class="admin-modal-card static hover-danger stagger-item" style="animation-delay: ${delay}s">
+               <div class="d-flex align-items-center gap-3">
+                   <div class="text-danger fw-bold opacity-50" style="width: 20px;">${idx+1}.</div>
+                   <div class="admin-modal-title">${c.name}</div>
+               </div>
+               <div class="admin-modal-badge admin-modal-badge-danger">${c.count} ครั้ง</div>
+           </div>`; 
        }); 
+       topHtml += '</div>';
+       
        var warnTopEmpEl = document.getElementById('warnTopEmployeesList');
-       if(warnTopEmpEl) warnTopEmpEl.innerHTML = topHtml || '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
+       if(warnTopEmpEl) warnTopEmpEl.innerHTML = topWarns.length > 0 ? topHtml : '<div class="text-center text-muted py-3">ยังไม่มีข้อมูล</div>';
        
        var html = '';
        if(data) {
@@ -2663,13 +2728,28 @@
         var list = window.allEmpData.filter(function(d) { return d.status === 'Active' && d.birthDate && (new Date(d.birthDate).getMonth() + 1) === thisMonth; }); 
         list.sort(function(a,b) { return new Date(a.birthDate).getDate() - new Date(b.birthDate).getDate(); }); 
         
-        var html = ''; 
-        if (list.length === 0) html = '<div class="text-center text-muted py-4">เดือนนี้ไม่มีวันเกิดพนักงาน</div>'; 
-        else { 
-            list.forEach(function(e) { 
+        var html = '<div class="row g-3">'; 
+        if (list.length === 0) {
+            html = '<div class="col-12 text-center text-muted py-4">เดือนนี้ไม่มีวันเกิดพนักงาน</div>'; 
+        } else { 
+            list.forEach(function(e, idx) { 
+                var delay = idx * 0.05;
                 var day = new Date(e.birthDate).getDate(); 
-                html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div class="d-flex align-items-center"><div class="bg-dark border border-secondary rounded-circle d-flex align-items-center justify-content-center me-3 text-warning fw-bold" style="width:36px;height:36px;">' + day + '</div><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div></div><i class="bi bi-chevron-right text-muted small"></i></div>'; 
+                html += `
+                <div class="col-md-6 stagger-item" style="animation-delay: ${delay}s">
+                    <div class="admin-modal-card hover-warning h-100" onclick="window.openModal('view', '${e.id}')">
+                        <div class="d-flex align-items-center gap-3 w-100">
+                            <div class="admin-modal-badge admin-modal-badge-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; padding: 0; font-size: 1.1rem;">${day}</div>
+                            <div class="overflow-hidden flex-grow-1">
+                                <div class="admin-modal-title text-truncate">${e.name}</div>
+                                <div class="admin-modal-subtitle text-truncate">${e.position}</div>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted small ms-auto"></i>
+                        </div>
+                    </div>
+                </div>`; 
             }); 
+            html += '</div>';
         } 
         var bodyEl = document.getElementById('birthdayListBody');
         if(bodyEl) bodyEl.innerHTML = html; 
@@ -2688,20 +2768,43 @@
             } 
         }); 
         var sorted = Object.keys(stats).map(function(k) { return {n:k, c:stats[k]}; }).sort(function(a,b) { return b.c - a.c; }); 
-        var html = '<div class="row g-2">'; 
-        sorted.forEach(function(i) { 
-            html += '<div class="col-sm-6"><div class="list-item-glass clickable-item" onclick="window.openPositionDetail(\'' + i.n + '\')"><span>' + i.n + '</span><span class="badge bg-success text-dark ms-2">' + i.c + '</span></div></div>'; 
+        
+        var html = '<div class="row g-3">'; 
+        sorted.forEach(function(i, idx) { 
+            var delay = idx * 0.05;
+            html += `
+            <div class="col-md-6 stagger-item" style="animation-delay: ${delay}s">
+                <div class="admin-modal-card h-100" onclick="window.openPositionDetail('${i.n}')">
+                    <div class="admin-modal-title" style="white-space: normal; word-break: break-word;">${i.n}</div>
+                    <div class="admin-modal-badge ms-2 flex-shrink-0">${i.c}</div>
+                </div>
+            </div>`; 
         }); 
+        html += '</div>';
+        
         var pList = document.getElementById('positionStatsList');
-        if(pList) pList.innerHTML = html + '</div>'; 
+        if(pList) pList.innerHTML = html; 
         window.showModalSafe('positionStatsModal'); 
     };
 
     window.openPositionDetail = function(pos) { 
         var list = window.allEmpData.filter(function(d) { return d.status === 'Active' && d.position && d.position.includes(pos); }); 
-        var html = ''; 
-        list.forEach(function(e) { html += '<div class="list-item-glass static-item"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + (e.phone || '-') + '</div></div></div>'; }); 
-        var pTitle = document.getElementById('positionDetailTitle'); if(pTitle) pTitle.innerText = 'ตำแหน่ง: ' + pos; 
+        
+        var html = '<div class="d-flex flex-column gap-2">'; 
+        list.forEach(function(e, idx) { 
+            var delay = idx * 0.05;
+            html += `
+            <div class="admin-modal-card hover-info stagger-item" style="animation-delay: ${delay}s">
+                <div>
+                    <div class="admin-modal-title">${e.name}</div>
+                    <div class="admin-modal-subtitle text-info font-monospace mt-1"><i class="bi bi-telephone me-1"></i>${e.phone || '-'}</div>
+                </div>
+                <button class="admin-modal-icon-btn" onclick="event.stopPropagation(); window.openModal('view', '${e.id}')" title="ดูโปรไฟล์"><i class="bi bi-search"></i></button>
+            </div>`; 
+        }); 
+        html += '</div>';
+        
+        var pTitle = document.getElementById('positionDetailTitle'); if(pTitle) pTitle.innerHTML = `<i class="bi bi-diagram-3 me-2"></i>ตำแหน่ง: ${pos}`; 
         var pList = document.getElementById('positionDetailList'); if(pList) pList.innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
         window.showModalSafe('positionDetailModal'); 
     };
@@ -2713,9 +2816,16 @@
             if (d.status === 'Resigned' && d.resignDate && !isNaN(new Date(d.resignDate))) { var y2 = new Date(d.resignDate).getFullYear(); if(!yearMap[y2]) yearMap[y2]={j:0,r:0}; yearMap[y2].r++; } 
         }); 
         var html = '', cum = 0; 
-        Object.keys(yearMap).sort().forEach(function(y) { 
+        Object.keys(yearMap).sort().forEach(function(y, idx) { 
             var d = yearMap[y]; cum += (d.j - d.r); 
-            html += '<tr class="static-item"><td class="py-3">' + y + '</td><td class="text-success clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'join\')">+' + d.j + '</td><td class="text-danger clickable" style="cursor:pointer; text-decoration:underline;" onclick="window.openYearDetail(\'' + y + '\',\'resign\')">-' + d.r + '</td><td class="text-white">' + cum + '</td></tr>'; 
+            var delay = idx * 0.05;
+            html += `
+            <tr class="stagger-item" style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s; animation-delay: ${delay}s" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                <td class="py-3 text-light fw-bold fs-6">${y}</td>
+                <td class="py-3"><span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-2 cursor-pointer hover-scale fs-6" onclick="window.openYearDetail('${y}','join')">+${d.j}</span></td>
+                <td class="py-3"><span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 px-3 py-2 cursor-pointer hover-scale fs-6" onclick="window.openYearDetail('${y}','resign')">-${d.r}</span></td>
+                <td class="py-3 text-white fw-bold fs-6">${cum}</td>
+            </tr>`; 
         }); 
         var bModal = document.getElementById('yearStatsBodyModal'); if(bModal) bModal.innerHTML = html; 
         window.showModalSafe('yearlyStatsModal'); 
@@ -2723,17 +2833,43 @@
 
     window.openYearDetail = function(year, type) { 
         var list = []; var title = ""; 
+        var icon = ""; var colorClass = "";
+        
         if (type === 'join') { 
+            icon = '<i class="bi bi-person-plus-fill me-2"></i>';
+            colorClass = 'text-success';
             title = `เข้าใหม่ ปี ${year}`; 
             list = window.allEmpData.filter(function(d) { return d.startDate && new Date(d.startDate).getFullYear() == year; }); 
         } else if (type === 'resign') { 
+            icon = '<i class="bi bi-person-dash-fill me-2"></i>';
+            colorClass = 'text-danger';
             title = `ลาออก ปี ${year}`; 
             list = window.allEmpData.filter(function(d) { return d.status === 'Resigned' && d.resignDate && new Date(d.resignDate).getFullYear() == year; }); 
         } 
-        var html = ''; 
-        list.forEach(function(e) { html += '<div class="list-item-glass clickable-item" onclick="window.openModal(\'view\',\'' + e.id + '\')"><div><div class="item-title">' + e.name + '</div><div class="item-subtitle">' + e.position + '</div></div><span class="badge bg-dark border border-secondary text-light">' + window.formatDate(type === 'join' ? e.startDate : e.resignDate) + '</span></div>'; }); 
-        var dTitle = document.getElementById('yearDetailTitle'); if(dTitle) dTitle.innerText = title; 
-        var dList = document.getElementById('yearDetailList'); if(dList) dList.innerHTML = html || '<div class="text-center text-muted">ไม่พบข้อมูล</div>'; 
+        
+        var html = '<div class="d-flex flex-column gap-2">'; 
+        list.forEach(function(e, idx) { 
+            var delay = idx * 0.05;
+            var dateDisplay = window.formatDate(type === 'join' ? e.startDate : e.resignDate);
+            var badgeColor = type === 'join' ? 'admin-modal-badge' : 'admin-modal-badge admin-modal-badge-danger';
+            var hoverClass = type === 'join' ? 'hover-info' : 'hover-danger';
+            html += `
+            <div class="admin-modal-card ${hoverClass} stagger-item" style="animation-delay: ${delay}s" onclick="window.openModal('view','${e.id}')">
+                <div class="overflow-hidden pe-2">
+                    <div class="admin-modal-title text-truncate">${e.name}</div>
+                    <div class="admin-modal-subtitle text-truncate">${e.position}</div>
+                </div>
+                <div class="${badgeColor} flex-shrink-0" style="font-size:0.75rem;">${dateDisplay}</div>
+            </div>`; 
+        }); 
+        html += '</div>';
+        
+        var dTitle = document.getElementById('yearDetailTitle'); 
+        if(dTitle) {
+            dTitle.innerHTML = icon + title;
+            dTitle.className = `modal-title fw-bold fs-6 ${colorClass}`;
+        }
+        var dList = document.getElementById('yearDetailList'); if(dList) dList.innerHTML = html || '<div class="text-center text-muted py-4">ไม่พบข้อมูล</div>'; 
         window.showModalSafe('yearDetailModal'); 
     };
 
