@@ -959,16 +959,23 @@
         }
     };
 
-    // เพิ่มฟังก์ชันกรณีปฏิเสธเงื่อนไข
+    // ฟังก์ชันกรณีปฏิเสธเงื่อนไข ให้กลับไปหน้า Login ทันที
     window.u_declineRules = function() {
+        var rulesOverlay = document.getElementById('rulesOverlay');
+        if (rulesOverlay) {
+            rulesOverlay.style.display = 'none';
+        }
+        document.body.style.overflow = '';
+        
         if(typeof window.logout === 'function') {
             window.logout();
         } else {
+            localStorage.removeItem('hr_user_session');
             window.location.reload();
         }
     };
 
-    // เพิ่มฟังก์ชันสำหรับกดยืนยันการยอมรับ
+    // ฟังก์ชันสำหรับกดยืนยันการยอมรับ
     window.u_acceptCompanyRules = function() {
         var btn = document.getElementById('btnAcceptRules');
         if (btn) {
@@ -1415,7 +1422,6 @@
             payload: {
                 monthYear: monthYear,
                 evaluatorId: window.currentUserData.id,
-                evaluatorName: window.currentUserData.name,
                 evaluatorName: window.currentUserData.name,
                 evaluations: evals
             }
