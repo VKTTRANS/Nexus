@@ -944,6 +944,66 @@
     window.globalYardData = [];
     window.u_evaluatedDriverIds = [];
 
+    // เพิ่มฟังก์ชันสำหรับจัดการปุ่ม ยอมรับกฎระเบียบ 
+    window.u_toggleAcceptRulesBtn = function(cb) {
+        var btn = document.getElementById('btnAcceptRules');
+        if (btn) {
+            btn.disabled = !cb.checked;
+            if (cb.checked) {
+                btn.classList.remove('btn-secondary');
+                btn.classList.add('btn-warning', 'text-dark');
+            } else {
+                btn.classList.add('btn-secondary');
+                btn.classList.remove('btn-warning', 'text-dark');
+            }
+        }
+    };
+
+    // เพิ่มฟังก์ชันกรณีปฏิเสธเงื่อนไข
+    window.u_declineRules = function() {
+        if(typeof window.logout === 'function') {
+            window.logout();
+        } else {
+            window.location.reload();
+        }
+    };
+
+    // เพิ่มฟังก์ชันสำหรับกดยืนยันการยอมรับ
+    window.u_acceptCompanyRules = function() {
+        var btn = document.getElementById('btnAcceptRules');
+        if (btn) {
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังดำเนินการ...';
+            btn.disabled = true;
+        }
+
+        var closeOverlayAndShowContent = function() {
+            var overlay = document.getElementById('rulesOverlay');
+            if (overlay) overlay.style.display = 'none';
+            document.body.style.overflow = '';
+            var content = document.getElementById('userProfileContent');
+            if (content) content.style.display = 'flex';
+            
+            if (window.currentUserData) {
+                localStorage.setItem('vkt_rules_accepted_' + window.currentUserData.id, 'true');
+                window.currentUserData.rulesAccepted = true;
+            }
+        };
+
+        // หากมี API รองรับให้ส่งเพื่อเก็บเข้า Database
+        if (typeof window.callAPI === 'function' && window.currentUserData) {
+            window.callAPI({
+                action: 'acceptRules', 
+                empId: window.currentUserData.id 
+            }).then(function(res) {
+                closeOverlayAndShowContent();
+            }).catch(function(e) {
+                closeOverlayAndShowContent(); 
+            });
+        } else {
+            closeOverlayAndShowContent();
+        }
+    };
+
     window.loadUserData = function() { 
         var userLoadingEl = document.getElementById('userLoading');
         if(userLoadingEl) userLoadingEl.style.display = 'block'; 
@@ -1355,6 +1415,7 @@
             payload: {
                 monthYear: monthYear,
                 evaluatorId: window.currentUserData.id,
+                evaluatorName: window.currentUserData.name,
                 evaluatorName: window.currentUserData.name,
                 evaluations: evals
             }
