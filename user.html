@@ -991,7 +991,10 @@
             if (content) content.style.display = 'flex';
             
             if (window.currentUserData) {
-                localStorage.setItem('vkt_rules_accepted_' + window.currentUserData.id, 'true');
+                var now = new Date();
+                var currentMonthKey = now.getFullYear() + "_" + (now.getMonth() + 1);
+                var ruleKey = 'vkt_rules_accepted_' + currentMonthKey + '_' + window.currentUserData.id;
+                localStorage.setItem(ruleKey, 'true');
                 window.currentUserData.rulesAccepted = true;
             }
         };
@@ -1037,10 +1040,14 @@
             var headerEl = document.getElementById('userNameHeader');
             if(headerEl) headerEl.innerText = d.name; 
             
-            var isAccepted = (d.rulesAccepted === true || d.rulesAccepted === "true" || d.rulesAccepted === "ยอมรับแล้ว");
+            var now = new Date();
+            var currentMonthKey = now.getFullYear() + "_" + (now.getMonth() + 1);
+            var ruleKey = 'vkt_rules_accepted_' + currentMonthKey + '_' + d.id;
+            
+            // เช็คจาก LocalStorage เป็นหลัก ว่าเดือนนี้กดยอมรับไปหรือยัง
+            var isAcceptedThisMonth = localStorage.getItem(ruleKey) === 'true';
 
-            if (!isAccepted) {
-                localStorage.removeItem('vkt_rules_accepted_' + d.id);
+            if (!isAcceptedThisMonth) {
                 if(userProfileContentEl) userProfileContentEl.style.display = 'none'; 
                 document.body.style.overflow = 'hidden'; 
                 
@@ -1051,7 +1058,6 @@
                 if(rulesOverlay) rulesOverlay.style.display = 'none';
                 
                 document.body.style.overflow = '';
-                localStorage.setItem('vkt_rules_accepted_' + d.id, 'true');
                 if(userProfileContentEl) userProfileContentEl.style.display = 'flex'; 
             }
             
