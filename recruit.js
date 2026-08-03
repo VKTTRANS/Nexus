@@ -99,7 +99,13 @@ window.showRecruitDetail = async function(index) {
     
     document.getElementById('d_name').innerText = c.name; 
     document.getElementById('d_pos').innerHTML = '<i class="bi bi-briefcase me-2"></i>' + c.position; 
-    document.getElementById('d_phone').innerText = c.phone || '-'; 
+    var phoneStr = c.phone || '-';
+        if (phoneStr !== '-') {
+            // ใช้แท็ก <a> และ href="tel:เบอร์" เพื่อให้กดแล้วโทรออกได้ทันที
+            document.getElementById('d_phone').innerHTML = '<a href="tel:' + phoneStr + '" class="text-info text-decoration-none border-bottom border-info border-opacity-50 pb-1 hover-scale d-inline-block"><i class="bi bi-telephone-outbound me-1"></i>' + phoneStr + '</a>';
+        } else {
+            document.getElementById('d_phone').innerText = '-';
+        }
     
     var imgEl = document.getElementById('d_photo'); 
     imgEl.src = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; 
