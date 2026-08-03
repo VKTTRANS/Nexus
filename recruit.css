@@ -1,0 +1,12 @@
+.swal2-container { 
+    z-index: 20000 !important; 
+}
+.applicant-list-item { 
+    background: rgba(255,255,255,0.02); 
+    border: 1px solid rgba(255,255,255,0.05); 
+    border-radius: 12px; transition: all 0.3s ease; cursor: pointer; 
+}
+.applicant-list-item:hover { 
+    transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 230, 118, 0.15); 
+    border-color: #00E676; background: rgba(40, 40, 40, 0.8); 
+}
