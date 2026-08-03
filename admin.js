@@ -1254,15 +1254,15 @@ window.openBirthdayModal = function() {
             var delay = idx * 0.05;
             var day = new Date(e.birthDate).getDate(); 
             html += `
-            <div class="col-md-6 stagger-item" style="animation-delay: ${delay}s">
-                <div class="admin-modal-card hover-warning h-100" onclick="window.openModal('view', '${e.id}')">
+            <div class="col-md-6 col-lg-4 stagger-item" style="animation-delay: ${delay}s">
+                <div class="admin-modal-card hover-warning h-100 p-3" onclick="window.openModal('view', '${e.id}')">
                     <div class="d-flex align-items-center gap-3 w-100">
-                        <div class="admin-modal-badge admin-modal-badge-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; padding: 0; font-size: 1.1rem;">${day}</div>
+                        <div class="admin-modal-badge admin-modal-badge-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; padding: 0; font-size: 1rem;">${day}</div>
                         <div class="overflow-hidden flex-grow-1">
-                            <div class="admin-modal-title text-truncate">${e.name}</div>
-                            <div class="admin-modal-subtitle text-truncate">${e.position}</div>
+                            <div class="admin-modal-title" style="font-size: 0.85rem; white-space: normal; line-height: 1.3;">${e.name}</div>
+                            <div class="admin-modal-subtitle text-truncate" style="font-size: 0.75rem;">${e.position}</div>
                         </div>
-                        <i class="bi bi-chevron-right text-muted small ms-auto"></i>
+                        <i class="bi bi-chevron-right text-muted small ms-auto flex-shrink-0"></i>
                     </div>
                 </div>
             </div>`; 
