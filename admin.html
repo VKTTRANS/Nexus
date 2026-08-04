@@ -12,11 +12,12 @@
                 <button class="tab-btn" id="btnTabWarn" onclick="window.switchAdminTab('warn')"><i class="bi bi-exclamation-triangle-fill me-1 text-danger"></i>ใบเตือน</button>
                 <button class="tab-btn" id="btnTabPayroll" onclick="window.switchAdminTab('payroll')"><i class="bi bi-cash-coin me-1 text-warning"></i>เงินเดือน</button>
                 <button class="tab-btn" id="btnTabEval" onclick="window.switchAdminTab('eval')"><i class="bi bi-star-fill me-1 text-success"></i>ประเมิน</button>
+                <!-- 🟢 ปุ่ม Tab ติดต่อศูนย์ (ใหม่) -->
+                <button class="tab-btn" id="btnTabContact" onclick="window.switchAdminTab('contact')"><i class="bi bi-telephone-inbound-fill me-1 text-primary"></i>ติดต่อศูนย์</button>
             </div>
         </div>
         
         <div class="d-flex gap-2">
-            <!-- ปุ่มสลับไปดูหน้าใบสมัครงาน -->
             <button class="btn btn-sm btn-dark border-secondary text-light rounded-pill px-3 admin-only hover-scale" onclick="window.switchView('view-recruit'); window.loadRecruitData();" style="display:none;"><i class="bi bi-file-earmark-person me-1"></i>ใบสมัคร</button>
             <button class="btn btn-sm btn-success rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="window.openModal('create')" style="display:none;"><i class="bi bi-person-plus-fill me-1"></i>เพิ่มพนักงานใหม่</button>
             <button class="btn btn-sm btn-outline-danger rounded-pill px-2 hover-scale" onclick="window.logout()" title="ออกจากระบบ"><i class="bi bi-power"></i></button>
@@ -338,6 +339,43 @@
                     </thead>
                     <tbody id="adminPayrollTableBody">
                         <tr><td colspan="8" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🟢 Section: จัดการรายชื่อศูนย์ติดต่อ (Contact) -->
+    <div id="section-admin-contact" class="d-none">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
+            <div class="stat-card border-primary p-2 px-3 m-0 d-flex align-items-center gap-3" style="background: rgba(13,110,253,0.05); min-width: 250px;">
+                <div class="stat-icon text-primary m-0 bg-primary bg-opacity-10"><i class="bi bi-telephone-inbound"></i></div>
+                <div>
+                    <h6 class="text-secondary mb-0" style="font-size: 0.7rem;">รายชื่อผู้ติดต่อทั้งหมด</h6>
+                    <h4 class="fw-bold text-primary mb-0"><span id="contactTotalCount">0</span> <span class="fs-6 fw-normal text-muted">รายการ</span></h4>
+                </div>
+            </div>
+            <div class="d-flex gap-2 align-items-center" style="flex-grow: 1; justify-content: flex-end;">
+                <button class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm fw-bold hover-scale" onclick="window.openContactModal()">
+                    <i class="bi bi-plus-circle me-1"></i>เพิ่มผู้ติดต่อ/กลุ่มงาน
+                </button>
+            </div>
+        </div>
+        <div class="glass-container-table stagger-3">
+            <div class="table-responsive">
+                <table class="table table-hover table-custom mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 text-warning">กลุ่ม / โซน</th>
+                            <th>พนักงาน (ID)</th>
+                            <th>ชื่อ - นามสกุล</th>
+                            <th>ตำแหน่ง</th>
+                            <th>เบอร์โทรศัพท์</th>
+                            <th class="text-end pe-4">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminContactTableBody">
+                        <tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-primary spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -744,7 +782,7 @@
         </div>
     </div>
 
-    <!-- Modal ออกสลิปเงินเดือน (ที่ปรับแก้แล้ว) -->
+    <!-- Modal ออกสลิปเงินเดือน -->
     <div class="modal fade admin-popup-modal" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-success">
@@ -946,7 +984,7 @@
         </div>
     </div>
 
-    <!-- Modal สำหรับแสดงผลประเมินย่อยของ Admin (เอาไว้ใช้กรณีสลับหน้า) -->
+    <!-- Modal สำหรับแสดงผลประเมินย่อยของ Admin -->
     <div class="modal fade admin-popup-modal" id="evalDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-success border-opacity-50">
@@ -1026,7 +1064,7 @@
         </div>
     </div>
 
-<!-- Modal วันเกิด -->
+    <!-- Modal วันเกิด -->
     <div class="modal fade admin-popup-modal" id="birthdayModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-warning border-neon-warning">
@@ -1281,6 +1319,43 @@
                     <button class="btn btn-outline-danger me-auto rounded-pill px-4" onclick="window.deleteWarning()">ลบเอกสารทิ้ง</button>
                     <button class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
                     <button class="btn btn-danger fw-bold text-white rounded-pill px-4" onclick="window.saveWarningResolution()">บันทึกอัปเดต</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🟢 Modal จัดการรายชื่อผู้ติดต่อ (ใหม่) -->
+    <div class="modal fade admin-popup-modal" id="contactModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content border-primary border-neon-info">
+                <div class="modal-header border-bottom border-secondary border-opacity-50">
+                    <h5 class="modal-title fw-bold text-primary"><i class="bi bi-person-lines-fill me-2"></i>จัดการผู้ติดต่อ / ศูนย์ฯ</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="contactForm" onsubmit="window.saveContact(event)">
+                        <input type="hidden" id="c_oldGroup">
+                        <input type="hidden" id="c_oldEmpId">
+                        
+                        <div class="mb-3">
+                            <label class="small text-muted mb-1 fw-bold">ชื่อกลุ่ม / โซน / แผนก *</label>
+                            <input type="text" id="c_groupName" class="form-control bg-dark text-white border-secondary input-dark" required placeholder="เช่น ลานอยุธยา, แจ้งอุบัติเหตุด่วน...">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="small text-muted mb-1 fw-bold">เลือกพนักงานผู้รับผิดชอบ *</label>
+                            <input class="form-control bg-dark text-white border-secondary input-dark" list="contactEmpOptions" id="c_empInput" placeholder="ค้นหาพนักงาน..." required>
+                            <datalist id="contactEmpOptions"></datalist>
+                        </div>
+                        
+                        <div class="text-end pt-3 border-top border-secondary border-opacity-50 d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-danger rounded-pill px-4" id="btnDeleteContact" style="display:none;" onclick="window.deleteContact()">ลบข้อมูล</button>
+                            <div class="ms-auto">
+                                <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold" id="btnSaveContact">บันทึกข้อมูล</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

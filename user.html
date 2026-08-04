@@ -36,7 +36,6 @@
         
         <div class="col-lg-8">
             <div class="main-content-card p-3 p-md-4 shadow-lg">
-                <!-- เมนู Tab จัดเรียงใหม่รองรับ Mobile แบบ List -->
                 <ul class="nav nav-pills custom-nav-pills mb-4 gap-2 flex-column flex-md-row" id="userTabs" role="tablist">
                     <li class="nav-item flex-md-fill" role="presentation">
                         <button class="nav-link active py-2 px-3 w-100 d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-payslips" data-bs-toggle="tab" data-bs-target="#tab-content-payslips" type="button" role="tab">
@@ -66,6 +65,12 @@
                         <button class="nav-link py-2 px-3 w-100 text-success d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
                             <span class="d-flex align-items-center"><i class="bi bi-star-fill me-2 fs-5"></i> ผลประเมิน</span>
                             <span class="badge bg-success rounded-pill ms-md-2" id="u_evalCountBadge">0</span>
+                        </button>
+                    </li>
+                    <!-- 🟢 แท็บติดต่อศูนย์ (ใหม่) -->
+                    <li class="nav-item flex-md-fill" role="presentation">
+                        <button class="nav-link py-2 px-3 w-100 text-light d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-contacts" data-bs-toggle="tab" data-bs-target="#tab-content-contacts" type="button" role="tab" onclick="window.u_loadContacts()">
+                            <span class="d-flex align-items-center"><i class="bi bi-telephone-outbound-fill me-2 fs-5 text-primary"></i> ติดต่อศูนย์</span>
                         </button>
                     </li>
                 </ul>
@@ -119,6 +124,18 @@
                         </div>
                         <div id="u_userEvalListTab">
                             <div class="text-center text-muted py-4 small"><div class="spinner-border spinner-border-sm text-success mb-2"></div><br>กำลังโหลด...</div>
+                        </div>
+                    </div>
+
+                    <!-- 🟢 เนื้อหาแท็บติดต่อศูนย์ (ใหม่) -->
+                    <div class="tab-pane fade" id="tab-content-contacts" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
+                            <h6 class="fw-bold text-light mb-0"><i class="bi bi-person-badge-fill me-2 text-primary"></i>รายชื่อผู้ติดต่อ / แจ้งปัญหา</h6>
+                        </div>
+                        <div id="u_contactListTab">
+                            <div class="text-center text-muted py-4 small">
+                                <div class="spinner-border spinner-border-sm text-light mb-2"></div><br>กำลังโหลดข้อมูลการติดต่อ...
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -220,7 +237,6 @@
     </div>
 </div>
 
-<!-- Modal สำหรับแจ้งอุบัติเหตุ (u_accidentModal ถูกกำหนดใน accident.html) -->
 <!-- Modal สำหรับซ่อมบำรุงและลานตู้ -->
 <div class="modal fade" id="u_yardModal" tabindex="-1" style="z-index: 1060;">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -473,60 +489,61 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="tab-pane fade" id="u_tabDocs">
-                                <div class="p-4 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
-                                    <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50 text-start">
-                                        <i class="bi bi-exclamation-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการอัปเดต / เปลี่ยนแปลง หากไม่ต้องการเปลี่ยนให้ปล่อยว่างไว้
+                        </div>
+                        
+                        <div class="tab-pane fade" id="u_tabDocs">
+                            <div class="p-4 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
+                                <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50 text-start">
+                                    <i class="bi bi-exclamation-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการอัปเดต / เปลี่ยนแปลง หากไม่ต้องการเปลี่ยนให้ปล่อยว่างไว้
+                                </div>
+                                <div class="row g-4 text-start">
+                                    <div class="col-md-4">
+                                        <label class="small text-muted mb-1 fw-bold">รูปถ่ายหน้าตรง</label>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_filePhoto">
                                     </div>
-                                    <div class="row g-4 text-start">
-                                        <div class="col-md-4">
-                                            <label class="small text-muted mb-1 fw-bold">รูปถ่ายหน้าตรง</label>
-                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_filePhoto">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted mb-1 fw-bold">สำเนาบัตรประชาชน</label>
-                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileIdCard">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted mb-1 fw-bold text-warning">ใบอนุญาตขับขี่ (สำคัญ)</label>
-                                            <input type="file" class="form-control bg-dark text-light border-warning shadow-none form-control-sm" id="u_fileDrive">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted mb-1 fw-bold">หนังสือเดินทาง (Passport)</label>
-                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_filePassport">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted mb-1 fw-bold">สำเนาทะเบียนบ้าน</label>
-                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileHouse">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted mb-1 fw-bold text-info">ประวัติอาชญากรรม</label>
-                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileCriminal">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted mb-1 fw-bold text-info">ใบตรวจสุขภาพ</label>
-                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileHealth">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted mb-1 fw-bold">วุฒิการศึกษา</label>
-                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileEdu">
-                                        </div>
+                                    <div class="col-md-4">
+                                        <label class="small text-muted mb-1 fw-bold">สำเนาบัตรประชาชน</label>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileIdCard">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="small text-muted mb-1 fw-bold text-warning">ใบอนุญาตขับขี่ (สำคัญ)</label>
+                                        <input type="file" class="form-control bg-dark text-light border-warning shadow-none form-control-sm" id="u_fileDrive">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="small text-muted mb-1 fw-bold">หนังสือเดินทาง (Passport)</label>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_filePassport">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="small text-muted mb-1 fw-bold">สำเนาทะเบียนบ้าน</label>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileHouse">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="small text-muted mb-1 fw-bold text-info">ประวัติอาชญากรรม</label>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileCriminal">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="small text-muted mb-1 fw-bold text-info">ใบตรวจสุขภาพ</label>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileHealth">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="small text-muted mb-1 fw-bold">วุฒิการศึกษา</label>
+                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileEdu">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer border-top border-secondary pt-4 mt-2 px-0 pb-0">
-                        <button type="button" class="btn btn-secondary rounded-pill px-5" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm">
-                            <i class="bi bi-save-fill me-2"></i>อัปเดตข้อมูลส่วนตัว
-                        </button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer border-top border-secondary pt-4 mt-2 px-0 pb-0">
+                    <button type="button" class="btn btn-secondary rounded-pill px-5" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm">
+                        <i class="bi bi-save-fill me-2"></i>อัปเดตข้อมูลส่วนตัว
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Modal ประเมิน (Cross-Role) ที่ปรับใหม่ให้ใช้ Slider บนมือถือได้ง่ายๆ -->

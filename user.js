@@ -1283,3 +1283,44 @@ window.u_safeDate = function(d) {
         return '';
     }
 };
+
+// =========================================================================
+// 🟢 ฟังก์ชันสำหรับโหลดข้อมูลรายชื่อติดต่อ (Contact) (แทรกใหม่)
+// =========================================================================
+window.u_loadContacts = function() {
+    var tab = document.getElementById('u_contactListTab');
+    if(!tab) return;
+    
+    // แสดงรูปโหลดดิ้ง
+    tab.innerHTML = '<div class="text-center text-muted py-4 small"><div class="spinner-border spinner-border-sm text-light mb-2"></div><br>กำลังโหลดข้อมูลการติดต่อ...</div>';
+    
+    // เรียก API ไปที่ code.gs
+    window.callAPI({ action: 'getContactData' }).then(function(res) {
+        if(!res || res.length === 0) {
+            tab.innerHTML = '<div class="text-center text-muted py-5 small"><i class="bi bi-telephone-x fs-1 d-block mb-3 opacity-50"></i>ยังไม่มีข้อมูลผู้ติดต่อในระบบ</div>';
+            return;
+        }
+
+        // วาด UI การ์ดรายชื่อ
+        let html = '<div class="row g-3">';
+        res.forEach(function(c) {
+            html += `
+            <div class="col-md-6 col-lg-4">
+                <div class="p-3 rounded h-100 d-flex flex-column" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,193,7,0.3);">
+                    <div class="mb-2"><span class="badge bg-warning text-dark fw-bold"><i class="bi bi-bookmark-star-fill me-1"></i> ${c.group}</span></div>
+                    <div class="fw-bold text-white fs-5 mb-1">${c.name}</div>
+                    <div class="text-secondary small mb-3 flex-grow-1"><i class="bi bi-briefcase me-1"></i> ${c.position}</div>
+                    <a href="tel:${c.phone}" class="btn btn-outline-success btn-sm w-100 rounded-pill fw-bold shadow-sm d-flex justify-content-center align-items-center mt-auto">
+                        <i class="bi bi-telephone-fill me-2 fs-6"></i> โทร: ${c.phone}
+                    </a>
+                </div>
+            </div>`;
+        });
+        html += '</div>';
+        
+        tab.innerHTML = html;
+        
+    }).catch(function(err) {
+        tab.innerHTML = '<div class="text-center text-danger py-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
+    });
+};

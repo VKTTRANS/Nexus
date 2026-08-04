@@ -171,7 +171,6 @@
     Mobile Responsive (หน้าจอมือถือ) 
     ========================================== */
 @media (max-width: 767.98px) {
-    /* 1. ปรับเมนู Tab ให้เป็น List รายการแนวตั้ง */
     .custom-nav-pills {
         background: transparent !important;
         border: none !important;
@@ -188,24 +187,16 @@
         background: rgba(255, 193, 7, 0.1) !important;
         box-shadow: none;
     }
-    
-    /* 2. จัดปุ่ม Header ด้านบนให้เรียงบน-ล่าง ขยายเต็มจอ */
     .top-header-actions { flex-direction: column; width: 100%; margin-top: 10px; }
     .top-header-actions > div, .top-header-actions button { width: 100%; justify-content: center; }
     #u_evalTopMenuContainer { width: 100%; }
     #btnOpenEvalModal { width: 100%; margin-bottom: 8px; }
-    
-    /* 3. ประวัติสลิป และรายการอื่นๆ จัดเป็นบน-ล่าง */
     .history-item { flex-direction: column !important; align-items: flex-start !important; gap: 12px; }
     .history-item > div { width: 100%; }
     .history-item .btn, .history-item .text-end { width: 100%; text-align: center !important; justify-content: center; display: flex; }
-    
-    /* 4. ปรับขนาดฟอนต์ใน Profile Card */
     .driver-card-header img { width: 100px !important; height: 100px !important; }
     .info-box { padding: 8px 12px; }
     .info-box .fs-6 { font-size: 0.9rem !important; }
     .quick-action-btn span { font-size: 0.75rem !important; }
-    
-    /* 5. ปรับ Layout ฟอร์มอัปโหลดรูป ให้เต็มบรรทัด */
     .upload-zone { padding: 10px; }
 }

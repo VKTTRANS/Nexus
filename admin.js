@@ -1,3 +1,5 @@
+window.allContactData = []; // เพิ่มตัวแปรสำหรับเก็บรายชื่อ Contact
+
 window.showModalSafe = function(modalId) {
     var el = document.getElementById(modalId);
     if (!el) return;
@@ -149,6 +151,9 @@ window.loadAdminData = function() {
     var tbEval = document.getElementById('adminEvalTableBody');
     if(tbEval) tbEval.innerHTML = '<tr><td colspan="5" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูลประเมิน...</td></tr>';
     
+    var tbContact = document.getElementById('adminContactTableBody');
+    if(tbContact) tbContact.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-primary spinner-border-sm me-2"></div> กำลังโหลดข้อมูลผู้ติดต่อ...</td></tr>';
+
     window.callAPI({ 
         action: 'getAccidentData', 
         role: 'Admin', 
@@ -206,23 +211,33 @@ window.loadAdminData = function() {
                     window.allEvalData = evalData || [];
                     window.filterAdminEvalTable();
                 });
+
+                // 🟢 โหลดข้อมูล Contact เข้า Admin Panel
+                window.callAPI({ action: 'getContactData' }).then(function(contactData) {
+                    window.allContactData = contactData || [];
+                    window.renderContactTable();
+                    
+                    // อัปเดต Dropdown เลือกพนักงานในหน้าจอแก้ไข
+                    var datalist = document.getElementById('contactEmpOptions');
+                    if(datalist) {
+                        datalist.innerHTML = '';
+                        var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; });
+                        activeEmps.forEach(function(e) {
+                            datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">';
+                        });
+                    }
+                });
             });
         });
     });
 };
 
 window.switchAdminTab = function(tab) {
-    var elEmp = document.getElementById('btnTabEmp'); if(elEmp) elEmp.classList.remove('active');
-    var elAcc = document.getElementById('btnTabAcc'); if(elAcc) elAcc.classList.remove('active');
-    var elWarn = document.getElementById('btnTabWarn'); if(elWarn) elWarn.classList.remove('active');
-    var elPay = document.getElementById('btnTabPayroll'); if(elPay) elPay.classList.remove('active');
-    var elEval = document.getElementById('btnTabEval'); if(elEval) elEval.classList.remove('active');
+    var tabs = ['btnTabEmp', 'btnTabAcc', 'btnTabWarn', 'btnTabPayroll', 'btnTabEval', 'btnTabContact'];
+    var sections = ['section-admin-emp', 'section-admin-acc', 'section-admin-warn', 'section-admin-payroll', 'section-admin-eval', 'section-admin-contact'];
     
-    var secEmp = document.getElementById('section-admin-emp'); if(secEmp) secEmp.classList.add('d-none');
-    var secAcc = document.getElementById('section-admin-acc'); if(secAcc) secAcc.classList.add('d-none');
-    var secWarn = document.getElementById('section-admin-warn'); if(secWarn) secWarn.classList.add('d-none');
-    var secPay = document.getElementById('section-admin-payroll'); if(secPay) secPay.classList.add('d-none');
-    var secEval = document.getElementById('section-admin-eval'); if(secEval) secEval.classList.add('d-none');
+    tabs.forEach(function(t) { var el = document.getElementById(t); if(el) el.classList.remove('active'); });
+    sections.forEach(function(s) { var sec = document.getElementById(s); if(sec) sec.classList.add('d-none'); });
     
     var searchEmp = document.getElementById('searchInput'); if(searchEmp) searchEmp.value = '';
     var searchAcc = document.getElementById('searchAccidentInput'); if(searchAcc) searchAcc.value = '';
@@ -234,28 +249,27 @@ window.switchAdminTab = function(tab) {
     var filterStatus = document.getElementById('filterSlipStatus'); if(filterStatus) filterStatus.value = 'all';
 
     if (tab === 'emp') { 
-        if(elEmp) elEmp.classList.add('active'); 
-        if(secEmp) secEmp.classList.remove('d-none'); 
+        document.getElementById('btnTabEmp').classList.add('active'); 
+        document.getElementById('section-admin-emp').classList.remove('d-none'); 
         if(window.allEmpData) window.filterTable();
     } else if (tab === 'acc') { 
-        if(elAcc) elAcc.classList.add('active'); 
-        if(secAcc) secAcc.classList.remove('d-none'); 
+        document.getElementById('btnTabAcc').classList.add('active'); 
+        document.getElementById('section-admin-acc').classList.remove('d-none'); 
         if(window.allAccidentData) window.filterAccidentTable();
     } else if (tab === 'warn') { 
-        if(elWarn) elWarn.classList.add('active'); 
-        if(secWarn) secWarn.classList.remove('d-none'); 
+        document.getElementById('btnTabWarn').classList.add('active'); 
+        document.getElementById('section-admin-warn').classList.remove('d-none'); 
         if(window.allWarningData) window.filterWarnTable();
     } else if (tab === 'payroll') {
-        if(elPay) elPay.classList.add('active'); 
-        if(secPay) secPay.classList.remove('d-none');
+        document.getElementById('btnTabPayroll').classList.add('active'); 
+        document.getElementById('section-admin-payroll').classList.remove('d-none');
         
         var yearSelect = document.getElementById('filterPayrollYear');
         if (yearSelect && yearSelect.options.length === 0) {
             var currentYear = new Date().getFullYear();
             for (var y = currentYear - 2; y <= currentYear + 2; y++) {
                 var option = document.createElement('option');
-                option.value = y;
-                option.text = y;
+                option.value = y; option.text = y;
                 if (y === currentYear) option.selected = true;
                 yearSelect.appendChild(option);
             }
@@ -264,14 +278,12 @@ window.switchAdminTab = function(tab) {
         }
 
         var monthSelect = document.getElementById('filterPayrollMonthSelect');
-        if (monthSelect) { 
-            monthSelect.value = ("0" + (new Date().getMonth() + 1)).slice(-2);
-        }
+        if (monthSelect) { monthSelect.value = ("0" + (new Date().getMonth() + 1)).slice(-2); }
 
         if(window.allEmpData) window.filterPayrollTable(); 
     } else if (tab === 'eval') {
-        if(elEval) elEval.classList.add('active'); 
-        if(secEval) secEval.classList.remove('d-none'); 
+        document.getElementById('btnTabEval').classList.add('active'); 
+        document.getElementById('section-admin-eval').classList.remove('d-none'); 
         
         var evalMonthInput = document.getElementById('filterEvalMonth');
         if(evalMonthInput && !evalMonthInput.value) {
@@ -281,6 +293,11 @@ window.switchAdminTab = function(tab) {
             evalMonthInput.value = y + "-" + m;
         }
         if(window.allEvalData) window.filterAdminEvalTable();
+    } else if (tab === 'contact') {
+        // 🟢 Tab ใหม่สำหรับจัดการติดต่อศูนย์
+        document.getElementById('btnTabContact').classList.add('active'); 
+        document.getElementById('section-admin-contact').classList.remove('d-none');
+        if(window.allContactData) window.renderContactTable();
     }
 };
 
@@ -1140,15 +1157,6 @@ window.openCreateWarningModal = function() {
     if (!form) return;
     form.reset(); 
     
-    var datalist = document.getElementById('warnEmpOptions'); 
-    if(datalist) {
-        datalist.innerHTML = ''; 
-        var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; }); 
-        activeEmps.forEach(function(e) { 
-            datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">'; 
-        }); 
-    }
-    
     var issueDate = document.getElementById('warnIssueDate');
     if(issueDate) issueDate.valueAsDate = new Date(); 
     var incidentDate = document.getElementById('warnIncidentDate');
@@ -1389,4 +1397,136 @@ window.openYearDetail = function(year, type) {
     }
     var dList = document.getElementById('yearDetailList'); if(dList) dList.innerHTML = html || '<div class="text-center text-muted py-4">ไม่พบข้อมูล</div>'; 
     window.showModalSafe('yearDetailModal'); 
+};
+
+
+// =========================================================================
+// 🟢 ส่วนการทำงานสำหรับ Tab จัดการข้อมูลผู้ติดต่อ (Contact) ของ Admin
+// =========================================================================
+
+window.renderContactTable = function() {
+    var countEl = document.getElementById('contactTotalCount');
+    if(countEl) countEl.innerText = window.allContactData ? window.allContactData.length : 0;
+    
+    var tbody = document.getElementById('adminContactTableBody');
+    if(!tbody) return;
+    
+    if(!window.allContactData || window.allContactData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted">ยังไม่มีรายชื่อติดต่อในระบบ</td></tr>';
+        return;
+    }
+    
+    var html = '';
+    window.allContactData.forEach(function(c) {
+        html += `
+        <tr>
+            <td class="ps-4"><span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm">${c.group}</span></td>
+            <td><span class="font-monospace text-info">${c.empId}</span></td>
+            <td class="text-light fw-bold">${c.name}</td>
+            <td class="text-secondary small">${c.position}</td>
+            <td class="font-monospace text-success">${c.phone}</td>
+            <td class="text-end pe-4">
+                <button class="btn btn-sm btn-outline-info rounded-pill px-3 shadow-sm hover-scale" onclick="window.openContactModal('${c.group}', '${c.empId}')">
+                    <i class="bi bi-pencil-square me-1"></i>แก้ไข
+                </button>
+            </td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+};
+
+window.openContactModal = function(group, empId) {
+    var form = document.getElementById('contactForm');
+    if(form) form.reset();
+    
+    var btnDelete = document.getElementById('btnDeleteContact');
+    
+    // โหมดแก้ไข
+    if(group && empId) {
+        document.getElementById('c_oldGroup').value = group;
+        document.getElementById('c_oldEmpId').value = empId;
+        document.getElementById('c_groupName').value = group;
+        
+        var empData = window.allEmpData.find(function(e) { return e.id === empId; });
+        if(empData) {
+            document.getElementById('c_empInput').value = empData.id + " : " + empData.name + " (" + (empData.position || "-") + ")";
+        } else {
+            document.getElementById('c_empInput').value = empId;
+        }
+        if(btnDelete) btnDelete.style.display = 'inline-block';
+    } 
+    // โหมดเพิ่มใหม่
+    else {
+        document.getElementById('c_oldGroup').value = '';
+        document.getElementById('c_oldEmpId').value = '';
+        if(btnDelete) btnDelete.style.display = 'none';
+    }
+    
+    window.showModalSafe('contactModal');
+};
+
+window.saveContact = function(e) {
+    e.preventDefault();
+    var inputEl = document.getElementById('c_empInput');
+    var inputValue = inputEl ? inputEl.value : ''; 
+    if (!inputValue || inputValue.indexOf(':') === -1) { 
+        Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ถูกต้อง', text: 'กรุณาเลือกพนักงานจากรายชื่อที่กำหนด'}); 
+        return; 
+    }
+    
+    var empIdValue = inputValue.split(':')[0].trim();
+    var groupName = document.getElementById('c_groupName').value.trim();
+    
+    var payload = {
+        action: 'save',
+        oldGroup: document.getElementById('c_oldGroup').value,
+        oldEmpId: document.getElementById('c_oldEmpId').value,
+        group: groupName,
+        empId: empIdValue
+    };
+    
+    Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }});
+    
+    window.callAPI({ action: 'manageContactData', payload: payload }).then(function(res) {
+        if(res.success) {
+            Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message});
+            var mod = bootstrap.Modal.getInstance(document.getElementById('contactModal'));
+            if(mod) mod.hide();
+            window.loadAdminData(); // โหลดใหม่ทั้งหน้าเพื่อให้ชัวร์
+        } else {
+            Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
+        }
+    });
+};
+
+window.deleteContact = function() {
+    var oldGroup = document.getElementById('c_oldGroup').value;
+    var oldEmpId = document.getElementById('c_oldEmpId').value;
+    
+    Swal.fire({ 
+        title: 'ยืนยันการลบ?', 
+        text: `ลบผู้ติดต่อกลุ่ม "${oldGroup}" ใช่หรือไม่?`, 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#d33', 
+        cancelButtonColor: '#555', 
+        confirmButtonText: 'ลบทิ้ง!', 
+        cancelButtonText: 'ยกเลิก' 
+    }).then(function(result) {
+        if (result.isConfirmed) { 
+            Swal.fire({title: 'กำลังลบ...', allowOutsideClick: false, didOpen: function() { Swal.showLoading(); }}); 
+            
+            var payload = { action: 'delete', oldGroup: oldGroup, oldEmpId: oldEmpId };
+            window.callAPI({ action: 'manageContactData', payload: payload }).then(function(res) {
+                if(res.success) {
+                    Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message});
+                    var mod = bootstrap.Modal.getInstance(document.getElementById('contactModal'));
+                    if(mod) mod.hide();
+                    window.loadAdminData();
+                } else {
+                    Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
+                }
+            });
+        }
+    });
 };
