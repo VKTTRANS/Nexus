@@ -1,13 +1,10 @@
-/* --- Logistics Theme สำหรับ User --- */
 :root {
     --logistic-bg: #0a0a0a;
     --logistic-card: #151515;
     --logistic-primary: #ffc107;
     --logistic-border: #2a2a2a;
 }
-
 #view-user { background-color: var(--logistic-bg); min-height: 100vh; }
-
 .driver-card {
     background: var(--logistic-card);
     border: 1px solid var(--logistic-border);
@@ -15,14 +12,12 @@
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
-
 .driver-card-header {
     background: repeating-linear-gradient(45deg, #111, #111 10px, #181818 10px, #181818 20px);
     border-bottom: 1px solid var(--logistic-border);
     border-radius: 12px 12px 0 0;
     padding-bottom: 20px;
 }
-
 .info-box {
     background: #0f0f0f;
     border: 1px solid #222;
@@ -31,7 +26,6 @@
     padding: 10px 15px;
     margin-bottom: 10px;
 }
-
 .quick-action-btn {
     background: #111;
     border: 1px solid #333;
@@ -46,147 +40,103 @@
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(255, 193, 7, 0.1);
 }
-
 .main-content-card {
     background: var(--logistic-card);
     border: 1px solid var(--logistic-border);
     border-radius: 12px;
     min-height: 80vh;
 }
-
 .custom-nav-pills {
-    background: #0a0a0a;
-    border-radius: 10px;
-    padding: 5px;
-    border: 1px solid #222;
-    flex-wrap: wrap;
+    display: flex;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-bottom: 25px;
+    width: 100%;
+}
+.custom-nav-pills .nav-item {
+    flex: 1 1 0;
+    min-width: 0;
 }
 .custom-nav-pills .nav-link {
+    background: rgba(20, 20, 20, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 10px !important;
     color: #888;
-    border-radius: 8px;
     font-weight: 600;
-    transition: 0.3s;
+    padding: 12px 5px !important;
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+    font-size: 0.85rem;
+    position: relative;
     white-space: nowrap;
 }
-.custom-nav-pills .nav-link.active {
-    background-color: #222;
-    color: var(--logistic-primary);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+.custom-nav-pills .nav-link i {
+    font-size: 1.1rem !important;
+    margin: 0 6px 0 0 !important;
 }
-
-.history-item {
-    background: #0a0a0a;
-    border: 1px solid #222;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 12px;
-    transition: all 0.2s;
-}
-.history-item:hover {
-    border-color: #444;
-    background: #111;
-}
-
-.upload-zone {
-    background: #0a0a0a;
-    border: 1px dashed #444;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    transition: all 0.3s;
-}
-.upload-zone:hover { border-color: var(--logistic-primary); background: #111; }
-
-.logistics-modal .modal-body { text-align: left !important; }
-
-.eval-score-input::-webkit-outer-spin-button,
-.eval-score-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-.eval-score-input[type=number] {
-    -moz-appearance: textfield;
-}
-
-.accordion-item { border: none; }
-.accordion-button {
-    background-color: #1a1a1a;
+.custom-nav-pills .nav-link:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
     color: #fff;
-    box-shadow: none !important;
+    transform: translateY(-2px);
 }
-.accordion-button:not(.collapsed) {
-    background-color: #222;
-    color: var(--logistic-primary);
+.custom-nav-pills .nav-link.active {
+    background: rgba(255, 193, 7, 0.1) !important;
+    border-color: rgba(255, 193, 7, 0.4) !important;
+    color: var(--logistic-primary) !important;
 }
+.custom-nav-pills .nav-link.text-danger.active { 
+    background: rgba(239, 68, 68, 0.1) !important; border-color: rgba(239, 68, 68, 0.4) !important; color: #fc5c65 !important; 
+}
+.custom-nav-pills .nav-link.text-info.active { 
+    background: rgba(13, 202, 240, 0.1) !important; border-color: rgba(13, 202, 240, 0.4) !important; color: #0dcaf0 !important; 
+}
+.custom-nav-pills .nav-link.text-success.active { 
+    background: rgba(25, 135, 84, 0.1) !important; border-color: rgba(25, 135, 84, 0.4) !important; color: #20c997 !important; 
+}
+.custom-nav-pills .nav-link.text-light.active { 
+    background: rgba(255, 255, 255, 0.1) !important; border-color: rgba(255, 255, 255, 0.3) !important; color: #fff !important; 
+}
+.custom-nav-pills .nav-link .badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 0.65rem;
+    padding: 4px 6px;
+    border-radius: 20px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-weight: 800;
+}
+.history-item { background: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 15px; margin-bottom: 12px; transition: all 0.2s; }
+.history-item:hover { border-color: #444; background: #111; }
+.upload-zone { background: #0a0a0a; border: 1px dashed #444; border-radius: 8px; padding: 15px; text-align: center; transition: all 0.3s; }
+.upload-zone:hover { border-color: var(--logistic-primary); background: #111; }
+.logistics-modal .modal-body { text-align: left !important; }
+.eval-score-input::-webkit-outer-spin-button, .eval-score-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.eval-score-input[type=number] { -moz-appearance: textfield; }
+.accordion-item { border: none; }
+.accordion-button { background-color: #1a1a1a; color: #fff; box-shadow: none !important; }
+.accordion-button:not(.collapsed) { background-color: #222; color: var(--logistic-primary); }
 .accordion-button::after { filter: invert(1) grayscale(100%) brightness(200%); }
-
-/* ==========================================
-    ปรับแต่ง Slider สำหรับประเมินผล
-    ========================================== */
-.eval-range {
-    -webkit-appearance: none;
-    width: 100%;
-    background: transparent;
-    height: 35px;
-}
-.eval-range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 28px;
-    width: 28px;
-    border-radius: 50%;
-    background: #6c757d;
-    cursor: pointer;
-    margin-top: -11px;
-    border: 3px solid #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    transition: background 0.3s, box-shadow 0.3s;
-}
-.eval-range.touched::-webkit-slider-thumb {
-    background: #198754;
-    box-shadow: 0 0 12px rgba(25, 135, 84, 0.8);
-}
-.eval-range::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 6px;
-    cursor: pointer;
-    background: #333;
-    border-radius: 3px;
-}
+.eval-range { -webkit-appearance: none; width: 100%; background: transparent; height: 35px; }
+.eval-range::-webkit-slider-thumb { -webkit-appearance: none; height: 28px; width: 28px; border-radius: 50%; background: #6c757d; cursor: pointer; margin-top: -11px; border: 3px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.5); transition: background 0.3s, box-shadow 0.3s; }
+.eval-range.touched::-webkit-slider-thumb { background: #198754; box-shadow: 0 0 12px rgba(25, 135, 84, 0.8); }
+.eval-range::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #333; border-radius: 3px; }
 .eval-range:focus { outline: none; }
 .eval-range:disabled::-webkit-slider-thumb { background: #444; border-color: #555; cursor: not-allowed; box-shadow: none; }
 .eval-range:disabled::-webkit-slider-runnable-track { background: #222; cursor: not-allowed; }
+.eval-driver-card { background: rgba(255,255,255,0.02); border: 1px solid #333; border-radius: 12px; transition: 0.3s; }
+.eval-driver-card:hover { border-color: rgba(25, 135, 84, 0.5); background: rgba(255,255,255,0.04); }
 
-.eval-driver-card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid #333;
-    border-radius: 12px;
-    transition: 0.3s;
-}
-.eval-driver-card:hover {
-    border-color: rgba(25, 135, 84, 0.5);
-    background: rgba(255,255,255,0.04);
-}
-
-/* ==========================================
-    Mobile Responsive (หน้าจอมือถือ) 
-    ========================================== */
 @media (max-width: 767.98px) {
-    .custom-nav-pills {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        gap: 8px !important;
-    }
-    .custom-nav-pills .nav-link {
-        background: #111;
-        border: 1px solid #333 !important;
-        padding: 14px 16px !important;
-    }
-    .custom-nav-pills .nav-link.active {
-        border-color: var(--logistic-primary) !important;
-        background: rgba(255, 193, 7, 0.1) !important;
-        box-shadow: none;
-    }
     .top-header-actions { flex-direction: column; width: 100%; margin-top: 10px; }
     .top-header-actions > div, .top-header-actions button { width: 100%; justify-content: center; }
     #u_evalTopMenuContainer { width: 100%; }

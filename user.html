@@ -1,6 +1,6 @@
 <div id="view-user" class="view-section container p-3 p-md-4">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center align-items-start mb-4 fade-in-up gap-3">
-        <div class="w-100">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center align-items-start mb-4 gap-3">
+        <div class="flex-grow-1">
             <h4 class="fw-bold text-white mb-1" style="letter-spacing: 1px;">
                 <i class="bi bi-truck text-warning me-2"></i>DRIVER PORTAL
             </h4>
@@ -9,14 +9,13 @@
             </div>
         </div>
         
-        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-md-end top-header-actions">
+        <div class="d-flex flex-row align-items-center gap-2 justify-content-start justify-content-md-end" style="white-space: nowrap;">
             <div id="u_evalTopMenuContainer" style="display: none;">
-                <button id="btnOpenEvalModal" onclick="window.u_openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm d-flex justify-content-center align-items-center">
+                <button id="btnOpenEvalModal" onclick="window.u_openEvaluationModal()" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm d-flex align-items-center">
                     <i class="bi bi-star-fill me-1"></i> ประเมิน <span id="u_evalStatusBadge" class="badge bg-danger ms-2">ยังไม่ประเมิน</span>
                 </button>
             </div>
-            
-            <button class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-bold shadow-sm d-flex justify-content-center align-items-center" onclick="window.logout()">
+            <button class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold shadow-sm d-flex align-items-center" onclick="window.logout()">
                 <i class="bi bi-power me-1"></i> ออกจากระบบ
             </button>
         </div>
@@ -36,44 +35,78 @@
         
         <div class="col-lg-8">
             <div class="main-content-card p-3 p-md-4 shadow-lg">
-                <ul class="nav nav-pills custom-nav-pills mb-4 gap-2 flex-column flex-md-row" id="userTabs" role="tablist">
-                    <li class="nav-item flex-md-fill" role="presentation">
-                        <button class="nav-link active py-2 px-3 w-100 d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-payslips" data-bs-toggle="tab" data-bs-target="#tab-content-payslips" type="button" role="tab">
-                            <span class="d-flex align-items-center"><i class="bi bi-cash-stack me-2 fs-5"></i> สลิปเงินเดือน</span>
-                            <span class="badge bg-warning text-dark rounded-pill ms-md-2" id="u_payslipCountBadge">0</span>
+                
+                <!-- 🖥️ เมนูแนวนอน (แสดงเฉพาะจอ PC/Tablet) -->
+                <ul class="nav nav-pills custom-nav-pills mb-4 d-none d-md-flex" id="userTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active d-flex align-items-center" id="tab-btn-payslips" data-bs-toggle="tab" data-bs-target="#tab-content-payslips" type="button" role="tab">
+                            <i class="bi bi-cash-stack"></i> สลิปเงินเดือน
+                            <span class="badge bg-warning text-dark" id="u_payslipCountBadge">0</span>
                         </button>
                     </li>
-                    <li class="nav-item flex-md-fill" role="presentation">
-                        <button class="nav-link py-2 px-3 w-100 d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-docs" data-bs-toggle="tab" data-bs-target="#tab-content-docs" type="button" role="tab">
-                            <span class="d-flex align-items-center"><i class="bi bi-folder2-open me-2 fs-5"></i> เอกสารส่วนตัว</span>
-                            <span class="badge bg-secondary rounded-pill ms-md-2" id="u_docCountBadge">0</span>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link d-flex align-items-center" id="tab-btn-docs" data-bs-toggle="tab" data-bs-target="#tab-content-docs" type="button" role="tab">
+                            <i class="bi bi-folder2-open"></i> เอกสาร
+                            <span class="badge bg-secondary" id="u_docCountBadge">0</span>
                         </button>
                     </li>
-                    <li class="nav-item flex-md-fill" role="presentation">
-                        <button class="nav-link py-2 px-3 w-100 text-danger d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-warns" data-bs-toggle="tab" data-bs-target="#tab-content-warns" type="button" role="tab">
-                            <span class="d-flex align-items-center"><i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i> ใบเตือน</span>
-                            <span class="badge bg-danger rounded-pill ms-md-2" id="u_warnCountBadge">0</span>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-danger d-flex align-items-center" id="tab-btn-warns" data-bs-toggle="tab" data-bs-target="#tab-content-warns" type="button" role="tab">
+                            <i class="bi bi-exclamation-triangle-fill"></i> ใบเตือน
+                            <span class="badge bg-danger" id="u_warnCountBadge">0</span>
                         </button>
                     </li>
-                    <li class="nav-item flex-md-fill" role="presentation">
-                        <button class="nav-link py-2 px-3 w-100 text-info d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-accs" data-bs-toggle="tab" data-bs-target="#tab-content-accs" type="button" role="tab">
-                            <span class="d-flex align-items-center"><i class="bi bi-cone-striped me-2 fs-5"></i> อุบัติเหตุ</span>
-                            <span class="badge bg-info text-dark rounded-pill ms-md-2" id="u_accCountBadge">0</span>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-info d-flex align-items-center" id="tab-btn-accs" data-bs-toggle="tab" data-bs-target="#tab-content-accs" type="button" role="tab">
+                            <i class="bi bi-cone-striped"></i> อุบัติเหตุ
+                            <span class="badge bg-info text-dark" id="u_accCountBadge">0</span>
                         </button>
                     </li>
-                    <li class="nav-item flex-md-fill" role="presentation">
-                        <button class="nav-link py-2 px-3 w-100 text-success d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
-                            <span class="d-flex align-items-center"><i class="bi bi-star-fill me-2 fs-5"></i> ผลประเมิน</span>
-                            <span class="badge bg-success rounded-pill ms-md-2" id="u_evalCountBadge">0</span>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-success d-flex align-items-center" id="tab-btn-evals" data-bs-toggle="tab" data-bs-target="#tab-content-evals" type="button" role="tab">
+                            <i class="bi bi-star-fill"></i> ผลประเมิน
+                            <span class="badge bg-success" id="u_evalCountBadge">0</span>
                         </button>
                     </li>
-                    <!-- 🟢 แท็บติดต่อศูนย์ (ใหม่) -->
-                    <li class="nav-item flex-md-fill" role="presentation">
-                        <button class="nav-link py-2 px-3 w-100 text-light d-flex justify-content-between align-items-center justify-content-md-center" id="tab-btn-contacts" data-bs-toggle="tab" data-bs-target="#tab-content-contacts" type="button" role="tab" onclick="window.u_loadContacts()">
-                            <span class="d-flex align-items-center"><i class="bi bi-telephone-outbound-fill me-2 fs-5 text-primary"></i> ติดต่อศูนย์</span>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link text-light d-flex align-items-center" id="tab-btn-contacts" data-bs-toggle="tab" data-bs-target="#tab-content-contacts" type="button" role="tab" onclick="window.u_loadContacts()">
+                            <i class="bi bi-telephone-outbound-fill text-primary"></i> ติดต่อศูนย์
                         </button>
                     </li>
                 </ul>
+
+                <!-- 📱 เมนู Dropdown (แสดงเฉพาะมือถือ) แก้ href แล้ว! -->
+                <div class="dropdown d-md-none mb-4">
+                    <button class="btn btn-dark w-100 text-start d-flex justify-content-between align-items-center py-3 px-3 shadow-sm rounded-3 border-secondary" type="button" id="mobileTabBtn" data-bs-toggle="dropdown" aria-expanded="false" style="background: rgba(20,20,20,0.8);">
+                        <div id="mobileTabTitle" class="fw-bold"><i class="bi bi-cash-stack me-2 text-warning"></i> สลิปเงินเดือน</div>
+                        <i class="bi bi-chevron-down text-muted"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark w-100 shadow-lg border-secondary border-opacity-50 mt-1" style="border-radius: 12px; overflow: hidden; background: #151515;">
+                        <li><a class="dropdown-item py-3 px-3 d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25" href="javascript:void(0)" onclick="window.u_selectMobileTab('tab-btn-payslips', '<i class=\'bi bi-cash-stack me-2 text-warning\'></i> สลิปเงินเดือน')">
+                            <span class="text-light fw-bold"><i class="bi bi-cash-stack me-2 text-warning"></i> สลิปเงินเดือน</span>
+                            <span class="badge bg-warning text-dark rounded-pill" id="u_payslipCountBadge_m">0</span>
+                        </a></li>
+                        <li><a class="dropdown-item py-3 px-3 d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25" href="javascript:void(0)" onclick="window.u_selectMobileTab('tab-btn-docs', '<i class=\'bi bi-folder2-open me-2 text-light\'></i> เอกสารประจำตัว')">
+                            <span class="text-light fw-bold"><i class="bi bi-folder2-open me-2"></i> เอกสารประจำตัว</span>
+                            <span class="badge bg-secondary rounded-pill" id="u_docCountBadge_m">0</span>
+                        </a></li>
+                        <li><a class="dropdown-item py-3 px-3 d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25" href="javascript:void(0)" onclick="window.u_selectMobileTab('tab-btn-warns', '<i class=\'bi bi-exclamation-triangle-fill me-2 text-danger\'></i> ใบเตือน')">
+                            <span class="text-light fw-bold"><i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i> ใบเตือน</span>
+                            <span class="badge bg-danger rounded-pill" id="u_warnCountBadge_m">0</span>
+                        </a></li>
+                        <li><a class="dropdown-item py-3 px-3 d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25" href="javascript:void(0)" onclick="window.u_selectMobileTab('tab-btn-accs', '<i class=\'bi bi-cone-striped me-2 text-info\'></i> อุบัติเหตุ')">
+                            <span class="text-light fw-bold"><i class="bi bi-cone-striped me-2 text-info"></i> อุบัติเหตุ</span>
+                            <span class="badge bg-info text-dark rounded-pill" id="u_accCountBadge_m">0</span>
+                        </a></li>
+                        <li><a class="dropdown-item py-3 px-3 d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25" href="javascript:void(0)" onclick="window.u_selectMobileTab('tab-btn-evals', '<i class=\'bi bi-star-fill me-2 text-success\'></i> ผลประเมิน')">
+                            <span class="text-light fw-bold"><i class="bi bi-star-fill me-2 text-success"></i> ผลประเมิน</span>
+                            <span class="badge bg-success rounded-pill" id="u_evalCountBadge_m">0</span>
+                        </a></li>
+                        <li><a class="dropdown-item py-3 px-3 d-flex justify-content-between align-items-center" href="javascript:void(0)" onclick="window.u_selectMobileTab('tab-btn-contacts', '<i class=\'bi bi-telephone-outbound-fill me-2 text-primary\'></i> ติดต่อศูนย์')">
+                            <span class="text-light fw-bold"><i class="bi bi-telephone-outbound-fill me-2 text-primary"></i> ติดต่อศูนย์</span>
+                        </a></li>
+                    </ul>
+                </div>
                 
                 <div class="tab-content" id="userTabsContent">
                     <div class="tab-pane fade show active" id="tab-content-payslips" role="tabpanel">
@@ -127,7 +160,6 @@
                         </div>
                     </div>
 
-                    <!-- 🟢 เนื้อหาแท็บติดต่อศูนย์ (ใหม่) -->
                     <div class="tab-pane fade" id="tab-content-contacts" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
                             <h6 class="fw-bold text-light mb-0"><i class="bi bi-person-badge-fill me-2 text-primary"></i>รายชื่อผู้ติดต่อ / แจ้งปัญหา</h6>
@@ -144,7 +176,6 @@
     </div>
 </div>
 
-<!-- Modal กฎระเบียบ -->
 <div id="rulesOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999;">
     <div class="d-flex justify-content-center align-items-center w-100 h-100 p-2 p-md-4">
         <div class="d-flex flex-column rounded-4 w-100" style="background: #111; border: 1px solid #ffc107; box-shadow: 0 0 30px rgba(255, 193, 7, 0.2); max-width: 800px; max-height: 95vh;">
@@ -156,7 +187,6 @@
                 <div class="alert alert-warning border-warning bg-warning bg-opacity-10 text-warning mb-4">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>กรุณาอ่านและทำความเข้าใจ</strong> เพื่อสิทธิประโยชน์และการปฏิบัติงานที่ถูกต้องของตัวท่านเอง
                 </div>
-
                 <h6 class="text-success fw-bold">1. การเข้างาน</h6>
                 <ul class="list-unstyled ps-3 mb-4">
                     <li class="mb-2"><b>1.1</b> พนักงานประจำสำนักงานใหญ่ ให้เข้างาน จันทร์-ศุกร์, เสาร์เว้นเสาร์ เวลา 09.00-18.00 น.</li>
@@ -166,14 +196,12 @@
                     <li class="mb-2"><b>1.5</b> เงินเบิกล่วงหน้า ไม่เกิน 3,000 บาท/สัปดาห์ (รวมทั้งเดือนไม่เกินเงินเดือน) แจ้งวันจันทร์จ่ายวันพุธ</li>
                     <li class="mb-2"><b>1.6-1.7</b> การมาสาย ขาดงาน หรือออกก่อนเวลา ต้องได้รับการรับรองจากผู้บริหาร หากไม่มีถือเป็นการขาดงานโดยไม่แจ้งล่วงหน้า (มีผลต่อการประเมิน)</li>
                 </ul>
-
                 <h6 class="text-success fw-bold">2. การทำงานล่วงเวลาและการเปลี่ยนแปลงวันหยุด</h6>
                 <ul class="list-unstyled ps-3 mb-4">
                     <li class="mb-2"><b>2.1-2.6</b> การทำโอทีต้องได้รับอนุมัติล่วงหน้า 1 วัน (ทำได้ไม่เกิน 4 ชม./วัน ในวันปกติ และเหมาไม่เกิน 8 ชม./วัน ในวันหยุด)</li>
                     <li class="mb-2"><b>2.7</b> หากติดภารกิจทำโอทีไม่ได้ ต้องแจ้งล่วงหน้า 3 วัน หาคนทำแทน มิฉะนั้นอาจได้รับใบเตือน</li>
                     <li class="mb-2"><b>2.8-2.9</b> เปลี่ยนแปลงวันหยุดต้องแจ้งล่วงหน้า 3 วันทำการ</li>
                 </ul>
-
                 <h6 class="text-success fw-bold">3. การลางานและการขาดงาน</h6>
                 <ul class="list-unstyled ps-3 mb-4">
                     <li class="mb-1"><b>3.1 ลาป่วย (SL):</b> ลาได้ตามจริงไม่เกิน 30 วัน (ต้องมีใบรับรองแพทย์)</li>
@@ -183,14 +211,12 @@
                     <li class="mb-1"><b>3.5-3.8:</b> ลาคลอด (90 วัน ได้ค่าจ้าง 45 วัน), ลาทำหมัน, ลารับราชการทหาร (ไม่เกิน 60 วัน), ลาบวช (ไม่ได้รับค่าจ้าง)</li>
                     <li class="mb-1 text-danger"><b>3.9</b> ขาดงานแล้วไม่แจ้งเป็นลายลักษณ์อักษรภายใน 7 วัน จะได้รับใบเตือน (ครบ 3 ใบ พิจารณาพ้นสภาพ)</li>
                 </ul>
-
                 <h6 class="text-success fw-bold">4. - 5. การเดินทางและสวัสดิการอื่นๆ</h6>
                 <ul class="list-unstyled ps-3 mb-4">
                     <li class="mb-2">ค่าโรงแรม, ค่าเบี้ยเลี้ยงกันดาร, ค่าน้ำมัน, เบี้ยขยัน ต้องได้รับการอนุมัติจากผู้บริหาร</li>
                     <li class="mb-2">ห้างฯ จ่ายประกันสังคมส่วนลูกจ้างแทนพนักงานประจำทุกคน</li>
                     <li class="mb-2">ชุดฟอร์มพนักงานขับรถ ได้ 2-3 ชุด/ปี (หากลาออกก่อน 1 ปี หักเงินเดือนเต็มจำนวน)</li>
                 </ul>
-
                 <h6 class="text-success fw-bold">6. ความประพฤติและระเบียบวินัย</h6>
                 <ul class="list-unstyled ps-3 mb-4">
                     <li class="mb-1">- ต้องปฏิบัติงานด้วยความซื่อสัตย์ ขยัน และเคารพกฎความปลอดภัย</li>
@@ -198,14 +224,12 @@
                     <li class="mb-1">- ห้ามเปิดเผยความลับบริษัท, ห้ามทำธุรกิจแข่งกับห้างฯ, ห้ามเปิดเผยเงินเดือน</li>
                     <li class="mb-1">- พนักงานที่ไปอบรมต้องถ่ายทอดความรู้ (มีสัญญา 1 ปี หากออกก่อนโดนเรียกค่าชดเชย)</li>
                 </ul>
-
                 <h6 class="text-success fw-bold">7. - 8. การลาออกและการพ้นสภาพ</h6>
                 <ul class="list-unstyled ps-3 mb-4">
                     <li class="mb-2">ต้องแจ้งล่วงหน้าอย่างน้อย 1 เดือน และส่งมอบงานเป็นลายลักษณ์อักษร</li>
                     <li class="mb-2 text-danger">พนักงานขับรถ: หากมีความเสียหายต่อสินค้าหรือรถ ห้างฯ ขอสงวนสิทธิ์หักค่าเสียหายจากเงินเดือนงวดสุดท้าย</li>
                     <li class="mb-2 text-danger">ขาดงานติดต่อกัน 3 วันโดยไม่แจ้ง / ทำผิดซ้ำซากขั้นร้ายแรง = พ้นสภาพทันทีโดยไม่มีค่าชดเชย</li>
                 </ul>
-
                 <h6 class="text-success fw-bold">10. แจ้งกรณีพนักงานเข้าใหม่</h6>
                 <div class="p-3 bg-dark border border-secondary rounded">
                     <div>10.1 ชุดพนักงานถ้าอยู่ไม่ถึง 1 ปี = ปรับชุดละ 1,000 บาท</div>
@@ -223,7 +247,6 @@
                         ข้าพเจ้าได้อ่าน รับทราบ และยอมรับกฎระเบียบ
                     </label>
                 </div>
-
                 <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
                     <button type="button" class="btn btn-outline-danger rounded-pill px-5 py-2 fw-bold" onclick="window.u_declineRules()">
                         <i class="bi bi-x-circle me-1"></i> ไม่ยอมรับ (ออกจากระบบ)
@@ -237,7 +260,6 @@
     </div>
 </div>
 
-<!-- Modal สำหรับซ่อมบำรุงและลานตู้ -->
 <div class="modal fade" id="u_yardModal" tabindex="-1" style="z-index: 1060;">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content bg-dark text-light border border-info border-opacity-50">
@@ -305,7 +327,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="logistics-card p-3 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
                             <label class="small text-light fw-bold m-0 fs-6">
@@ -337,12 +358,10 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="logistics-card p-3 mb-0" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
                         <label class="small text-muted mb-2 fw-bold">หมายเหตุ / อาการเพิ่มเติม</label>
                         <textarea class="form-control bg-dark text-light border-secondary shadow-none" id="u_repNote" rows="2" placeholder="อธิบายอาการเบื้องต้น หรือ ตำแหน่งเพิ่มเติม..."></textarea>
                     </div>
-
                     <div class="mt-4 text-end border-top border-secondary border-opacity-25 pt-4">
                         <button type="button" class="btn btn-secondary rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
                         <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-lg fw-bold" id="btnSubmitRep">ส่งใบแจ้งซ่อม</button>
@@ -353,7 +372,6 @@
     </div>
 </div>
 
-<!-- Modal จัดการข้อมูลส่วนตัว -->
 <div class="modal fade" id="u_empModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content logistics-modal">
@@ -409,7 +427,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-12">
                                     <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                         <div class="fw-bold text-success mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -445,7 +462,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-12">
                                     <div class="row g-3">
                                         <div class="col-md-6">
@@ -489,64 +505,62 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="tab-pane fade" id="u_tabDocs">
-                            <div class="p-4 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
-                                <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50 text-start">
-                                    <i class="bi bi-exclamation-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการอัปเดต / เปลี่ยนแปลง หากไม่ต้องการเปลี่ยนให้ปล่อยว่างไว้
-                                </div>
-                                <div class="row g-4 text-start">
-                                    <div class="col-md-4">
-                                        <label class="small text-muted mb-1 fw-bold">รูปถ่ายหน้าตรง</label>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_filePhoto">
+                            
+                            <div class="tab-pane fade" id="u_tabDocs">
+                                <div class="p-4 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
+                                    <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50 text-start">
+                                        <i class="bi bi-exclamation-circle-fill me-2"></i>อัปโหลดเฉพาะไฟล์ที่ต้องการอัปเดต / เปลี่ยนแปลง หากไม่ต้องการเปลี่ยนให้ปล่อยว่างไว้
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted mb-1 fw-bold">สำเนาบัตรประชาชน</label>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileIdCard">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted mb-1 fw-bold text-warning">ใบอนุญาตขับขี่ (สำคัญ)</label>
-                                        <input type="file" class="form-control bg-dark text-light border-warning shadow-none form-control-sm" id="u_fileDrive">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted mb-1 fw-bold">หนังสือเดินทาง (Passport)</label>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_filePassport">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted mb-1 fw-bold">สำเนาทะเบียนบ้าน</label>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileHouse">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted mb-1 fw-bold text-info">ประวัติอาชญากรรม</label>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileCriminal">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted mb-1 fw-bold text-info">ใบตรวจสุขภาพ</label>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileHealth">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted mb-1 fw-bold">วุฒิการศึกษา</label>
-                                        <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileEdu">
+                                    <div class="row g-4 text-start">
+                                        <div class="col-md-4">
+                                            <label class="small text-muted mb-1 fw-bold">รูปถ่ายหน้าตรง</label>
+                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_filePhoto">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="small text-muted mb-1 fw-bold">สำเนาบัตรประชาชน</label>
+                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileIdCard">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="small text-muted mb-1 fw-bold text-warning">ใบอนุญาตขับขี่ (สำคัญ)</label>
+                                            <input type="file" class="form-control bg-dark text-light border-warning shadow-none form-control-sm" id="u_fileDrive">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="small text-muted mb-1 fw-bold">หนังสือเดินทาง (Passport)</label>
+                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_filePassport">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="small text-muted mb-1 fw-bold">สำเนาทะเบียนบ้าน</label>
+                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileHouse">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="small text-muted mb-1 fw-bold text-info">ประวัติอาชญากรรม</label>
+                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileCriminal">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="small text-muted mb-1 fw-bold text-info">ใบตรวจสุขภาพ</label>
+                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileHealth">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="small text-muted mb-1 fw-bold">วุฒิการศึกษา</label>
+                                            <input type="file" class="form-control bg-dark text-light border-secondary shadow-none form-control-sm" id="u_fileEdu">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer border-top border-secondary pt-4 mt-2 px-0 pb-0">
-                    <button type="button" class="btn btn-secondary rounded-pill px-5" data-bs-dismiss="modal">ยกเลิก</button>
-                    <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm">
-                        <i class="bi bi-save-fill me-2"></i>อัปเดตข้อมูลส่วนตัว
-                    </button>
-                </div>
-            </form>
+                    <div class="modal-footer border-top border-secondary pt-4 mt-2 px-0 pb-0">
+                        <button type="button" class="btn btn-secondary rounded-pill px-5" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-warning fw-bold text-dark rounded-pill px-5 shadow-sm">
+                            <i class="bi bi-save-fill me-2"></i>อัปเดตข้อมูลส่วนตัว
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-</div>
 
-<!-- Modal ประเมิน (Cross-Role) ที่ปรับใหม่ให้ใช้ Slider บนมือถือได้ง่ายๆ -->
 <div class="modal fade" id="u_evaluationModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content logistics-modal" style="border-color: #198754; background: #111;">
@@ -572,7 +586,6 @@
                         <i class="bi bi-check2-all"></i> ตั้งค่าคนที่เหลือเป็น 'ไม่ได้ประสานงาน'
                     </button>
                 </div>
-                
                 <div id="u_evalDriverList" class="d-flex flex-column gap-2">
                     <div class="text-center text-muted py-5"><div class="spinner-border text-success"></div><br>กำลังโหลดรายชื่อ...</div>
                 </div>

@@ -1285,7 +1285,7 @@ window.u_safeDate = function(d) {
 };
 
 // =========================================================================
-// 🟢 ฟังก์ชันสำหรับโหลดข้อมูลรายชื่อติดต่อ (Contact Cards) - Compact Style
+// 🟢 ฟังก์ชันสำหรับโหลดข้อมูลรายชื่อติดต่อ (Contact Cards) - Responsive Style
 // =========================================================================
 window.u_loadContacts = function() {
     var tab = document.getElementById('u_contactListTab');
@@ -1301,41 +1301,41 @@ window.u_loadContacts = function() {
             return;
         }
 
-        // 🟢 เพิ่มคำสั่ง: จัดเรียงข้อมูลตามชื่อ "กลุ่ม / โซน" (ก-ฮ)
+        // 🟢 จัดเรียงข้อมูลตามชื่อ "กลุ่ม / โซน" (ก-ฮ)
         res.sort(function(a, b) {
             return a.group.localeCompare(b.group, 'th');
         });
 
-        // วาด UI การ์ดรายชื่อแบบ Compact
-        let html = '<div class="row g-2.5 g-md-3">';
+        // 🟢 เปลี่ยนคลาสตรงนี้ จาก col-sm-6 เป็น col-md-6 
+        // มือถือ (<768px) = 1 กล่อง | แท็บเล็ต = 2 กล่อง | คอมพิวเตอร์ = 3 กล่อง
+        let html = '<div class="row g-3">';
         res.forEach(function(c) {
             
-            // ตรวจสอบว่ามีชื่อเล่นไหม ถ้ามีให้แสดงสีฟ้าเด่นๆ ถ้าไม่มีปล่อยว่างไว้
+            // ตรวจสอบชื่อเล่น
             let nicknameHtml = (c.nickname && c.nickname !== '-') 
-                ? `<span class="text-info fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">${c.nickname}</span>` 
-                : `<span class="text-secondary font-monospace" style="font-size: 0.7rem; opacity: 0.6;">${c.empId || ''}</span>`;
+                ? `<span class="text-info fw-bold text-nowrap" style="font-size: 0.85rem; letter-spacing: 0.5px;">${c.nickname}</span>` 
+                : `<span class="text-secondary font-monospace text-nowrap" style="font-size: 0.75rem; opacity: 0.6;">${c.empId || ''}</span>`;
 
             html += `
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between shadow-sm position-relative" 
                      style="background: rgba(18, 18, 18, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.2s ease;">
                     <div>
-                        <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
-                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2.5 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">
+                        <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1 rounded-pill fw-bold text-start" style="font-size: 0.72rem; white-space: normal; line-height: 1.3;">
                                 <i class="bi bi-bookmark-star-fill me-1"></i>${c.group}
                             </span>
-                            <!-- แสดงชื่อเล่นตรงมุมขวาบนแทน ID -->
                             ${nicknameHtml}
                         </div>
-                        <div class="fw-bold text-white mb-1" style="font-size: 0.95rem; line-height: 1.35;">
+                        <div class="fw-bold text-white mb-1" style="font-size: 1rem; line-height: 1.35;">
                             ${c.name}
                         </div>
-                        <div class="text-secondary small mb-3 text-truncate" style="font-size: 0.78rem;" title="${c.position}">
+                        <div class="text-secondary small mb-3 text-truncate" style="font-size: 0.8rem;" title="${c.position}">
                             <i class="bi bi-briefcase text-warning opacity-75 me-1"></i>${c.position}
                         </div>
                     </div>
-                    <a href="tel:${c.phone}" class="btn btn-sm btn-success text-success border border-success border-opacity-25 w-100 rounded-pill fw-bold py-1.5 shadow-sm d-flex justify-content-center align-items-center hover-scale" 
-                       style="background: rgba(25, 135, 84, 0.12) !important; font-size: 0.82rem;">
+                    <a href="tel:${c.phone}" class="btn btn-sm btn-success text-success border border-success border-opacity-25 w-100 rounded-pill fw-bold py-2 shadow-sm d-flex justify-content-center align-items-center hover-scale" 
+                       style="background: rgba(25, 135, 84, 0.12) !important; font-size: 0.9rem;">
                         <i class="bi bi-telephone-fill me-2 fs-6"></i>โทร ${c.phone}
                     </a>
                 </div>
@@ -1348,4 +1348,35 @@ window.u_loadContacts = function() {
     }).catch(function(err) {
         tab.innerHTML = '<div class="text-center text-danger py-4">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
     });
+};
+
+// =========================================================================
+// 🟢 ระบบสลับ Tab หน้าจอสำหรับมือถือแบบ Dropdown (กันจอเด้งขึ้นบนสุด)
+// =========================================================================
+window.u_selectMobileTab = function(targetId, titleHtml) {
+    // อัปเดตข้อความหัวเรื่องปุ่ม Dropdown ให้ตรงกับหน้าที่เลือก
+    var titleEl = document.getElementById('mobileTabTitle');
+    if(titleEl) titleEl.innerHTML = titleHtml;
+    
+    // สลับเนื้อหา Tab ของ Bootstrap ให้เปลี่ยนหน้า
+    var tabBtn = document.getElementById(targetId);
+    if(tabBtn) {
+        var tab = new bootstrap.Tab(tabBtn);
+        tab.show();
+        
+        // ถ้ากดเข้าหน้า "ติดต่อศูนย์" ให้โหลด API รายชื่อทันที (เพราะข้อมูลไม่ได้โหลดมารอไว้)
+        if (targetId === 'tab-btn-contacts') {
+            window.u_loadContacts();
+        }
+
+        // เลื่อนหน้าจอให้หัวข้อ Dropdown กลับมาอยู่พอดีจอเบาๆ
+        setTimeout(function() {
+            var mobileDropdown = document.getElementById('mobileTabBtn');
+            if(mobileDropdown) {
+                var yOffset = -20; // เว้นพื้นที่ด้านบนนิดหน่อยไม่ให้ชิดขอบไป
+                var y = mobileDropdown.getBoundingClientRect().top + window.scrollY + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+        }, 150);
+    }
 };
