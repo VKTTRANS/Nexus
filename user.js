@@ -1285,14 +1285,14 @@ window.u_safeDate = function(d) {
 };
 
 // =========================================================================
-// 🟢 ฟังก์ชันสำหรับโหลดข้อมูลรายชื่อติดต่อ (Contact) (แทรกใหม่)
+// 🟢 ฟังก์ชันสำหรับโหลดข้อมูลรายชื่อติดต่อ (Contact Cards) - Compact Style
 // =========================================================================
 window.u_loadContacts = function() {
     var tab = document.getElementById('u_contactListTab');
     if(!tab) return;
     
     // แสดงรูปโหลดดิ้ง
-    tab.innerHTML = '<div class="text-center text-muted py-4 small"><div class="spinner-border spinner-border-sm text-light mb-2"></div><br>กำลังโหลดข้อมูลการติดต่อ...</div>';
+    tab.innerHTML = '<div class="text-center text-muted py-5 small"><div class="spinner-border spinner-border-sm text-warning mb-2"></div><br>กำลังโหลดข้อมูลการติดต่อ...</div>';
     
     // เรียก API ไปที่ code.gs
     window.callAPI({ action: 'getContactData' }).then(function(res) {
@@ -1301,17 +1301,42 @@ window.u_loadContacts = function() {
             return;
         }
 
-        // วาด UI การ์ดรายชื่อ
-        let html = '<div class="row g-3">';
+        // 🟢 เพิ่มคำสั่ง: จัดเรียงข้อมูลตามชื่อ "กลุ่ม / โซน" (ก-ฮ)
+        res.sort(function(a, b) {
+            return a.group.localeCompare(b.group, 'th');
+        });
+
+        // วาด UI การ์ดรายชื่อแบบ Compact
+        let html = '<div class="row g-2.5 g-md-3">';
         res.forEach(function(c) {
+            
+            // ตรวจสอบว่ามีชื่อเล่นไหม ถ้ามีให้แสดงสีฟ้าเด่นๆ ถ้าไม่มีปล่อยว่างไว้
+            let nicknameHtml = (c.nickname && c.nickname !== '-') 
+                ? `<span class="text-info fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">${c.nickname}</span>` 
+                : `<span class="text-secondary font-monospace" style="font-size: 0.7rem; opacity: 0.6;">${c.empId || ''}</span>`;
+
             html += `
-            <div class="col-md-6 col-lg-4">
-                <div class="p-3 rounded h-100 d-flex flex-column" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,193,7,0.3);">
-                    <div class="mb-2"><span class="badge bg-warning text-dark fw-bold"><i class="bi bi-bookmark-star-fill me-1"></i> ${c.group}</span></div>
-                    <div class="fw-bold text-white fs-5 mb-1">${c.name}</div>
-                    <div class="text-secondary small mb-3 flex-grow-1"><i class="bi bi-briefcase me-1"></i> ${c.position}</div>
-                    <a href="tel:${c.phone}" class="btn btn-outline-success btn-sm w-100 rounded-pill fw-bold shadow-sm d-flex justify-content-center align-items-center mt-auto">
-                        <i class="bi bi-telephone-fill me-2 fs-6"></i> โทร: ${c.phone}
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between shadow-sm position-relative" 
+                     style="background: rgba(18, 18, 18, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.2s ease;">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
+                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2.5 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">
+                                <i class="bi bi-bookmark-star-fill me-1"></i>${c.group}
+                            </span>
+                            <!-- แสดงชื่อเล่นตรงมุมขวาบนแทน ID -->
+                            ${nicknameHtml}
+                        </div>
+                        <div class="fw-bold text-white mb-1" style="font-size: 0.95rem; line-height: 1.35;">
+                            ${c.name}
+                        </div>
+                        <div class="text-secondary small mb-3 text-truncate" style="font-size: 0.78rem;" title="${c.position}">
+                            <i class="bi bi-briefcase text-warning opacity-75 me-1"></i>${c.position}
+                        </div>
+                    </div>
+                    <a href="tel:${c.phone}" class="btn btn-sm btn-success text-success border border-success border-opacity-25 w-100 rounded-pill fw-bold py-1.5 shadow-sm d-flex justify-content-center align-items-center hover-scale" 
+                       style="background: rgba(25, 135, 84, 0.12) !important; font-size: 0.82rem;">
+                        <i class="bi bi-telephone-fill me-2 fs-6"></i>โทร ${c.phone}
                     </a>
                 </div>
             </div>`;
