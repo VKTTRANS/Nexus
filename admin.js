@@ -355,9 +355,9 @@ window.renderTable = function(data) {
                     visibleCount++; 
                 } 
             });
-            if (menuItems !== '') { 
-                docIcon = '<div class="dropdown"><button class="btn btn-sm btn-link text-decoration-none text-success p-0 hover-scale" type="button" data-bs-toggle="dropdown"><i class="bi bi-folder2-open fs-5"></i></button><ul class="dropdown-menu dropdown-menu-dark shadow-lg border border-secondary border-opacity-25 p-0 overflow-hidden" style="min-width: 200px;">' + menuItems + '</ul></div>'; 
-            }
+                if (menuItems !== '') { 
+                    docIcon = '<div class="dropdown"><button class="btn btn-sm btn-link text-decoration-none text-success p-0 hover-scale" type="button" data-bs-toggle="dropdown"><i class="bi bi-folder2-open fs-5"></i></button><ul class="dropdown-menu dropdown-menu-dark shadow-lg border border-secondary border-opacity-25 p-0 overflow-hidden" style="min-width: 200px;">' + menuItems + '</ul></div>'; 
+                }
         }
         
         var ruleBadge = emp.rulesAccepted 
