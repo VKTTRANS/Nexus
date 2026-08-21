@@ -339,7 +339,7 @@ window.renderTable = function(data) {
             var menuItems = '';
             var docConfig = [ 
                 { key: "SALARY_SLIP", name: "สลิปเงินเดือน", icon: "bi-cash-stack text-warning" },
-                { key: "APP_FORM", name: "ใบสมัครงาน", icon: "bi-file-earmark-pdf text-danger" }, // เพิ่มบรรทัดนี้
+                { key: "APP_FORM", name: "ใบสมัครงาน", icon: "bi-file-earmark-pdf text-danger" },
                 { key: "PHOTO", name: "รูปถ่าย", icon: "bi-person-bounding-box" }, 
                 { key: "ID_CARD", name: "บัตรประชาชน", icon: "bi-person-vcard" }, 
                 { key: "LICENSE", name: "ใบขับขี่", icon: "bi-car-front" }, 
