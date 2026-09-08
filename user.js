@@ -479,6 +479,7 @@ window.u_saveEvaluations = function() {
             monthYear: monthYear,
             evaluatorId: window.currentUserData.id,
             evaluatorName: window.currentUserData.name,
+            evaluatorPos: window.currentUserData.position,
             evaluations: evals
         }
     }).then(function(res) {
@@ -1065,6 +1066,24 @@ window.u_openRepairModal = function() {
     if(modalEl) new bootstrap.Modal(modalEl).show(); 
 };
 
+// 🟢 เพิ่มฟังก์ชัน u_openAccidentModal ที่ตกหล่นไป
+window.u_openAccidentModal = function() {
+    var modalEl = document.getElementById('accidentModal');
+    if (modalEl) {
+        new bootstrap.Modal(modalEl).show();
+    } else if (typeof window.openAccidentModal === 'function') {
+        window.openAccidentModal();
+    } else {
+        Swal.fire({
+            icon: 'info',
+            title: 'แจ้งเตือน',
+            text: 'ระบบรายงานอุบัติเหตุกำลังอยู่ระหว่างปรับปรุง หรือหน้าต่างข้อมูลโหลดไม่สมบูรณ์',
+            background: '#1e1e1e',
+            color: '#fff'
+        });
+    }
+};
+
 window.u_loadFleetVehicles = async function() { 
     var pSelect = document.getElementById('u_repPlate');
     if(!pSelect) return;
@@ -1284,34 +1303,24 @@ window.u_safeDate = function(d) {
     }
 };
 
-// =========================================================================
-// 🟢 ฟังก์ชันสำหรับโหลดข้อมูลรายชื่อติดต่อ (Contact Cards) - Responsive Style
-// =========================================================================
 window.u_loadContacts = function() {
     var tab = document.getElementById('u_contactListTab');
     if(!tab) return;
     
-    // แสดงรูปโหลดดิ้ง
     tab.innerHTML = '<div class="text-center text-muted py-5 small"><div class="spinner-border spinner-border-sm text-warning mb-2"></div><br>กำลังโหลดข้อมูลการติดต่อ...</div>';
     
-    // เรียก API ไปที่ code.gs
     window.callAPI({ action: 'getContactData' }).then(function(res) {
         if(!res || res.length === 0) {
             tab.innerHTML = '<div class="text-center text-muted py-5 small"><i class="bi bi-telephone-x fs-1 d-block mb-3 opacity-50"></i>ยังไม่มีข้อมูลผู้ติดต่อในระบบ</div>';
             return;
         }
 
-        // 🟢 จัดเรียงข้อมูลตามชื่อ "กลุ่ม / โซน" (ก-ฮ)
         res.sort(function(a, b) {
             return a.group.localeCompare(b.group, 'th');
         });
 
-        // 🟢 เปลี่ยนคลาสตรงนี้ จาก col-sm-6 เป็น col-md-6 
-        // มือถือ (<768px) = 1 กล่อง | แท็บเล็ต = 2 กล่อง | คอมพิวเตอร์ = 3 กล่อง
         let html = '<div class="row g-3">';
         res.forEach(function(c) {
-            
-            // ตรวจสอบชื่อเล่น
             let nicknameHtml = (c.nickname && c.nickname !== '-') 
                 ? `<span class="text-info fw-bold text-nowrap" style="font-size: 0.85rem; letter-spacing: 0.5px;">${c.nickname}</span>` 
                 : `<span class="text-secondary font-monospace text-nowrap" style="font-size: 0.75rem; opacity: 0.6;">${c.empId || ''}</span>`;
@@ -1350,30 +1359,23 @@ window.u_loadContacts = function() {
     });
 };
 
-// =========================================================================
-// 🟢 ระบบสลับ Tab หน้าจอสำหรับมือถือแบบ Dropdown (กันจอเด้งขึ้นบนสุด)
-// =========================================================================
 window.u_selectMobileTab = function(targetId, titleHtml) {
-    // อัปเดตข้อความหัวเรื่องปุ่ม Dropdown ให้ตรงกับหน้าที่เลือก
     var titleEl = document.getElementById('mobileTabTitle');
     if(titleEl) titleEl.innerHTML = titleHtml;
     
-    // สลับเนื้อหา Tab ของ Bootstrap ให้เปลี่ยนหน้า
     var tabBtn = document.getElementById(targetId);
     if(tabBtn) {
         var tab = new bootstrap.Tab(tabBtn);
         tab.show();
         
-        // ถ้ากดเข้าหน้า "ติดต่อศูนย์" ให้โหลด API รายชื่อทันที (เพราะข้อมูลไม่ได้โหลดมารอไว้)
         if (targetId === 'tab-btn-contacts') {
             window.u_loadContacts();
         }
 
-        // เลื่อนหน้าจอให้หัวข้อ Dropdown กลับมาอยู่พอดีจอเบาๆ
         setTimeout(function() {
             var mobileDropdown = document.getElementById('mobileTabBtn');
             if(mobileDropdown) {
-                var yOffset = -20; // เว้นพื้นที่ด้านบนนิดหน่อยไม่ให้ชิดขอบไป
+                var yOffset = -20; 
                 var y = mobileDropdown.getBoundingClientRect().top + window.scrollY + yOffset;
                 window.scrollTo({ top: y, behavior: 'smooth' });
             }
