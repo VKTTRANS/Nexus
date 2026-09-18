@@ -14,7 +14,6 @@ var globalUserWarnings = [];
 var globalUserAccidents = [];
 var globalYardData = [];
 
-// สำหรับหน้า Admin
 var currentDisplayData = [];
 var currentSort = { key: 'id', order: 'asc' };
 var allAccidentData = [];
@@ -351,8 +350,13 @@ window.loadSettings = async function(cb) {
 
       var c = document.getElementById('positionCheckboxList'); 
       if(c) {
-         c.innerHTML=''; 
-         allPositionsList.forEach(p => { c.innerHTML+=`<div class="form-check border-bottom py-1 ps-4"><input class="form-check-input" type="checkbox" name="posCheckbox" value="${p}" id="cb_${p}"><label class="form-check-label w-100 cursor-pointer text-truncate" for="cb_${p}" title="${p}">${p}</label></div>`; }); 
+         c.innerHTML = ''; 
+         allPositionsList.forEach(p => { 
+             c.innerHTML += `<div class="form-check border-bottom border-secondary border-opacity-25 py-2 ps-4">
+                 <input class="form-check-input border-secondary shadow-none" type="checkbox" name="posCheckbox" value="${p}" id="cb_${p}">
+                 <label class="form-check-label w-100 cursor-pointer text-truncate text-light ms-1" for="cb_${p}" title="${p}">${p}</label>
+             </div>`; 
+         }); 
       }
       
       var hSelect = document.getElementById('ssoHosp'); 

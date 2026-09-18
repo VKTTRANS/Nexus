@@ -6,7 +6,7 @@
   --accent-color: #00E676;            
   --accent-glow: rgba(0, 230, 118, 0.3);
   --text-main: #ffffff;
-  --text-muted: #b8b8b8; 
+  --text-muted: #a4b0be; 
 }
 
 body { 
@@ -20,8 +20,21 @@ body {
   font-size: 1rem;
 }
 
+.text-danger { color: #ff7979 !important; }
+.text-info { color: #48dbfb !important; }
+.text-warning { color: #feca57 !important; }
+.text-primary { color: #54a0ff !important; }
 .text-muted { color: var(--text-muted) !important; }
 .text-secondary { color: #d0d0d0 !important; }
+.text-success { color: var(--accent-color) !important; }
+
+.form-check-label { 
+    color: #f1f2f6 !important; 
+    font-weight: 400;
+}
+.input-group-text {
+    color: #f1f2f6 !important;
+}
 
 .card { 
     background: var(--glass-panel); 
@@ -37,7 +50,6 @@ body {
     font-weight: 600; 
 }
 
-.text-success { color: var(--accent-color) !important; }
 .bg-success { background-color: var(--accent-color) !important; color: #000 !important; }
 .border-success { border-color: var(--accent-color) !important; }
 
