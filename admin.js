@@ -1264,17 +1264,35 @@ window.openBirthdayModal = function() {
     } else { 
         list.forEach(function(e, idx) { 
             var delay = idx * 0.05;
-            var day = new Date(e.birthDate).getDate(); 
+            var day = new Date(e.birthDate).getDate();   
+            var nick = e.nickname ? ` <span class="text-warning">(${e.nickname})</span>` : '';
+            var pos = e.position ? e.position.replace(/,/g, ', ') : '-';
+            
             html += `
-            <div class="col-md-6 col-lg-4 stagger-item" style="animation-delay: ${delay}s">
+            <div class="col-md-6 stagger-item" style="animation-delay: ${delay}s">
                 <div class="admin-modal-card hover-warning h-100 p-3" onclick="window.openModal('view', '${e.id}')">
-                    <div class="d-flex align-items-center gap-3 w-100">
-                        <div class="admin-modal-badge admin-modal-badge-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; padding: 0; font-size: 1rem;">${day}</div>
-                        <div class="overflow-hidden flex-grow-1">
-                            <div class="admin-modal-title" style="font-size: 0.85rem; white-space: normal; line-height: 1.3;">${e.name}</div>
-                            <div class="admin-modal-subtitle text-truncate" style="font-size: 0.75rem;">${e.position}</div>
+                    <div class="d-flex align-items-start gap-3 w-100">
+                        <!-- ปฏิทินวันที่ -->
+                        <div class="admin-modal-badge admin-modal-badge-warning d-flex flex-column align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 50px; height: 50px; padding: 0; border-radius: 12px;">
+                            <span style="font-size: 0.65rem; opacity: 0.8; line-height: 1; margin-bottom: 2px;">วันที่</span>
+                            <span style="font-size: 1.3rem; font-weight: bold; line-height: 1;">${day}</span>
                         </div>
-                        <i class="bi bi-chevron-right text-muted small ms-auto flex-shrink-0"></i>
+                        
+                        <!-- ข้อมูลพนักงาน -->
+                        <div class="flex-grow-1" style="min-width: 0;">
+                            <div class="admin-modal-title mb-1" style="font-size: 0.95rem; white-space: normal; line-height: 1.3;">
+                                ${e.name}${nick}
+                            </div>
+                            <div class="text-info font-monospace mb-1" style="font-size: 0.8rem;">
+                                <i class="bi bi-person-vcard me-1"></i>${e.id}
+                            </div>
+                            <div class="admin-modal-subtitle text-light opacity-75" style="font-size: 0.8rem; white-space: normal; line-height: 1.4;">
+                                <i class="bi bi-briefcase me-1"></i>${pos}
+                            </div>
+                        </div>
+                        
+                        <!-- ไอคอนลูกศร -->
+                        <i class="bi bi-chevron-right text-muted fs-5 ms-1 mt-2 flex-shrink-0"></i>
                     </div>
                 </div>
             </div>`; 
