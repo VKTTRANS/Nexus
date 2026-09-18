@@ -5,18 +5,15 @@
                 <div class="bg-success text-black rounded-circle d-flex align-items-center justify-content-center me-2" style="width:28px; height:28px; font-size:1rem;"><i class="bi bi-shield-check"></i></div>
                 Admin Console
             </h5>
-            
             <div class="nav-tabs-custom d-flex ms-md-3">
                 <button class="tab-btn active" id="btnTabEmp" onclick="window.switchAdminTab('emp')"><i class="bi bi-people-fill me-1"></i>พนักงาน</button>
                 <button class="tab-btn" id="btnTabAcc" onclick="window.switchAdminTab('acc')"><i class="bi bi-cone-striped me-1"></i>อุบัติเหตุ</button>
                 <button class="tab-btn" id="btnTabWarn" onclick="window.switchAdminTab('warn')"><i class="bi bi-exclamation-triangle-fill me-1 text-danger"></i>ใบเตือน</button>
                 <button class="tab-btn" id="btnTabPayroll" onclick="window.switchAdminTab('payroll')"><i class="bi bi-cash-coin me-1 text-warning"></i>เงินเดือน</button>
                 <button class="tab-btn" id="btnTabEval" onclick="window.switchAdminTab('eval')"><i class="bi bi-star-fill me-1 text-success"></i>ประเมิน</button>
-                <!-- 🟢 ปุ่ม Tab ติดต่อศูนย์ (ใหม่) -->
                 <button class="tab-btn" id="btnTabContact" onclick="window.switchAdminTab('contact')"><i class="bi bi-telephone-inbound-fill me-1 text-primary"></i>ติดต่อศูนย์</button>
             </div>
         </div>
-        
         <div class="d-flex gap-2">
             <button class="btn btn-sm btn-dark border-secondary text-light rounded-pill px-3 admin-only hover-scale" onclick="window.switchView('view-recruit'); window.loadRecruitData();" style="display:none;"><i class="bi bi-file-earmark-person me-1"></i>ใบสมัคร</button>
             <button class="btn btn-sm btn-success rounded-pill px-3 text-dark fw-bold shadow-sm admin-only hover-scale" onclick="window.openModal('create')" style="display:none;"><i class="bi bi-person-plus-fill me-1"></i>เพิ่มพนักงานใหม่</button>
@@ -24,7 +21,6 @@
         </div>
     </div>
 
-    <!-- Section: พนักงาน -->
     <div id="section-admin-emp">
         <div class="row g-2 mb-3 stagger-2">
             <div class="col-md-4">
@@ -107,7 +103,6 @@
         </div>
     </div>
 
-    <!-- Section: ประเมินพนักงาน -->
     <div id="section-admin-eval" class="d-none">
         <div class="row g-2 mb-3 stagger-2">
             <div class="col-md-4">
@@ -142,7 +137,6 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 p-2 rounded-3 border border-secondary border-opacity-25 bg-black bg-opacity-25 stagger-3">
             <div class="d-flex gap-2 flex-wrap">
                 <input type="month" id="filterEvalMonth" class="form-control form-control-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 150px; cursor: pointer;" onchange="window.filterAdminEvalTable()">
-                
                 <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-50 px-2 py-1" style="width: 250px;">
                     <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchEvalInput" onkeyup="window.filterAdminEvalTable()" placeholder="ค้นหาชื่อผู้ถูกประเมิน, ผู้ประเมิน...">
@@ -171,7 +165,6 @@
         </div>
     </div>
 
-    <!-- Section: อุบัติเหตุ -->
     <div id="section-admin-acc" class="d-none">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
             <div class="stat-card clickable border-warning p-2 px-3 m-0 d-flex align-items-center gap-3" onclick="new bootstrap.Modal(document.getElementById('accTopCausesModal')).show()" style="background: rgba(255,165,0,0.05); min-width: 250px;">
@@ -208,7 +201,6 @@
         </div>
     </div>
 
-    <!-- Section: ใบเตือน -->
     <div id="section-admin-warn" class="d-none">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
             <div class="stat-card clickable border-danger p-2 px-3 m-0 d-flex align-items-center gap-3" onclick="new bootstrap.Modal(document.getElementById('warnTopEmpModal')).show()" style="background: rgba(255,0,0,0.05); min-width: 250px;">
@@ -249,9 +241,7 @@
         </div>
     </div>
 
-    <!-- Section: เงินเดือน (Payroll) -->
     <div id="section-admin-payroll" class="d-none">
-        
         <div class="row g-2 mb-3 stagger-2">
             <div class="col-md-4">
                 <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #00E676;">
@@ -318,6 +308,12 @@
                     <option value="issued">✅ ออกสลิปแล้ว</option>
                     <option value="pending">⏳ ยังไม่ออก</option>
                 </select>
+
+                <!-- เพิ่มตัวกรองสถานะการทำงานของพนักงาน -->
+                <select id="filterPayrollEmpStatus" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width:160px; cursor: pointer;" onchange="window.filterPayrollTable()">
+                    <option value="Active">🟢 เฉพาะทำงานอยู่</option>
+                    <option value="all">🌐 รวมลาออก/พักงาน</option>
+                </select>
             </div>
             <button class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm hover-scale" onclick="window.loadAdminData()"><i class="bi bi-arrow-clockwise me-1"></i>รีเฟรช</button>
         </div>
@@ -345,7 +341,6 @@
         </div>
     </div>
 
-    <!-- 🟢 Section: จัดการรายชื่อศูนย์ติดต่อ (Contact) -->
     <div id="section-admin-contact" class="d-none">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 stagger-2">
             <div class="stat-card border-primary p-2 px-3 m-0 d-flex align-items-center gap-3" style="background: rgba(13,110,253,0.05); min-width: 250px;">
@@ -382,7 +377,6 @@
         </div>
     </div>
 
-    <!-- Modal สำหรับจัดการข้อมูลพนักงาน -->
     <div class="modal fade" id="empModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content logistics-modal">
@@ -409,9 +403,7 @@
                             </div>
                         </div>
                         <div class="tab-content">
-                            <!-- Tab: ข้อมูลทั่วไป -->
                             <div class="tab-pane fade show active" id="tabInfo">
-                                <!-- View Mode -->
                                 <div id="viewModeSection" style="display:none;">
                                     <div class="row g-3">
                                         <div class="col-12">
@@ -531,10 +523,8 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Edit Mode -->
                                 <div id="editModeSection" style="display:none;">
                                     <div class="row g-4">
-                                        <!-- Section 1: ข้อมูลระบบ -->
                                         <div class="col-12">
                                             <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                                 <div class="fw-bold text-warning mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -566,7 +556,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Section 2: สถานะและการจ้างงาน -->
                                         <div class="col-12">
                                             <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                                 <div class="fw-bold text-info mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -615,7 +604,6 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- Section 3: ข้อมูลส่วนตัว -->
                                         <div class="col-12">
                                             <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                                 <div class="fw-bold text-success mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -661,7 +649,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Section 4: ข้อมูลบัตรและใบขับขี่ -->
                                         <div class="col-12">
                                             <div class="row g-3">
                                                 <div class="col-md-6">
@@ -705,7 +692,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Section 5: ตำแหน่งงาน -->
                                         <div class="col-12">
                                             <div class="p-3 mb-0 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                                 <div class="fw-bold text-white mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -719,7 +705,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Tab: เอกสารแนบ -->
                             <div class="tab-pane fade" id="tabDocs">
                                 <div class="p-4 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
                                     <div class="alert alert-dark border border-warning text-warning small p-3 mb-4 bg-black bg-opacity-50 text-start">
@@ -782,7 +767,6 @@
         </div>
     </div>
 
-    <!-- Modal ออกสลิปเงินเดือน -->
     <div class="modal fade admin-popup-modal" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-success">
@@ -810,7 +794,6 @@
                         </div>
 
                         <div class="row g-2">
-                            <!-- ข้อมูลหลัก -->
                             <div class="col-12">
                                 <div class="row g-2 p-2 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
                                     <div class="col-md-6">
@@ -824,7 +807,6 @@
                                 </div>
                             </div>
 
-                            <!-- รายได้ & รายการหัก -->
                             <div class="col-md-6">
                                 <div class="p-2 rounded h-100" style="background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2);">
                                     <div class="text-success fw-bold border-bottom border-success border-opacity-25 pb-1 mb-2" style="font-size: 0.85rem;"><i class="bi bi-plus-circle-fill me-2"></i>รายได้อื่นๆ (Incomes)</div>
@@ -947,7 +929,6 @@
                                 </div>
                             </div>
                             
-                            <!-- สรุป -->
                             <div class="col-12 mt-2">
                                 <div class="row g-2">
                                     <div class="col-md-4">
@@ -984,7 +965,6 @@
         </div>
     </div>
 
-    <!-- Modal สำหรับแสดงผลประเมินย่อยของ Admin -->
     <div class="modal fade admin-popup-modal" id="evalDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-success border-opacity-50">
@@ -1009,7 +989,6 @@
         </div>
     </div>
 
-    <!-- Modal ประวัติสลิปเงินเดือน (Payroll History) -->
     <div class="modal fade admin-popup-modal" id="payrollHistoryModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-info border-neon-info">
@@ -1038,7 +1017,6 @@
         </div>
     </div>
 
-    <!-- Modal อุบัติเหตุสูงสุด -->
     <div class="modal fade admin-popup-modal" id="accTopCausesModal" tabindex="-1">
         <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-warning border-neon-warning">
@@ -1051,7 +1029,6 @@
         </div>
     </div>
 
-    <!-- Modal ใบเตือนสูงสุด -->
     <div class="modal fade admin-popup-modal" id="warnTopEmpModal" tabindex="-1">
         <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-danger border-neon-danger">
@@ -1064,7 +1041,6 @@
         </div>
     </div>
 
-    <!-- Modal วันเกิด -->
     <div class="modal fade admin-popup-modal" id="birthdayModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-warning border-neon-warning">
@@ -1077,7 +1053,6 @@
         </div>
     </div>
 
-    <!-- Modal สถิติตำแหน่ง -->
     <div class="modal fade admin-popup-modal" id="positionStatsModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-success border-neon-success">
@@ -1090,7 +1065,6 @@
         </div>
     </div>
 
-    <!-- Modal รายชื่อตามตำแหน่ง -->
     <div class="modal fade admin-popup-modal" id="positionDetailModal" tabindex="-1">
         <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-success border-neon-success">
@@ -1103,7 +1077,6 @@
         </div>
     </div>
 
-    <!-- Modal สถิติรายปี -->
     <div class="modal fade admin-popup-modal" id="yearlyStatsModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-info border-neon-info">
@@ -1128,7 +1101,6 @@
         </div>
     </div>
 
-    <!-- Modal รายละเอียดรายปี -->
     <div class="modal fade admin-popup-modal" id="yearDetailModal" tabindex="-1">
         <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-info border-neon-info">
@@ -1141,7 +1113,6 @@
         </div>
     </div>
 
-    <!-- Modal รายละเอียดอุบัติเหตุ -->
     <div class="modal fade admin-popup-modal" id="accidentDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-warning border-neon-warning">
@@ -1199,7 +1170,6 @@
         </div>
     </div>
 
-    <!-- Modal ออกใบเตือน -->
     <div class="modal fade admin-popup-modal" id="warningCreateModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-danger border-neon-danger">
@@ -1269,7 +1239,6 @@
         </div>
     </div>
 
-    <!-- Modal รายละเอียดใบเตือน -->
     <div class="modal fade admin-popup-modal" id="warningDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-danger border-neon-danger">
@@ -1324,7 +1293,6 @@
         </div>
     </div>
 
-    <!-- 🟢 Modal จัดการรายชื่อผู้ติดต่อ (ใหม่) -->
     <div class="modal fade admin-popup-modal" id="contactModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content border-primary border-neon-info">

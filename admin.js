@@ -1,4 +1,4 @@
-window.allContactData = []; // เพิ่มตัวแปรสำหรับเก็บรายชื่อ Contact
+window.allContactData = [];
 
 window.showModalSafe = function(modalId) {
     var el = document.getElementById(modalId);
@@ -212,18 +212,16 @@ window.loadAdminData = function() {
                     window.filterAdminEvalTable();
                 });
 
-                // 🟢 โหลดข้อมูล Contact เข้า Admin Panel
                 window.callAPI({ action: 'getContactData' }).then(function(contactData) {
                     window.allContactData = contactData || [];
                     window.renderContactTable();
                     
-                    // อัปเดต Dropdown เลือกพนักงานในหน้าจอแก้ไข
                     var datalist = document.getElementById('contactEmpOptions');
                     if(datalist) {
                         datalist.innerHTML = '';
                         var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; });
                         activeEmps.forEach(function(e) {
-                            datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || '-') + ')">';
+                            datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || "-") + ')">';
                         });
                     }
                 });
@@ -294,7 +292,6 @@ window.switchAdminTab = function(tab) {
         }
         if(window.allEvalData) window.filterAdminEvalTable();
     } else if (tab === 'contact') {
-        // 🟢 Tab ใหม่สำหรับจัดการติดต่อศูนย์
         document.getElementById('btnTabContact').classList.add('active'); 
         document.getElementById('section-admin-contact').classList.remove('d-none');
         if(window.allContactData) window.renderContactTable();
@@ -339,7 +336,7 @@ window.renderTable = function(data) {
             var menuItems = '';
             var docConfig = [ 
                 { key: "SALARY_SLIP", name: "สลิปเงินเดือน", icon: "bi-cash-stack text-warning" },
-                { key: "APP_FORM", name: "ใบสมัครงาน", icon: "bi-file-earmark-pdf text-danger" },
+                { key: "APP_FORM", name: "ใบสมัครงาน", icon: "bi-file-earmark-pdf text-danger" }, 
                 { key: "PHOTO", name: "รูปถ่าย", icon: "bi-person-bounding-box" }, 
                 { key: "ID_CARD", name: "บัตรประชาชน", icon: "bi-person-vcard" }, 
                 { key: "LICENSE", name: "ใบขับขี่", icon: "bi-car-front" }, 
@@ -355,9 +352,9 @@ window.renderTable = function(data) {
                     visibleCount++; 
                 } 
             });
-                if (menuItems !== '') { 
-                    docIcon = '<div class="dropdown"><button class="btn btn-sm btn-link text-decoration-none text-success p-0 hover-scale" type="button" data-bs-toggle="dropdown"><i class="bi bi-folder2-open fs-5"></i></button><ul class="dropdown-menu dropdown-menu-dark shadow-lg border border-secondary border-opacity-25 p-0 overflow-hidden" style="min-width: 200px;">' + menuItems + '</ul></div>'; 
-                }
+            if (menuItems !== '') { 
+                docIcon = '<div class="dropdown"><button class="btn btn-sm btn-link text-decoration-none text-success p-0 hover-scale" type="button" data-bs-toggle="dropdown"><i class="bi bi-folder2-open fs-5"></i></button><ul class="dropdown-menu dropdown-menu-dark shadow-lg border border-secondary border-opacity-25 p-0 overflow-hidden" style="min-width: 200px;">' + menuItems + '</ul></div>'; 
+            }
         }
         
         var ruleBadge = emp.rulesAccepted 
@@ -437,14 +434,20 @@ window.filterPayrollTable = function() {
     var statusEl = document.getElementById('filterSlipStatus');
     var statusVal = statusEl ? statusEl.value : 'all';
 
-    var activeEmps = window.allEmpData.filter(function(d) { return d.status === 'Active'; });
-    
+    var empStatusEl = document.getElementById('filterPayrollEmpStatus');
+    var empStatusVal = empStatusEl ? empStatusEl.value : 'Active';
+
     var html = '';
     var totalNet = 0;
     var totalSSO = 0;
     var slipCount = 0;
 
-    var filtered = activeEmps.filter(function(d) { 
+    var filtered = window.allEmpData.filter(function(d) { 
+        var matchStatusFilter = true;
+        if (empStatusVal === 'Active') {
+            matchStatusFilter = (d.status === 'Active');
+        }
+
         var matchName = (d.name + d.id).toLowerCase().includes(val); 
         var matchPos = (posVal === 'all' || (d.position && d.position.includes(posVal)));
         
@@ -456,11 +459,11 @@ window.filterPayrollTable = function() {
             hasSlip = empSlips.some(function(p) { return p.payMonth && p.payMonth.startsWith(yearVal); });
         }
 
-        var matchStatus = true;
-        if (statusVal === 'issued') matchStatus = hasSlip;
-        if (statusVal === 'pending') matchStatus = !hasSlip;
+        var matchSlipStatus = true;
+        if (statusVal === 'issued') matchSlipStatus = hasSlip;
+        if (statusVal === 'pending') matchSlipStatus = !hasSlip;
 
-        return matchName && matchPos && matchStatus;
+        return matchStatusFilter && matchName && matchPos && matchSlipStatus;
     }); 
     
     if (filtered.length === 0) {
@@ -1400,11 +1403,6 @@ window.openYearDetail = function(year, type) {
     window.showModalSafe('yearDetailModal'); 
 };
 
-
-// =========================================================================
-// 🟢 ส่วนการทำงานสำหรับ Tab จัดการข้อมูลผู้ติดต่อ (Contact) ของ Admin
-// =========================================================================
-
 window.renderContactTable = function() {
     var countEl = document.getElementById('contactTotalCount');
     if(countEl) countEl.innerText = window.allContactData ? window.allContactData.length : 0;
@@ -1442,7 +1440,6 @@ window.openContactModal = function(group, empId) {
     
     var btnDelete = document.getElementById('btnDeleteContact');
     
-    // โหมดแก้ไข
     if(group && empId) {
         document.getElementById('c_oldGroup').value = group;
         document.getElementById('c_oldEmpId').value = empId;
@@ -1456,7 +1453,6 @@ window.openContactModal = function(group, empId) {
         }
         if(btnDelete) btnDelete.style.display = 'inline-block';
     } 
-    // โหมดเพิ่มใหม่
     else {
         document.getElementById('c_oldGroup').value = '';
         document.getElementById('c_oldEmpId').value = '';
@@ -1493,7 +1489,7 @@ window.saveContact = function(e) {
             Swal.fire({icon: 'success', title: 'สำเร็จ', text: res.message});
             var mod = bootstrap.Modal.getInstance(document.getElementById('contactModal'));
             if(mod) mod.hide();
-            window.loadAdminData(); // โหลดใหม่ทั้งหน้าเพื่อให้ชัวร์
+            window.loadAdminData();
         } else {
             Swal.fire({icon: 'error', title: 'ผิดพลาด', text: res.message});
         }
