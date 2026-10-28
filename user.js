@@ -655,6 +655,11 @@ window.u_renderUserProfile = function(d) {
                         <i class="bi bi-geo-alt fs-5 text-info"></i><span class="small fw-bold" style="font-size: 0.8rem;">ลานตู้</span>
                     </button>
                 </div>
+                <div class="col-12 mt-2">
+                    <button onclick="window.u_openCertModal()" class="btn quick-action-btn w-100 py-2 d-flex justify-content-center align-items-center gap-2 shadow-sm" style="border-color: rgba(0, 230, 118, 0.4);">
+                        <i class="bi bi-file-earmark-check-fill fs-5 text-success"></i><span class="small fw-bold text-light" style="font-size: 0.85rem;">ขอหนังสือรับรองการทำงาน</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>`;

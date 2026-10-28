@@ -12,6 +12,10 @@
                 <button class="tab-btn" id="btnTabPayroll" onclick="window.switchAdminTab('payroll')"><i class="bi bi-cash-coin me-1 text-warning"></i>เงินเดือน</button>
                 <button class="tab-btn" id="btnTabEval" onclick="window.switchAdminTab('eval')"><i class="bi bi-star-fill me-1 text-success"></i>ประเมิน</button>
                 <button class="tab-btn" id="btnTabContact" onclick="window.switchAdminTab('contact')"><i class="bi bi-telephone-inbound-fill me-1 text-primary"></i>ติดต่อศูนย์</button>
+                <button class="tab-btn position-relative" id="btnTabCert" onclick="window.switchAdminTab('cert')">
+                    <i class="bi bi-file-earmark-check-fill me-1 text-info"></i>หนังสือรับรอง
+                    <span id="badgeCertPendingCount" class="badge bg-danger text-white rounded-pill ms-1 d-none" style="font-size: 0.65rem;">0</span>
+                </button>
             </div>
         </div>
         <div class="d-flex gap-2">
@@ -371,6 +375,75 @@
                     </thead>
                     <tbody id="adminContactTableBody">
                         <tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border text-primary spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-admin-cert" class="d-none">
+        <div class="row g-2 mb-3 stagger-2">
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #ffc107;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">คำขอรออนุมัติ (Pending)</div>
+                        <h3 class="fw-bold text-warning mb-0" id="statCertPending">0</h3>
+                    </div>
+                    <div class="stat-icon text-warning bg-warning bg-opacity-10"><i class="bi bi-hourglass-split"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #00E676;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">อนุมัติแล้ว (Approved)</div>
+                        <h3 class="fw-bold text-success mb-0" id="statCertApproved">0</h3>
+                    </div>
+                    <div class="stat-icon text-success bg-success bg-opacity-10"><i class="bi bi-file-earmark-check-fill"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card h-100 d-flex justify-content-between align-items-center" style="border-left: 3px solid #0dcaf0;">
+                    <div>
+                        <div class="text-secondary text-uppercase" style="font-size:0.7rem; letter-spacing:1px; margin-bottom:2px;">คำขอทั้งหมด</div>
+                        <h3 class="fw-bold text-info mb-0" id="statCertTotal">0</h3>
+                    </div>
+                    <div class="stat-icon text-info bg-info bg-opacity-10"><i class="bi bi-folder2-open"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 p-2 rounded-3 border border-secondary border-opacity-25 bg-black bg-opacity-25 stagger-3">
+            <div class="d-flex gap-2 flex-wrap">
+                <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-50 px-2 py-1" style="width: 260px;">
+                    <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchCertInput" onkeyup="window.filterAdminCertTable()" placeholder="ค้นหาชื่อ, รหัสพนักงาน, เลขที่คำขอ...">
+                </div>
+                <select id="filterCertStatus" class="form-select form-select-sm bg-black bg-opacity-50 text-light border-secondary rounded-pill shadow-none px-3" style="width: 160px; cursor: pointer;" onchange="window.filterAdminCertTable()">
+                    <option value="all">🌐 ทุกสถานะ</option>
+                    <option value="Pending">⏳ รออนุมัติ</option>
+                    <option value="Approved">✅ อนุมัติแล้ว</option>
+                    <option value="Rejected">❌ ไม่อนุมัติ</option>
+                </select>
+            </div>
+            <button class="btn btn-sm btn-outline-success rounded-pill px-3 shadow-sm hover-scale" onclick="window.loadAdminCertData()"><i class="bi bi-arrow-clockwise me-1"></i>รีเฟรช</button>
+        </div>
+
+        <div class="glass-container-table stagger-4">
+            <div class="table-responsive">
+                <table class="table table-hover table-custom mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">เลขที่คำขอ / วันที่ขอ</th>
+                            <th>พนักงาน</th>
+                            <th>ตำแหน่ง</th>
+                            <th>วัตถุประสงค์</th>
+                            <th class="text-center">อายุเอกสาร (30 วัน)</th>
+                            <th class="text-center">สถานะ</th>
+                            <th class="text-end pe-4">จัดการ / อนุมัติ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminCertTableBody">
+                        <tr><td colspan="7" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>

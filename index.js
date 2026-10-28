@@ -79,7 +79,7 @@ window.onload = async function() {
 };
 
 async function loadAllComponents() {
-  const files = ['login.html', 'admin.html', 'recruit.html', 'user.html', 'accident.html'];
+  const files = ['login.html', 'admin.html', 'recruit.html', 'user.html', 'accident.html', 'cert.html'];
   for (let file of files) {
     try {
       const response = await fetch(file);

@@ -212,6 +212,10 @@ window.loadAdminData = function() {
                     window.filterAdminEvalTable();
                 });
 
+                if (typeof window.loadAdminCertData === 'function') {
+                    window.loadAdminCertData();
+                }
+
                 window.callAPI({ action: 'getContactData' }).then(function(contactData) {
                     window.allContactData = contactData || [];
                     window.renderContactTable();
@@ -231,8 +235,8 @@ window.loadAdminData = function() {
 };
 
 window.switchAdminTab = function(tab) {
-    var tabs = ['btnTabEmp', 'btnTabAcc', 'btnTabWarn', 'btnTabPayroll', 'btnTabEval', 'btnTabContact'];
-    var sections = ['section-admin-emp', 'section-admin-acc', 'section-admin-warn', 'section-admin-payroll', 'section-admin-eval', 'section-admin-contact'];
+    var tabs = ['btnTabEmp', 'btnTabAcc', 'btnTabWarn', 'btnTabPayroll', 'btnTabEval', 'btnTabContact', 'btnTabCert'];
+    var sections = ['section-admin-emp', 'section-admin-acc', 'section-admin-warn', 'section-admin-payroll', 'section-admin-eval', 'section-admin-contact', 'section-admin-cert'];
     
     tabs.forEach(function(t) { var el = document.getElementById(t); if(el) el.classList.remove('active'); });
     sections.forEach(function(s) { var sec = document.getElementById(s); if(sec) sec.classList.add('d-none'); });
@@ -295,6 +299,10 @@ window.switchAdminTab = function(tab) {
         document.getElementById('btnTabContact').classList.add('active'); 
         document.getElementById('section-admin-contact').classList.remove('d-none');
         if(window.allContactData) window.renderContactTable();
+    } else if (tab === 'cert') {
+        document.getElementById('btnTabCert').classList.add('active');
+        document.getElementById('section-admin-cert').classList.remove('d-none');
+        if (typeof window.filterAdminCertTable === 'function') window.filterAdminCertTable();
     }
 };
 
@@ -328,7 +336,8 @@ window.renderTable = function(data) {
         
         var editBtn = ''; 
         if (window.currentUser && window.currentUser.role !== 'Viewer') { 
-            editBtn = '<button class="btn btn-sm btn-dark border-secondary text-warning rounded-circle hover-scale" onclick="event.stopPropagation(); window.openModal(\'edit\', \'' + emp.id + '\')" title="แก้ไข"><i class="bi bi-pencil-fill"></i></button>'; 
+            var certDirectBtn = emp.status === 'Active' ? '<button class="btn btn-sm btn-dark border-secondary text-info rounded-circle hover-scale me-1" onclick="event.stopPropagation(); window.openAdminApproveCertModal(null, \'' + emp.id + '\')" title="ออกหนังสือรับรองให้ทันที"><i class="bi bi-file-earmark-check"></i></button>' : '';
+            editBtn = certDirectBtn + '<button class="btn btn-sm btn-dark border-secondary text-warning rounded-circle hover-scale" onclick="event.stopPropagation(); window.openModal(\'edit\', \'' + emp.id + '\')" title="แก้ไข"><i class="bi bi-pencil-fill"></i></button>'; 
         }
         
         var docIcon = '<span class="text-muted small opacity-25">-</span>';

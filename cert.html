@@ -1,0 +1,137 @@
+<!-- 🟢 Modal สำหรับพนักงานกดขอ และประวัติการขอหนังสือรับรอง -->
+<div class="modal fade" id="certRequestModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content logistics-modal" style="border-color: #00E676; background: #121212;">
+            <div class="modal-header logistics-modal-header py-3 border-bottom border-success">
+                <h5 class="modal-title fw-bold text-success fs-5">
+                    <i class="bi bi-file-earmark-check-fill me-2"></i>ขอหนังสือรับรองการทำงาน
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body p-4 bg-black bg-opacity-50 text-start">
+                <!-- ฟอร์มกดส่งคำขอสำหรับพนักงาน -->
+                <form id="certRequestForm" onsubmit="window.u_submitCertRequest(event)">
+                    <div class="p-3 mb-4 rounded" style="background: rgba(0, 230, 118, 0.04); border: 1px solid rgba(0, 230, 118, 0.2);">
+                        <div class="fw-bold text-success mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+                            <i class="bi bi-send-plus me-2"></i>สร้างคำขอใหม่ (เอกสารมีอายุ 30 วัน นับจากวันอนุมัติ)
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1 fw-bold">ชื่อ-นามสกุล</label>
+                                <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary shadow-none" id="u_cert_fullname" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted mb-1 fw-bold">ตำแหน่งปัจจุบัน</label>
+                                <input type="text" class="form-control form-control-sm bg-dark text-info border-secondary shadow-none" id="u_cert_position" readonly>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="small text-muted mb-1 fw-bold">วัตถุประสงค์ในการนำไปใช้ *</label>
+                                <select class="form-select form-select-sm bg-dark text-white border-secondary shadow-none mb-2" id="u_cert_purpose_select" onchange="window.u_toggleCertPurposeOther()" required>
+                                    <option value="">-- เลือกวัตถุประสงค์ --</option>
+                                    <option value="ทำธุรกรรมทางการเงิน / สินเชื่อธนาคาร">ทำธุรกรรมทางการเงิน / สินเชื่อธนาคาร</option>
+                                    <option value="เช่าซื้อรถยนต์ / รถจักรยานยนต์">เช่าซื้อรถยนต์ / รถจักรยานยนต์</option>
+                                    <option value="สมัครบัตรเครดิต / บัตรกดเงินสด">สมัครบัตรเครดิต / บัตรกดเงินสด</option>
+                                    <option value="ค้ำประกันบุคคล / เช่าที่พักอาศัย">ค้ำประกันบุคคล / เช่าที่พักอาศัย</option>
+                                    <option value="ยื่นติดต่อราชการ / ประกันสังคม">ยื่นติดต่อราชการ / ประกันสังคม</option>
+                                    <option value="อื่นๆ">อื่นๆ (ระบุเอง)</option>
+                                </select>
+                                <input type="text" class="form-control form-control-sm bg-dark text-warning border-warning shadow-none d-none" id="u_cert_purpose_other" placeholder="โปรดระบุวัตถุประสงค์...">
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn btn-success btn-sm rounded-pill px-4 fw-bold text-dark shadow-sm" id="btnUserSubmitCert">
+                                <i class="bi bi-send-check-fill me-1"></i> ส่งคำขออนุมัติ
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- ประวัติการขอหนังสือรับรองของพนักงาน -->
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-50">
+                        <h6 class="fw-bold text-white mb-0"><i class="bi bi-clock-history me-2 text-warning"></i>ประวัติการขอหนังสือรับรองของคุณ</h6>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-0 px-2 text-light" onclick="window.u_loadMyCertRequests()">
+                            <i class="bi bi-arrow-clockwise"></i> รีเฟรช
+                        </button>
+                    </div>
+                    <div id="u_certHistoryList">
+                        <div class="text-center text-muted py-4 small">กำลังโหลดประวัติ...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-top border-secondary border-opacity-25">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🟢 Modal สำหรับ Admin ตรวจสอบและกดอนุมัติ (หรือออกให้พนักงานโดยตรง) -->
+<div class="modal fade admin-popup-modal" id="adminCertApproveModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1065;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-success border-neon-success">
+            <div class="modal-header border-bottom border-secondary border-opacity-50">
+                <h5 class="modal-title fw-bold text-success">
+                    <i class="bi bi-patch-check-fill me-2"></i>อนุมัติและสร้างหนังสือรับรอง (PDF)
+                </h5>
+                <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 text-start">
+                <form id="adminCertApproveForm" onsubmit="window.adminConfirmApproveCert(event)">
+                    <input type="hidden" id="adm_cert_reqId">
+                    <input type="hidden" id="adm_cert_empId">
+
+                    <div class="mb-3">
+                        <label class="small text-muted mb-1 fw-bold">รหัสเอกสารอ้างอิง</label>
+                        <input type="text" class="form-control form-control-sm bg-dark text-warning border-secondary font-monospace fw-bold" id="adm_cert_reqId_show" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small text-muted mb-1 fw-bold">ชื่อ-นามสกุล พนักงาน (แสดงในเอกสาร) *</label>
+                        <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary fw-bold" id="adm_cert_fullname" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small text-muted mb-1 fw-bold">ตำแหน่ง (ปรับแก้คำให้สวยงามก่อนพิมพ์ได้) *</label>
+                        <input type="text" class="form-control form-control-sm bg-dark text-info border-secondary" id="adm_cert_position" required>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="small text-muted mb-1 fw-bold">วันที่เริ่มงาน *</label>
+                            <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" id="adm_cert_startDate" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="small text-muted mb-1 fw-bold">วันที่ออกเอกสาร (วันอนุมัติ) *</label>
+                            <input type="date" class="form-control form-control-sm bg-dark text-success border-success fw-bold" id="adm_cert_issueDate" onchange="window.updateCertExpPreview()" required>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded mb-3" style="background: rgba(255, 193, 7, 0.08); border: 1px dashed rgba(255, 193, 7, 0.4);">
+                        <div class="d-flex justify-content-between align-items-center small">
+                            <span class="text-warning fw-bold"><i class="bi bi-calendar-range me-1"></i>วันหมดอายุเอกสาร (+30 วัน):</span>
+                            <span class="text-white fw-bold" id="adm_cert_expPreview">-</span>
+                        </div>
+                        <div class="text-muted mt-1" style="font-size: 0.72rem;">
+                            * ระบบจะระบุวันหมดอายุลงในไฟล์ PDF อัตโนมัติ มีผลบังคับใช้ 30 วันนับจากวันที่ออกเอกสาร
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small text-muted mb-1 fw-bold">วัตถุประสงค์ที่พนักงานแจ้ง</label>
+                        <input type="text" class="form-control form-control-sm bg-dark text-secondary border-secondary" id="adm_cert_purpose" readonly>
+                    </div>
+
+                    <div class="text-end pt-3 border-top border-secondary border-opacity-50">
+                        <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-success btn-sm rounded-pill px-4 fw-bold text-dark shadow-lg" id="btnAdminApproveCert">
+                            <i class="bi bi-file-earmark-pdf-fill me-1"></i> อนุมัติและสร้าง PDF
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
