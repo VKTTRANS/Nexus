@@ -10,6 +10,26 @@ window.showModalSafe = function(modalId) {
     modalObj.show();
 };
 
+// 🟢 ฟังก์ชันอัปเดตรายชื่อพนักงานเข้า Datalist (ทั้งหน้าใบเตือน และ หน้าติดต่อศูนย์)
+window.populateEmployeeDatalists = function() {
+    if (!window.allEmpData || !Array.isArray(window.allEmpData)) return;
+    var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; });
+    var optionsHtml = '';
+    activeEmps.forEach(function(e) {
+        optionsHtml += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || "-") + ')">';
+    });
+
+    var warnDatalist = document.getElementById('warnEmpOptions');
+    if (warnDatalist) {
+        warnDatalist.innerHTML = optionsHtml;
+    }
+
+    var contactDatalist = document.getElementById('contactEmpOptions');
+    if (contactDatalist) {
+        contactDatalist.innerHTML = optionsHtml;
+    }
+};
+
 window.filterAdminEvalTable = function() {
     var search = (document.getElementById('searchEvalInput') ? document.getElementById('searchEvalInput').value.toLowerCase() : "");
     var filterMonth = document.getElementById('filterEvalMonth') ? document.getElementById('filterEvalMonth').value : "";
@@ -177,6 +197,9 @@ window.loadAdminData = function() {
                 window.allEmpData = data; 
                 window.currentDisplayData = data;
                 
+                // 🟢 อัปเดตตัวเลือก Datalist ของใบเตือนและผู้ติดต่อทันทีที่โหลดข้อมูลพนักงานเสร็จ
+                window.populateEmployeeDatalists();
+                
                 if(window.currentUser.role !== 'Viewer') { 
                     var els = document.querySelectorAll('.admin-only'); 
                     for(var i=0; i<els.length; i++) els[i].style.display = 'inline-block'; 
@@ -219,15 +242,7 @@ window.loadAdminData = function() {
                 window.callAPI({ action: 'getContactData' }).then(function(contactData) {
                     window.allContactData = contactData || [];
                     window.renderContactTable();
-                    
-                    var datalist = document.getElementById('contactEmpOptions');
-                    if(datalist) {
-                        datalist.innerHTML = '';
-                        var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; });
-                        activeEmps.forEach(function(e) {
-                            datalist.innerHTML += '<option value="' + e.id + ' : ' + e.name + ' (' + (e.position || "-") + ')">';
-                        });
-                    }
+                    window.populateEmployeeDatalists();
                 });
             });
         });
@@ -262,6 +277,7 @@ window.switchAdminTab = function(tab) {
         document.getElementById('btnTabWarn').classList.add('active'); 
         document.getElementById('section-admin-warn').classList.remove('d-none'); 
         if(window.allWarningData) window.filterWarnTable();
+        window.populateEmployeeDatalists();
     } else if (tab === 'payroll') {
         document.getElementById('btnTabPayroll').classList.add('active'); 
         document.getElementById('section-admin-payroll').classList.remove('d-none');
@@ -299,6 +315,7 @@ window.switchAdminTab = function(tab) {
         document.getElementById('btnTabContact').classList.add('active'); 
         document.getElementById('section-admin-contact').classList.remove('d-none');
         if(window.allContactData) window.renderContactTable();
+        window.populateEmployeeDatalists();
     } else if (tab === 'cert') {
         document.getElementById('btnTabCert').classList.add('active');
         document.getElementById('section-admin-cert').classList.remove('d-none');
@@ -1170,6 +1187,9 @@ window.openCreateWarningModal = function() {
     if (!form) return;
     form.reset(); 
     
+    // 🟢 อัปเดตรายชื่อพนักงานเข้า <datalist id="warnEmpOptions"> ทุกครั้งที่กดเปิด Modal ออกใบเตือน
+    window.populateEmployeeDatalists();
+    
     var issueDate = document.getElementById('warnIssueDate');
     if(issueDate) issueDate.valueAsDate = new Date(); 
     var incidentDate = document.getElementById('warnIncidentDate');
@@ -1465,6 +1485,9 @@ window.openContactModal = function(group, empId) {
     var form = document.getElementById('contactForm');
     if(form) form.reset();
     
+    // 🟢 อัปเดตรายชื่อพนักงานเข้า Datalist ทุกครั้งที่เปิด Modal ติดต่อศูนย์
+    window.populateEmployeeDatalists();
+    
     var btnDelete = document.getElementById('btnDeleteContact');
     
     if(group && empId) {
@@ -1554,3 +1577,13 @@ window.deleteContact = function() {
         }
     });
 };
+
+// 🟢 ฟังก์ชันช่วยจัดรูปแบบตัวเลขมีลูกน้ำ (เผื่อกรณีถูกเรียกใช้งานในหน้า Payroll)
+if (typeof window.numberWithCommas !== 'function') {
+    window.numberWithCommas = function(x) {
+        if (x === undefined || x === null || x === '') return "0.00";
+        var num = parseFloat(x);
+        if (isNaN(num)) return "0.00";
+        return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+}
