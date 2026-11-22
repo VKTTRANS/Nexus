@@ -1877,7 +1877,7 @@ window.renderSafetyDoc2 = function() {
 
     var buildEmpRows = function(arr) {
         if (arr.length === 0) {
-            return `<tr><td colspan="11" style="border:1px solid #333; padding:12px; text-align:center; color:#666;">- ไม่มีรายชื่อในหมวดนี้ -</td></tr>`;
+            return `<tr><td colspan="9" style="border:1px solid #333; padding:12px; text-align:center; color:#666;">- ไม่มีรายชื่อในหมวดนี้ -</td></tr>`;
         }
         var rowsHtml = '';
         arr.forEach(function(item, idx) {
@@ -1895,22 +1895,18 @@ window.renderSafetyDoc2 = function() {
                 statusTh = 'พักงาน';
             }
 
-            var formattedIdCard = window.formatThaiIdForReport(e.idCardNum);
-            var birthText = window.formatDate(e.birthDate);
             var startText = window.formatDate(e.startDate);
 
             rowsHtml += `<tr>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${idx + 1}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${e.id || '-'}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:left;">${e.name || '-'}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.gender}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.nationality}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${formattedIdCard}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${birthText}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:left;">${e.position || '-'}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.dept}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${startText}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${statusTh}</td>
+                <td style="border:1px solid #333; padding:6px 4px; text-align:center;">${idx + 1}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:6px 6px; text-align:center; mso-number-format:'\\@';">${e.id || '-'}</td>
+                <td style="border:1px solid #333; padding:6px 8px; text-align:left;">${e.name || '-'}</td>
+                <td style="border:1px solid #333; padding:6px 4px; text-align:center;">${inf.gender}</td>
+                <td style="border:1px solid #333; padding:6px 4px; text-align:center;">${inf.nationality}</td>
+                <td style="border:1px solid #333; padding:6px 8px; text-align:left;">${e.position || '-'}</td>
+                <td style="border:1px solid #333; padding:6px 6px; text-align:center;">${inf.dept}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:6px 6px; text-align:center; mso-number-format:'\\@';">${startText}</td>
+                <td style="border:1px solid #333; padding:6px 6px; text-align:center;">${statusTh}</td>
             </tr>`;
         });
         return rowsHtml;
@@ -1953,20 +1949,18 @@ window.renderSafetyDoc2 = function() {
         </table>
 
         <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 2.1 : ทะเบียนรายชื่อลูกจ้างของ หจก. (จำนวน ${compEmps.length} คน)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12.5px; table-layout: fixed;">
             <thead>
                 <tr style="background-color: #e9ecef;">
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:38px;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:70px;">รหัส</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อ - นามสกุล</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:45px;">เพศ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:65px;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:125px;">เลขบัตรประชาชน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเกิด</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">ตำแหน่งงาน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">ฝ่าย</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเริ่มงาน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:95px;">สถานะ</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:5%;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">รหัส</th>
+                    <th style="border:1px solid #333; padding:6px 8px; text-align:center; width:23%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:6%;">เพศ</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:7%;">สัญชาติ</th>
+                    <th style="border:1px solid #333; padding:6px 8px; text-align:center; width:20%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:6px 6px; text-align:center; width:12%;">ฝ่าย</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">วันเริ่มงาน</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">สถานะ</th>
                 </tr>
             </thead>
             <tbody>
@@ -1975,20 +1969,18 @@ window.renderSafetyDoc2 = function() {
         </table>
 
         <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 2.2 : ทะเบียนรายชื่อพนักงานรถร่วมบริการ (แยกเฉพาะรถร่วม จำนวน ${jointEmps.length} คน)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px;">
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12.5px; table-layout: fixed;">
             <thead>
                 <tr style="background-color: #fff3cd;">
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:38px;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:70px;">รหัส</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อ - นามสกุล</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:45px;">เพศ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:65px;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:125px;">เลขบัตรประชาชน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเกิด</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">ตำแหน่งงาน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">ประเภท</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเริ่มสัญญา</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:95px;">สถานะ</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:5%;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">รหัส</th>
+                    <th style="border:1px solid #333; padding:6px 8px; text-align:center; width:23%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:6%;">เพศ</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:7%;">สัญชาติ</th>
+                    <th style="border:1px solid #333; padding:6px 8px; text-align:center; width:20%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:6px 6px; text-align:center; width:12%;">ประเภท</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">วันเริ่มสัญญา</th>
+                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">สถานะ</th>
                 </tr>
             </thead>
             <tbody>
