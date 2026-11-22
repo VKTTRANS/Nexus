@@ -10,6 +10,54 @@ window.showModalSafe = function(modalId) {
     modalObj.show();
 };
 
+window.syncSafetyAdminUI = function() {
+    var secAcc = document.getElementById('section-admin-acc');
+    if (secAcc) {
+        var searchInput = document.getElementById('searchAccidentInput');
+        var doc6Btn = secAcc.querySelector('button[onclick*="openSafetyDoc6Modal"]');
+        if (searchInput && doc6Btn) {
+            var inputGroup = searchInput.closest('.input-group');
+            var parentWrap = doc6Btn.parentElement;
+            if (inputGroup && parentWrap && parentWrap.id !== 'accToolbarRight') {
+                parentWrap.id = 'accToolbarRight';
+                parentWrap.className = 'd-flex gap-2 align-items-center';
+                parentWrap.style.cssText = 'flex-grow: 1; max-width: 540px; justify-content: flex-end;';
+                inputGroup.className = 'input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-25 px-2 py-1 w-100';
+                inputGroup.style.maxWidth = '';
+                doc6Btn.className = 'btn btn-warning text-dark btn-sm rounded-pill px-4 shadow-sm fw-bold hover-scale text-nowrap';
+                parentWrap.innerHTML = '';
+                parentWrap.appendChild(inputGroup);
+                parentWrap.appendChild(doc6Btn);
+            }
+        }
+    }
+
+    var secEmp = document.getElementById('section-admin-emp');
+    if (secEmp) {
+        var doc2Btn = secEmp.querySelector('button[onclick*="openSafetyDoc2Modal"]');
+        if (doc2Btn) {
+            doc2Btn.className = 'btn btn-sm btn-success text-dark fw-bold px-3 rounded-pill shadow-sm hover-scale text-nowrap';
+        }
+    }
+
+    var modal6 = document.getElementById('safetyDoc6Modal');
+    if (modal6 && !document.getElementById('doc6ScopeFilter')) {
+        var exclCheck = document.getElementById('doc6ExcludeJointCheck');
+        if (exclCheck) {
+            var colDiv = exclCheck.closest('[class*="col-"]');
+            if (colDiv) {
+                colDiv.className = 'col-lg-3 col-md-6';
+                colDiv.innerHTML = '<label class="small text-muted mb-1 fw-bold">ขอบเขตผู้ปฏิบัติงาน</label>' +
+                    '<select id="doc6ScopeFilter" class="form-select form-select-sm bg-dark text-white border-secondary shadow-none" onchange="window.renderSafetyDoc6()">' +
+                    '<option value="company" selected>เฉพาะลูกจ้าง หจก. (ไม่รวมรถร่วม)</option>' +
+                    '<option value="all">รวมทั้งหมด (แยกรายชื่อรถร่วมด้านล่าง)</option>' +
+                    '</select>';
+            }
+        }
+    }
+};
+
+
 window.resolveAccidentCause = function(acc) {
     if (!acc) return '-';
     var rawCause = String(acc.cause || '').trim();
@@ -197,6 +245,7 @@ window.openEvalDetailModal = function(jsonStr) {
 };
 
 window.loadAdminData = function() {
+    window.syncSafetyAdminUI();
     var tbEmp = document.getElementById('tableBody');
     if(tbEmp) tbEmp.innerHTML = '<tr><td colspan="10" class="text-center py-5 text-muted"><div class="spinner-border text-success spinner-border-sm me-2"></div> กำลังโหลดข้อมูล...</td></tr>';
     
@@ -290,6 +339,7 @@ window.loadAdminData = function() {
 };
 
 window.switchAdminTab = function(tab) {
+    window.syncSafetyAdminUI();
     var tabs = ['btnTabEmp', 'btnTabAcc', 'btnTabWarn', 'btnTabPayroll', 'btnTabEval', 'btnTabContact', 'btnTabCert'];
     var sections = ['section-admin-emp', 'section-admin-acc', 'section-admin-warn', 'section-admin-payroll', 'section-admin-eval', 'section-admin-contact', 'section-admin-cert'];
     
@@ -1898,22 +1948,22 @@ window.renderSafetyDoc2 = function() {
             var startText = window.formatDate(e.startDate);
 
             rowsHtml += `<tr>
-                <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${idx + 1}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${e.id || '-'}</td>
-                <td style="border:1px solid #333; padding:4px 6px; text-align:left; word-break:break-word;">${e.name || '-'}</td>
-                <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${inf.gender}</td>
-                <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${inf.nationality}</td>
-                <td style="border:1px solid #333; padding:4px 6px; text-align:left; word-break:break-word;">${e.position || '-'}</td>
-                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10.5px; word-break:break-word;">${inf.dept}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${startText}</td>
-                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10.5px; word-break:break-word;">${statusTh}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center;">${idx + 1}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; overflow-wrap:anywhere; mso-number-format:'\\@';">${e.id || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 6px; text-align:left; overflow-wrap:break-word;">${e.name || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center;">${inf.gender}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center;">${inf.nationality}</td>
+                <td style="border:1px solid #333; padding:4px 6px; text-align:left; overflow-wrap:break-word;">${e.position || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10.5px; overflow-wrap:break-word;">${inf.dept}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; overflow-wrap:anywhere; mso-number-format:'\\@';">${startText}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10.5px; overflow-wrap:break-word;">${statusTh}</td>
             </tr>`;
         });
         return rowsHtml;
     };
 
     var html = `
-    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.35;">
+    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.45;">
         <div style="text-align:center; margin-bottom: 10px;">
             <div style="font-size: 16px; font-weight: bold;">ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง (เอกสารตรวจความปลอดภัยฯ ข้อ 2)</div>
             <div style="font-size: 13.5px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
@@ -1953,13 +2003,13 @@ window.renderSafetyDoc2 = function() {
             <thead>
                 <tr style="background-color: #e9ecef;">
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:8.5%;">รหัส</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:23%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">รหัส</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22.5%;">ชื่อ - นามสกุล</th>
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:5%;">เพศ</th>
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:6%;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:23.5%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22.5%;">ตำแหน่งงาน</th>
                     <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">ฝ่าย</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">วันเริ่มงาน</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10.5%;">วันเริ่มงาน</th>
                     <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">สถานะ</th>
                 </tr>
             </thead>
@@ -1973,13 +2023,13 @@ window.renderSafetyDoc2 = function() {
             <thead>
                 <tr style="background-color: #fff3cd;">
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:8.5%;">รหัส</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:23%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">รหัส</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22.5%;">ชื่อ - นามสกุล</th>
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:5%;">เพศ</th>
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:6%;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:23.5%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22.5%;">ตำแหน่งงาน</th>
                     <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">ประเภท</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">วันเริ่มสัญญา</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10.5%;">วันเริ่มสัญญา</th>
                     <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">สถานะ</th>
                 </tr>
             </thead>
@@ -2010,6 +2060,7 @@ window.parseAccidentYearCE = function(dateStr) {
 };
 
 window.openSafetyDoc6Modal = function() {
+    window.syncSafetyAdminUI();
     var yearSel = document.getElementById('doc6YearFilter');
     if (yearSel) {
         var curYear = new Date().getFullYear();
@@ -2115,7 +2166,7 @@ window.renderSafetyDoc6 = function() {
         var lvl = window.classifyAccidentInjuryLevel(acc);
         counts[lvl]++;
 
-        var item = { acc: acc, dept: safetyInfo.dept, isJoint: safetyInfo.isJoint, lvl: lvl };
+        var item = { acc: acc, isJoint: safetyInfo.isJoint, lvl: lvl };
         if (safetyInfo.isJoint) jointAccidents.push(item);
         else compAccidents.push(item);
     });
@@ -2126,7 +2177,7 @@ window.renderSafetyDoc6 = function() {
 
     var buildAccTableRows = function(list) {
         if (list.length === 0) {
-            return `<tr><td colspan="9" style="border:1px solid #333; padding:10px; text-align:center; color:#666;">- ไม่มีประวัติอุบัติเหตุในหมวดนี้ -</td></tr>`;
+            return `<tr><td colspan="8" style="border:1px solid #333; padding:10px; text-align:center; color:#666;">- ไม่มีประวัติอุบัติเหตุในหมวดนี้ -</td></tr>`;
         }
         var rows = '';
         list.forEach(function(item, idx) {
@@ -2140,8 +2191,8 @@ window.renderSafetyDoc6 = function() {
             else if (lvl === 'noLostTime') lvlLabel = 'บาดเจ็บเล็กน้อย';
 
             var resolvedCause = window.resolveAccidentCause(a);
-            if (resolvedCause.length > 90) {
-                resolvedCause = resolvedCause.substring(0, 88) + '...';
+            if (resolvedCause.length > 95) {
+                resolvedCause = resolvedCause.substring(0, 93) + '...';
             }
             var dateStr = String(a.accDate || '-').trim();
             var timeStr = String(a.accTime || '').trim();
@@ -2149,15 +2200,14 @@ window.renderSafetyDoc6 = function() {
             var vehShow = (a.vehType || '-') + (a.truckPlate && a.truckPlate !== '-' ? ' (' + a.truckPlate + ')' : '');
 
             rows += `<tr>
-                <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${idx + 1}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${a.docNo || '-'}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; font-size:10px; mso-number-format:'\\@';">${dateTimeShow}</td>
-                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.empName || '-'}</td>
-                <td style="border:1px solid #333; padding:4px 3px; text-align:center; font-size:10px; white-space:nowrap;">${item.dept}</td>
-                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10px; word-break:break-word;">${vehShow}</td>
-                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.location || '-'}</td>
-                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${resolvedCause}</td>
-                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10px; word-break:break-word;">${lvlLabel}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center;">${idx + 1}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 5px; text-align:center; overflow-wrap:anywhere; mso-number-format:'\\@';">${a.docNo || '-'}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 5px; text-align:center; overflow-wrap:break-word; mso-number-format:'\\@';">${dateTimeShow}</td>
+                <td style="border:1px solid #333; padding:4px 6px; text-align:left; overflow-wrap:break-word;">${a.empName || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 5px; text-align:center; overflow-wrap:break-word;">${vehShow}</td>
+                <td style="border:1px solid #333; padding:4px 6px; text-align:left; overflow-wrap:break-word;">${a.location || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 6px; text-align:left; overflow-wrap:break-word;">${resolvedCause}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; overflow-wrap:break-word;">${lvlLabel}</td>
             </tr>`;
         });
         return rows;
@@ -2173,18 +2223,17 @@ window.renderSafetyDoc6 = function() {
     } else {
         detailTableHtml = `
         <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.1 : ทะเบียนบันทึกเหตุการณ์อุบัติเหตุของลูกจ้าง หจก. (${periodTitle} จำนวน ${compAccidents.length} ครั้ง)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 18px; font-size: 10.5px; table-layout: fixed;">
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 18px; font-size: 10.5px; line-height: 1.45; table-layout: fixed;">
             <thead>
                 <tr style="background-color: #e9ecef;">
-                    <th style="border:1px solid #333; padding:5px 2px; text-align:center; width:4%;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:9.5%;">เลขที่เอกสาร</th>
-                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:11%;">วัน-เวลาเกิดเหตุ</th>
-                    <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:14.5%;">ชื่อผู้ขับขี่/ลูกจ้าง</th>
-                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:8.5%;">ฝ่าย</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:12.5%;">รถ / ทะเบียน</th>
-                    <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:13%;">สถานที่เกิดเหตุ</th>
-                    <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:16%;">สาเหตุหลัก</th>
-                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:11%;">ผลกระทบ</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:12%;">เลขที่เอกสาร</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:13.5%;">วัน-เวลาเกิดเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:15.5%;">ชื่อผู้ขับขี่ / ลูกจ้าง</th>
+                    <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:13.5%;">รถ / ทะเบียน</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:13.5%;">สถานที่เกิดเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:17%;">สาเหตุหลัก</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10.5%;">ผลกระทบ</th>
                 </tr>
             </thead>
             <tbody>
@@ -2195,18 +2244,17 @@ window.renderSafetyDoc6 = function() {
         if (!excludeJoint) {
             detailTableHtml += `
             <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.2 : ทะเบียนบันทึกเหตุการณ์อุบัติเหตุของพนักงานรถร่วมบริการ (แยกเฉพาะรถร่วม จำนวน ${jointAccidents.length} ครั้ง)</div>
-            <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10.5px; table-layout: fixed;">
+            <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10.5px; line-height: 1.45; table-layout: fixed;">
                 <thead>
                     <tr style="background-color: #fff3cd;">
-                        <th style="border:1px solid #333; padding:5px 2px; text-align:center; width:4%;">ลำดับ</th>
-                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:9.5%;">เลขที่เอกสาร</th>
-                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:11%;">วัน-เวลาเกิดเหตุ</th>
-                        <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:14.5%;">ชื่อผู้ขับขี่รถร่วม</th>
-                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:8.5%;">ประเภท</th>
-                        <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:12.5%;">รถ / ทะเบียน</th>
-                        <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:13%;">สถานที่เกิดเหตุ</th>
-                        <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:16%;">สาเหตุหลัก</th>
-                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:11%;">ผลกระทบ</th>
+                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
+                        <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:12%;">เลขที่เอกสาร</th>
+                        <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:13.5%;">วัน-เวลาเกิดเหตุ</th>
+                        <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:15.5%;">ชื่อผู้ขับขี่รถร่วม</th>
+                        <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:13.5%;">รถ / ทะเบียน</th>
+                        <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:13.5%;">สถานที่เกิดเหตุ</th>
+                        <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:17%;">สาเหตุหลัก</th>
+                        <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10.5%;">ผลกระทบ</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2217,7 +2265,7 @@ window.renderSafetyDoc6 = function() {
     }
 
     var html = `
-    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.35;">
+    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.45;">
         <div style="text-align:center; margin-bottom: 10px;">
             <div style="font-size: 16px; font-weight: bold;">แบบสรุปสถิติการประสบอันตรายจากการทำงาน ${periodTitle} (เอกสารข้อ 6)</div>
             <div style="font-size: 13.5px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
@@ -2225,7 +2273,7 @@ window.renderSafetyDoc6 = function() {
         </div>
 
         <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 1 : ตารางสรุปสถิติการประสบอันตรายหรือเจ็บป่วยเนื่องจากการทำงาน (${periodSubTitle})</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11.5px;">
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11.5px; line-height: 1.45;">
             <thead>
                 <tr style="background-color: #e9ecef;">
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:45px;">ลำดับ</th>
@@ -2316,6 +2364,7 @@ window.printSafetyDoc = function(elementId, docTitle) {
             body { font-family: 'Sarabun', sans-serif; margin: 0; padding: 0; color: #000; background: #fff; }
             table { page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
+            td, th { overflow-wrap: break-word; word-wrap: break-word; }
             thead { display: table-header-group; }
         </style>
     </head>
