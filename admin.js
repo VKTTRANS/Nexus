@@ -10,7 +10,6 @@ window.showModalSafe = function(modalId) {
     modalObj.show();
 };
 
-// 🟢 ฟังก์ชันอัปเดตรายชื่อพนักงานเข้า Datalist (ทั้งหน้าใบเตือน และ หน้าติดต่อศูนย์)
 window.populateEmployeeDatalists = function() {
     if (!window.allEmpData || !Array.isArray(window.allEmpData)) return;
     var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; });
@@ -197,7 +196,6 @@ window.loadAdminData = function() {
                 window.allEmpData = data; 
                 window.currentDisplayData = data;
                 
-                // 🟢 อัปเดตตัวเลือก Datalist ของใบเตือนและผู้ติดต่อทันทีที่โหลดข้อมูลพนักงานเสร็จ
                 window.populateEmployeeDatalists();
                 
                 if(window.currentUser.role !== 'Viewer') { 
@@ -568,7 +566,6 @@ window.filterPayrollTable = function() {
 };
 
 window.openPayrollHistory = function(empId) {
-    var emp = window.allEmpData.find(function(e) { return e.id === empId; });
     var slips = window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); });
     
     var html = '';
@@ -1187,7 +1184,6 @@ window.openCreateWarningModal = function() {
     if (!form) return;
     form.reset(); 
     
-    // 🟢 อัปเดตรายชื่อพนักงานเข้า <datalist id="warnEmpOptions"> ทุกครั้งที่กดเปิด Modal ออกใบเตือน
     window.populateEmployeeDatalists();
     
     var issueDate = document.getElementById('warnIssueDate');
@@ -1301,13 +1297,10 @@ window.openBirthdayModal = function() {
             <div class="col-md-6 stagger-item" style="animation-delay: ${delay}s">
                 <div class="admin-modal-card hover-warning h-100 p-3" onclick="window.openModal('view', '${e.id}')">
                     <div class="d-flex align-items-start gap-3 w-100">
-                        <!-- ปฏิทินวันที่ -->
                         <div class="admin-modal-badge admin-modal-badge-warning d-flex flex-column align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 50px; height: 50px; padding: 0; border-radius: 12px;">
                             <span style="font-size: 0.65rem; opacity: 0.8; line-height: 1; margin-bottom: 2px;">วันที่</span>
                             <span style="font-size: 1.3rem; font-weight: bold; line-height: 1;">${day}</span>
                         </div>
-                        
-                        <!-- ข้อมูลพนักงาน -->
                         <div class="flex-grow-1" style="min-width: 0;">
                             <div class="admin-modal-title mb-1" style="font-size: 0.95rem; white-space: normal; line-height: 1.3;">
                                 ${e.name}${nick}
@@ -1319,8 +1312,6 @@ window.openBirthdayModal = function() {
                                 <i class="bi bi-briefcase me-1"></i>${pos}
                             </div>
                         </div>
-                        
-                        <!-- ไอคอนลูกศร -->
                         <i class="bi bi-chevron-right text-muted fs-5 ms-1 mt-2 flex-shrink-0"></i>
                     </div>
                 </div>
@@ -1485,7 +1476,6 @@ window.openContactModal = function(group, empId) {
     var form = document.getElementById('contactForm');
     if(form) form.reset();
     
-    // 🟢 อัปเดตรายชื่อพนักงานเข้า Datalist ทุกครั้งที่เปิด Modal ติดต่อศูนย์
     window.populateEmployeeDatalists();
     
     var btnDelete = document.getElementById('btnDeleteContact');
@@ -1578,7 +1568,585 @@ window.deleteContact = function() {
     });
 };
 
-// 🟢 ฟังก์ชันช่วยจัดรูปแบบตัวเลขมีลูกน้ำ (เผื่อกรณีถูกเรียกใช้งานในหน้า Payroll)
+window.classifyEmpForSafety = function(emp) {
+    var pos = String(emp.position || '').trim();
+    var posLower = pos.toLowerCase();
+
+    var isJoint = pos.indexOf('รถร่วม') !== -1;
+
+    var dept = 'ฝ่ายรถบรรทุก / ขนส่ง';
+    if (!isJoint) {
+        var officeKeywords = ['สำนักงาน', 'ออฟฟิศ', 'office', 'บัญชี', 'การเงิน', 'ธุรการ', 'บุคคล', 'hr', 'admin', 'ผู้จัดการ', 'บริหาร', 'จัดซื้อ', 'ประสานงาน', 'เสมียน', 'แม่บ้าน'];
+        var driverKeywords = ['ขับรถ', 'พนักงานขับ', 'พขร', 'ติดรถ', 'ท้ายรถ', 'ช่าง', 'ลาน', 'จัดส่ง', 'รถบรรทุก', 'หัวลาก', 'เทรลเลอร์', '6 ล้อ', '10 ล้อ', '4 ล้อ'];
+
+        var matchOffice = officeKeywords.some(function(k) { return posLower.indexOf(k) !== -1; });
+        var matchDriver = driverKeywords.some(function(k) { return posLower.indexOf(k) !== -1; });
+
+        if (matchOffice && !matchDriver) {
+            dept = 'ฝ่ายสำนักงาน';
+        } else if (!matchDriver && (emp.role === 'Admin' || emp.role === 'Viewer') && !emp.licNum) {
+            dept = 'ฝ่ายสำนักงาน';
+        }
+    } else {
+        dept = 'รถร่วมบริการ';
+    }
+
+    var gender = 'ชาย';
+    var gRaw = String(emp.gender || '').trim();
+    var nameRaw = String(emp.name || '').trim();
+    if (gRaw === 'หญิง' || nameRaw.indexOf('นาง') === 0 || nameRaw.indexOf('น.ส.') === 0 || nameRaw.indexOf('นางสาว') === 0) {
+        gender = 'หญิง';
+    } else if (gRaw === 'ชาย' || nameRaw.indexOf('นาย') === 0) {
+        gender = 'ชาย';
+    }
+
+    var nationality = 'ไทย';
+    var idDigits = String(emp.idCardNum || '').replace(/\D/g, '');
+    var hasPassport = emp.docs && emp.docs.PASSPORT && emp.docs.PASSPORT.url;
+    var textCheck = (pos + ' ' + String(emp.name || '') + ' ' + String(emp.nationality || '')).toLowerCase();
+
+    if (
+        textCheck.indexOf('ต่างด้าว') !== -1 ||
+        textCheck.indexOf('พม่า') !== -1 ||
+        textCheck.indexOf('เมียนมา') !== -1 ||
+        textCheck.indexOf('กัมพูชา') !== -1 ||
+        textCheck.indexOf('ลาว') !== -1
+    ) {
+        nationality = 'ต่างด้าว';
+    } else if (idDigits.length === 13 && (idDigits.charAt(0) === '0' || idDigits.charAt(0) === '6' || idDigits.charAt(0) === '7')) {
+        nationality = 'ต่างด้าว';
+    } else if (!idDigits && hasPassport) {
+        nationality = 'ต่างด้าว';
+    }
+
+    return {
+        isJoint: isJoint,
+        dept: dept,
+        gender: gender,
+        nationality: nationality
+    };
+};
+
+window.createEmptySafetyStatRow = function() {
+    return {
+        thaiMale: 0,
+        thaiFemale: 0,
+        foreignMale: 0,
+        foreignFemale: 0,
+        totalMale: 0,
+        totalFemale: 0,
+        total: 0
+    };
+};
+
+window.addEmpToSafetyStatRow = function(rowObj, info) {
+    if (info.nationality === 'ไทย') {
+        if (info.gender === 'หญิง') rowObj.thaiFemale++;
+        else rowObj.thaiMale++;
+    } else {
+        if (info.gender === 'หญิง') rowObj.foreignFemale++;
+        else rowObj.foreignMale++;
+    }
+    if (info.gender === 'หญิง') rowObj.totalFemale++;
+    else rowObj.totalMale++;
+    rowObj.total++;
+};
+
+window.openSafetyDoc2Modal = function() {
+    window.renderSafetyDoc2();
+    window.showModalSafe('safetyDoc2Modal');
+};
+
+window.renderSafetyDoc2 = function() {
+    var container = document.getElementById('safetyDoc2PrintArea');
+    if (!container) return;
+
+    var companyNameEl = document.getElementById('doc2CompanyName');
+    var companyName = companyNameEl ? companyNameEl.value.trim() : 'ห้างหุ้นส่วนจำกัด';
+    var statusFilterEl = document.getElementById('doc2StatusFilter');
+    var statusFilter = statusFilterEl ? statusFilterEl.value : 'Active';
+
+    var rawList = window.allEmpData || [];
+    var filtered = rawList.filter(function(e) {
+        if (statusFilter === 'Active') return e.status === 'Active';
+        return true;
+    });
+
+    filtered.sort(function(a, b) {
+        return String(a.id || '').localeCompare(String(b.id || ''), 'th', { numeric: true });
+    });
+
+    var statTruck = window.createEmptySafetyStatRow();
+    var statOffice = window.createEmptySafetyStatRow();
+    var statCompSub = window.createEmptySafetyStatRow();
+    var statJoint = window.createEmptySafetyStatRow();
+    var statGrand = window.createEmptySafetyStatRow();
+
+    var compEmps = [];
+    var jointEmps = [];
+
+    filtered.forEach(function(emp) {
+        var info = window.classifyEmpForSafety(emp);
+        var enriched = { emp: emp, info: info };
+
+        if (info.isJoint) {
+            jointEmps.push(enriched);
+            window.addEmpToSafetyStatRow(statJoint, info);
+        } else {
+            compEmps.push(enriched);
+            if (info.dept === 'ฝ่ายสำนักงาน') {
+                window.addEmpToSafetyStatRow(statOffice, info);
+            } else {
+                window.addEmpToSafetyStatRow(statTruck, info);
+            }
+            window.addEmpToSafetyStatRow(statCompSub, info);
+        }
+        window.addEmpToSafetyStatRow(statGrand, info);
+    });
+
+    var todayThai = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+    var statusLabel = statusFilter === 'Active' ? 'เฉพาะผู้ปฏิบัติงานปัจจุบัน (Active)' : 'รวมพนักงานทั้งหมด (Active / พักงาน / ลาออก)';
+
+    var buildSummaryTr = function(label, r, bgStyle, isBold) {
+        var fw = isBold ? 'font-weight:bold;' : '';
+        return `<tr style="${bgStyle}${fw}">
+            <td style="border:1px solid #333; padding:6px 10px; text-align:left;">${label}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.thaiMale}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.thaiFemale}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.foreignMale}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.foreignFemale}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.totalMale}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.totalFemale}</td>
+            <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${r.total}</td>
+        </tr>`;
+    };
+
+    var buildEmpRows = function(arr) {
+        if (arr.length === 0) {
+            return `<tr><td colspan="11" style="border:1px solid #333; padding:12px; text-align:center; color:#666;">- ไม่มีรายชื่อในหมวดนี้ -</td></tr>`;
+        }
+        var rowsHtml = '';
+        arr.forEach(function(item, idx) {
+            var e = item.emp;
+            var inf = item.info;
+            var statusTh = e.status === 'Active' ? 'ทำงานปกติ' : (e.status === 'Resigned' ? 'ลาออก (' + window.formatDate(e.resignDate) + ')' : 'พักงาน');
+            rowsHtml += `<tr>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${idx + 1}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${e.id || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:left;">${e.name || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.gender}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.nationality}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${e.idCardNum || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${window.formatDate(e.birthDate)}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:left;">${e.position || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.dept}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${window.formatDate(e.startDate)}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${statusTh}</td>
+            </tr>`;
+        });
+        return rowsHtml;
+    };
+
+    var html = `
+    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 13px; line-height: 1.45;">
+        <div style="text-align:center; margin-bottom: 14px;">
+            <div style="font-size: 18px; font-weight: bold;">ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง (เอกสารตรวจความปลอดภัยฯ ข้อ 2)</div>
+            <div style="font-size: 15px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
+            <div style="font-size: 12px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | เงื่อนไข: ${statusLabel}</div>
+        </div>
+
+        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายรถ / สำนักงาน, ไทย / ต่างด้าว, ชาย / หญิง และแยกรถร่วม)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px;">
+            <thead>
+                <tr style="background-color: #e9ecef;">
+                    <th rowspan="2" style="border:1px solid #333; padding:6px 10px; text-align:center;">ประเภท / แผนก / ฝ่าย</th>
+                    <th colspan="2" style="border:1px solid #333; padding:6px; text-align:center;">สัญชาติไทย (คน)</th>
+                    <th colspan="2" style="border:1px solid #333; padding:6px; text-align:center;">ต่างด้าว (คน)</th>
+                    <th colspan="2" style="border:1px solid #333; padding:6px; text-align:center;">รวมแยกเพศ (คน)</th>
+                    <th rowspan="2" style="border:1px solid #333; padding:6px; text-align:center;">รวมทั้งสิ้น<br>(คน)</th>
+                </tr>
+                <tr style="background-color: #f8f9fa;">
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชาย</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">หญิง</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชาย</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">หญิง</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">รวมชาย</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">รวมหญิง</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${buildSummaryTr('1. ลูกจ้าง หจก. - ฝ่ายรถบรรทุก / ขนส่ง', statTruck, '', false)}
+                ${buildSummaryTr('2. ลูกจ้าง หจก. - ฝ่ายสำนักงาน (Office)', statOffice, '', false)}
+                ${buildSummaryTr('รวมลูกจ้างประจำของ หจก. ทั้งสิ้น (1 + 2)', statCompSub, 'background-color:#d1e7dd;', true)}
+                ${buildSummaryTr('3. พนักงานรถร่วมบริการ (แยกบัญชีรถร่วม)', statJoint, 'background-color:#fff3cd;', false)}
+                ${buildSummaryTr('รวมผู้ปฏิบัติงานในระบบทั้งหมด (หจก. + รถร่วม)', statGrand, 'background-color:#cfe2ff;', true)}
+            </tbody>
+        </table>
+
+        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 2.1 : ทะเบียนรายชื่อลูกจ้างของ หจก. (จำนวน ${compEmps.length} คน)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
+            <thead>
+                <tr style="background-color: #e9ecef;">
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:38px;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:70px;">รหัส</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:45px;">เพศ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:65px;">สัญชาติ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">เลขบัตรประชาชน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:80px;">วันเกิด</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">ฝ่าย</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:80px;">วันเริ่มงาน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">สถานะ</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${buildEmpRows(compEmps)}
+            </tbody>
+        </table>
+
+        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 2.2 : ทะเบียนรายชื่อพนักงานรถร่วมบริการ (แยกเฉพาะรถร่วม จำนวน ${jointEmps.length} คน)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px;">
+            <thead>
+                <tr style="background-color: #fff3cd;">
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:38px;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:70px;">รหัส</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:45px;">เพศ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:65px;">สัญชาติ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">เลขบัตรประชาชน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:80px;">วันเกิด</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">ประเภท</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:80px;">วันเริ่มสัญญา</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">สถานะ</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${buildEmpRows(jointEmps)}
+            </tbody>
+        </table>
+
+        <div style="display:flex; justify-content:space-between; margin-top: 30px; padding: 0 30px;">
+            <div style="text-align:center;">
+                <div>ลงชื่อ ....................................................... ผู้จัดทำข้อมูล</div>
+                <div style="margin-top:4px;">( ....................................................... )</div>
+                <div style="margin-top:4px;">วันที่ ......... / ......... / .............</div>
+            </div>
+            <div style="text-align:center;">
+                <div>ลงชื่อ ....................................................... นายจ้าง / ผู้มีอำนาจลงนาม</div>
+                <div style="margin-top:4px;">( ....................................................... )</div>
+                <div style="margin-top:4px;">วันที่ ......... / ......... / .............</div>
+            </div>
+        </div>
+    </div>`;
+
+    container.innerHTML = html;
+};
+
+window.parseAccidentYearCE = function(dateStr) {
+    if (!dateStr) return null;
+    var s = String(dateStr).trim();
+    var d = new Date(s);
+    if (!isNaN(d.getTime())) {
+        var y = d.getFullYear();
+        return y > 2400 ? y - 543 : y;
+    }
+    var parts = s.split(/[\/\-\s]/);
+    for (var i = 0; i < parts.length; i++) {
+        var num = parseInt(parts[i], 10);
+        if (num > 2400) return num - 543;
+        if (num >= 1990 && num <= 2100) return num;
+    }
+    return null;
+};
+
+window.openSafetyDoc6Modal = function() {
+    var yearSel = document.getElementById('doc6YearFilter');
+    if (yearSel) {
+        var curYear = new Date().getFullYear();
+        var yearsSet = new Set([curYear, curYear - 1, curYear - 2]);
+        (window.allAccidentData || []).forEach(function(a) {
+            var y = window.parseAccidentYearCE(a.accDate);
+            if (y) yearsSet.add(y);
+        });
+        var sortedYears = Array.from(yearsSet).sort(function(a, b) { return b - a; });
+        var prevVal = yearSel.value;
+        yearSel.innerHTML = '';
+        sortedYears.forEach(function(y) {
+            var opt = document.createElement('option');
+            opt.value = String(y);
+            opt.text = 'พ.ศ. ' + (y + 543) + ' (' + y + ')';
+            if (prevVal ? String(y) === prevVal : y === curYear) opt.selected = true;
+            yearSel.appendChild(opt);
+        });
+    }
+    window.renderSafetyDoc6();
+    window.showModalSafe('safetyDoc6Modal');
+};
+
+window.classifyAccidentInjuryLevel = function(acc) {
+    var text = (String(acc.damage || '') + ' ' + String(acc.detail || '') + ' ' + String(acc.fixText || '')).toLowerCase();
+    if (text.indexOf('เสียชีวิต') !== -1 || text.indexOf('ตาย') !== -1) {
+        return 'death';
+    }
+    if (text.indexOf('พิการ') !== -1 || text.indexOf('ทุพพลภาพ') !== -1 || text.indexOf('สูญเสียอวัยวะ') !== -1) {
+        return 'disability';
+    }
+    if (text.indexOf('หยุดงานเกิน 3 วัน') !== -1 || text.indexOf('นอนโรงพยาบาล') !== -1 || text.indexOf('แอดมิท') !== -1 || text.indexOf('สาหัส') !== -1) {
+        return 'over3';
+    }
+    if (text.indexOf('หยุดงาน') !== -1 || text.indexOf('ลาป่วย') !== -1) {
+        return 'upto3';
+    }
+    if (text.indexOf('บาดเจ็บ') !== -1 || text.indexOf('ปฐมพยาบาล') !== -1 || text.indexOf('ทำแผล') !== -1 || text.indexOf('ฟกช้ำ') !== -1 || text.indexOf('ถลอก') !== -1) {
+        return 'noLostTime';
+    }
+    return 'propertyOnly';
+};
+
+window.renderSafetyDoc6 = function() {
+    var container = document.getElementById('safetyDoc6PrintArea');
+    if (!container) return;
+
+    var companyNameEl = document.getElementById('doc6CompanyName');
+    var companyName = companyNameEl ? companyNameEl.value.trim() : 'ห้างหุ้นส่วนจำกัด';
+    var yearSel = document.getElementById('doc6YearFilter');
+    var selectedYear = yearSel && yearSel.value ? parseInt(yearSel.value, 10) : new Date().getFullYear();
+    var thaiYear = selectedYear + 543;
+    var excludeJointEl = document.getElementById('doc6ExcludeJointCheck');
+    var excludeJoint = excludeJointEl ? excludeJointEl.checked : false;
+
+    var empMap = {};
+    (window.allEmpData || []).forEach(function(e) {
+        empMap[String(e.id).trim()] = e;
+    });
+
+    var activeCompanyEmps = (window.allEmpData || []).filter(function(e) {
+        if (e.status !== 'Active') return false;
+        if (excludeJoint && String(e.position || '').indexOf('รถร่วม') !== -1) return false;
+        return true;
+    }).length;
+
+    var yearAccidents = (window.allAccidentData || []).filter(function(a) {
+        var y = window.parseAccidentYearCE(a.accDate);
+        if (y !== selectedYear) return false;
+        if (excludeJoint) {
+            var empObj = empMap[String(a.empId || '').trim()];
+            if (empObj && String(empObj.position || '').indexOf('รถร่วม') !== -1) {
+                return false;
+            }
+        }
+        return true;
+    });
+
+    var counts = {
+        death: 0,
+        disability: 0,
+        over3: 0,
+        upto3: 0,
+        noLostTime: 0,
+        propertyOnly: 0
+    };
+
+    yearAccidents.forEach(function(acc) {
+        var lvl = window.classifyAccidentInjuryLevel(acc);
+        counts[lvl]++;
+    });
+
+    var totalInjuryCases = counts.death + counts.disability + counts.over3 + counts.upto3 + counts.noLostTime;
+    var totalAllIncidents = yearAccidents.length;
+    var todayThai = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+    var scopeNote = excludeJoint ? 'เฉพาะลูกจ้างประจำของ หจก. (ไม่รวมรถร่วมบริการ)' : 'รวมผู้ปฏิบัติงานทั้งหมดในระบบ';
+
+    var detailTableHtml = '';
+    if (yearAccidents.length === 0) {
+        detailTableHtml = `
+        <div style="border: 2px solid #198754; background-color: #f8fff9; padding: 16px; text-align: center; margin-bottom: 24px; border-radius: 6px;">
+            <div style="font-size: 15px; font-weight: bold; color: #0f5132;">สรุปผลการดำเนินงานด้านความปลอดภัย ประจำปี พ.ศ. ${thaiYear}</div>
+            <div style="font-size: 14px; margin-top: 6px;">สถานประกอบกิจการ <b>ไม่มีลูกจ้างประสบอันตรายหรือเกิดอุบัติเหตุจากการทำงาน (สถิติการประสบอันตราย = 0 ราย)</b></div>
+        </div>`;
+    } else {
+        var detailRows = '';
+        yearAccidents.forEach(function(a, idx) {
+            var empObj = empMap[String(a.empId || '').trim()];
+            var isJointTag = (empObj && String(empObj.position || '').indexOf('รถร่วม') !== -1) ? ' (รถร่วม)' : '';
+            var lvl = window.classifyAccidentInjuryLevel(a);
+            var lvlLabel = 'ทรัพย์สิน/รถเสียหาย (บาดเจ็บ 0 ราย)';
+            if (lvl === 'death') lvlLabel = 'เสียชีวิต';
+            else if (lvl === 'disability') lvlLabel = 'ทุพพลภาพ/สูญเสียอวัยวะ';
+            else if (lvl === 'over3') lvlLabel = 'บาดเจ็บหยุดงานเกิน 3 วัน';
+            else if (lvl === 'upto3') lvlLabel = 'บาดเจ็บหยุดงานไม่เกิน 3 วัน';
+            else if (lvl === 'noLostTime') lvlLabel = 'บาดเจ็บเล็กน้อย (ไม่หยุดงาน)';
+
+            detailRows += `<tr>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${idx + 1}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${a.docNo || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${a.accDate || '-'} ${a.accTime || ''}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:left;">${a.empName || '-'}${isJointTag}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${a.vehType || '-'} (${a.truckPlate || '-'})</td>
+                <td style="border:1px solid #333; padding:5px; text-align:left;">${a.location || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:left;">${a.cause || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:left;">${a.damage || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:center;">${lvlLabel}</td>
+            </tr>`;
+        });
+
+        detailTableHtml = `
+        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 2 : ทะเบียนบันทึกเหตุการณ์อุบัติเหตุทางถนน/ในการทำงาน ประจำปี พ.ศ. ${thaiYear} (จำนวน ${totalAllIncidents} ครั้ง)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px;">
+            <thead>
+                <tr style="background-color: #e9ecef;">
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:38px;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">เลขที่เอกสาร</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:105px;">วัน-เวลาเกิดเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อผู้ประสบเหตุ/ผู้ขับขี่</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">รถ / ทะเบียน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">สถานที่เกิดเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">สาเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">ความเสียหาย/อาการ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:130px;">ระดับความรุนแรง</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${detailRows}
+            </tbody>
+        </table>`;
+    }
+
+    var html = `
+    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 13px; line-height: 1.5;">
+        <div style="text-align:center; margin-bottom: 16px;">
+            <div style="font-size: 18px; font-weight: bold;">แบบสรุปสถิติการประสบอันตรายจากการทำงาน ประจำปี พ.ศ. ${thaiYear} (เอกสารข้อ 6)</div>
+            <div style="font-size: 15px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
+            <div style="font-size: 12px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ขอบเขตข้อมูล: ${scopeNote} | จำนวนผู้ปฏิบัติงานปัจจุบัน: ${activeCompanyEmps} คน</div>
+        </div>
+
+        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 1 : ตารางสรุปสถิติการประสบอันตรายหรือเจ็บป่วยเนื่องจากการทำงาน (1 มกราคม - 31 ธันวาคม พ.ศ. ${thaiYear})</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px;">
+            <thead>
+                <tr style="background-color: #e9ecef;">
+                    <th style="border:1px solid #333; padding:7px; text-align:center; width:55px;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:7px 12px; text-align:left;">ระดับความรุนแรงของการประสบอันตรายจากการทำงาน</th>
+                    <th style="border:1px solid #333; padding:7px; text-align:center; width:130px;">จำนวนลูกจ้าง (ราย)</th>
+                    <th style="border:1px solid #333; padding:7px; text-align:center; width:180px;">หมายเหตุ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">1</td>
+                    <td style="border:1px solid #333; padding:6px 12px;">กรณีเสียชีวิตเนื่องจากการทำงาน</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.death}</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.death === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">2</td>
+                    <td style="border:1px solid #333; padding:6px 12px;">กรณีทุพพลภาพ หรือสูญเสียอวัยวะบางส่วน</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.disability}</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.disability === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">3</td>
+                    <td style="border:1px solid #333; padding:6px 12px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานเกิน 3 วันทำงานติดต่อกัน</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.over3}</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.over3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">4</td>
+                    <td style="border:1px solid #333; padding:6px 12px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานไม่เกิน 3 วันทำงาน</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.upto3}</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.upto3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">5</td>
+                    <td style="border:1px solid #333; padding:6px 12px;">กรณีบาดเจ็บเล็กน้อย (ปฐมพยาบาล ไม่มีการหยุดงาน)</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.noLostTime}</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.noLostTime === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                </tr>
+                <tr style="background-color: #d1e7dd; font-weight: bold;">
+                    <td colspan="2" style="border:1px solid #333; padding:7px 12px; text-align:right;">รวมจำนวนลูกจ้างที่ประสบอันตรายจากการทำงานทั้งสิ้น (ข้อ 1 - 5)</td>
+                    <td style="border:1px solid #333; padding:7px; text-align:center; font-size:15px;">${totalInjuryCases} ราย</td>
+                    <td style="border:1px solid #333; padding:7px; text-align:center;">${totalInjuryCases === 0 ? 'ปลอดภัย 100% (0 ราย)' : 'มีประวัติตามรายละเอียดแนบ'}</td>
+                </tr>
+                <tr style="background-color: #fff3cd;">
+                    <td colspan="2" style="border:1px solid #333; padding:6px 12px; text-align:right;">สถิติอุบัติเหตุทางรถยนต์/ทรัพย์สินเสียหาย (ไม่มีลูกจ้างบาดเจ็บ)</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.propertyOnly} ครั้ง</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">บันทึกจากระบบแจ้งอุบัติเหตุ</td>
+                </tr>
+            </tbody>
+        </table>
+
+        ${detailTableHtml}
+
+        <div style="display:flex; justify-content:space-between; margin-top: 35px; padding: 0 30px;">
+            <div style="text-align:center;">
+                <div>ลงชื่อ ....................................................... จป.บริหาร / ผู้จัดทำ</div>
+                <div style="margin-top:4px;">( ....................................................... )</div>
+                <div style="margin-top:4px;">วันที่ ......... / ......... / .............</div>
+            </div>
+            <div style="text-align:center;">
+                <div>ลงชื่อ ....................................................... นายจ้าง / ผู้มีอำนาจลงนาม</div>
+                <div style="margin-top:4px;">( ....................................................... )</div>
+                <div style="margin-top:4px;">วันที่ ......... / ......... / .............</div>
+            </div>
+        </div>
+    </div>`;
+
+    container.innerHTML = html;
+};
+
+window.printSafetyDoc = function(elementId, docTitle) {
+    var el = document.getElementById(elementId);
+    if (!el) return;
+    var printWindow = window.open('', '_blank', 'width=1100,height=800');
+    if (!printWindow) {
+        Swal.fire({ icon: 'warning', title: 'เปิดหน้าต่างพิมพ์ไม่ได้', text: 'กรุณาอนุญาต Pop-up ของเบราว์เซอร์ก่อนพิมพ์เอกสาร', background: '#1a1a1a', color: '#fff' });
+        return;
+    }
+    printWindow.document.write(`<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>${docTitle}</title>
+        <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <style>
+            @page { size: A4 portrait; margin: 12mm; }
+            body { font-family: 'Sarabun', sans-serif; margin: 0; padding: 0; color: #000; background: #fff; }
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            thead { display: table-header-group; }
+        </style>
+    </head>
+    <body>
+        ${el.innerHTML}
+        <script>
+            window.onload = function() {
+                setTimeout(function() { window.print(); }, 400);
+            };
+        <\/script>
+    </body>
+    </html>`);
+    printWindow.document.close();
+};
+
+window.exportSafetyDocExcel = function(elementId, fileNamePrefix) {
+    var el = document.getElementById(elementId);
+    if (!el) return;
+    var excelHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head><meta charset="UTF-8"></head>
+    <body>${el.innerHTML}</body></html>`;
+
+    var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = fileNamePrefix + '_' + new Date().toISOString().slice(0, 10) + '.xls';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+
 if (typeof window.numberWithCommas !== 'function') {
     window.numberWithCommas = function(x) {
         if (x === undefined || x === null || x === '') return "0.00";
