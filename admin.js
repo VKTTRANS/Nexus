@@ -1864,20 +1864,20 @@ window.renderSafetyDoc2 = function() {
     var buildSummaryTr = function(label, r, bgStyle, isBold) {
         var fw = isBold ? 'font-weight:bold;' : '';
         return `<tr style="${bgStyle}${fw}">
-            <td style="border:1px solid #333; padding:6px 10px; text-align:left;">${label}</td>
-            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.thaiMale}</td>
-            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.thaiFemale}</td>
-            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.foreignMale}</td>
-            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.foreignFemale}</td>
-            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.totalMale}</td>
-            <td style="border:1px solid #333; padding:6px; text-align:center;">${r.totalFemale}</td>
-            <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${r.total}</td>
+            <td style="border:1px solid #333; padding:4px 8px; text-align:left;">${label}</td>
+            <td style="border:1px solid #333; padding:4px 6px; text-align:center;">${r.thaiMale}</td>
+            <td style="border:1px solid #333; padding:4px 6px; text-align:center;">${r.thaiFemale}</td>
+            <td style="border:1px solid #333; padding:4px 6px; text-align:center;">${r.foreignMale}</td>
+            <td style="border:1px solid #333; padding:4px 6px; text-align:center;">${r.foreignFemale}</td>
+            <td style="border:1px solid #333; padding:4px 6px; text-align:center;">${r.totalMale}</td>
+            <td style="border:1px solid #333; padding:4px 6px; text-align:center;">${r.totalFemale}</td>
+            <td style="border:1px solid #333; padding:4px 6px; text-align:center; font-weight:bold;">${r.total}</td>
         </tr>`;
     };
 
     var buildEmpRows = function(arr) {
         if (arr.length === 0) {
-            return `<tr><td colspan="9" style="border:1px solid #333; padding:12px; text-align:center; color:#666;">- ไม่มีรายชื่อในหมวดนี้ -</td></tr>`;
+            return `<tr><td colspan="9" style="border:1px solid #333; padding:10px; text-align:center; color:#666;">- ไม่มีรายชื่อในหมวดนี้ -</td></tr>`;
         }
         var rowsHtml = '';
         arr.forEach(function(item, idx) {
@@ -1887,7 +1887,7 @@ window.renderSafetyDoc2 = function() {
             var statusTh = 'ทำงานปกติ';
             if (e.status === 'Resigned') {
                 if (targetYear && resignYearCheck && resignYearCheck > targetYear) {
-                    statusTh = 'ทำงานปกติ (ลาออกปี ' + resignYearCheck + ')';
+                    statusTh = 'ทำงานปกติ (ออกปี ' + resignYearCheck + ')';
                 } else {
                     statusTh = 'ลาออก (' + window.formatDate(e.resignDate) + ')';
                 }
@@ -1898,45 +1898,45 @@ window.renderSafetyDoc2 = function() {
             var startText = window.formatDate(e.startDate);
 
             rowsHtml += `<tr>
-                <td style="border:1px solid #333; padding:6px 4px; text-align:center;">${idx + 1}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:6px 6px; text-align:center; mso-number-format:'\\@';">${e.id || '-'}</td>
-                <td style="border:1px solid #333; padding:6px 8px; text-align:left;">${e.name || '-'}</td>
-                <td style="border:1px solid #333; padding:6px 4px; text-align:center;">${inf.gender}</td>
-                <td style="border:1px solid #333; padding:6px 4px; text-align:center;">${inf.nationality}</td>
-                <td style="border:1px solid #333; padding:6px 8px; text-align:left;">${e.position || '-'}</td>
-                <td style="border:1px solid #333; padding:6px 6px; text-align:center;">${inf.dept}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:6px 6px; text-align:center; mso-number-format:'\\@';">${startText}</td>
-                <td style="border:1px solid #333; padding:6px 6px; text-align:center;">${statusTh}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${idx + 1}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${e.id || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 6px; text-align:left; word-break:break-word;">${e.name || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${inf.gender}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${inf.nationality}</td>
+                <td style="border:1px solid #333; padding:4px 6px; text-align:left; word-break:break-word;">${e.position || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap;">${inf.dept}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${startText}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; word-break:break-word;">${statusTh}</td>
             </tr>`;
         });
         return rowsHtml;
     };
 
     var html = `
-    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 13px; line-height: 1.45;">
-        <div style="text-align:center; margin-bottom: 14px;">
-            <div style="font-size: 18px; font-weight: bold;">ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง (เอกสารตรวจความปลอดภัยฯ ข้อ 2)</div>
-            <div style="font-size: 15px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
-            <div style="font-size: 12px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ช่วงเวลา: ${yearLabel} | เงื่อนไข: ${statusLabel}</div>
+    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.35;">
+        <div style="text-align:center; margin-bottom: 10px;">
+            <div style="font-size: 16px; font-weight: bold;">ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง (เอกสารตรวจความปลอดภัยฯ ข้อ 2)</div>
+            <div style="font-size: 13.5px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
+            <div style="font-size: 11px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ช่วงเวลา: ${yearLabel} | เงื่อนไข: ${statusLabel}</div>
         </div>
 
-        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายรถ / สำนักงาน, ไทย / ต่างด้าว, ชาย / หญิง และแยกรถร่วม)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px;">
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายรถ / สำนักงาน, ไทย / ต่างด้าว, ชาย / หญิง และแยกรถร่วม)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11.5px;">
             <thead>
                 <tr style="background-color: #e9ecef;">
-                    <th rowspan="2" style="border:1px solid #333; padding:6px 10px; text-align:center;">ประเภท / แผนก / ฝ่าย</th>
-                    <th colspan="2" style="border:1px solid #333; padding:6px; text-align:center;">สัญชาติไทย (คน)</th>
-                    <th colspan="2" style="border:1px solid #333; padding:6px; text-align:center;">ต่างด้าว (คน)</th>
-                    <th colspan="2" style="border:1px solid #333; padding:6px; text-align:center;">รวมแยกเพศ (คน)</th>
-                    <th rowspan="2" style="border:1px solid #333; padding:6px; text-align:center;">รวมทั้งสิ้น<br>(คน)</th>
+                    <th rowspan="2" style="border:1px solid #333; padding:5px 8px; text-align:center;">ประเภท / แผนก / ฝ่าย</th>
+                    <th colspan="2" style="border:1px solid #333; padding:4px; text-align:center;">สัญชาติไทย (คน)</th>
+                    <th colspan="2" style="border:1px solid #333; padding:4px; text-align:center;">ต่างด้าว (คน)</th>
+                    <th colspan="2" style="border:1px solid #333; padding:4px; text-align:center;">รวมแยกเพศ (คน)</th>
+                    <th rowspan="2" style="border:1px solid #333; padding:5px; text-align:center;">รวมทั้งสิ้น<br>(คน)</th>
                 </tr>
                 <tr style="background-color: #f8f9fa;">
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชาย</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">หญิง</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชาย</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">หญิง</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">รวมชาย</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">รวมหญิง</th>
+                    <th style="border:1px solid #333; padding:4px; text-align:center;">ชาย</th>
+                    <th style="border:1px solid #333; padding:4px; text-align:center;">หญิง</th>
+                    <th style="border:1px solid #333; padding:4px; text-align:center;">ชาย</th>
+                    <th style="border:1px solid #333; padding:4px; text-align:center;">หญิง</th>
+                    <th style="border:1px solid #333; padding:4px; text-align:center;">รวมชาย</th>
+                    <th style="border:1px solid #333; padding:4px; text-align:center;">รวมหญิง</th>
                 </tr>
             </thead>
             <tbody>
@@ -1948,19 +1948,19 @@ window.renderSafetyDoc2 = function() {
             </tbody>
         </table>
 
-        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 2.1 : ทะเบียนรายชื่อลูกจ้างของ หจก. (จำนวน ${compEmps.length} คน)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12.5px; table-layout: fixed;">
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.1 : ทะเบียนรายชื่อลูกจ้างของ หจก. (จำนวน ${compEmps.length} คน)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 18px; font-size: 11px; table-layout: fixed;">
             <thead>
                 <tr style="background-color: #e9ecef;">
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:5%;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">รหัส</th>
-                    <th style="border:1px solid #333; padding:6px 8px; text-align:center; width:23%;">ชื่อ - นามสกุล</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:6%;">เพศ</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:7%;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:6px 8px; text-align:center; width:20%;">ตำแหน่งงาน</th>
-                    <th style="border:1px solid #333; padding:6px 6px; text-align:center; width:12%;">ฝ่าย</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">วันเริ่มงาน</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">สถานะ</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:8.5%;">รหัส</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:5%;">เพศ</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:6%;">สัญชาติ</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:13%;">ฝ่าย</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">วันเริ่มงาน</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">สถานะ</th>
                 </tr>
             </thead>
             <tbody>
@@ -1968,19 +1968,19 @@ window.renderSafetyDoc2 = function() {
             </tbody>
         </table>
 
-        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 2.2 : ทะเบียนรายชื่อพนักงานรถร่วมบริการ (แยกเฉพาะรถร่วม จำนวน ${jointEmps.length} คน)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12.5px; table-layout: fixed;">
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.2 : ทะเบียนรายชื่อพนักงานรถร่วมบริการ (แยกเฉพาะรถร่วม จำนวน ${jointEmps.length} คน)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px; table-layout: fixed;">
             <thead>
                 <tr style="background-color: #fff3cd;">
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:5%;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">รหัส</th>
-                    <th style="border:1px solid #333; padding:6px 8px; text-align:center; width:23%;">ชื่อ - นามสกุล</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:6%;">เพศ</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:7%;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:6px 8px; text-align:center; width:20%;">ตำแหน่งงาน</th>
-                    <th style="border:1px solid #333; padding:6px 6px; text-align:center; width:12%;">ประเภท</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">วันเริ่มสัญญา</th>
-                    <th style="border:1px solid #333; padding:6px 4px; text-align:center; width:9%;">สถานะ</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:8.5%;">รหัส</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:5%;">เพศ</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:6%;">สัญชาติ</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:13%;">ประเภท</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">วันเริ่มสัญญา</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">สถานะ</th>
                 </tr>
             </thead>
             <tbody>
@@ -1988,7 +1988,7 @@ window.renderSafetyDoc2 = function() {
             </tbody>
         </table>
 
-        <div style="display:flex; justify-content:space-between; margin-top: 30px; padding: 0 30px;">
+        <div style="display:flex; justify-content:space-between; margin-top: 24px; padding: 0 30px; font-size: 11.5px;">
             <div style="text-align:center;">
                 <div>ลงชื่อ ....................................................... ผู้จัดทำข้อมูล</div>
                 <div style="margin-top:4px;">( ....................................................... )</div>
@@ -2114,9 +2114,9 @@ window.renderSafetyDoc6 = function() {
     var detailTableHtml = '';
     if (yearAccidents.length === 0) {
         detailTableHtml = `
-        <div style="border: 2px solid #198754; background-color: #f8fff9; padding: 16px; text-align: center; margin-bottom: 24px; border-radius: 6px;">
-            <div style="font-size: 15px; font-weight: bold; color: #0f5132;">สรุปผลการดำเนินงานด้านความปลอดภัย ประจำปี พ.ศ. ${thaiYear}</div>
-            <div style="font-size: 14px; margin-top: 6px;">สถานประกอบกิจการ <b>ไม่มีลูกจ้างประสบอันตรายหรือเกิดอุบัติเหตุจากการทำงาน (สถิติการประสบอันตราย = 0 ราย)</b></div>
+        <div style="border: 2px solid #198754; background-color: #f8fff9; padding: 14px; text-align: center; margin-bottom: 20px; border-radius: 6px;">
+            <div style="font-size: 13.5px; font-weight: bold; color: #0f5132;">สรุปผลการดำเนินงานด้านความปลอดภัย ประจำปี พ.ศ. ${thaiYear}</div>
+            <div style="font-size: 12.5px; margin-top: 5px;">สถานประกอบกิจการ <b>ไม่มีลูกจ้างประสบอันตรายหรือเกิดอุบัติเหตุจากการทำงาน (สถิติการประสบอันตราย = 0 ราย)</b></div>
         </div>`;
     } else {
         var detailRows = '';
@@ -2124,7 +2124,7 @@ window.renderSafetyDoc6 = function() {
             var empObj = empMap[String(a.empId || '').trim()];
             var isJointTag = (empObj && String(empObj.position || '').indexOf('รถร่วม') !== -1) ? ' (รถร่วม)' : '';
             var lvl = window.classifyAccidentInjuryLevel(a);
-            var lvlLabel = 'ทรัพย์สิน/รถเสียหาย (บาดเจ็บ 0 ราย)';
+            var lvlLabel = 'ทรัพย์สินเสียหาย (เจ็บ 0 ราย)';
             if (lvl === 'death') lvlLabel = 'เสียชีวิต';
             else if (lvl === 'disability') lvlLabel = 'ทุพพลภาพ/สูญเสียอวัยวะ';
             else if (lvl === 'over3') lvlLabel = 'บาดเจ็บหยุดงานเกิน 3 วัน';
@@ -2139,32 +2139,32 @@ window.renderSafetyDoc6 = function() {
             }
 
             detailRows += `<tr>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${idx + 1}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${a.docNo || '-'}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${a.accDate || '-'} ${a.accTime || ''}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:left;">${a.empName || '-'}${isJointTag}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${a.vehType || '-'} (${a.truckPlate || '-'})</td>
-                <td style="border:1px solid #333; padding:5px; text-align:left;">${a.location || '-'}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:left;">${fullCauseDisplay}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:left;">${a.damage || '-'}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${lvlLabel}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center;">${idx + 1}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${a.docNo || '-'}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${a.accDate || '-'} ${a.accTime || ''}</td>
+                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.empName || '-'}${isJointTag}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; word-break:break-word;">${a.vehType || '-'} (${a.truckPlate || '-'})</td>
+                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.location || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${fullCauseDisplay}</td>
+                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.damage || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; word-break:break-word;">${lvlLabel}</td>
             </tr>`;
         });
 
         detailTableHtml = `
-        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 2 : ทะเบียนบันทึกเหตุการณ์อุบัติเหตุทางถนน/ในการทำงาน ประจำปี พ.ศ. ${thaiYear} (จำนวน ${totalAllIncidents} ครั้ง)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px;">
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2 : ทะเบียนบันทึกเหตุการณ์อุบัติเหตุทางถนน/ในการทำงาน ประจำปี พ.ศ. ${thaiYear} (จำนวน ${totalAllIncidents} ครั้ง)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10.5px; table-layout: fixed;">
             <thead>
                 <tr style="background-color: #e9ecef;">
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:38px;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">เลขที่เอกสาร</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:105px;">วัน-เวลาเกิดเหตุ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อผู้ประสบเหตุ/ผู้ขับขี่</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">รถ / ทะเบียน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">สถานที่เกิดเหตุ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">สาเหตุ (รายละเอียด)</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">ความเสียหาย/อาการ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:130px;">ระดับความรุนแรง</th>
+                    <th style="border:1px solid #333; padding:4px 3px; text-align:center; width:4%;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:4px 4px; text-align:center; width:9%;">เลขที่เอกสาร</th>
+                    <th style="border:1px solid #333; padding:4px 4px; text-align:center; width:11%;">วัน-เวลาเกิดเหตุ</th>
+                    <th style="border:1px solid #333; padding:4px 5px; text-align:center; width:13%;">ชื่อผู้ประสบเหตุ</th>
+                    <th style="border:1px solid #333; padding:4px 4px; text-align:center; width:12%;">รถ / ทะเบียน</th>
+                    <th style="border:1px solid #333; padding:4px 5px; text-align:center; width:13%;">สถานที่เกิดเหตุ</th>
+                    <th style="border:1px solid #333; padding:4px 5px; text-align:center; width:14%;">สาเหตุ (รายละเอียด)</th>
+                    <th style="border:1px solid #333; padding:4px 5px; text-align:center; width:13%;">ความเสียหาย/อาการ</th>
+                    <th style="border:1px solid #333; padding:4px 4px; text-align:center; width:11%;">ระดับความรุนแรง</th>
                 </tr>
             </thead>
             <tbody>
@@ -2174,70 +2174,70 @@ window.renderSafetyDoc6 = function() {
     }
 
     var html = `
-    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 13px; line-height: 1.5;">
-        <div style="text-align:center; margin-bottom: 16px;">
-            <div style="font-size: 18px; font-weight: bold;">แบบสรุปสถิติการประสบอันตรายจากการทำงาน ประจำปี พ.ศ. ${thaiYear} (เอกสารข้อ 6)</div>
-            <div style="font-size: 15px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
-            <div style="font-size: 12px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ขอบเขตข้อมูล: ${scopeNote} | จำนวนผู้ปฏิบัติงานปัจจุบัน: ${activeCompanyEmps} คน</div>
+    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.4;">
+        <div style="text-align:center; margin-bottom: 12px;">
+            <div style="font-size: 16px; font-weight: bold;">แบบสรุปสถิติการประสบอันตรายจากการทำงาน ประจำปี พ.ศ. ${thaiYear} (เอกสารข้อ 6)</div>
+            <div style="font-size: 13.5px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
+            <div style="font-size: 11px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ขอบเขตข้อมูล: ${scopeNote} | จำนวนผู้ปฏิบัติงานปัจจุบัน: ${activeCompanyEmps} คน</div>
         </div>
 
-        <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 1 : ตารางสรุปสถิติการประสบอันตรายหรือเจ็บป่วยเนื่องจากการทำงาน (1 มกราคม - 31 ธันวาคม พ.ศ. ${thaiYear})</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px;">
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 1 : ตารางสรุปสถิติการประสบอันตรายหรือเจ็บป่วยเนื่องจากการทำงาน (1 มกราคม - 31 ธันวาคม พ.ศ. ${thaiYear})</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11.5px;">
             <thead>
                 <tr style="background-color: #e9ecef;">
-                    <th style="border:1px solid #333; padding:7px; text-align:center; width:55px;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:7px 12px; text-align:left;">ระดับความรุนแรงของการประสบอันตรายจากการทำงาน</th>
-                    <th style="border:1px solid #333; padding:7px; text-align:center; width:130px;">จำนวนลูกจ้าง (ราย)</th>
-                    <th style="border:1px solid #333; padding:7px; text-align:center; width:180px;">หมายเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:45px;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px 10px; text-align:left;">ระดับความรุนแรงของการประสบอันตรายจากการทำงาน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:120px;">จำนวนลูกจ้าง (ราย)</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:165px;">หมายเหตุ</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">1</td>
-                    <td style="border:1px solid #333; padding:6px 12px;">กรณีเสียชีวิตเนื่องจากการทำงาน</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.death}</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.death === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">1</td>
+                    <td style="border:1px solid #333; padding:5px 10px;">กรณีเสียชีวิตเนื่องจากการทำงาน</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.death}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.death === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">2</td>
-                    <td style="border:1px solid #333; padding:6px 12px;">กรณีทุพพลภาพ หรือสูญเสียอวัยวะบางส่วน</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.disability}</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.disability === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">2</td>
+                    <td style="border:1px solid #333; padding:5px 10px;">กรณีทุพพลภาพ หรือสูญเสียอวัยวะบางส่วน</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.disability}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.disability === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">3</td>
-                    <td style="border:1px solid #333; padding:6px 12px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานเกิน 3 วันทำงานติดต่อกัน</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.over3}</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.over3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">3</td>
+                    <td style="border:1px solid #333; padding:5px 10px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานเกิน 3 วันทำงานติดต่อกัน</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.over3}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.over3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">4</td>
-                    <td style="border:1px solid #333; padding:6px 12px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานไม่เกิน 3 วันทำงาน</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.upto3}</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.upto3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">4</td>
+                    <td style="border:1px solid #333; padding:5px 10px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานไม่เกิน 3 วันทำงาน</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.upto3}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.upto3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">5</td>
-                    <td style="border:1px solid #333; padding:6px 12px;">กรณีบาดเจ็บเล็กน้อย (ปฐมพยาบาล ไม่มีการหยุดงาน)</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.noLostTime}</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">${counts.noLostTime === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">5</td>
+                    <td style="border:1px solid #333; padding:5px 10px;">กรณีบาดเจ็บเล็กน้อย (ปฐมพยาบาล ไม่มีการหยุดงาน)</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.noLostTime}</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.noLostTime === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr style="background-color: #d1e7dd; font-weight: bold;">
-                    <td colspan="2" style="border:1px solid #333; padding:7px 12px; text-align:right;">รวมจำนวนลูกจ้างที่ประสบอันตรายจากการทำงานทั้งสิ้น (ข้อ 1 - 5)</td>
-                    <td style="border:1px solid #333; padding:7px; text-align:center; font-size:15px;">${totalInjuryCases} ราย</td>
-                    <td style="border:1px solid #333; padding:7px; text-align:center;">${totalInjuryCases === 0 ? 'ปลอดภัย 100% (0 ราย)' : 'มีประวัติตามรายละเอียดแนบ'}</td>
+                    <td colspan="2" style="border:1px solid #333; padding:6px 10px; text-align:right;">รวมจำนวนลูกจ้างที่ประสบอันตรายจากการทำงานทั้งสิ้น (ข้อ 1 - 5)</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center; font-size:13px;">${totalInjuryCases} ราย</td>
+                    <td style="border:1px solid #333; padding:6px; text-align:center;">${totalInjuryCases === 0 ? 'ปลอดภัย 100% (0 ราย)' : 'มีประวัติตามรายละเอียดแนบ'}</td>
                 </tr>
                 <tr style="background-color: #fff3cd;">
-                    <td colspan="2" style="border:1px solid #333; padding:6px 12px; text-align:right;">สถิติอุบัติเหตุทางรถยนต์/ทรัพย์สินเสียหาย (ไม่มีลูกจ้างบาดเจ็บ)</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center; font-weight:bold;">${counts.propertyOnly} ครั้ง</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">บันทึกจากระบบแจ้งอุบัติเหตุ</td>
+                    <td colspan="2" style="border:1px solid #333; padding:5px 10px; text-align:right;">สถิติอุบัติเหตุทางรถยนต์/ทรัพย์สินเสียหาย (ไม่มีลูกจ้างบาดเจ็บ)</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.propertyOnly} ครั้ง</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">บันทึกจากระบบแจ้งอุบัติเหตุ</td>
                 </tr>
             </tbody>
         </table>
 
         ${detailTableHtml}
 
-        <div style="display:flex; justify-content:space-between; margin-top: 35px; padding: 0 30px;">
+        <div style="display:flex; justify-content:space-between; margin-top: 26px; padding: 0 30px; font-size: 11.5px;">
             <div style="text-align:center;">
                 <div>ลงชื่อ ....................................................... จป.บริหาร / ผู้จัดทำ</div>
                 <div style="margin-top:4px;">( ....................................................... )</div>
@@ -2269,7 +2269,7 @@ window.printSafetyDoc = function(elementId, docTitle) {
         <title>${docTitle}</title>
         <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
         <style>
-            @page { size: A4 portrait; margin: 12mm; }
+            @page { size: A4 portrait; margin: 10mm; }
             body { font-family: 'Sarabun', sans-serif; margin: 0; padding: 0; color: #000; background: #fff; }
             table { page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
