@@ -22,8 +22,54 @@ var allWarningData = [];
 var currentWarningDisplayData = [];
 var recruitDataList = [];
 
+window.formatThaiIdMask = function(val) {
+  if (val === undefined || val === null) return '';
+  var str = String(val).trim();
+  if (!str || str === '-' || str.toLowerCase() === 'undefined' || str.toLowerCase() === 'null') return '';
+
+  if (/^\d+(\.\d+)?e\+\d+$/i.test(str)) {
+    var num = Number(str);
+    if (!isNaN(num)) {
+      str = num.toLocaleString('fullwide', { useGrouping: false });
+    }
+  }
+
+  var digits = str.replace(/\D/g, '').substring(0, 13);
+  if (digits.length === 0) return '';
+
+  var formatted = '';
+  if (digits.length > 0) formatted += digits.substring(0, 1);
+  if (digits.length > 1) formatted += '-' + digits.substring(1, 5);
+  if (digits.length > 5) formatted += '-' + digits.substring(5, 10);
+  if (digits.length > 10) formatted += '-' + digits.substring(10, 12);
+  if (digits.length > 12) formatted += '-' + digits.substring(12, 13);
+  return formatted;
+};
+
+window.bindThaiIdInputs = function() {
+  var idInputs = document.querySelectorAll('#idCardNum');
+  idInputs.forEach(function(inputEl) {
+    if (inputEl.dataset.maskBound === 'true') return;
+    inputEl.dataset.maskBound = 'true';
+    inputEl.setAttribute('maxlength', '17');
+    inputEl.addEventListener('input', function() {
+      var cursorEnd = this.selectionEnd === this.value.length;
+      this.value = window.formatThaiIdMask(this.value);
+      if (cursorEnd) {
+        this.setSelectionRange(this.value.length, this.value.length);
+      }
+    });
+  });
+};
+
 window.onload = async function() {
+  var staticEmpModal = document.querySelector('body > #empModal');
+  if (staticEmpModal) {
+    staticEmpModal.remove();
+  }
+
   await loadAllComponents();
+  window.bindThaiIdInputs();
   document.getElementById('globalLoader').style.display = 'none';
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -175,6 +221,7 @@ window.toggleResignDate = function() {
 };
 
 window.openModal = function(mode, targetId, preloadedData) { 
+    window.bindThaiIdInputs();
     document.getElementById('empForm').reset(); 
     document.getElementById('formMode').value = mode; 
     
@@ -262,7 +309,9 @@ function safeDate(d) { if(!d) return ''; try { var date = new Date(d); if(isNaN(
 
 window.fillData = function(d, isViewMode) { 
     if(!d) return; 
-    document.getElementById('empId').value = d.id; 
+    var empInputs = document.querySelectorAll('#empId');
+    empInputs.forEach(function(el) { el.value = d.id; });
+
     document.getElementById('fullname').value = d.name; 
     document.getElementById('prefix').value = ""; 
 
@@ -282,7 +331,9 @@ window.fillData = function(d, isViewMode) {
     document.getElementById('ssoHosp').value = d.ssoHosp || ''; 
     document.getElementById('idExp').value = safeDate(d.idExp); 
     document.getElementById('licExp').value = safeDate(d.licExp);
-    document.getElementById('idCardNum').value = d.idCardNum || ''; 
+
+    var formattedId = window.formatThaiIdMask(d.idCardNum);
+    document.getElementById('idCardNum').value = formattedId || (d.idCardNum && String(d.idCardNum).indexOf('undefined') === -1 ? d.idCardNum : ''); 
     document.getElementById('licNum').value = d.licNum || '';
     document.getElementById('licType').value = d.licType || ''; 
     document.getElementById('resignReason').value = d.resignReason || '';
@@ -307,6 +358,13 @@ window.fillData = function(d, isViewMode) {
        document.getElementById('view_username').innerText = d.username;
        document.getElementById('view_password').innerText = d.password;
        document.getElementById('view_role').innerText = d.role;
+
+       var ruleEl = document.getElementById('view_rule_status');
+       if (ruleEl) {
+           ruleEl.innerHTML = d.rulesAccepted 
+               ? '<span class="badge bg-success text-dark">ยอมรับแล้ว</span>' 
+               : '<span class="badge bg-danger text-white">ยังไม่ยอมรับ</span>';
+       }
        
        document.getElementById('view_startDate').innerText = window.formatDate(d.startDate);
        document.getElementById('view_tenure').innerHTML = 'อายุงาน: ' + window.calcTenure(d.startDate);
@@ -321,7 +379,7 @@ window.fillData = function(d, isViewMode) {
           document.getElementById('view_resign_section').style.display = 'none';
        }
        
-       document.getElementById('view_idCardNum').innerText = d.idCardNum || '-';
+       document.getElementById('view_idCardNum').innerText = formattedId || (d.idCardNum || '-');
        document.getElementById('view_idExp').innerText = d.idExp ? 'หมดอายุ: ' + window.formatDate(d.idExp) : '';
        document.getElementById('view_licType').innerText = d.licType || '-';
        document.getElementById('view_licNum').innerText = d.licNum ? 'เลขที่: ' + d.licNum : '';
@@ -377,9 +435,26 @@ window.loadSettings = async function(cb) {
 
 window.submitEmpForm = async function(e) { 
     e.preventDefault(); 
+
+    var rawIdVal = document.getElementById('idCardNum').value.trim();
+    var digitsOnly = rawIdVal.replace(/\D/g, '');
+    if (digitsOnly.length > 0 && digitsOnly.length !== 13) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'เลขบัตรประชาชนไม่ครบ 13 หลัก',
+            text: 'ขณะนี้คุณกรอกตัวเลขไป ' + digitsOnly.length + ' หลัก กรุณาตรวจสอบให้ครบ 13 หลัก หรือเว้นว่างไว้หากยังไม่ทราบ',
+            background: '#1a1a1a',
+            color: '#fff'
+        });
+        return;
+    }
+
+    var finalFormattedIdCard = digitsOnly.length === 13 ? window.formatThaiIdMask(digitsOnly) : rawIdVal;
+    var empIdInput = document.querySelector('#editModeSection #empId') || document.getElementById('empId');
+
     Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick:false, didOpen:()=>Swal.showLoading()}); 
     var form = { 
-        empId: document.getElementById('empId').value, 
+        empId: empIdInput.value, 
         role: document.getElementById('role').value, 
         status: document.getElementById('empStatus').value, 
         resignDate: document.getElementById('resignDate').value, 
@@ -394,7 +469,7 @@ window.submitEmpForm = async function(e) {
         ssoHosp: document.getElementById('ssoHosp').value, 
         idExp: document.getElementById('idExp').value, 
         licExp: document.getElementById('licExp').value, 
-        idCardNum: document.getElementById('idCardNum').value, 
+        idCardNum: finalFormattedIdCard, 
         licNum: document.getElementById('licNum').value, 
         licType: document.getElementById('licType').value, 
         resignReason: document.getElementById('resignReason').value, 
@@ -432,10 +507,12 @@ window.submitEmpForm = async function(e) {
 };
 
 window.genId = function() { 
-   document.getElementById('empId').value='...'; 
+   var empIdInput = document.querySelector('#editModeSection #empId') || document.getElementById('empId');
+   if (empIdInput) empIdInput.value = '...'; 
    try {
      window.callAPI({ action: 'getNextEmployeeId' }).then(res => {
-         document.getElementById('empId').value = res.empId;
+         var empInputs = document.querySelectorAll('#empId');
+         empInputs.forEach(function(el) { el.value = res.empId; });
      });
    } catch(e) {}
 };
