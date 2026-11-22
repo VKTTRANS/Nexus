@@ -10,6 +10,48 @@ window.showModalSafe = function(modalId) {
     modalObj.show();
 };
 
+window.resolveAccidentCause = function(acc) {
+    if (!acc) return '-';
+    var rawCause = String(acc.cause || '').trim();
+    var other = String(acc.causeOther || acc.otherCause || acc.cause_other || acc.causeDetail || '').trim();
+    var isOtherPlaceholder = (rawCause === 'อื่นๆ' || rawCause === 'อื่นๆ ระบุ' || rawCause.indexOf('อื่นๆ') === 0);
+
+    if (isOtherPlaceholder) {
+        var stripped = rawCause.replace(/^อื่นๆ\s*(ระบุ)?\s*[:\-]?\s*/i, '').trim();
+        if (stripped) return stripped;
+        if (other && other !== '-') return other;
+        var detailFallback = String(acc.detail || '').trim();
+        if (detailFallback && detailFallback !== '-') {
+            return detailFallback;
+        }
+        return rawCause || '-';
+    }
+
+    if (other && other !== '-' && rawCause.indexOf(other) === -1) {
+        return rawCause + ' (' + other + ')';
+    }
+    return rawCause || '-';
+};
+
+window.resolveAccidentCausedBy = function(acc) {
+    if (!acc) return '-';
+    var rawBy = String(acc.causedBy || '').trim();
+    var otherBy = String(acc.causedByOther || acc.otherCausedBy || acc.caused_by_other || '').trim();
+    var isOtherPlaceholder = (rawBy === 'อื่นๆ' || rawBy === 'อื่นๆ ระบุ' || rawBy.indexOf('อื่นๆ') === 0);
+
+    if (isOtherPlaceholder) {
+        var stripped = rawBy.replace(/^อื่นๆ\s*(ระบุ)?\s*[:\-]?\s*/i, '').trim();
+        if (stripped) return stripped;
+        if (otherBy && otherBy !== '-') return otherBy;
+        return rawBy || '-';
+    }
+
+    if (otherBy && otherBy !== '-' && rawBy.indexOf(otherBy) === -1) {
+        return rawBy + ' (' + otherBy + ')';
+    }
+    return rawBy || '-';
+};
+
 window.populateEmployeeDatalists = function() {
     if (!window.allEmpData || !Array.isArray(window.allEmpData)) return;
     var activeEmps = window.allEmpData.filter(function(e) { return e.status === 'Active'; });
@@ -941,8 +983,10 @@ window.renderAccidentTable = function(data) {
            var docsHtml = pdfBtn + photoHtml; 
            if(docsHtml === '') docsHtml = '-';
            
+           var displayCause = window.resolveAccidentCause(r);
+           var displayCausedBy = window.resolveAccidentCausedBy(r);
            var trailerText = (r.trailerPlate && r.trailerPlate !== '-') ? '<br><small class="text-info">หาง: ' + r.trailerPlate + '</small>' : '';
-           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><span class="text-danger">' + r.cause + '</span><br><small class="text-muted">' + r.causedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
+           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><div class="text-danger" style="max-width:200px; white-space:normal;">' + displayCause + '</div><small class="text-muted">' + displayCausedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
        });
    }
    var tableBody = document.getElementById('adminAccidentTableBody');
@@ -970,7 +1014,7 @@ window.openAccidentDetailByDocNo = function(docNo) {
     
     var trailerInfo = (data.trailerPlate && data.trailerPlate !== '-') ? (" หาง: " + data.trailerPlate) : "";
     var mVehicle = document.getElementById('m_accVehicle'); if(mVehicle) mVehicle.innerText = data.vehType + " ทะเบียนหัว: " + data.truckPlate + trailerInfo; 
-    var mCause = document.getElementById('m_accCause'); if(mCause) mCause.innerText = data.cause; 
+    var mCause = document.getElementById('m_accCause'); if(mCause) mCause.innerText = window.resolveAccidentCause(data); 
     var mLocation = document.getElementById('m_accLocation'); if(mLocation) mLocation.value = data.location; 
     var mDamage = document.getElementById('m_accDamage'); if(mDamage) mDamage.value = data.damage; 
     var mDetail = document.getElementById('m_accDetail'); if(mDetail) mDetail.value = data.detail;
@@ -1568,6 +1612,36 @@ window.deleteContact = function() {
     });
 };
 
+window.formatThaiIdForReport = function(rawId) {
+    if (rawId === undefined || rawId === null) return '-';
+    var s = String(rawId).trim();
+    if (!s || s === '-' || s.toLowerCase() === 'null' || s.toLowerCase() === 'undefined') return '-';
+
+    if (s.toLowerCase().indexOf('undefined') !== -1 || s.toLowerCase().indexOf('nan') !== -1) {
+        var cleaned = s.replace(/undefined|null|nan/gi, '').replace(/\D/g, '');
+        if (cleaned.length !== 13) return '-';
+        s = cleaned;
+    }
+
+    if (/^\d+(\.\d+)?e\+\d+$/i.test(s)) {
+        var num = Number(s);
+        if (!isNaN(num)) {
+            s = num.toLocaleString('fullwide', { useGrouping: false });
+        }
+    }
+
+    var digits = s.replace(/\D/g, '');
+    if (digits.length === 13) {
+        return digits.charAt(0) + '-' +
+               digits.substring(1, 5) + '-' +
+               digits.substring(5, 10) + '-' +
+               digits.substring(10, 12) + '-' +
+               digits.substring(12, 13);
+    }
+
+    return s;
+};
+
 window.classifyEmpForSafety = function(emp) {
     var pos = String(emp.position || '').trim();
     var posLower = pos.toLowerCase();
@@ -1577,7 +1651,7 @@ window.classifyEmpForSafety = function(emp) {
     var dept = 'ฝ่ายรถบรรทุก / ขนส่ง';
     if (!isJoint) {
         var officeKeywords = ['สำนักงาน', 'ออฟฟิศ', 'office', 'บัญชี', 'การเงิน', 'ธุรการ', 'บุคคล', 'hr', 'admin', 'ผู้จัดการ', 'บริหาร', 'จัดซื้อ', 'ประสานงาน', 'เสมียน', 'แม่บ้าน'];
-        var driverKeywords = ['ขับรถ', 'พนักงานขับ', 'พขร', 'ติดรถ', 'ท้ายรถ', 'ช่าง', 'ลาน', 'จัดส่ง', 'รถบรรทุก', 'หัวลาก', 'เทรลเลอร์', '6 ล้อ', '10 ล้อ', '4 ล้อ'];
+        var driverKeywords = ['ขับรถ', 'พนักงานขับ', 'พขร', 'ติดรถ', 'ท้ายรถ', 'ช่าง', 'ลาน', 'จัดส่ง', 'รถบรรทุก', 'หัวลาก', 'เทรลเลอร์', '6 ล้อ', '10 ล้อ', '4 ล้อ', 'เด็กรถ'];
 
         var matchOffice = officeKeywords.some(function(k) { return posLower.indexOf(k) !== -1; });
         var matchDriver = driverKeywords.some(function(k) { return posLower.indexOf(k) !== -1; });
@@ -1601,7 +1675,8 @@ window.classifyEmpForSafety = function(emp) {
     }
 
     var nationality = 'ไทย';
-    var idDigits = String(emp.idCardNum || '').replace(/\D/g, '');
+    var cleanIdStr = window.formatThaiIdForReport(emp.idCardNum);
+    var idDigits = cleanIdStr.replace(/\D/g, '');
     var hasPassport = emp.docs && emp.docs.PASSPORT && emp.docs.PASSPORT.url;
     var textCheck = (pos + ' ' + String(emp.name || '') + ' ' + String(emp.nationality || '')).toLowerCase();
 
@@ -1655,36 +1730,6 @@ window.addEmpToSafetyStatRow = function(rowObj, info) {
 window.openSafetyDoc2Modal = function() {
     window.renderSafetyDoc2();
     window.showModalSafe('safetyDoc2Modal');
-};
-
-window.formatThaiIdForReport = function(rawId) {
-    if (rawId === undefined || rawId === null) return '-';
-    var s = String(rawId).trim();
-    if (!s || s === '-' || s.toLowerCase() === 'null' || s.toLowerCase() === 'undefined') return '-';
-
-    if (s.toLowerCase().indexOf('undefined') !== -1 || s.toLowerCase().indexOf('nan') !== -1) {
-        var cleaned = s.replace(/undefined|null|nan/gi, '').replace(/\D/g, '');
-        if (cleaned.length !== 13) return '-';
-        s = cleaned;
-    }
-
-    if (/^\d+(\.\d+)?e\+\d+$/i.test(s)) {
-        var num = Number(s);
-        if (!isNaN(num)) {
-            s = num.toLocaleString('fullwide', { useGrouping: false });
-        }
-    }
-
-    var digits = s.replace(/\D/g, '');
-    if (digits.length === 13) {
-        return digits.charAt(0) + '-' +
-               digits.substring(1, 5) + '-' +
-               digits.substring(5, 10) + '-' +
-               digits.substring(10, 12) + '-' +
-               digits.substring(12, 13);
-    }
-
-    return s;
 };
 
 window.renderSafetyDoc2 = function() {
@@ -1921,19 +1966,22 @@ window.openSafetyDoc6Modal = function() {
 
 window.classifyAccidentInjuryLevel = function(acc) {
     var text = (String(acc.damage || '') + ' ' + String(acc.detail || '') + ' ' + String(acc.fixText || '')).toLowerCase();
-    if (text.indexOf('เสียชีวิต') !== -1 || text.indexOf('ตาย') !== -1) {
+
+    var cleanText = text.replace(/ไม่มีผู้บาดเจ็บ|ไม่มีคนเจ็บ|ไม่บาดเจ็บ|ไม่มีผู้เสียชีวิต|ล้อถลอก|สีถลอก|รถถลอก|กันชนถลอก|ตัวถังถลอก|ยางถลอก|ขอบถลอก/g, '');
+
+    if (cleanText.indexOf('เสียชีวิต') !== -1 || cleanText.indexOf('คนตาย') !== -1 || cleanText.indexOf('ถึงแก่ความตาย') !== -1) {
         return 'death';
     }
-    if (text.indexOf('พิการ') !== -1 || text.indexOf('ทุพพลภาพ') !== -1 || text.indexOf('สูญเสียอวัยวะ') !== -1) {
+    if (cleanText.indexOf('พิการ') !== -1 || cleanText.indexOf('ทุพพลภาพ') !== -1 || cleanText.indexOf('สูญเสียอวัยวะ') !== -1) {
         return 'disability';
     }
-    if (text.indexOf('หยุดงานเกิน 3 วัน') !== -1 || text.indexOf('นอนโรงพยาบาล') !== -1 || text.indexOf('แอดมิท') !== -1 || text.indexOf('สาหัส') !== -1) {
+    if (cleanText.indexOf('หยุดงานเกิน 3 วัน') !== -1 || cleanText.indexOf('นอนโรงพยาบาล') !== -1 || cleanText.indexOf('แอดมิท') !== -1 || cleanText.indexOf('บาดเจ็บสาหัส') !== -1) {
         return 'over3';
     }
-    if (text.indexOf('หยุดงาน') !== -1 || text.indexOf('ลาป่วย') !== -1) {
+    if (cleanText.indexOf('หยุดงาน') !== -1 || cleanText.indexOf('ลาป่วย') !== -1) {
         return 'upto3';
     }
-    if (text.indexOf('บาดเจ็บ') !== -1 || text.indexOf('ปฐมพยาบาล') !== -1 || text.indexOf('ทำแผล') !== -1 || text.indexOf('ฟกช้ำ') !== -1 || text.indexOf('ถลอก') !== -1) {
+    if (cleanText.indexOf('บาดเจ็บ') !== -1 || cleanText.indexOf('ปฐมพยาบาล') !== -1 || cleanText.indexOf('ทำแผล') !== -1 || cleanText.indexOf('ฟกช้ำ') !== -1 || cleanText.indexOf('แผลถลอก') !== -1 || cleanText.indexOf('คนเจ็บ') !== -1) {
         return 'noLostTime';
     }
     return 'propertyOnly';
@@ -2013,6 +2061,13 @@ window.renderSafetyDoc6 = function() {
             else if (lvl === 'upto3') lvlLabel = 'บาดเจ็บหยุดงานไม่เกิน 3 วัน';
             else if (lvl === 'noLostTime') lvlLabel = 'บาดเจ็บเล็กน้อย (ไม่หยุดงาน)';
 
+            var resolvedCause = window.resolveAccidentCause(a);
+            var resolvedBy = window.resolveAccidentCausedBy(a);
+            var fullCauseDisplay = resolvedCause;
+            if (resolvedBy && resolvedBy !== '-' && resolvedBy !== 'อื่นๆ' && fullCauseDisplay.indexOf(resolvedBy) === -1) {
+                fullCauseDisplay = resolvedCause + ' [' + resolvedBy + ']';
+            }
+
             detailRows += `<tr>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${idx + 1}</td>
                 <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${a.docNo || '-'}</td>
@@ -2020,7 +2075,7 @@ window.renderSafetyDoc6 = function() {
                 <td style="border:1px solid #333; padding:5px; text-align:left;">${a.empName || '-'}${isJointTag}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${a.vehType || '-'} (${a.truckPlate || '-'})</td>
                 <td style="border:1px solid #333; padding:5px; text-align:left;">${a.location || '-'}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:left;">${a.cause || '-'}</td>
+                <td style="border:1px solid #333; padding:5px; text-align:left;">${fullCauseDisplay}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:left;">${a.damage || '-'}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${lvlLabel}</td>
             </tr>`;
@@ -2037,7 +2092,7 @@ window.renderSafetyDoc6 = function() {
                     <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อผู้ประสบเหตุ/ผู้ขับขี่</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">รถ / ทะเบียน</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center;">สถานที่เกิดเหตุ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center;">สาเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center;">สาเหตุ (รายละเอียด)</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center;">ความเสียหาย/อาการ</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:130px;">ระดับความรุนแรง</th>
                 </tr>
@@ -2186,3 +2241,12 @@ window.exportSafetyDocExcel = function(elementId, fileNamePrefix) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 };
+
+if (typeof window.numberWithCommas !== 'function') {
+    window.numberWithCommas = function(x) {
+        if (x === undefined || x === null || x === '') return "0.00";
+        var num = parseFloat(x);
+        if (isNaN(num)) return "0.00";
+        return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+}
