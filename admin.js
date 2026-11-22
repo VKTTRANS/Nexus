@@ -40,6 +40,32 @@ window.syncSafetyAdminUI = function() {
         }
     }
 
+    var modal2 = document.getElementById('safetyDoc2Modal');
+    if (modal2 && !document.getElementById('doc2ScopeFilter')) {
+        var title2 = modal2.querySelector('.modal-title');
+        if (title2) {
+            title2.innerHTML = '<i class="bi bi-file-earmark-spreadsheet-fill me-2"></i>เอกสารข้อ 2 : ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง';
+        }
+        var compInput2 = document.getElementById('doc2CompanyName');
+        var statusSel2 = document.getElementById('doc2StatusFilter');
+        if (compInput2 && statusSel2) {
+            var compCol = compInput2.closest('[class*="col-"]');
+            var statusCol = statusSel2.closest('[class*="col-"]');
+            if (compCol) compCol.className = 'col-lg-3 col-md-6';
+            if (statusCol) {
+                statusCol.className = 'col-lg-2 col-md-6';
+                var scopeCol = document.createElement('div');
+                scopeCol.className = 'col-lg-2 col-md-6';
+                scopeCol.innerHTML = '<label class="small text-muted mb-1 fw-bold">ขอบเขตลูกจ้าง</label>' +
+                    '<select id="doc2ScopeFilter" class="form-select form-select-sm bg-dark text-success border-secondary fw-bold shadow-none" onchange="window.renderSafetyDoc2()">' +
+                    '<option value="company" selected>ไม่รวมรถร่วม (เฉพาะ หจก.)</option>' +
+                    '<option value="all">รวมรถร่วมบริการ</option>' +
+                    '</select>';
+                statusCol.parentNode.insertBefore(scopeCol, statusCol.nextSibling);
+            }
+        }
+    }
+
     var modal6 = document.getElementById('safetyDoc6Modal');
     if (modal6 && !document.getElementById('doc6ScopeFilter')) {
         var exclCheck = document.getElementById('doc6ExcludeJointCheck');
@@ -1812,6 +1838,7 @@ window.addEmpToSafetyStatRow = function(rowObj, info) {
 };
 
 window.openSafetyDoc2Modal = function() {
+    window.syncSafetyAdminUI();
     var yearSel = document.getElementById('doc2YearFilter');
     if (yearSel) {
         var curYear = new Date().getFullYear();
@@ -1850,6 +1877,9 @@ window.renderSafetyDoc2 = function() {
     var yearFilterEl = document.getElementById('doc2YearFilter');
     var yearFilter = yearFilterEl ? yearFilterEl.value : 'all';
     var targetYear = yearFilter !== 'all' ? parseInt(yearFilter, 10) : null;
+
+    var scopeFilterEl = document.getElementById('doc2ScopeFilter');
+    var includeJoint = scopeFilterEl ? (scopeFilterEl.value === 'all') : false;
 
     var rawList = window.allEmpData || [];
     var filtered = rawList.filter(function(e) {
@@ -1962,6 +1992,55 @@ window.renderSafetyDoc2 = function() {
         return rowsHtml;
     };
 
+    var part1Title = includeJoint
+        ? 'ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายขนส่ง / ฝ่ายสำนักงาน, ไทย / ต่างด้าว, ชาย / หญิง และแยกรถร่วม)'
+        : 'ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายขนส่ง / ฝ่ายสำนักงาน, สัญชาติไทย / ต่างด้าว, ชาย / หญิง)';
+
+    var summaryRowsHtml = '';
+    if (includeJoint) {
+        summaryRowsHtml = `
+            ${buildSummaryTr('1. ลูกจ้าง หจก. - ฝ่ายขนส่ง (พนักงานขับรถ / ประจำรถ)', statTruck, '', false)}
+            ${buildSummaryTr('2. ลูกจ้าง หจก. - ฝ่ายสำนักงาน (Office)', statOffice, '', false)}
+            ${buildSummaryTr('รวมลูกจ้างประจำของ หจก. ทั้งสิ้น (1 + 2)', statCompSub, 'background-color:#d1e7dd;', true)}
+            ${buildSummaryTr('3. พนักงานรถร่วมบริการ (แยกบัญชีรถร่วม)', statJoint, 'background-color:#fff3cd;', false)}
+            ${buildSummaryTr('รวมผู้ปฏิบัติงานในระบบทั้งหมด (หจก. + รถร่วม)', statGrand, 'background-color:#cfe2ff;', true)}
+        `;
+    } else {
+        summaryRowsHtml = `
+            ${buildSummaryTr('1. ฝ่ายขนส่ง (พนักงานขับรถ / ประจำรถ)', statTruck, '', false)}
+            ${buildSummaryTr('2. ฝ่ายสำนักงาน (Office)', statOffice, '', false)}
+            ${buildSummaryTr('รวมจำนวนลูกจ้างของสถานประกอบกิจการทั้งสิ้น (1 + 2)', statCompSub, 'background-color:#d1e7dd;', true)}
+        `;
+    }
+
+    var part2MainTitle = includeJoint
+        ? `ส่วนที่ 2.1 : ทะเบียนรายชื่อลูกจ้างของ หจก. (จำนวน ${compEmps.length} คน)`
+        : `ส่วนที่ 2 : ทะเบียนรายชื่อลูกจ้างของสถานประกอบกิจการ (จำนวน ${compEmps.length} คน)`;
+
+    var jointTableSectionHtml = '';
+    if (includeJoint) {
+        jointTableSectionHtml = `
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.2 : ทะเบียนรายชื่อพนักงานรถร่วมบริการ (แยกเฉพาะรถร่วม จำนวน ${jointEmps.length} คน)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px; table-layout: fixed;">
+            <thead>
+                <tr style="background-color: #fff3cd;">
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">รหัส</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22.5%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:5%;">เพศ</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:6%;">สัญชาติ</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22.5%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">ประเภท</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10.5%;">วันเริ่มสัญญา</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">สถานะ</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${buildEmpRows(jointEmps)}
+            </tbody>
+        </table>`;
+    }
+
     var html = `
     <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.45;">
         <div style="text-align:center; margin-bottom: 10px;">
@@ -1970,7 +2049,7 @@ window.renderSafetyDoc2 = function() {
             <div style="font-size: 11px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ช่วงเวลา: ${yearLabel} | เงื่อนไข: ${statusLabel}</div>
         </div>
 
-        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายขนส่ง / ฝ่ายสำนักงาน, ไทย / ต่างด้าว, ชาย / หญิง และแยกรถร่วม)</div>
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">${part1Title}</div>
         <table style="width:100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11.5px;">
             <thead>
                 <tr style="background-color: #e9ecef;">
@@ -1990,15 +2069,11 @@ window.renderSafetyDoc2 = function() {
                 </tr>
             </thead>
             <tbody>
-                ${buildSummaryTr('1. ลูกจ้าง หจก. - ฝ่ายขนส่ง (พนักงานขับรถ / ประจำรถ)', statTruck, '', false)}
-                ${buildSummaryTr('2. ลูกจ้าง หจก. - ฝ่ายสำนักงาน (Office)', statOffice, '', false)}
-                ${buildSummaryTr('รวมลูกจ้างประจำของ หจก. ทั้งสิ้น (1 + 2)', statCompSub, 'background-color:#d1e7dd;', true)}
-                ${buildSummaryTr('3. พนักงานรถร่วมบริการ (แยกบัญชีรถร่วม)', statJoint, 'background-color:#fff3cd;', false)}
-                ${buildSummaryTr('รวมผู้ปฏิบัติงานในระบบทั้งหมด (หจก. + รถร่วม)', statGrand, 'background-color:#cfe2ff;', true)}
+                ${summaryRowsHtml}
             </tbody>
         </table>
 
-        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.1 : ทะเบียนรายชื่อลูกจ้างของ หจก. (จำนวน ${compEmps.length} คน)</div>
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">${part2MainTitle}</div>
         <table style="width:100%; border-collapse: collapse; margin-bottom: 18px; font-size: 11px; table-layout: fixed;">
             <thead>
                 <tr style="background-color: #e9ecef;">
@@ -2018,25 +2093,7 @@ window.renderSafetyDoc2 = function() {
             </tbody>
         </table>
 
-        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.2 : ทะเบียนรายชื่อพนักงานรถร่วมบริการ (แยกเฉพาะรถร่วม จำนวน ${jointEmps.length} คน)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px; table-layout: fixed;">
-            <thead>
-                <tr style="background-color: #fff3cd;">
-                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">รหัส</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22.5%;">ชื่อ - นามสกุล</th>
-                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:5%;">เพศ</th>
-                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:6%;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22.5%;">ตำแหน่งงาน</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">ประเภท</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10.5%;">วันเริ่มสัญญา</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">สถานะ</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${buildEmpRows(jointEmps)}
-            </tbody>
-        </table>
+        ${jointTableSectionHtml}
 
         <div style="display:flex; justify-content:space-between; margin-top: 24px; padding: 0 30px; font-size: 11.5px;">
             <div style="text-align:center;">
