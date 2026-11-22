@@ -1412,30 +1412,37 @@
             <div class="modal-content border-success border-neon-success">
                 <div class="modal-header d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <h5 class="modal-title fw-bold text-success mb-0">
-                        <i class="bi bi-file-earmark-spreadsheet-fill me-2"></i>เอกสารข้อ 2 : ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง (แยกรถร่วม)
+                        <i class="bi bi-file-earmark-spreadsheet-fill me-2"></i>เอกสารข้อ 2 : ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง
                     </h5>
                     <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row g-2 mb-3 p-3 rounded border border-secondary border-opacity-25 bg-black bg-opacity-50 align-items-end">
-                        <div class="col-lg-4 col-md-6">
-                            <label class="small text-muted mb-1 fw-bold">ชื่อสถานประกอบกิจการ (สำหรับพิมพ์หัวรายงาน)</label>
+                        <div class="col-lg-3 col-md-6">
+                            <label class="small text-muted mb-1 fw-bold">ชื่อสถานประกอบกิจการ (หัวรายงาน)</label>
                             <input type="text" id="doc2CompanyName" class="form-control form-control-sm bg-dark text-white border-secondary shadow-none" value="ห้างหุ้นส่วนจำกัด (ขนส่งไม่ประจำทางทั่วไป)" oninput="window.renderSafetyDoc2()">
                         </div>
                         <div class="col-lg-2 col-md-6">
-                            <label class="small text-muted mb-1 fw-bold">ตัวกรองปี (พ.ศ. / ค.ศ.)</label>
+                            <label class="small text-muted mb-1 fw-bold">ตัวกรองปี (พ.ศ.)</label>
                             <select id="doc2YearFilter" class="form-select form-select-sm bg-dark text-warning border-secondary fw-bold shadow-none" onchange="window.renderSafetyDoc2()">
                                 <option value="all" selected>ทุกปี (ทั้งหมด)</option>
                             </select>
                         </div>
-                        <div class="col-lg-3 col-md-6">
-                            <label class="small text-muted mb-1 fw-bold">สถานะพนักงานที่นำมาคิด</label>
+                        <div class="col-lg-2 col-md-6">
+                            <label class="small text-muted mb-1 fw-bold">สถานะพนักงาน</label>
                             <select id="doc2StatusFilter" class="form-select form-select-sm bg-dark text-white border-secondary shadow-none" onchange="window.renderSafetyDoc2()">
-                                <option value="Active" selected>เฉพาะทำงานอยู่ปัจจุบัน (Active)</option>
-                                <option value="all">ทั้งหมด (รวมลาออก / พักงาน)</option>
+                                <option value="Active" selected>ทำงานอยู่ (Active)</option>
+                                <option value="all">ทั้งหมด (รวมลาออก)</option>
                             </select>
                         </div>
-                        <div class="col-lg-3 col-md-6 text-md-end d-flex gap-2 justify-content-md-end mt-2 mt-lg-0">
+                        <div class="col-lg-2 col-md-6">
+                            <label class="small text-muted mb-1 fw-bold">ขอบเขตลูกจ้าง</label>
+                            <select id="doc2ScopeFilter" class="form-select form-select-sm bg-dark text-success border-secondary fw-bold shadow-none" onchange="window.renderSafetyDoc2()">
+                                <option value="company" selected>ไม่รวมรถร่วม (เฉพาะ หจก.)</option>
+                                <option value="all">รวมรถร่วมบริการ</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-12 text-lg-end d-flex gap-2 justify-content-lg-end mt-2 mt-lg-0">
                             <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-3 fw-bold text-nowrap" onclick="window.exportSafetyDocExcel('safetyDoc2PrintArea', 'ข้อ2_ทะเบียนลูกจ้างและยอดสรุป')">
                                 <i class="bi bi-file-earmark-excel-fill me-1"></i>โหลด Excel
                             </button>
