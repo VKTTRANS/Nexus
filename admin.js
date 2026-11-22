@@ -1682,10 +1682,10 @@ window.classifyEmpForSafety = function(emp) {
 
     var isJoint = pos.indexOf('รถร่วม') !== -1;
 
-    var dept = 'ฝ่ายรถบรรทุก / ขนส่ง';
+    var dept = 'ฝ่ายขนส่ง';
     if (!isJoint) {
-        var officeKeywords = ['สำนักงาน', 'ออฟฟิศ', 'office', 'บัญชี', 'การเงิน', 'ธุรการ', 'บุคคล', 'hr', 'admin', 'ผู้จัดการ', 'บริหาร', 'จัดซื้อ', 'ประสานงาน', 'เสมียน', 'แม่บ้าน'];
-        var driverKeywords = ['ขับรถ', 'พนักงานขับ', 'พขร', 'ติดรถ', 'ท้ายรถ', 'ช่าง', 'ลาน', 'จัดส่ง', 'รถบรรทุก', 'หัวลาก', 'เทรลเลอร์', '6 ล้อ', '10 ล้อ', '4 ล้อ', 'เด็กรถ'];
+        var officeKeywords = ['สำนักงาน', 'ออฟฟิศ', 'office', 'บัญชี', 'การเงิน', 'ธุรการ', 'บุคคล', 'hr', 'admin', 'ผู้จัดการ', 'บริหาร', 'จัดซื้อ', 'ประสานงาน', 'เสมียน', 'แม่บ้าน', 'ความปลอดภัย', 'จป', 'it', 'ไอที', 'เจ้าหน้าที่'];
+        var driverKeywords = ['ขับรถ', 'พนักงานขับ', 'พขร', 'ติดรถ', 'ท้ายรถ', 'ช่าง', 'ลาน', 'จัดส่ง', 'รถบรรทุก', 'หัวลาก', 'เทรลเลอร์', '6 ล้อ', '10 ล้อ', '12 ล้อ', '4 ล้อ', 'เด็กรถ'];
 
         var matchOffice = officeKeywords.some(function(k) { return posLower.indexOf(k) !== -1; });
         var matchDriver = driverKeywords.some(function(k) { return posLower.indexOf(k) !== -1; });
@@ -1904,9 +1904,9 @@ window.renderSafetyDoc2 = function() {
                 <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${inf.gender}</td>
                 <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${inf.nationality}</td>
                 <td style="border:1px solid #333; padding:4px 6px; text-align:left; word-break:break-word;">${e.position || '-'}</td>
-                <td style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap;">${inf.dept}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10.5px; word-break:break-word;">${inf.dept}</td>
                 <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${startText}</td>
-                <td style="border:1px solid #333; padding:4px 4px; text-align:center; word-break:break-word;">${statusTh}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10.5px; word-break:break-word;">${statusTh}</td>
             </tr>`;
         });
         return rowsHtml;
@@ -1920,7 +1920,7 @@ window.renderSafetyDoc2 = function() {
             <div style="font-size: 11px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ช่วงเวลา: ${yearLabel} | เงื่อนไข: ${statusLabel}</div>
         </div>
 
-        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายรถ / สำนักงาน, ไทย / ต่างด้าว, ชาย / หญิง และแยกรถร่วม)</div>
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายขนส่ง / ฝ่ายสำนักงาน, ไทย / ต่างด้าว, ชาย / หญิง และแยกรถร่วม)</div>
         <table style="width:100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11.5px;">
             <thead>
                 <tr style="background-color: #e9ecef;">
@@ -1940,7 +1940,7 @@ window.renderSafetyDoc2 = function() {
                 </tr>
             </thead>
             <tbody>
-                ${buildSummaryTr('1. ลูกจ้าง หจก. - ฝ่ายรถบรรทุก / ขนส่ง', statTruck, '', false)}
+                ${buildSummaryTr('1. ลูกจ้าง หจก. - ฝ่ายขนส่ง (พนักงานขับรถ / ประจำรถ)', statTruck, '', false)}
                 ${buildSummaryTr('2. ลูกจ้าง หจก. - ฝ่ายสำนักงาน (Office)', statOffice, '', false)}
                 ${buildSummaryTr('รวมลูกจ้างประจำของ หจก. ทั้งสิ้น (1 + 2)', statCompSub, 'background-color:#d1e7dd;', true)}
                 ${buildSummaryTr('3. พนักงานรถร่วมบริการ (แยกบัญชีรถร่วม)', statJoint, 'background-color:#fff3cd;', false)}
@@ -1954,13 +1954,13 @@ window.renderSafetyDoc2 = function() {
                 <tr style="background-color: #e9ecef;">
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
                     <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:8.5%;">รหัส</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:23%;">ชื่อ - นามสกุล</th>
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:5%;">เพศ</th>
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:6%;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22%;">ตำแหน่งงาน</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:13%;">ฝ่าย</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">วันเริ่มงาน</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">สถานะ</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:23.5%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">ฝ่าย</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">วันเริ่มงาน</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">สถานะ</th>
                 </tr>
             </thead>
             <tbody>
@@ -1974,13 +1974,13 @@ window.renderSafetyDoc2 = function() {
                 <tr style="background-color: #fff3cd;">
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:4.5%;">ลำดับ</th>
                     <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:8.5%;">รหัส</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22%;">ชื่อ - นามสกุล</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:23%;">ชื่อ - นามสกุล</th>
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:5%;">เพศ</th>
                     <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:6%;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:22%;">ตำแหน่งงาน</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:13%;">ประเภท</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">วันเริ่มสัญญา</th>
-                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">สถานะ</th>
+                    <th style="border:1px solid #333; padding:5px 6px; text-align:center; width:23.5%;">ตำแหน่งงาน</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:9.5%;">ประเภท</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">วันเริ่มสัญญา</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:10%;">สถานะ</th>
                 </tr>
             </thead>
             <tbody>
