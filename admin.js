@@ -1657,6 +1657,36 @@ window.openSafetyDoc2Modal = function() {
     window.showModalSafe('safetyDoc2Modal');
 };
 
+window.formatThaiIdForReport = function(rawId) {
+    if (rawId === undefined || rawId === null) return '-';
+    var s = String(rawId).trim();
+    if (!s || s === '-' || s.toLowerCase() === 'null' || s.toLowerCase() === 'undefined') return '-';
+
+    if (s.toLowerCase().indexOf('undefined') !== -1 || s.toLowerCase().indexOf('nan') !== -1) {
+        var cleaned = s.replace(/undefined|null|nan/gi, '').replace(/\D/g, '');
+        if (cleaned.length !== 13) return '-';
+        s = cleaned;
+    }
+
+    if (/^\d+(\.\d+)?e\+\d+$/i.test(s)) {
+        var num = Number(s);
+        if (!isNaN(num)) {
+            s = num.toLocaleString('fullwide', { useGrouping: false });
+        }
+    }
+
+    var digits = s.replace(/\D/g, '');
+    if (digits.length === 13) {
+        return digits.charAt(0) + '-' +
+               digits.substring(1, 5) + '-' +
+               digits.substring(5, 10) + '-' +
+               digits.substring(10, 12) + '-' +
+               digits.substring(12, 13);
+    }
+
+    return s;
+};
+
 window.renderSafetyDoc2 = function() {
     var container = document.getElementById('safetyDoc2PrintArea');
     if (!container) return;
@@ -1730,17 +1760,21 @@ window.renderSafetyDoc2 = function() {
             var e = item.emp;
             var inf = item.info;
             var statusTh = e.status === 'Active' ? 'ทำงานปกติ' : (e.status === 'Resigned' ? 'ลาออก (' + window.formatDate(e.resignDate) + ')' : 'พักงาน');
+            var formattedIdCard = window.formatThaiIdForReport(e.idCardNum);
+            var birthText = window.formatDate(e.birthDate);
+            var startText = window.formatDate(e.startDate);
+
             rowsHtml += `<tr>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${idx + 1}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${e.id || '-'}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${e.id || '-'}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:left;">${e.name || '-'}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.gender}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.nationality}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${e.idCardNum || '-'}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${window.formatDate(e.birthDate)}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${formattedIdCard}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${birthText}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:left;">${e.position || '-'}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${inf.dept}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${window.formatDate(e.startDate)}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${startText}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${statusTh}</td>
             </tr>`;
         });
@@ -1792,11 +1826,11 @@ window.renderSafetyDoc2 = function() {
                     <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อ - นามสกุล</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:45px;">เพศ</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:65px;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">เลขบัตรประชาชน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:80px;">วันเกิด</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:125px;">เลขบัตรประชาชน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเกิด</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center;">ตำแหน่งงาน</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">ฝ่าย</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:80px;">วันเริ่มงาน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเริ่มงาน</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">สถานะ</th>
                 </tr>
             </thead>
@@ -1814,11 +1848,11 @@ window.renderSafetyDoc2 = function() {
                     <th style="border:1px solid #333; padding:5px; text-align:center;">ชื่อ - นามสกุล</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:45px;">เพศ</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:65px;">สัญชาติ</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">เลขบัตรประชาชน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:80px;">วันเกิด</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:125px;">เลขบัตรประชาชน</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเกิด</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center;">ตำแหน่งงาน</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">ประเภท</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:80px;">วันเริ่มสัญญา</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเริ่มสัญญา</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">สถานะ</th>
                 </tr>
             </thead>
@@ -1981,8 +2015,8 @@ window.renderSafetyDoc6 = function() {
 
             detailRows += `<tr>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${idx + 1}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${a.docNo || '-'}</td>
-                <td style="border:1px solid #333; padding:5px; text-align:center;">${a.accDate || '-'} ${a.accTime || ''}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${a.docNo || '-'}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:5px; text-align:center; mso-number-format:'\\@';">${a.accDate || '-'} ${a.accTime || ''}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:left;">${a.empName || '-'}${isJointTag}</td>
                 <td style="border:1px solid #333; padding:5px; text-align:center;">${a.vehType || '-'} (${a.truckPlate || '-'})</td>
                 <td style="border:1px solid #333; padding:5px; text-align:left;">${a.location || '-'}</td>
@@ -2133,7 +2167,13 @@ window.exportSafetyDocExcel = function(elementId, fileNamePrefix) {
     var el = document.getElementById(elementId);
     if (!el) return;
     var excelHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-    <head><meta charset="UTF-8"></head>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            .xl-text { mso-number-format:"\\@"; }
+            td, th { font-family: 'Sarabun', Tahoma, sans-serif; }
+        </style>
+    </head>
     <body>${el.innerHTML}</body></html>`;
 
     var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
@@ -2146,12 +2186,3 @@ window.exportSafetyDocExcel = function(elementId, fileNamePrefix) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 };
-
-if (typeof window.numberWithCommas !== 'function') {
-    window.numberWithCommas = function(x) {
-        if (x === undefined || x === null || x === '') return "0.00";
-        var num = parseFloat(x);
-        if (isNaN(num)) return "0.00";
-        return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    };
-}
