@@ -845,89 +845,6 @@
         </div>
     </div>
 
-    <div class="modal fade admin-popup-modal" id="safetyDoc2Modal" tabindex="-1">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content border-success border-neon-success">
-                <div class="modal-header d-flex flex-wrap justify-content-between align-items-center gap-2">
-                    <h5 class="modal-title fw-bold text-success mb-0">
-                        <i class="bi bi-file-earmark-spreadsheet-fill me-2"></i>เอกสารข้อ 2 : ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง (แยกรถร่วม)
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-2 mb-3 p-3 rounded border border-secondary border-opacity-25 bg-black bg-opacity-50 align-items-end">
-                        <div class="col-lg-4 col-md-6">
-                            <label class="small text-muted mb-1 fw-bold">ชื่อสถานประกอบกิจการ (สำหรับพิมพ์หัวรายงาน)</label>
-                            <input type="text" id="doc2CompanyName" class="form-control form-control-sm bg-dark text-white border-secondary shadow-none" value="ห้างหุ้นส่วนจำกัด (ขนส่งไม่ประจำทางทั่วไป)" oninput="window.renderSafetyDoc2()">
-                        </div>
-                        <div class="col-lg-2 col-md-6">
-                            <label class="small text-muted mb-1 fw-bold">ตัวกรองปี (พ.ศ. / ค.ศ.)</label>
-                            <select id="doc2YearFilter" class="form-select form-select-sm bg-dark text-warning border-secondary fw-bold shadow-none" onchange="window.renderSafetyDoc2()">
-                                <option value="all" selected>ทุกปี (ทั้งหมด)</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <label class="small text-muted mb-1 fw-bold">สถานะพนักงานที่นำมาคิด</label>
-                            <select id="doc2StatusFilter" class="form-select form-select-sm bg-dark text-white border-secondary shadow-none" onchange="window.renderSafetyDoc2()">
-                                <option value="Active" selected>เฉพาะทำงานอยู่ปัจจุบัน (Active)</option>
-                                <option value="all">ทั้งหมด (รวมลาออก / พักงาน)</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3 col-md-6 text-md-end d-flex gap-2 justify-content-md-end mt-2 mt-lg-0">
-                            <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-3 fw-bold text-nowrap" onclick="window.exportSafetyDocExcel('safetyDoc2PrintArea', 'ข้อ2_ทะเบียนลูกจ้างและยอดสรุป')">
-                                <i class="bi bi-file-earmark-excel-fill me-1"></i>โหลด Excel
-                            </button>
-                            <button type="button" class="btn btn-sm btn-success text-dark rounded-pill px-3 fw-bold shadow-sm text-nowrap" onclick="window.printSafetyDoc('safetyDoc2PrintArea', 'เอกสารข้อ 2 ทะเบียนลูกจ้างและยอดสรุป')">
-                                <i class="bi bi-printer-fill me-1"></i>พิมพ์ / PDF
-                            </button>
-                        </div>
-                    </div>
-                    <div id="safetyDoc2PrintArea" class="p-3 rounded bg-white text-dark" style="overflow-x: auto;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade admin-popup-modal" id="safetyDoc6Modal" tabindex="-1">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content border-warning border-neon-warning">
-                <div class="modal-header d-flex flex-wrap justify-content-between align-items-center gap-2">
-                    <h5 class="modal-title fw-bold text-warning mb-0">
-                        <i class="bi bi-clipboard2-pulse-fill me-2"></i>เอกสารข้อ 6 : สถิติการประสบอันตรายจากการทำงาน
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-2 mb-3 p-3 rounded border border-secondary border-opacity-25 bg-black bg-opacity-50 align-items-end">
-                        <div class="col-md-4">
-                            <label class="small text-muted mb-1 fw-bold">ชื่อสถานประกอบกิจการ (สำหรับพิมพ์หัวรายงาน)</label>
-                            <input type="text" id="doc6CompanyName" class="form-control form-control-sm bg-dark text-white border-secondary shadow-none" value="ห้างหุ้นส่วนจำกัด (ขนส่งไม่ประจำทางทั่วไป)" oninput="window.renderSafetyDoc6()">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted mb-1 fw-bold">ประจำปี (พ.ศ. / ค.ศ.)</label>
-                            <select id="doc6YearFilter" class="form-select form-select-sm bg-dark text-warning border-secondary fw-bold shadow-none" onchange="window.renderSafetyDoc6()"></select>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-check form-switch mb-1">
-                                <input class="form-check-input border-warning shadow-none" type="checkbox" id="doc6ExcludeJointCheck" onchange="window.renderSafetyDoc6()" style="cursor:pointer;">
-                                <label class="form-check-label text-light small" for="doc6ExcludeJointCheck" style="cursor:pointer;">ตัดอุบัติเหตุของรถร่วมออก</label>
-                            </div>
-                        </div>
-                        <div class="col-md-3 text-md-end d-flex gap-2 justify-content-md-end mt-2 mt-md-0">
-                            <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-3 fw-bold" onclick="window.exportSafetyDocExcel('safetyDoc6PrintArea', 'ข้อ6_สถิติการประสบอันตรายจากการทำงาน')">
-                                <i class="bi bi-file-earmark-excel-fill me-1"></i>โหลด Excel
-                            </button>
-                            <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-4 fw-bold shadow-sm" onclick="window.printSafetyDoc('safetyDoc6PrintArea', 'เอกสารข้อ 6 สถิติการประสบอันตรายจากการทำงาน')">
-                                <i class="bi bi-printer-fill me-1"></i>พิมพ์ / PDF
-                            </button>
-                        </div>
-                    </div>
-                    <div id="safetyDoc6PrintArea" class="p-3 rounded bg-white text-dark" style="overflow-x: auto;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="modal fade admin-popup-modal" id="payrollModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-success">
@@ -1485,6 +1402,89 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade admin-popup-modal" id="safetyDoc2Modal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-success border-neon-success">
+                <div class="modal-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <h5 class="modal-title fw-bold text-success mb-0">
+                        <i class="bi bi-file-earmark-spreadsheet-fill me-2"></i>เอกสารข้อ 2 : ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง (แยกรถร่วม)
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-2 mb-3 p-3 rounded border border-secondary border-opacity-25 bg-black bg-opacity-50 align-items-end">
+                        <div class="col-lg-4 col-md-6">
+                            <label class="small text-muted mb-1 fw-bold">ชื่อสถานประกอบกิจการ (สำหรับพิมพ์หัวรายงาน)</label>
+                            <input type="text" id="doc2CompanyName" class="form-control form-control-sm bg-dark text-white border-secondary shadow-none" value="ห้างหุ้นส่วนจำกัด (ขนส่งไม่ประจำทางทั่วไป)" oninput="window.renderSafetyDoc2()">
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <label class="small text-muted mb-1 fw-bold">ตัวกรองปี (พ.ศ. / ค.ศ.)</label>
+                            <select id="doc2YearFilter" class="form-select form-select-sm bg-dark text-warning border-secondary fw-bold shadow-none" onchange="window.renderSafetyDoc2()">
+                                <option value="all" selected>ทุกปี (ทั้งหมด)</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <label class="small text-muted mb-1 fw-bold">สถานะพนักงานที่นำมาคิด</label>
+                            <select id="doc2StatusFilter" class="form-select form-select-sm bg-dark text-white border-secondary shadow-none" onchange="window.renderSafetyDoc2()">
+                                <option value="Active" selected>เฉพาะทำงานอยู่ปัจจุบัน (Active)</option>
+                                <option value="all">ทั้งหมด (รวมลาออก / พักงาน)</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-6 text-md-end d-flex gap-2 justify-content-md-end mt-2 mt-lg-0">
+                            <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-3 fw-bold text-nowrap" onclick="window.exportSafetyDocExcel('safetyDoc2PrintArea', 'ข้อ2_ทะเบียนลูกจ้างและยอดสรุป')">
+                                <i class="bi bi-file-earmark-excel-fill me-1"></i>โหลด Excel
+                            </button>
+                            <button type="button" class="btn btn-sm btn-success text-dark rounded-pill px-3 fw-bold shadow-sm text-nowrap" onclick="window.printSafetyDoc('safetyDoc2PrintArea', 'เอกสารข้อ 2 ทะเบียนลูกจ้างและยอดสรุป')">
+                                <i class="bi bi-printer-fill me-1"></i>พิมพ์ / PDF
+                            </button>
+                        </div>
+                    </div>
+                    <div id="safetyDoc2PrintArea" class="p-3 rounded bg-white text-dark" style="overflow-x: auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade admin-popup-modal" id="safetyDoc6Modal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-warning border-neon-warning">
+                <div class="modal-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <h5 class="modal-title fw-bold text-warning mb-0">
+                        <i class="bi bi-clipboard2-pulse-fill me-2"></i>เอกสารข้อ 6 : สถิติการประสบอันตรายจากการทำงาน
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-2 mb-3 p-3 rounded border border-secondary border-opacity-25 bg-black bg-opacity-50 align-items-end">
+                        <div class="col-md-4">
+                            <label class="small text-muted mb-1 fw-bold">ชื่อสถานประกอบกิจการ (สำหรับพิมพ์หัวรายงาน)</label>
+                            <input type="text" id="doc6CompanyName" class="form-control form-control-sm bg-dark text-white border-secondary shadow-none" value="ห้างหุ้นส่วนจำกัด (ขนส่งไม่ประจำทางทั่วไป)" oninput="window.renderSafetyDoc6()">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="small text-muted mb-1 fw-bold">ประจำปี (พ.ศ. / ค.ศ.)</label>
+                            <select id="doc6YearFilter" class="form-select form-select-sm bg-dark text-warning border-secondary fw-bold shadow-none" onchange="window.renderSafetyDoc6()"></select>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check form-switch mb-1">
+                                <input class="form-check-input border-warning shadow-none" type="checkbox" id="doc6ExcludeJointCheck" onchange="window.renderSafetyDoc6()" style="cursor:pointer;">
+                                <label class="form-check-label text-light small" for="doc6ExcludeJointCheck" style="cursor:pointer;">ตัดอุบัติเหตุของรถร่วมออก</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-md-end d-flex gap-2 justify-content-md-end mt-2 mt-md-0">
+                            <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-3 fw-bold" onclick="window.exportSafetyDocExcel('safetyDoc6PrintArea', 'ข้อ6_สถิติการประสบอันตรายจากการทำงาน')">
+                                <i class="bi bi-file-earmark-excel-fill me-1"></i>โหลด Excel
+                            </button>
+                            <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-4 fw-bold shadow-sm" onclick="window.printSafetyDoc('safetyDoc6PrintArea', 'เอกสารข้อ 6 สถิติการประสบอันตรายจากการทำงาน')">
+                                <i class="bi bi-printer-fill me-1"></i>พิมพ์ / PDF
+                            </button>
+                        </div>
+                    </div>
+                    <div id="safetyDoc6PrintArea" class="p-3 rounded bg-white text-dark" style="overflow-x: auto;"></div>
                 </div>
             </div>
         </div>
