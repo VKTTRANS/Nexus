@@ -1,8 +1,3 @@
-
-
-
-ไอคอน JS
-admin_updated
 window.allContactData = [];
 
 window.showModalSafe = function(modalId) {
