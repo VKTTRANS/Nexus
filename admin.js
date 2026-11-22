@@ -987,7 +987,7 @@ window.renderAccidentTable = function(data) {
            var displayCause = window.resolveAccidentCause(r);
            var displayCausedBy = window.resolveAccidentCausedBy(r);
            var trailerText = (r.trailerPlate && r.trailerPlate !== '-') ? '<br><small class="text-info">หาง: ' + r.trailerPlate + '</small>' : '';
-           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><div class="text-danger" style="max-width:200px; white-space:normal;">' + displayCause + '</div><small class="text-muted">' + displayCausedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
+           html += '<tr style="cursor:pointer;" onclick="if(!event.target.closest(\'button\') && !event.target.closest(\'a\')) window.openAccidentDetailByDocNo(\'' + r.docNo + '\')"><td class="ps-4"><span class="text-warning font-monospace">' + r.docNo + '</span><br><span class="badge ' + statClass + ' rounded-pill mt-1" style="font-size: 0.65rem;">' + statText + '</span></td><td><b class="text-light">' + r.empName + '</b><br><small class="text-muted">' + r.empId + '</small></td><td>' + r.accDate + '<br><small class="text-muted">' + r.accTime + '</small></td><td><div class="text-truncate text-light" style="max-width:150px;" title="' + r.location + '">' + r.location + '</div></td><td>' + r.vehType + '<br><small class="text-muted">หัว: ' + r.truckPlate + '</small>' + trailerText + '</td><td><div class="text-danger" style="max-width:220px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; white-space:normal;" title="' + displayCause.replace(/"/g, '&quot;') + '">' + displayCause + '</div><small class="text-muted text-truncate d-block" style="max-width:220px;" title="' + displayCausedBy.replace(/"/g, '&quot;') + '">' + displayCausedBy + '</small></td><td class="text-center pe-4">' + docsHtml + '</td></tr>';
        });
    }
    var tableBody = document.getElementById('adminAccidentTableBody');
@@ -2020,14 +2020,15 @@ window.openSafetyDoc6Modal = function() {
         });
         var sortedYears = Array.from(yearsSet).sort(function(a, b) { return b - a; });
         var prevVal = yearSel.value;
-        yearSel.innerHTML = '';
+        yearSel.innerHTML = '<option value="all">ทุกปี (ทั้งหมด)</option>';
         sortedYears.forEach(function(y) {
             var opt = document.createElement('option');
             opt.value = String(y);
             opt.text = 'พ.ศ. ' + (y + 543) + ' (' + y + ')';
-            if (prevVal ? String(y) === prevVal : y === curYear) opt.selected = true;
+            if (prevVal ? String(y) === String(prevVal) : y === curYear) opt.selected = true;
             yearSel.appendChild(opt);
         });
+        if (prevVal === 'all') yearSel.value = 'all';
     }
     window.renderSafetyDoc6();
     window.showModalSafe('safetyDoc6Modal');
@@ -2063,10 +2064,15 @@ window.renderSafetyDoc6 = function() {
     var companyNameEl = document.getElementById('doc6CompanyName');
     var companyName = companyNameEl ? companyNameEl.value.trim() : 'ห้างหุ้นส่วนจำกัด';
     var yearSel = document.getElementById('doc6YearFilter');
-    var selectedYear = yearSel && yearSel.value ? parseInt(yearSel.value, 10) : new Date().getFullYear();
-    var thaiYear = selectedYear + 543;
-    var excludeJointEl = document.getElementById('doc6ExcludeJointCheck');
-    var excludeJoint = excludeJointEl ? excludeJointEl.checked : false;
+    var yearVal = yearSel && yearSel.value ? yearSel.value : String(new Date().getFullYear());
+    var isAllYears = (yearVal === 'all');
+    var selectedYear = !isAllYears ? parseInt(yearVal, 10) : null;
+    var periodTitle = isAllYears ? 'ทุกปี (สะสมทั้งหมด)' : ('ประจำปี พ.ศ. ' + (selectedYear + 543));
+    var periodSubTitle = isAllYears ? 'ข้อมูลสะสมทุกปีในระบบ' : ('1 มกราคม - 31 ธันวาคม พ.ศ. ' + (selectedYear + 543));
+
+    var scopeSel = document.getElementById('doc6ScopeFilter');
+    var excludeCheckLegacy = document.getElementById('doc6ExcludeJointCheck');
+    var excludeJoint = scopeSel ? (scopeSel.value === 'company') : (excludeCheckLegacy ? excludeCheckLegacy.checked : false);
 
     var empMap = {};
     (window.allEmpData || []).forEach(function(e) {
@@ -2080,17 +2086,19 @@ window.renderSafetyDoc6 = function() {
         return true;
     }).length;
 
-    var yearAccidents = (window.allAccidentData || []).filter(function(a) {
-        var y = window.parseAccidentYearCE(a.accDate);
-        if (y !== selectedYear) return false;
-        if (excludeJoint) {
-            var empObj = empMap[String(a.empId || '').trim()];
-            if (empObj && String(empObj.position || '').indexOf('รถร่วม') !== -1) {
-                return false;
-            }
+    var matchedAccidents = (window.allAccidentData || []).filter(function(a) {
+        if (!isAllYears) {
+            var y = window.parseAccidentYearCE(a.accDate);
+            if (y !== selectedYear) return false;
         }
+        var empObj = empMap[String(a.empId || '').trim()];
+        var isJointEmp = empObj && String(empObj.position || '').indexOf('รถร่วม') !== -1;
+        if (excludeJoint && isJointEmp) return false;
         return true;
     });
+
+    var compAccidents = [];
+    var jointAccidents = [];
 
     var counts = {
         death: 0,
@@ -2101,87 +2109,122 @@ window.renderSafetyDoc6 = function() {
         propertyOnly: 0
     };
 
-    yearAccidents.forEach(function(acc) {
+    matchedAccidents.forEach(function(acc) {
+        var empObj = empMap[String(acc.empId || '').trim()];
+        var safetyInfo = empObj ? window.classifyEmpForSafety(empObj) : { isJoint: false, dept: 'ฝ่ายขนส่ง' };
         var lvl = window.classifyAccidentInjuryLevel(acc);
         counts[lvl]++;
+
+        var item = { acc: acc, dept: safetyInfo.dept, isJoint: safetyInfo.isJoint, lvl: lvl };
+        if (safetyInfo.isJoint) jointAccidents.push(item);
+        else compAccidents.push(item);
     });
 
     var totalInjuryCases = counts.death + counts.disability + counts.over3 + counts.upto3 + counts.noLostTime;
-    var totalAllIncidents = yearAccidents.length;
     var todayThai = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-    var scopeNote = excludeJoint ? 'เฉพาะลูกจ้างประจำของ หจก. (ไม่รวมรถร่วมบริการ)' : 'รวมผู้ปฏิบัติงานทั้งหมดในระบบ';
+    var scopeNote = excludeJoint ? 'เฉพาะลูกจ้างประจำของ หจก. (ไม่รวมรถร่วมบริการ)' : 'รวมผู้ปฏิบัติงานทั้งหมด (แยกแสดงลูกจ้าง หจก. และรถร่วม)';
+
+    var buildAccTableRows = function(list) {
+        if (list.length === 0) {
+            return `<tr><td colspan="9" style="border:1px solid #333; padding:10px; text-align:center; color:#666;">- ไม่มีประวัติอุบัติเหตุในหมวดนี้ -</td></tr>`;
+        }
+        var rows = '';
+        list.forEach(function(item, idx) {
+            var a = item.acc;
+            var lvl = item.lvl;
+            var lvlLabel = 'ทรัพย์สินเสียหาย (เจ็บ 0)';
+            if (lvl === 'death') lvlLabel = 'เสียชีวิต';
+            else if (lvl === 'disability') lvlLabel = 'ทุพพลภาพ';
+            else if (lvl === 'over3') lvlLabel = 'หยุดงาน > 3 วัน';
+            else if (lvl === 'upto3') lvlLabel = 'หยุดงาน ≤ 3 วัน';
+            else if (lvl === 'noLostTime') lvlLabel = 'บาดเจ็บเล็กน้อย';
+
+            var resolvedCause = window.resolveAccidentCause(a);
+            if (resolvedCause.length > 90) {
+                resolvedCause = resolvedCause.substring(0, 88) + '...';
+            }
+            var dateStr = String(a.accDate || '-').trim();
+            var timeStr = String(a.accTime || '').trim();
+            var dateTimeShow = timeStr && timeStr !== '-' ? (dateStr + ' ' + timeStr) : dateStr;
+            var vehShow = (a.vehType || '-') + (a.truckPlate && a.truckPlate !== '-' ? ' (' + a.truckPlate + ')' : '');
+
+            rows += `<tr>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center; white-space:nowrap;">${idx + 1}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${a.docNo || '-'}</td>
+                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; font-size:10px; mso-number-format:'\\@';">${dateTimeShow}</td>
+                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.empName || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 3px; text-align:center; font-size:10px; white-space:nowrap;">${item.dept}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10px; word-break:break-word;">${vehShow}</td>
+                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.location || '-'}</td>
+                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${resolvedCause}</td>
+                <td style="border:1px solid #333; padding:4px 4px; text-align:center; font-size:10px; word-break:break-word;">${lvlLabel}</td>
+            </tr>`;
+        });
+        return rows;
+    };
 
     var detailTableHtml = '';
-    if (yearAccidents.length === 0) {
+    if (matchedAccidents.length === 0) {
         detailTableHtml = `
         <div style="border: 2px solid #198754; background-color: #f8fff9; padding: 14px; text-align: center; margin-bottom: 20px; border-radius: 6px;">
-            <div style="font-size: 13.5px; font-weight: bold; color: #0f5132;">สรุปผลการดำเนินงานด้านความปลอดภัย ประจำปี พ.ศ. ${thaiYear}</div>
+            <div style="font-size: 13.5px; font-weight: bold; color: #0f5132;">สรุปผลการดำเนินงานด้านความปลอดภัย (${periodTitle})</div>
             <div style="font-size: 12.5px; margin-top: 5px;">สถานประกอบกิจการ <b>ไม่มีลูกจ้างประสบอันตรายหรือเกิดอุบัติเหตุจากการทำงาน (สถิติการประสบอันตราย = 0 ราย)</b></div>
         </div>`;
     } else {
-        var detailRows = '';
-        yearAccidents.forEach(function(a, idx) {
-            var empObj = empMap[String(a.empId || '').trim()];
-            var isJointTag = (empObj && String(empObj.position || '').indexOf('รถร่วม') !== -1) ? ' (รถร่วม)' : '';
-            var lvl = window.classifyAccidentInjuryLevel(a);
-            var lvlLabel = 'ทรัพย์สินเสียหาย (เจ็บ 0 ราย)';
-            if (lvl === 'death') lvlLabel = 'เสียชีวิต';
-            else if (lvl === 'disability') lvlLabel = 'ทุพพลภาพ/สูญเสียอวัยวะ';
-            else if (lvl === 'over3') lvlLabel = 'บาดเจ็บหยุดงานเกิน 3 วัน';
-            else if (lvl === 'upto3') lvlLabel = 'บาดเจ็บหยุดงานไม่เกิน 3 วัน';
-            else if (lvl === 'noLostTime') lvlLabel = 'บาดเจ็บเล็กน้อย (ไม่หยุดงาน)';
-
-            var resolvedCause = window.resolveAccidentCause(a);
-            var resolvedBy = window.resolveAccidentCausedBy(a);
-            var fullCauseDisplay = resolvedCause;
-            if (resolvedBy && resolvedBy !== '-' && resolvedBy !== 'อื่นๆ' && fullCauseDisplay.indexOf(resolvedBy) === -1) {
-                fullCauseDisplay = resolvedCause + ' [' + resolvedBy + ']';
-            }
-
-            detailRows += `<tr>
-                <td style="border:1px solid #333; padding:4px 3px; text-align:center;">${idx + 1}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${a.docNo || '-'}</td>
-                <td class="xl-text" style="border:1px solid #333; padding:4px 4px; text-align:center; white-space:nowrap; mso-number-format:'\\@';">${a.accDate || '-'} ${a.accTime || ''}</td>
-                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.empName || '-'}${isJointTag}</td>
-                <td style="border:1px solid #333; padding:4px 4px; text-align:center; word-break:break-word;">${a.vehType || '-'} (${a.truckPlate || '-'})</td>
-                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.location || '-'}</td>
-                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${fullCauseDisplay}</td>
-                <td style="border:1px solid #333; padding:4px 5px; text-align:left; word-break:break-word;">${a.damage || '-'}</td>
-                <td style="border:1px solid #333; padding:4px 4px; text-align:center; word-break:break-word;">${lvlLabel}</td>
-            </tr>`;
-        });
-
         detailTableHtml = `
-        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2 : ทะเบียนบันทึกเหตุการณ์อุบัติเหตุทางถนน/ในการทำงาน ประจำปี พ.ศ. ${thaiYear} (จำนวน ${totalAllIncidents} ครั้ง)</div>
-        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10.5px; table-layout: fixed;">
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.1 : ทะเบียนบันทึกเหตุการณ์อุบัติเหตุของลูกจ้าง หจก. (${periodTitle} จำนวน ${compAccidents.length} ครั้ง)</div>
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 18px; font-size: 10.5px; table-layout: fixed;">
             <thead>
                 <tr style="background-color: #e9ecef;">
-                    <th style="border:1px solid #333; padding:4px 3px; text-align:center; width:4%;">ลำดับ</th>
-                    <th style="border:1px solid #333; padding:4px 4px; text-align:center; width:9%;">เลขที่เอกสาร</th>
-                    <th style="border:1px solid #333; padding:4px 4px; text-align:center; width:11%;">วัน-เวลาเกิดเหตุ</th>
-                    <th style="border:1px solid #333; padding:4px 5px; text-align:center; width:13%;">ชื่อผู้ประสบเหตุ</th>
-                    <th style="border:1px solid #333; padding:4px 4px; text-align:center; width:12%;">รถ / ทะเบียน</th>
-                    <th style="border:1px solid #333; padding:4px 5px; text-align:center; width:13%;">สถานที่เกิดเหตุ</th>
-                    <th style="border:1px solid #333; padding:4px 5px; text-align:center; width:14%;">สาเหตุ (รายละเอียด)</th>
-                    <th style="border:1px solid #333; padding:4px 5px; text-align:center; width:13%;">ความเสียหาย/อาการ</th>
-                    <th style="border:1px solid #333; padding:4px 4px; text-align:center; width:11%;">ระดับความรุนแรง</th>
+                    <th style="border:1px solid #333; padding:5px 2px; text-align:center; width:4%;">ลำดับ</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:9.5%;">เลขที่เอกสาร</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:11%;">วัน-เวลาเกิดเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:14.5%;">ชื่อผู้ขับขี่/ลูกจ้าง</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:8.5%;">ฝ่าย</th>
+                    <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:12.5%;">รถ / ทะเบียน</th>
+                    <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:13%;">สถานที่เกิดเหตุ</th>
+                    <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:16%;">สาเหตุหลัก</th>
+                    <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:11%;">ผลกระทบ</th>
                 </tr>
             </thead>
             <tbody>
-                ${detailRows}
+                ${buildAccTableRows(compAccidents)}
             </tbody>
         </table>`;
+
+        if (!excludeJoint) {
+            detailTableHtml += `
+            <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 2.2 : ทะเบียนบันทึกเหตุการณ์อุบัติเหตุของพนักงานรถร่วมบริการ (แยกเฉพาะรถร่วม จำนวน ${jointAccidents.length} ครั้ง)</div>
+            <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10.5px; table-layout: fixed;">
+                <thead>
+                    <tr style="background-color: #fff3cd;">
+                        <th style="border:1px solid #333; padding:5px 2px; text-align:center; width:4%;">ลำดับ</th>
+                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:9.5%;">เลขที่เอกสาร</th>
+                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:11%;">วัน-เวลาเกิดเหตุ</th>
+                        <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:14.5%;">ชื่อผู้ขับขี่รถร่วม</th>
+                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:8.5%;">ประเภท</th>
+                        <th style="border:1px solid #333; padding:5px 4px; text-align:center; width:12.5%;">รถ / ทะเบียน</th>
+                        <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:13%;">สถานที่เกิดเหตุ</th>
+                        <th style="border:1px solid #333; padding:5px 5px; text-align:center; width:16%;">สาเหตุหลัก</th>
+                        <th style="border:1px solid #333; padding:5px 3px; text-align:center; width:11%;">ผลกระทบ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${buildAccTableRows(jointAccidents)}
+                </tbody>
+            </table>`;
+        }
     }
 
     var html = `
-    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.4;">
-        <div style="text-align:center; margin-bottom: 12px;">
-            <div style="font-size: 16px; font-weight: bold;">แบบสรุปสถิติการประสบอันตรายจากการทำงาน ประจำปี พ.ศ. ${thaiYear} (เอกสารข้อ 6)</div>
+    <div style="font-family: 'Sarabun', sans-serif; color: #000; font-size: 11.5px; line-height: 1.35;">
+        <div style="text-align:center; margin-bottom: 10px;">
+            <div style="font-size: 16px; font-weight: bold;">แบบสรุปสถิติการประสบอันตรายจากการทำงาน ${periodTitle} (เอกสารข้อ 6)</div>
             <div style="font-size: 13.5px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
-            <div style="font-size: 11px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ขอบเขตข้อมูล: ${scopeNote} | จำนวนผู้ปฏิบัติงานปัจจุบัน: ${activeCompanyEmps} คน</div>
+            <div style="font-size: 11px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ขอบเขต: ${scopeNote} | จำนวนผู้ปฏิบัติงานปัจจุบัน: ${activeCompanyEmps} คน</div>
         </div>
 
-        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 1 : ตารางสรุปสถิติการประสบอันตรายหรือเจ็บป่วยเนื่องจากการทำงาน (1 มกราคม - 31 ธันวาคม พ.ศ. ${thaiYear})</div>
+        <div style="font-weight: bold; font-size: 12.5px; margin-bottom: 5px;">ส่วนที่ 1 : ตารางสรุปสถิติการประสบอันตรายหรือเจ็บป่วยเนื่องจากการทำงาน (${periodSubTitle})</div>
         <table style="width:100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11.5px;">
             <thead>
                 <tr style="background-color: #e9ecef;">
@@ -2193,51 +2236,51 @@ window.renderSafetyDoc6 = function() {
             </thead>
             <tbody>
                 <tr>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">1</td>
-                    <td style="border:1px solid #333; padding:5px 10px;">กรณีเสียชีวิตเนื่องจากการทำงาน</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.death}</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.death === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">1</td>
+                    <td style="border:1px solid #333; padding:4px 10px;">กรณีเสียชีวิตเนื่องจากการทำงาน</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center; font-weight:bold;">${counts.death}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">${counts.death === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">2</td>
-                    <td style="border:1px solid #333; padding:5px 10px;">กรณีทุพพลภาพ หรือสูญเสียอวัยวะบางส่วน</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.disability}</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.disability === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">2</td>
+                    <td style="border:1px solid #333; padding:4px 10px;">กรณีทุพพลภาพ หรือสูญเสียอวัยวะบางส่วน</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center; font-weight:bold;">${counts.disability}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">${counts.disability === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">3</td>
-                    <td style="border:1px solid #333; padding:5px 10px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานเกิน 3 วันทำงานติดต่อกัน</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.over3}</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.over3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">3</td>
+                    <td style="border:1px solid #333; padding:4px 10px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานเกิน 3 วันทำงานติดต่อกัน</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center; font-weight:bold;">${counts.over3}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">${counts.over3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">4</td>
-                    <td style="border:1px solid #333; padding:5px 10px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานไม่เกิน 3 วันทำงาน</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.upto3}</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.upto3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">4</td>
+                    <td style="border:1px solid #333; padding:4px 10px;">กรณีบาดเจ็บหรือเจ็บป่วยจนต้องหยุดงานไม่เกิน 3 วันทำงาน</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center; font-weight:bold;">${counts.upto3}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">${counts.upto3 === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">5</td>
-                    <td style="border:1px solid #333; padding:5px 10px;">กรณีบาดเจ็บเล็กน้อย (ปฐมพยาบาล ไม่มีการหยุดงาน)</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.noLostTime}</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">${counts.noLostTime === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">5</td>
+                    <td style="border:1px solid #333; padding:4px 10px;">กรณีบาดเจ็บเล็กน้อย (ปฐมพยาบาล ไม่มีการหยุดงาน)</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center; font-weight:bold;">${counts.noLostTime}</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">${counts.noLostTime === 0 ? 'ไม่มีผู้ประสบเหตุ' : '-'}</td>
                 </tr>
                 <tr style="background-color: #d1e7dd; font-weight: bold;">
-                    <td colspan="2" style="border:1px solid #333; padding:6px 10px; text-align:right;">รวมจำนวนลูกจ้างที่ประสบอันตรายจากการทำงานทั้งสิ้น (ข้อ 1 - 5)</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center; font-size:13px;">${totalInjuryCases} ราย</td>
-                    <td style="border:1px solid #333; padding:6px; text-align:center;">${totalInjuryCases === 0 ? 'ปลอดภัย 100% (0 ราย)' : 'มีประวัติตามรายละเอียดแนบ'}</td>
+                    <td colspan="2" style="border:1px solid #333; padding:5px 10px; text-align:right;">รวมจำนวนลูกจ้างที่ประสบอันตรายจากการทำงานทั้งสิ้น (ข้อ 1 - 5)</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center; font-size:13px;">${totalInjuryCases} ราย</td>
+                    <td style="border:1px solid #333; padding:5px; text-align:center;">${totalInjuryCases === 0 ? 'ปลอดภัย 100% (0 ราย)' : 'มีประวัติตามรายละเอียดแนบ'}</td>
                 </tr>
                 <tr style="background-color: #fff3cd;">
-                    <td colspan="2" style="border:1px solid #333; padding:5px 10px; text-align:right;">สถิติอุบัติเหตุทางรถยนต์/ทรัพย์สินเสียหาย (ไม่มีลูกจ้างบาดเจ็บ)</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">${counts.propertyOnly} ครั้ง</td>
-                    <td style="border:1px solid #333; padding:5px; text-align:center;">บันทึกจากระบบแจ้งอุบัติเหตุ</td>
+                    <td colspan="2" style="border:1px solid #333; padding:4px 10px; text-align:right;">สถิติอุบัติเหตุทางรถยนต์/ทรัพย์สินเสียหาย (ไม่มีลูกจ้างบาดเจ็บ)</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center; font-weight:bold;">${counts.propertyOnly} ครั้ง</td>
+                    <td style="border:1px solid #333; padding:4px 5px; text-align:center;">บันทึกจากระบบแจ้งอุบัติเหตุ</td>
                 </tr>
             </tbody>
         </table>
 
         ${detailTableHtml}
 
-        <div style="display:flex; justify-content:space-between; margin-top: 26px; padding: 0 30px; font-size: 11.5px;">
+        <div style="display:flex; justify-content:space-between; margin-top: 24px; padding: 0 30px; font-size: 11.5px;">
             <div style="text-align:center;">
                 <div>ลงชื่อ ....................................................... จป.บริหาร / ผู้จัดทำ</div>
                 <div style="margin-top:4px;">( ....................................................... )</div>
