@@ -1,3 +1,8 @@
+
+
+
+ไอคอน JS
+admin_updated
 window.allContactData = [];
 
 window.showModalSafe = function(modalId) {
@@ -608,6 +613,7 @@ window.filterPayrollTable = function() {
 };
 
 window.openPayrollHistory = function(empId) {
+    var emp = window.allEmpData.find(function(e) { return e.id === empId; });
     var slips = window.allPayrollData.filter(function(p) { return p.empId === empId; }).sort(function(a,b) { return new Date(b.payDate) - new Date(a.payDate); });
     
     var html = '';
@@ -1345,6 +1351,7 @@ window.openBirthdayModal = function() {
                             <span style="font-size: 0.65rem; opacity: 0.8; line-height: 1; margin-bottom: 2px;">วันที่</span>
                             <span style="font-size: 1.3rem; font-weight: bold; line-height: 1;">${day}</span>
                         </div>
+                        
                         <div class="flex-grow-1" style="min-width: 0;">
                             <div class="admin-modal-title mb-1" style="font-size: 0.95rem; white-space: normal; line-height: 1.3;">
                                 ${e.name}${nick}
@@ -1356,6 +1363,7 @@ window.openBirthdayModal = function() {
                                 <i class="bi bi-briefcase me-1"></i>${pos}
                             </div>
                         </div>
+                        
                         <i class="bi bi-chevron-right text-muted fs-5 ms-1 mt-2 flex-shrink-0"></i>
                     </div>
                 </div>
@@ -1612,6 +1620,7 @@ window.deleteContact = function() {
     });
 };
 
+
 window.formatThaiIdForReport = function(rawId) {
     if (rawId === undefined || rawId === null) return '-';
     var s = String(rawId).trim();
@@ -1640,6 +1649,36 @@ window.formatThaiIdForReport = function(rawId) {
     }
 
     return s;
+};
+
+window.parseAnyYearCE = function(dateStr) {
+    if (!dateStr) return null;
+    var s = String(dateStr).trim();
+    if (!s || s === '-') return null;
+    var d = new Date(s);
+    if (!isNaN(d.getTime())) {
+        var y = d.getFullYear();
+        return y > 2400 ? y - 543 : y;
+    }
+    var parts = s.split(/[\/\-\s]/);
+    for (var i = 0; i < parts.length; i++) {
+        var num = parseInt(parts[i], 10);
+        if (num > 2400) return num - 543;
+        if (num >= 1980 && num <= 2100) return num;
+    }
+    return null;
+};
+
+window.isSystemDummyAccount = function(emp) {
+    if (!emp) return true;
+    var nameStr = String(emp.name || '').trim().toLowerCase();
+    var idStr = String(emp.id || '').trim().toLowerCase();
+    var userStr = String(emp.username || '').trim().toLowerCase();
+    if (!nameStr || nameStr === '-' || nameStr === 'register' || nameStr === 'admin' || nameStr === 'test') {
+        if (!idStr || idStr === '-' || idStr === 'register' || userStr === 'register') return true;
+    }
+    if (nameStr === 'register') return true;
+    return false;
 };
 
 window.classifyEmpForSafety = function(emp) {
@@ -1728,6 +1767,29 @@ window.addEmpToSafetyStatRow = function(rowObj, info) {
 };
 
 window.openSafetyDoc2Modal = function() {
+    var yearSel = document.getElementById('doc2YearFilter');
+    if (yearSel) {
+        var curYear = new Date().getFullYear();
+        var yearsSet = new Set([curYear, curYear - 1, curYear - 2]);
+        (window.allEmpData || []).forEach(function(e) {
+            if (window.isSystemDummyAccount(e)) return;
+            var sy = window.parseAnyYearCE(e.startDate);
+            var ry = window.parseAnyYearCE(e.resignDate);
+            if (sy && sy >= 2000 && sy <= curYear + 1) yearsSet.add(sy);
+            if (ry && ry >= 2000 && ry <= curYear + 1) yearsSet.add(ry);
+        });
+        var sortedYears = Array.from(yearsSet).sort(function(a, b) { return b - a; });
+        var prevVal = yearSel.value || 'all';
+        yearSel.innerHTML = '<option value="all">ทุกปี (ทั้งหมด)</option>';
+        sortedYears.forEach(function(y) {
+            var opt = document.createElement('option');
+            opt.value = String(y);
+            opt.text = 'พ.ศ. ' + (y + 543) + ' (' + y + ')';
+            if (String(y) === String(prevVal)) opt.selected = true;
+            yearSel.appendChild(opt);
+        });
+        if (prevVal === 'all') yearSel.value = 'all';
+    }
     window.renderSafetyDoc2();
     window.showModalSafe('safetyDoc2Modal');
 };
@@ -1740,11 +1802,32 @@ window.renderSafetyDoc2 = function() {
     var companyName = companyNameEl ? companyNameEl.value.trim() : 'ห้างหุ้นส่วนจำกัด';
     var statusFilterEl = document.getElementById('doc2StatusFilter');
     var statusFilter = statusFilterEl ? statusFilterEl.value : 'Active';
+    var yearFilterEl = document.getElementById('doc2YearFilter');
+    var yearFilter = yearFilterEl ? yearFilterEl.value : 'all';
+    var targetYear = yearFilter !== 'all' ? parseInt(yearFilter, 10) : null;
 
     var rawList = window.allEmpData || [];
     var filtered = rawList.filter(function(e) {
-        if (statusFilter === 'Active') return e.status === 'Active';
-        return true;
+        if (window.isSystemDummyAccount(e)) return false;
+
+        if (!targetYear) {
+            if (statusFilter === 'Active') return e.status === 'Active';
+            return true;
+        } else {
+            var startY = window.parseAnyYearCE(e.startDate);
+            var resignY = window.parseAnyYearCE(e.resignDate);
+
+            if (startY && startY > targetYear) return false;
+
+            if (statusFilter === 'Active') {
+                if (e.status === 'Active') return true;
+                if (e.status === 'Resigned' && resignY && resignY > targetYear) return true;
+                return false;
+            } else {
+                if (e.status === 'Resigned' && resignY && resignY < targetYear) return false;
+                return true;
+            }
+        }
     });
 
     filtered.sort(function(a, b) {
@@ -1780,7 +1863,8 @@ window.renderSafetyDoc2 = function() {
     });
 
     var todayThai = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-    var statusLabel = statusFilter === 'Active' ? 'เฉพาะผู้ปฏิบัติงานปัจจุบัน (Active)' : 'รวมพนักงานทั้งหมด (Active / พักงาน / ลาออก)';
+    var yearLabel = targetYear ? ('ประจำปี พ.ศ. ' + (targetYear + 543) + ' (' + targetYear + ')') : 'ทุกปี (ทั้งหมด)';
+    var statusLabel = statusFilter === 'Active' ? 'เฉพาะผู้ปฏิบัติงาน (Active)' : 'รวมพนักงานทั้งหมด (Active / พักงาน / ลาออก)';
 
     var buildSummaryTr = function(label, r, bgStyle, isBold) {
         var fw = isBold ? 'font-weight:bold;' : '';
@@ -1804,7 +1888,18 @@ window.renderSafetyDoc2 = function() {
         arr.forEach(function(item, idx) {
             var e = item.emp;
             var inf = item.info;
-            var statusTh = e.status === 'Active' ? 'ทำงานปกติ' : (e.status === 'Resigned' ? 'ลาออก (' + window.formatDate(e.resignDate) + ')' : 'พักงาน');
+            var resignYearCheck = window.parseAnyYearCE(e.resignDate);
+            var statusTh = 'ทำงานปกติ';
+            if (e.status === 'Resigned') {
+                if (targetYear && resignYearCheck && resignYearCheck > targetYear) {
+                    statusTh = 'ทำงานปกติ (ลาออกปี ' + resignYearCheck + ')';
+                } else {
+                    statusTh = 'ลาออก (' + window.formatDate(e.resignDate) + ')';
+                }
+            } else if (e.status === 'Suspended') {
+                statusTh = 'พักงาน';
+            }
+
             var formattedIdCard = window.formatThaiIdForReport(e.idCardNum);
             var birthText = window.formatDate(e.birthDate);
             var startText = window.formatDate(e.startDate);
@@ -1831,7 +1926,7 @@ window.renderSafetyDoc2 = function() {
         <div style="text-align:center; margin-bottom: 14px;">
             <div style="font-size: 18px; font-weight: bold;">ทะเบียนลูกจ้าง และยอดสรุปจำนวนลูกจ้าง (เอกสารตรวจความปลอดภัยฯ ข้อ 2)</div>
             <div style="font-size: 15px; font-weight: bold; margin-top: 2px;">สถานประกอบกิจการ: ${companyName}</div>
-            <div style="font-size: 12px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | เงื่อนไข: ${statusLabel}</div>
+            <div style="font-size: 12px; color: #444; margin-top: 2px;">ข้อมูล ณ วันที่ ${todayThai} | ช่วงเวลา: ${yearLabel} | เงื่อนไข: ${statusLabel}</div>
         </div>
 
         <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">ส่วนที่ 1 : ตารางสรุปจำนวนลูกจ้าง (แยกฝ่ายรถ / สำนักงาน, ไทย / ต่างด้าว, ชาย / หญิง และแยกรถร่วม)</div>
@@ -1876,7 +1971,7 @@ window.renderSafetyDoc2 = function() {
                     <th style="border:1px solid #333; padding:5px; text-align:center;">ตำแหน่งงาน</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">ฝ่าย</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเริ่มงาน</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">สถานะ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:95px;">สถานะ</th>
                 </tr>
             </thead>
             <tbody>
@@ -1898,7 +1993,7 @@ window.renderSafetyDoc2 = function() {
                     <th style="border:1px solid #333; padding:5px; text-align:center;">ตำแหน่งงาน</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:115px;">ประเภท</th>
                     <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">วันเริ่มสัญญา</th>
-                    <th style="border:1px solid #333; padding:5px; text-align:center; width:85px;">สถานะ</th>
+                    <th style="border:1px solid #333; padding:5px; text-align:center; width:95px;">สถานะ</th>
                 </tr>
             </thead>
             <tbody>
@@ -1924,20 +2019,7 @@ window.renderSafetyDoc2 = function() {
 };
 
 window.parseAccidentYearCE = function(dateStr) {
-    if (!dateStr) return null;
-    var s = String(dateStr).trim();
-    var d = new Date(s);
-    if (!isNaN(d.getTime())) {
-        var y = d.getFullYear();
-        return y > 2400 ? y - 543 : y;
-    }
-    var parts = s.split(/[\/\-\s]/);
-    for (var i = 0; i < parts.length; i++) {
-        var num = parseInt(parts[i], 10);
-        if (num > 2400) return num - 543;
-        if (num >= 1990 && num <= 2100) return num;
-    }
-    return null;
+    return window.parseAnyYearCE(dateStr);
 };
 
 window.openSafetyDoc6Modal = function() {
@@ -2005,6 +2087,7 @@ window.renderSafetyDoc6 = function() {
     });
 
     var activeCompanyEmps = (window.allEmpData || []).filter(function(e) {
+        if (window.isSystemDummyAccount(e)) return false;
         if (e.status !== 'Active') return false;
         if (excludeJoint && String(e.position || '').indexOf('รถร่วม') !== -1) return false;
         return true;
