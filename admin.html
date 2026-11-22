@@ -179,12 +179,12 @@
                     <h4 class="fw-bold text-warning mb-0"><span id="accTotalCount">0</span> <span class="fs-6 fw-normal text-muted">ครั้ง (Top 10)</span></h4>
                 </div>
             </div>
-            <div class="d-flex gap-2 align-items-center flex-nowrap ms-auto" style="flex-grow: 1; max-width: 560px; justify-content: flex-end;">
-                <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-25 px-2 py-1 flex-grow-1" style="max-width: 340px;">
+            <div id="accToolbarRight" class="d-flex gap-2 align-items-center" style="flex-grow: 1; max-width: 540px; justify-content: flex-end;">
+                <div class="input-group input-group-sm rounded-pill border border-secondary border-opacity-25 bg-black bg-opacity-25 px-2 py-1 w-100">
                     <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control bg-transparent border-0 text-white shadow-none px-0" id="searchAccidentInput" onkeyup="window.filterAccidentTable()" placeholder="ค้นหาชื่อ, รหัส, เลขที่เอกสาร (ACC)...">
                 </div>
-                <button class="btn btn-warning text-dark btn-sm rounded-pill px-3 shadow-sm fw-bold hover-scale text-nowrap" onclick="window.openSafetyDoc6Modal()">
+                <button id="btnOpenSafetyDoc6" class="btn btn-warning text-dark btn-sm rounded-pill px-4 shadow-sm fw-bold hover-scale text-nowrap" onclick="window.openSafetyDoc6Modal()">
                     <i class="bi bi-clipboard2-pulse-fill me-1"></i>เอกสารข้อ 6 (สถิติอุบัติเหตุ)
                 </button>
             </div>
